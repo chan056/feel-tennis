@@ -1,0 +1,16 @@
+body {
+  font-size: 16px;
+}
+video::-internal-media-controls-download-button {
+  display: none;
+}
+video::-webkit-media-controls-enclosure {
+  overflow: hidden;
+}
+video::-webkit-media-controls-panel {
+  width: calc(130%);
+}
+/*# sourceMappingURL=index.css.map */
+/*# sourceMappingURL=index.css.map */
+/*# sourceMappingURL=common.css.map */
+/*# sourceMappingURL=common.css.map */
