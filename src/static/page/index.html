@@ -5,18 +5,28 @@
 	<meta charset="UTF-8">
 	<title>ChanTube</title>
 	<link rel="stylesheet" href="../css/common.css">
+	<link rel="stylesheet" href="../lib/element/index.css">
 </head>
 
 <body>
-	<!-- <div id="app">
-		<h2>专辑</h2>
-		<ul class="list">
-			<todo-item v-for="item in albums" v-bind:todo="item" v-bind:key="item.id">
-			</todo-item>
-		</ul>
-	</div> -->
-	<span id="example"></span>
+	<div id="app">
+		<a :href="n.link" v-for="n in albums">{{ n.name }}</a>
+		<el-button @click="visible = true">按钮</el-button>
+		<el-dialog v-model="visible" title="Hello world">
+		  <p>欢迎使用 Element</p>
+		</el-dialog>
+	</div>
+	<div id="router">
+		<router-link to="/foo">Go to Foo</router-link>
+		<router-link to="/bar">Go to Bar</router-link>
+		<router-view></router-view>
+	</div>
 </body>
 <script src="../lib/v.js"></script>
+<script src="../lib/vue-router.js"></script>
+
+<script src="../lib/axios.min.js"></script>
+<script src="../lib/element/index.js"></script>
+
 <script src="../js/index.js"></script>
 </html>

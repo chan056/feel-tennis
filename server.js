@@ -50,7 +50,7 @@ var server = http.createServer(function(request, response) {
 				r.queryAlbum(response);
 			},
 		}
-// return console.log(pathname);
+		// return console.log(pathname);
 		var action = router[pathname];
 
 		action && action();

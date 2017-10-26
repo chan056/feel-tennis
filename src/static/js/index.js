@@ -1,27 +1,60 @@
-/* Vue.component('todo-item', {
-    props: ['todo'],
-    template: '<li><a :href="todo.link">{{ todo.text }}</a></li>'
-})
-
-var app = new Vue({
+// vue instance
+var vm = new Vue({
     el: '#app',
     data: {
-        albums: [
-            { id: 0, text: 'feel tennis', link: ''},
-            { id: 1, text: '奶酪' },
-            { id: 2, text: '随便其他什么人吃的东西' }
-        ]
+        visible: false,
+        albums: []
+    },
+    computed: {
+        now: {
+            get: function () {
+                return this.a;
+            },
+            set: function (v) {
+                console.log(arguments)
+                this.a = v;
+            }
+        },
+        evenNumbers: function () {
+            return this.numbers.filter(function (number) {
+                return number % 2 === 0;
+            })
+        }
+    },
+    methods: {
+        even: function (numbers) {
+            return numbers.filter(function (number) {
+                return number % 2 === 0;
+            });
+        }
     }
-}) */
-
-var data = {a: 1};
-var vm = new Vue({
-    el: '#example',
-    data: data
 });
 
-console.log(vm.$data === data, vm.$el);
+Vue.component
 
-vm.$watch('a', function(){
-    console.log('a change from '+arguments[1]+' to ' + arguments[0]);
-});
+// router
+const Foo = { template: '<div>foo</div>' }
+const Bar = { template: '<div>bar</div>' }
+
+const routes = [
+    { path: '/foo', component: Foo },
+    { path: '/bar', component: Bar }
+]
+
+const router = new VueRouter({
+    routes // （缩写）相当于 routes: routes
+})
+
+const app = new Vue({
+    router
+}).$mount('#router');
+
+// XHR
+axios.get('/albums')
+    .then(function (response) {
+        console.table(response.data);
+        vm.albums = response.data;
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
