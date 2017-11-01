@@ -7,7 +7,7 @@ var vm = new Vue({
     },
     computed: {
         now: {
-            get: function () {
+            get: function () {``
                 return this.a;
             },
             set: function (v) {

@@ -10,11 +10,16 @@
 
 <body>
 	<div id="app">
-		<a :href="n.link" v-for="n in albums">{{ n.name }}</a>
-		<el-button @click="visible = true">按钮</el-button>
+		<!-- <a :href="n.link" v-for="n in albums">{{ n.name }}</a> -->
+		<ol>
+			<li v-for="n in albums">
+				<a :href="n.link">{{ n.name }}</a>
+			</li>
+		</ol>
+		<!-- <el-button @click="visible = true">按钮</el-button>
 		<el-dialog v-model="visible" title="Hello world">
 		  <p>欢迎使用 Element</p>
-		</el-dialog>
+		</el-dialog> -->
 	</div>
 	<div id="router">
 		<router-link to="/foo">Go to Foo</router-link>

@@ -1,3 +1,4 @@
 *.mp4
 node_modules
 src/static/video
+npm-debug.log
