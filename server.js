@@ -20,12 +20,7 @@ var server = http.createServer(function(request, response) {
 
 		fs.exists(realPath, function(exists) {
 			if (!exists) {
-				response.writeHead(404, {
-					'Content-Type': 'text/plain'
-				});
-
-				response.write("This request URL " + pathname + " was not found on this server.");
-				response.end();
+				response404();
 			} else {
 				fs.readFile(realPath, "binary", function(err, file) {
 					if (err) {
@@ -53,8 +48,20 @@ var server = http.createServer(function(request, response) {
 		// return console.log(pathname);
 		var action = router[pathname];
 
-		action && action();
+		if(action){
+			action()
+		}else{
+			response404();
+		}
+	}
 
+	function response404(){
+		response.writeHead(404, {
+			'Content-Type': 'text/plain'
+		});
+
+		response.write("This request URL " + pathname + " was not found on this server.");
+		response.end();
 	}
 });
 server.listen(PORT);

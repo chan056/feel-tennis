@@ -9,23 +9,15 @@
 </head>
 
 <body>
-	<div id="app">
-		<!-- <a :href="n.link" v-for="n in albums">{{ n.name }}</a> -->
-		<ol>
-			<li v-for="n in albums">
-				<a :href="n.link">{{ n.name }}</a>
-			</li>
-		</ol>
-		<!-- <el-button @click="visible = true">按钮</el-button>
-		<el-dialog v-model="visible" title="Hello world">
-		  <p>欢迎使用 Element</p>
-		</el-dialog> -->
-	</div>
 	<div id="router">
-		<router-link to="/foo">Go to Foo</router-link>
-		<router-link to="/bar">Go to Bar</router-link>
+		<router-link to="/">Index</router-link>
+		<router-link to="/tennis">tennis</router-link>
 		<router-view></router-view>
 	</div>
+
+	<!-- <script type="x-template" #xt>
+		<a :href="n.link" v-for="n in albums">{{ n.name }}</a>
+	</script> -->
 </body>
 <script src="../lib/v.js"></script>
 <script src="../lib/vue-router.js"></script>
