@@ -1,15 +1,22 @@
 // router
 const Index = {
 	data: function () {
-		return { albums: [] }
-	},
+		var d = {albums: []};
 
+		xhr('/albums', function(resData){
+			d.albums = resData;
+			console.log(resData)
+		});
+		
+		return d;
+		// return { albums: [] }
+	},
 	// props: ['id'],
 
 	template: `
-        <div id="index">
-            <a :href="n.link" v-for="n in albums">{{ n.name }}</a>
-        </div>
+			<div id="index">
+					<a :href="n.link" v-for="n in albums">{{n.name }}</a>
+			</div>
     `,
 
 	beforeRouteEnter(to, from, next) {
@@ -60,13 +67,12 @@ const app = new Vue({
 	router
 }).$mount('#router');
 
-
-// XHR
-// axios.get('/albums')
-//     .then(function (response) {
-//         console.table(response.data);
-//         vm.albums = response.data;
-//     })
-//     .catch(function (error) {
-//         console.log(error);
-//     });
+function xhr(api, sfn){
+	axios.get(api)
+    .then(function (response) {
+			sfn && sfn(response.data)
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+}
