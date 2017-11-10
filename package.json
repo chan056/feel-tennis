@@ -4,7 +4,8 @@
   "description": "",
   "main": "mine.js",
   "dependencies": {
-    "mysql": "^2.15.0"
+    "mysql": "^2.15.0",
+    "path-to-regexp": "^2.1.0"
   },
   "devDependencies": {},
   "scripts": {

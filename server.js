@@ -1,4 +1,4 @@
-var PORT = 3000;
+var PORT = 3001;
 
 var http = require('http');
 var url = require('url');
@@ -39,15 +39,49 @@ var server = http.createServer(function(request, response) {
 			}
 		});
 	}else{// API
-		var router = {
+		var r =  require('./src/n/db/operate');
+		var pathToRegexp = require('path-to-regexp');
+
+		var routerConfig = {
+			'/sports': function(){
+				r.querySports(response);
+			},
+
+			'/albumList/:id/:pid': function(){
+				r.queryAlbumList(response);
+			},
+			
 			'/albums': function(){
-				var r =  require('./src/n/db/queryAlbum');
 				r.queryAlbum(response);
 			},
 		}
-		// return console.log(pathname);
-		var action = router[pathname];
 
+		var pathMatch;
+		var fnMatched;
+		var keys = []
+
+		for(var k in routerConfig){
+			var f = routerConfig[k];
+			var pathReg = pathToRegexp(k, keys);
+
+			pathMatch = pathReg.exec(pathname);
+			if(pathMatch){
+				fnMatched = f;
+				
+				break;
+			}
+		}
+
+		if(pathMatch){
+			var o = {};
+			for(let i=0, l=keys.length; i < l; i++){
+				let key = keys[i];
+				let keyName = key.name;
+				o[keyName] = pathMatch[i + 1]
+			}
+		}
+		
+		var action = routerConfig[pathname];
 		if(action){
 			action()
 		}else{

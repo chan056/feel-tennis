@@ -1,36 +1,47 @@
-// router
-const Index = {
+const Sports = {
 	data: function () {
-		var d = {albums: []};
+		var d = {sports: []};
 
-		xhr('/albums', function(resData){
-			d.albums = resData;
+		xhr('/sports', function(resData){
+			d.sports = resData;
 			console.log(resData)
 		});
-		
+
 		return d;
-		// return { albums: [] }
 	},
-	// props: ['id'],
 
 	template: `
-			<div id="index">
-					<a :href="n.link" v-for="n in albums">{{n.name }}</a>
+			<div id="album-list">
+				<ol>
+					<li v-for="sport in sports">
+						<a :href="sport.id">{{ sport.name }}</a>
+					</li>
+				</ol>
 			</div>
     `,
+};
 
-	beforeRouteEnter(to, from, next) {
-		console.log('beforeRouteEnter');
-		next();
+const AlbumList = {
+	props: ['sportId', 'pid'],
+	data: function () {
+		var d = {albumList: []};
+		var propsData = this.$options.propsData;
+		xhr('/albumList/'+propsData.sportId+'/'+propsData.pid, function(resData){
+			d.albumList = resData;
+		});
+
+		return d;
 	},
-	beforeRouteUpdate(to, from, next) {
-		console.log('beforeRouteUpdate');
-		next();
-	},
-	beforeRouteLeave(to, from, next) {
-		console.log('beforeRouteLeave ');
-		next();
-	}
+
+	template: `
+			<div id="album-list">
+				<ol>
+					<li v-for="album in albumList">
+						<a :href="album.album_id">{{ album.album_name }}</a>
+					</li>
+				</ol>
+			</div>
+    `,
 };
 
 const Tennis = {
@@ -46,22 +57,14 @@ const Tennis = {
 `};
 
 const routes = [
-	{
-		path: '/index',
-		component: Index,
-		props: true,
-
-	},
+	{ path: '/sports', component: Sports },
+	{ path: '/sports/:sportId/:pid', component: AlbumList, props: true, },
 	{ path: '/tennis', component: Tennis },
 ]
 
 const router = new VueRouter({
 	routes // （缩写）相当于 routes: routes
 })
-
-// router.beforeEach((to, from, next) => {
-// console.log(to, from, next)
-// })
 
 const app = new Vue({
 	router
