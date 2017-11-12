@@ -4,7 +4,6 @@ const Sports = {
 
 		xhr('/sports', function(resData){
 			d.sports = resData;
-			console.log(resData)
 		});
 
 		return d;
@@ -14,7 +13,7 @@ const Sports = {
 			<div id="album-list">
 				<ol>
 					<li v-for="sport in sports">
-						<a :href="sport.id">{{ sport.name }}</a>
+						<router-link :to="{path: '/sports/'+ sport.id }">{{ sport.name }}</router-link> 
 					</li>
 				</ol>
 			</div>
@@ -22,11 +21,11 @@ const Sports = {
 };
 
 const AlbumList = {
-	props: ['sportId', 'pid'],
+	props: ['sportId'],
 	data: function () {
 		var d = {albumList: []};
 		var propsData = this.$options.propsData;
-		xhr('/albumList/'+propsData.sportId+'/'+propsData.pid, function(resData){
+		xhr('/albumList/' + propsData.sportId, function(resData){
 			d.albumList = resData;
 		});
 
@@ -58,7 +57,7 @@ const Tennis = {
 
 const routes = [
 	{ path: '/sports', component: Sports },
-	{ path: '/sports/:sportId/:pid', component: AlbumList, props: true, },
+	{ path: '/sports/:sportId', component: AlbumList, props: true, },
 	{ path: '/tennis', component: Tennis },
 ]
 

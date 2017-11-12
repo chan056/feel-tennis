@@ -1,4 +1,4 @@
-var PORT = 3001;
+var PORT = 3000;
 
 var http = require('http');
 var url = require('url');
@@ -41,21 +41,23 @@ var server = http.createServer(function(request, response) {
 	}else{// API
 		var r =  require('./src/n/db/operate');
 		var pathToRegexp = require('path-to-regexp');
+		var paramsMathed = {};
 
 		var routerConfig = {
 			'/sports': function(){
-				r.querySports(response);
+				r.operate('querySports', paramsMathed, response);
 			},
 
-			'/albumList/:id/:pid': function(){
-				r.queryAlbumList(response);
+			'/albumList/:sport_id': function(){
+				r.operate('queryAlbumList', paramsMathed, response);
 			},
 			
 			'/albums': function(){
-				r.queryAlbum(response);
+				r.operate('queryAlbum', paramsMathed, response);
 			},
 		}
 
+		// 从路径中抽取参数
 		var pathMatch;
 		var fnMatched;
 		var keys = []
@@ -73,17 +75,16 @@ var server = http.createServer(function(request, response) {
 		}
 
 		if(pathMatch){
-			var o = {};
 			for(let i=0, l=keys.length; i < l; i++){
 				let key = keys[i];
 				let keyName = key.name;
-				o[keyName] = pathMatch[i + 1]
+				paramsMathed[keyName] = pathMatch[i + 1]
 			}
 		}
+		// ====
 		
-		var action = routerConfig[pathname];
-		if(action){
-			action()
+		if(fnMatched){
+			fnMatched();
 		}else{
 			response404();
 		}
