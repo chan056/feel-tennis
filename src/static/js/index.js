@@ -36,29 +36,63 @@ const AlbumList = {
 			<div id="album-list">
 				<ol>
 					<li v-for="album in albumList">
-						<a :href="album.album_id">{{ album.album_name }}</a>
+						<router-link :to="{path: '/album/'+ album.album_id }">{{ album.album_name }}</router-link> 
 					</li>
 				</ol>
 			</div>
     `,
 };
 
-const Tennis = {
+const Album = {
+	props: ['albumId'],
+	data: function () {
+		var d = {albumVideoList: []};
+		var propsData = this.$options.propsData;
+		xhr('/album/' + propsData.albumId, function(resData){
+			d.albumVideoList = resData;
+		});
+
+		return d;
+	},
 	template: `
-    <div>
-        <h2>Feel Tennis</h2>
-        <ul class="list">
-            <li>
-                <a href="./video.html">How to play forehand stroke</a>
-            </li>
-        </ul>
-    </div>
-`};
+		<div>
+			<h2>Feel Tennis</h2>
+			<ul class="list">
+				<li v-for="video in albumVideoList">
+					<router-link :to="{path: '/video/'+ video.album_video_id }">{{ video.headline }}</router-link>
+				</li>
+			</ul>
+		</div>
+	`
+};
+
+const Video = {
+	props: ['videoId'],
+	data: function () {
+		var d = {video: [], src: ''};
+		var propsData = this.$options.propsData;
+		xhr('/video/' + propsData.videoId, function(resData){
+			d.video = resData[0];
+			d.src = "../video/" + d.video.album_id + '_' + d.video.album_video_id + ".mp4";
+		});
+
+		return d;
+	},
+	template: `
+		<div>
+			<h2>{{video.headline}}</h2>
+			<video v-bind:src="src" controls="controls" >
+				Top 3 Footwork Mistakes In Tennis And How To Correct Them
+			</video>
+		</div>
+	`
+};
 
 const routes = [
 	{ path: '/sports', component: Sports },
 	{ path: '/sports/:sportId', component: AlbumList, props: true, },
-	{ path: '/tennis', component: Tennis },
+	{ path: '/album/:albumId', component: Album, props: true, },
+	{ path: '/video/:videoId', component: Video, props: true, },
 ]
 
 const router = new VueRouter({

@@ -52,18 +52,23 @@ var server = http.createServer(function(request, response) {
 				r.operate('queryAlbumList', paramsMathed, response);
 			},
 			
-			'/albums': function(){
+			'/album/:album_id': function(){
 				r.operate('queryAlbum', paramsMathed, response);
+			},
+			
+			'/video/:album_video_id': function(){
+				r.operate('queryVideo', paramsMathed, response);
 			},
 		}
 
 		// 从路径中抽取参数
 		var pathMatch;
 		var fnMatched;
-		var keys = []
+		var keys;
 
 		for(var k in routerConfig){
 			var f = routerConfig[k];
+			keys = [];
 			var pathReg = pathToRegexp(k, keys);
 
 			pathMatch = pathReg.exec(pathname);

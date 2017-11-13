@@ -27,7 +27,18 @@ var operations = {
 
 	queryAlbum: function () {
 
-		conn.query('SELECT * from album' + qualification, function (err, result, fields) {
+		conn.query('SELECT * from video' + qualification, function (err, result, fields) {
+			if (err) throw err;
+
+			result = JSON.stringify(result);
+			res.end(result)
+		});
+
+	},
+
+	queryVideo: function () {
+		
+		conn.query('SELECT * from video' + qualification, function (err, result, fields) {
 			if (err) throw err;
 
 			result = JSON.stringify(result);
@@ -35,9 +46,11 @@ var operations = {
 		});
 
 	}
+	
 }
 
 module.exports.operate = function (operationName, params, response) {
+	console.log(arguments[0], arguments[1])
 	qualification = parseParam(params);
 	res = response;
 	operations[operationName]();
