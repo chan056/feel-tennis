@@ -82,7 +82,7 @@ const Video = {
 		<div>
 			<h2>{{video.headline}}</h2>
 			<video v-bind:src="src" controls="controls" >
-				Top 3 Footwork Mistakes In Tennis And How To Correct Them
+				Not support this browser, please use Chrome.
 			</video>
 		</div>
 	`
