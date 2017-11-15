@@ -1,3 +1,4 @@
+
 const Sports = {
 	data: function () {
 		var d = {sports: []};
@@ -9,15 +10,7 @@ const Sports = {
 		return d;
 	},
 
-	template: `
-			<div id="album-list">
-				<ol>
-					<li v-for="sport in sports">
-						<router-link :to="{path: '/sports/'+ sport.id }">{{ sport.name }}</router-link> 
-					</li>
-				</ol>
-			</div>
-    `,
+	template: temp.sports,
 };
 
 const AlbumList = {
@@ -32,15 +25,7 @@ const AlbumList = {
 		return d;
 	},
 
-	template: `
-			<div id="album-list">
-				<ol>
-					<li v-for="album in albumList">
-						<router-link :to="{path: '/album/'+ album.album_id }">{{ album.album_name }}</router-link> 
-					</li>
-				</ol>
-			</div>
-    `,
+	template: temp.albumList,
 };
 
 const Album = {
@@ -54,16 +39,7 @@ const Album = {
 
 		return d;
 	},
-	template: `
-		<div>
-			<h2>Feel Tennis</h2>
-			<ul class="list">
-				<li v-for="video in albumVideoList">
-					<router-link :to="{path: '/video/'+ video.album_video_id }">{{ video.headline }}</router-link>
-				</li>
-			</ul>
-		</div>
-	`
+	template: temp.album
 };
 
 const Video = {
@@ -78,25 +54,22 @@ const Video = {
 
 		return d;
 	},
-	template: `
-		<div>
-			<h2>{{video.headline}}</h2>
-			<video v-bind:src="src" controls="controls" >
-				Not support this browser, please use Chrome.
-			</video>
-		</div>
-	`
+	template: temp.video
 };
 
 const routes = [
+	// 获取所有‘运动’项目
 	{ path: '/sports', component: Sports },
-	{ path: '/sports/:sportId', component: AlbumList, props: true, },
-	{ path: '/album/:albumId', component: Album, props: true, },
-	{ path: '/video/:videoId', component: Video, props: true, },
+	// 获取‘某运动项目’下的‘专辑列表’
+	{ path: '/sports/:sportId/albums', component: AlbumList, props: true, },
+	// 获取‘某专辑’下的‘视频列表’
+	{ path: '/albums/:albumId', component: Album, props: true, },
+	// 获取‘某视频’的信息
+	{ path: '/videos/:videoId', component: Video, props: true, },
 ]
 
 const router = new VueRouter({
-	routes // （缩写）相当于 routes: routes
+	routes
 })
 
 const app = new Vue({
