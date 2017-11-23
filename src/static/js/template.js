@@ -1,9 +1,16 @@
 var temp = {
+    // header: `
+    //     <div>I'm header!!!</div>
+    // `,
+
+    // footer: `
+    //     <div>I'm footer!!!</div>
+    // `,
     sports: `
         <div id="album-list">
             <ol>
                 <li v-for="sport in sports">
-                    <router-link :to="{path: '/sports/'+ sport.id + '/albums' }">{{ sport.name }}</router-link> 
+                    <router-link :to="{path: '/sports/'+ sport.id }">{{ sport.name }}</router-link> 
                 </li>
             </ol>
         </div>

@@ -9,6 +9,10 @@ var mine = require('./mine').types;
 var server = http.createServer(function(request, response) {
 	var pathname = url.parse(request.url).pathname;
 	// return response.end(pathname)
+
+	if(pathname == '/'){
+		pathname = '/page/index.html';
+	}
 	
 	var ext = path.extname(pathname);
 	ext = ext ? ext.slice(1) : 'unknown';
@@ -48,15 +52,15 @@ var server = http.createServer(function(request, response) {
 				r.operate('querySports', paramsMathed, response);
 			},
 
-			'/albumList/:sport_id': function(){
+			'/sports/:sport_id/albums': function(){
 				r.operate('queryAlbumList', paramsMathed, response);
 			},
 			
-			'/album/:album_id': function(){
+			'/albums/:album_id/videos': function(){
 				r.operate('queryAlbum', paramsMathed, response);
 			},
 			
-			'/video/:album_video_id': function(){
+			'/videos/:album_video_id': function(){
 				r.operate('queryVideo', paramsMathed, response);
 			},
 		}

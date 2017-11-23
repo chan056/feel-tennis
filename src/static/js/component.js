@@ -1,4 +1,3 @@
-
 const Sports = {
 	data: function () {
 		var d = {sports: []};
@@ -18,7 +17,7 @@ const AlbumList = {
 	data: function () {
 		var d = {albumList: []};
 		var propsData = this.$options.propsData;
-		xhr('/albumList/' + propsData.sportId, function(resData){
+		xhr('/sports/' + propsData.sportId + '/albums', function(resData){
 			d.albumList = resData;
 		});
 
@@ -33,7 +32,7 @@ const Album = {
 	data: function () {
 		var d = {albumVideoList: []};
 		var propsData = this.$options.propsData;
-		xhr('/album/' + propsData.albumId, function(resData){
+		xhr('/albums/' + propsData.albumId + '/videos', function(resData){
 			d.albumVideoList = resData;
 		});
 
@@ -47,7 +46,7 @@ const Video = {
 	data: function () {
 		var d = {video: [], src: ''};
 		var propsData = this.$options.propsData;
-		xhr('/video/' + propsData.videoId, function(resData){
+		xhr('/videos/' + propsData.videoId, function(resData){
 			d.video = resData[0];
 			d.src = "../video/" + d.video.album_id + '_' + d.video.album_video_id + ".mp4";
 		});
@@ -56,32 +55,3 @@ const Video = {
 	},
 	template: temp.video
 };
-
-const routes = [
-	// 获取所有‘运动’项目
-	{ path: '/sports', component: Sports },
-	// 获取‘某运动项目’下的‘专辑列表’
-	{ path: '/sports/:sportId/albums', component: AlbumList, props: true, },
-	// 获取‘某专辑’下的‘视频列表’
-	{ path: '/albums/:albumId', component: Album, props: true, },
-	// 获取‘某视频’的信息
-	{ path: '/videos/:videoId', component: Video, props: true, },
-]
-
-const router = new VueRouter({
-	routes
-})
-
-const app = new Vue({
-	router
-}).$mount('#router');
-
-function xhr(api, sfn){
-	axios.get(api)
-    .then(function (response) {
-			sfn && sfn(response.data)
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
-}
