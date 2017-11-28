@@ -63,7 +63,6 @@ const Upload = {
 
 		xhr('/albums', function(resData){
 			d.albums = resData;
-			console.log(resData)
 		});
 
 		return d;
