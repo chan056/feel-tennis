@@ -18,4 +18,6 @@ exports.types = {
     "wmv": "video/x-ms-wmv",
     "mp4": "video/mp4",
     "xml": "text/xml",
+    "ttf": "text/ttf",
+    "woff": "text/woff"
 };

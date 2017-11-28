@@ -1,11 +1,4 @@
 var temp = {
-    // header: `
-    //     <div>I'm header!!!</div>
-    // `,
-
-    // footer: `
-    //     <div>I'm footer!!!</div>
-    // `,
     sports: `
         <div id="album-list">
             <ol>
@@ -19,7 +12,7 @@ var temp = {
         <div id="album-list">
             <ol>
                 <li v-for="album in albumList">
-                    <router-link :to="{path: '/albums/'+ album.album_id }">{{ album.album_name }}</router-link> 
+                    <router-link :to="{path: '/albums/'+ album.id }">{{ album.name }}</router-link> 
                 </li>
             </ol>
         </div>
@@ -42,5 +35,21 @@ var temp = {
                 Not support this browser, please use Chrome.
             </video>
         </div>
+     `,
+
+     upload: `
+        <div>
+            <h2>视频上传页面</h2>
+            <el-select v-model="SO.albumId" clearable placeholder="请选择">
+                <el-option
+                    v-for="item in albums"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+                </el-option>
+            </el-select>
+            <el-button v-on:click="alert" >默认按钮</el-button>
+        </div>
      `
+     
 }

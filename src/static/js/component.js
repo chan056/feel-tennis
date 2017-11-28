@@ -48,10 +48,30 @@ const Video = {
 		var propsData = this.$options.propsData;
 		xhr('/videos/' + propsData.videoId, function(resData){
 			d.video = resData[0];
-			d.src = "../video/" + d.video.album_id + '_' + d.video.album_video_id + ".mp4";
+			d.src = "../video/" + d.video.id + ".mp4";
 		});
 
 		return d;
 	},
 	template: temp.video
+};
+
+const Upload = {
+	props: [''],
+	data: function () {
+		var d = {SO: {}, albums: []};
+
+		xhr('/albums', function(resData){
+			d.albums = resData;
+			console.log(resData)
+		});
+
+		return d;
+	},
+	methods: {
+		alert: function(){
+			console.log(arguments);
+		}
+	},
+	template: temp.upload
 };

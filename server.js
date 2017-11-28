@@ -52,6 +52,10 @@ var server = http.createServer(function(request, response) {
 				r.operate('querySports', paramsMathed, response);
 			},
 
+			'/albums': function(){
+				r.operate('queryAlbumList', paramsMathed, response);
+			},
+
 			'/sports/:sport_id/albums': function(){
 				r.operate('queryAlbumList', paramsMathed, response);
 			},
@@ -73,12 +77,12 @@ var server = http.createServer(function(request, response) {
 		for(var k in routerConfig){
 			var f = routerConfig[k];
 			keys = [];
-			var pathReg = pathToRegexp(k, keys);
 
+			var pathReg = pathToRegexp(k, keys);
 			pathMatch = pathReg.exec(pathname);
+
 			if(pathMatch){
 				fnMatched = f;
-				
 				break;
 			}
 		}
