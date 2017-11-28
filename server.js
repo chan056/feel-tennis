@@ -64,7 +64,7 @@ var server = http.createServer(function(request, response) {
 				r.operate('queryAlbum', paramsMathed, response);
 			},
 			
-			'/videos/:album_video_id': function(){
+			'/videos/:album_id': function(){
 				r.operate('queryVideo', paramsMathed, response);
 			},
 		}

@@ -22,7 +22,7 @@ var temp = {
             <h2>Feel Tennis</h2>
             <ul class="list">
                 <li v-for="video in albumVideoList">
-                    <router-link :to="{path: '/videos/'+ video.album_video_id }">{{ video.headline }}</router-link>
+                    <router-link :to="{path: '/videos/'+ video.album_id }">{{ video.headline }}</router-link>
                 </li>
             </ul>
         </div>
