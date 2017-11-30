@@ -44,6 +44,7 @@ var server = http.createServer(function(request, response) {
 			}
 		});
 	}else{// API
+		// todo 拦截无理请求
 		var r =  require('./src/n/db/operate');
 		var pathToRegexp = require('path-to-regexp');
 		var paramsMathed = {};
@@ -70,19 +71,26 @@ var server = http.createServer(function(request, response) {
 			},
 
 			'/upload/:type': function(){
+				let type = '';
 				// create an incoming form object
-				var form = new formidable.IncomingForm();
+				let form = new formidable.IncomingForm();
+				let absPath = '',
+					relPath = '';
 				
 				// specify that we want to allow the user to upload multiple files in a single request
 				form.multiples = true;
 			
 				// store all uploads in the /uploads directory
-				form.uploadDir = path.join(__dirname, '/uploads');
+				form.uploadDir = path.join(__dirname, "src/static", '/uploads');
+				let uploadDir = '/uploads';
 			
 				// every time a file has been uploaded successfully,
 				// rename it to it's orignal name
 				form.on('file', function(field, file) {
-					fs.rename(file.path, path.join(form.uploadDir, file.name));
+					absPath = path.join(form.uploadDir, file.name);
+					relPath = path.join(uploadDir, file.name);
+
+					fs.rename(file.path, absPath);
 				});
 			
 				// log any errors that occur
@@ -92,7 +100,11 @@ var server = http.createServer(function(request, response) {
 			
 				// once all the files have been uploaded, send a response to the client
 				form.on('end', function() {
-					response.end('upload success');
+					var d = {
+						absPath: absPath,
+						relPath: relPath
+					}
+					response.end(JSON.stringify(d));
 				});
 			
 				// parse the incoming request containing the form data
