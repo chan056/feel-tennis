@@ -10,7 +10,7 @@ const routes = [
 	{ path: '/videos/:videoId', component: Video, props: true, },
 
 	{ path: '/upload', component: Upload, props: true, },
-]
+];
 
 const router = new VueRouter({
 	routes

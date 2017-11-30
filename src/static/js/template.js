@@ -40,15 +40,76 @@ var temp = {
      upload: `
         <div>
             <h2>视频上传页面</h2>
-            <el-select v-model="SO.albumId" clearable placeholder="请选择">
-                <el-option
-                    v-for="item in albums"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id">
-                </el-option>
-            </el-select>
-            <el-button v-on:click="alert" >默认按钮</el-button>
+
+            <el-row>
+                <el-col :span="4">
+                    <label>专辑</label>
+                </el-col>
+
+                <el-col :span="4">
+                    <el-select v-model="SO.albumId" clearable placeholder="请选择">
+                        <el-option
+                            v-for="item in albums"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-col>
+            </el-row>
+
+            <el-row>
+                <el-col :span="4">
+                    <label>Headline</label>
+                </el-col>
+
+                <el-col :span="4">
+                    <el-input v-model="SO.headline" placeholder="请输入标题"></el-input>
+                </el-col>
+            </el-row>
+
+            <el-row>
+                <el-col :span="4">
+                    <label>Tag</label>
+                </el-col>
+
+                <el-col :span="4">
+                    <el-select v-model="SO.albumId" clearable placeholder="请选择tag">
+                        <el-option
+                            v-for="item in albums"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-col>
+            </el-row>
+
+            <el-row>
+                <el-col :span="4">
+                    <label>文件</label>
+                </el-col>
+
+                <el-col :span="4">
+                    <!--<el-input v-model="SO.headline" placeholder="请输入标题"></el-input>-->
+                    <el-upload
+                        class="upload-demo"
+                        action="/upload/video"
+                        :on-preview="handlePreview"
+                        :on-remove="handleRemove"
+                        multiple
+                        :limit="3"
+                        :on-exceed="handleExceed"
+                        :file-list="fileList">
+                        <el-button size="small" type="primary">点击上传</el-button>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                    </el-upload>
+                </el-col>
+            </el-row>
+
+            <el-row>
+                <el-button v-on:click="alert" >提交</el-button>
+            </el-row>
         </div>
      `
      
