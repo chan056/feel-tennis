@@ -1,9 +1,7 @@
-var conn = require('./connect.js').conn;
-var qualification,
-	res;
+let conn = require('./connect.js').conn;
 
 var operations = {
-	querySports: function () {
+	querySport: function (res, qualification) {
 
 		conn.query('SELECT * from sport' + qualification, function (err, result, fields) {
 			if (err) throw err;
@@ -14,18 +12,20 @@ var operations = {
 
 	},
 
-	queryAlbumList: function () {
+	queryAlbumList: function (res, qualification) {
 
 		conn.query('SELECT * from album' + qualification, function (err, result, fields) {
 			if (err) throw err;
 
+			result.push({x : 'queryAlbumList'})
 			result = JSON.stringify(result);
 			res.end(result)
-		});
 
+			
+		});
 	},
 
-	queryAlbum: function () {
+	queryAlbum: function (res, qualification) {
 
 		conn.query('SELECT * from video' + qualification, function (err, result, fields) {
 			if (err) throw err;
@@ -36,24 +36,35 @@ var operations = {
 
 	},
 
-	queryVideo: function () {
+	queryVideo: function (res, qualification) {
 		
 		conn.query('SELECT * from video' + qualification, function (err, result, fields) {
 			if (err) throw err;
 
 			result = JSON.stringify(result);
-			res.end(result)
+			res.end(result);
+		});
+
+	},
+
+	queryTag: function (res, qualification) {
+
+		conn.query('SELECT * from tag' + qualification, function (err, result, fields) {
+			if (err) throw err;
+
+			result = JSON.stringify(result);
+			res.end(result);
+
+			
 		});
 
 	}
-	
 }
 
 module.exports.operate = function (operationName, params, response) {
 	console.log(arguments[0], arguments[1])
 	qualification = parseParam(params);
-	res = response;
-	operations[operationName]();
+	operations[operationName](response, qualification);
 }
 
 function parseParam(params) {

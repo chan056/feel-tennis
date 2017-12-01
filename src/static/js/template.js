@@ -74,15 +74,17 @@ var temp = {
                 </el-col>
 
                 <el-col :span="4">
-                    <el-select v-model="SO.albumId" clearable placeholder="请选择tag">
+                    <el-select v-model="SO.tag" clearable placeholder="请选择tag">
                         <el-option
-                            v-for="item in albums"
+                            v-for="item in tags"
                             :key="item.id"
                             :label="item.name"
                             :value="item.id">
                         </el-option>
                     </el-select>
                 </el-col>
+                
+                <el-button v-on:click="">新建Tag</el-button>
             </el-row>
 
             <el-row>

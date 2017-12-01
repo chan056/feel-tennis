@@ -59,13 +59,18 @@ const Video = {
 const Upload = {
 	props: [''],
 	data: function () {
-		var d = {SO: {}, albums: []};
+		var d = {SO: {}, albums: [], tags: []};
 
 		d.fileList = [];
 
 		xhr('/albums', function(resData){
 			d.albums = resData;
 		});
+
+		xhr('/tags', function(resData){
+			d.tags = resData;
+		});
+		
 
 		return d;
 	},

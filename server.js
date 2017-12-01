@@ -51,7 +51,7 @@ var server = http.createServer(function(request, response) {
 
 		var routerConfig = {
 			'/sports': function(){
-				r.operate('querySports', paramsMathed, response);
+				r.operate('querySport', paramsMathed, response);
 			},
 
 			'/albums': function(){
@@ -109,6 +109,10 @@ var server = http.createServer(function(request, response) {
 			
 				// parse the incoming request containing the form data
 				form.parse(request);
+			},
+
+			'/tags(/:sport_id)?': function(){
+				r.operate('queryTag', paramsMathed, response);
 			}
 		}
 
@@ -134,7 +138,8 @@ var server = http.createServer(function(request, response) {
 			for(let i=0, l=keys.length; i < l; i++){
 				let key = keys[i];
 				let keyName = key.name;
-				paramsMathed[keyName] = pathMatch[i + 1]
+				if(pathMatch[i + 1] != undefined)
+					paramsMathed[keyName] = pathMatch[i + 1]
 			}
 		}
 		// ====
