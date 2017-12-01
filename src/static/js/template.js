@@ -74,7 +74,11 @@ var temp = {
                 </el-col>
 
                 <el-col :span="4">
-                    <el-select v-model="SO.tag" clearable placeholder="请选择tag">
+                    <el-select v-model="SO.tag" 
+                        clearable
+                        multiple
+                        filterable
+                        placeholder="请选择tag">
                         <el-option
                             v-for="item in tags"
                             :key="item.id"
@@ -113,6 +117,8 @@ var temp = {
             <el-row>
                 <el-button v-on:click="alert" >提交</el-button>
             </el-row>
+
+            {{SO}}
         </div>
      `
      
