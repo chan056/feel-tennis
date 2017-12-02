@@ -17,7 +17,6 @@ var operations = {
 		conn.query('SELECT * from album' + qualification, function (err, result, fields) {
 			if (err) throw err;
 
-			result.push({x : 'queryAlbumList'})
 			result = JSON.stringify(result);
 			res.end(result)
 
