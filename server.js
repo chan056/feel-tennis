@@ -6,10 +6,12 @@ var fs = require('fs');
 var path = require('path');
 var formidable = require('formidable');
 
+
 var mine = require('./mine').types;
 var tools = require('./src/n/tool');
 
 var server = http.createServer(function(request, response) {
+	// console.log(request.headers)
 	var pathname = url.parse(request.url).pathname;
 	global.pathname = pathname;// 存储为全局对象
 
@@ -46,9 +48,11 @@ var server = http.createServer(function(request, response) {
 			}
 		});
 	}else{// API
+		if(ext && ext != 'unknown')
+			return tools.response404(response)
 		// todo 拦截无理请求
 		let resolveApiPathModule = require('./src/n/db/resolveApiPath');
-		resolveApiPathModule.resolveApiPath(pathname, response);
+		resolveApiPathModule.resolveApiPath(pathname, response, request);
 	}
 });
 server.listen(PORT);

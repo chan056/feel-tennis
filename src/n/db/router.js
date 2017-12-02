@@ -1,27 +1,41 @@
 var r =  require('./operate');
 
 var routerConfig = {
-    '/sports': function(params, response){
-        r.operate('querySport', params, response);
+    '/sports': function(params, res){
+        r.operate('querySport', params, res);
     },
 
-    '/albums': function(params, response){
-        r.operate('queryAlbumList', params, response);
+    '/albums': function(params, res){
+        r.operate('queryAlbumList', params, res);
     },
 
-    '/sports/:sport_id/albums': function(params, response){
-        r.operate('queryAlbumList', params, response);
+    '/sports/:sport_id/albums': function(params, res){
+        r.operate('queryAlbumList', params, res);
     },
     
-    '/albums/:album_id/videos': function(params, response){
-        r.operate('queryAlbum', params, response);
+    '/albums/:album_id/videos': function(params, res){
+        r.operate('queryAlbum', params, res);
     },
     
-    '/videos/:album_id': function(params, response){
-        r.operate('queryVideo', params, response);
+    '/videos/:album_id': function(params, res){
+        r.operate('queryVideo', params, res);
     },
 
-    '/upload/:type': function(){
+    '/tags(/:sport_id)?': function(params, res){
+        r.operate('queryTag', params, res);
+    },
+
+    // POST
+    '/video': function(res, req){
+        r.operate('creatVedio', params, res)
+    },
+
+    // 上传文件
+    '/upload/:type': function(params, res, req){
+        var formidable = require('formidable');
+        var path = require('path');
+        var fs = require('fs');
+
         let type = '';
         // create an incoming form object
         let form = new formidable.IncomingForm();
@@ -32,7 +46,7 @@ var routerConfig = {
         form.multiples = true;
     
         // store all uploads in the /uploads directory
-        form.uploadDir = path.join(__dirname, "src/static", '/uploads');
+        form.uploadDir = path.join(__dirname, "../../static", '/uploads');
         let uploadDir = '/uploads';
     
         // every time a file has been uploaded successfully,
@@ -49,22 +63,20 @@ var routerConfig = {
             console.log('An error has occured: \n' + err);
         });
     
-        // once all the files have been uploaded, send a response to the client
+        // once all the files have been uploaded, send a request to the client
         form.on('end', function() {
             var d = {
                 absPath: absPath,
                 relPath: relPath
             }
-            response.end(JSON.stringify(d));
+            res.end(JSON.stringify(d));
         });
     
         // parse the incoming request containing the form data
-        form.parse(request);
+        form.parse(req);
     },
 
-    '/tags(/:sport_id)?': function(params, response){
-        r.operate('queryTag', params, response);
-    }
+    
 }
 
 module.exports = routerConfig;

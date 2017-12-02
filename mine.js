@@ -19,5 +19,6 @@ exports.types = {
     "mp4": "video/mp4",
     "xml": "text/xml",
     "ttf": "text/ttf",
-    "woff": "text/woff"
+    "woff": "text/woff",
+    "map": 'text/plain'
 };

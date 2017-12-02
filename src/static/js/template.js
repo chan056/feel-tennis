@@ -115,7 +115,7 @@ var temp = {
             </el-row>
 
             <el-row>
-                <el-button v-on:click="alert" >提交</el-button>
+                <el-button v-on:click="postVedio" >提交</el-button>
             </el-row>
 
             {{SO}}

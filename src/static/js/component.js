@@ -46,9 +46,11 @@ const Video = {
 	data: function () {
 		var d = {video: [], src: ''};
 		var propsData = this.$options.propsData;
+		let videoDir = "../uploads/";
+
 		xhr('/videos/' + propsData.videoId, function(resData){
 			d.video = resData[0];
-			d.src = "../video/" + d.video.id + ".mp4";
+			d.src =  videoDir + d.video.id + ".mp4";
 		});
 
 		return d;
@@ -84,11 +86,17 @@ const Upload = {
 		handlePreview(file) {
 			console.log(file);
 		},
-		handleExceed(files, fileList) {debugger;
+		handleExceed(files, fileList) {
 			this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
 		},
 		handleSuccess(file){
 			console.log(file);
+		},
+
+		postVedio(){
+			xhr('/video', function(){
+				console.log('新建成功')
+			}, 'post', this.SO);
 		}
 	},
 	template: temp.upload

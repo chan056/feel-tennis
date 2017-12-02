@@ -57,6 +57,10 @@ var operations = {
 			
 		});
 
+	},
+
+	creatVedio: function(){
+
 	}
 }
 
@@ -65,6 +69,8 @@ module.exports.operate = function (operationName, params, response) {
 	qualification = parseParam(params);
 	operations[operationName](response, qualification);
 }
+
+module.exports.insert
 
 function parseParam(params) {
 	if (isEmpty(params)) {
