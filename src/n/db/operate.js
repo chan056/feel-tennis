@@ -1,4 +1,5 @@
 let conn = require('./connect.js').conn;
+let tools = require('../tool');
 
 var operations = {
 	querySport: function (res, qualification) {
@@ -59,21 +60,34 @@ var operations = {
 
 	},
 
-	creatVedio: function(){
+	creatVedio: function(res, postObj){
+		var sql = `INSERT INTO video 
+			(album_id, headline, tag)
+			VALUES (?, ?, ?)`;
 
+		conn.query(sql, [postObj.albumId, postObj.headline, postObj.tag], function(err, result, fields){
+			if(err)
+				throw err;
+			
+			res.end('success');
+		});
 	}
 }
 
-module.exports.operate = function (operationName, params, response) {
+module.exports.operate = function (operationName, params, response, reqMethod) {
 	console.log(arguments[0], arguments[1])
-	qualification = parseParam(params);
-	operations[operationName](response, qualification);
+	reqMethod = reqMethod || 'get';
+	if(reqMethod == 'get'){
+		qualification = generateQuerySQL(params);
+		operations[operationName](response, qualification);
+	}else if(reqMethod == 'post'){
+		operations[operationName](response, params);
+	}
 }
 
-module.exports.insert
-
-function parseParam(params) {
-	if (isEmpty(params)) {
+function generateQuerySQL(params) {
+	
+	if (tools.isEmpty(params)) {
 		return '';
 	}
 
@@ -81,6 +95,7 @@ function parseParam(params) {
 	var n = 0;
 	for (var i in params) {
 		let k = params[i];
+		k = conn.escape(k);
 
 		n == 0?
 			qualification += i + '=' + k:
@@ -92,6 +107,3 @@ function parseParam(params) {
 	return qualification;
 }
 
-function isEmpty(obj) {
-	return (Object.getOwnPropertyNames(obj).length === 0);
-}

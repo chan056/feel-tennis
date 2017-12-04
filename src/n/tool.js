@@ -7,6 +7,11 @@ function response404(response){
     response.end();
 }
 
+function isEmpty(obj) {
+	return (Object.getOwnPropertyNames(obj).length === 0);
+}
+
 module.exports = {
-    response404: response404
+    response404: response404,
+    isEmpty: isEmpty
 }

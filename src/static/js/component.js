@@ -61,7 +61,12 @@ const Video = {
 const Upload = {
 	props: [''],
 	data: function () {
-		var d = {SO: {}, albums: [], tags: []};
+		let newTagDialogConfig = {
+			visibility: false,
+			title: '新建标签',
+		};
+
+		var d = {SO: {}, albums: [], tags: [], sports: [], newTagDialogConfig: newTagDialogConfig, newTag: {}};
 
 		d.fileList = [];
 
@@ -73,6 +78,9 @@ const Upload = {
 			d.tags = resData;
 		});
 		
+		xhr('/sports', function(resData){
+			d.sports = resData;
+		});
 
 		return d;
 	},
@@ -94,9 +102,12 @@ const Upload = {
 		},
 
 		postVedio(){
+			let so = Object.assign({}, this.SO);
+			so.tag = this.SO.tag.join(',');
+
 			xhr('/video', function(){
-				console.log('新建成功')
-			}, 'post', this.SO);
+				console.log(arguments)
+			}, 'post', so);
 		}
 	},
 	template: temp.upload

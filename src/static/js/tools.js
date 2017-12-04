@@ -1,7 +1,7 @@
 function xhr(api, sfn, type, params){
     type = type || 'get';
 
-	axios[type](api)
+	axios[type](api, params)
     .then(function (response) {
        sfn && sfn(response.data)
     })

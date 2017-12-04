@@ -88,7 +88,7 @@ var temp = {
                     </el-select>
                 </el-col>
                 
-                <el-button v-on:click="">新建Tag</el-button>
+                <el-button v-on:click="" @click="newTagDialogConfig.visibility = true">新建Tag</el-button>
             </el-row>
 
             <el-row>
@@ -109,7 +109,6 @@ var temp = {
                         :file-list="fileList"
                         >
                         <el-button size="small" type="primary">点击上传</el-button>
-                        <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
                     </el-upload>
                 </el-col>
             </el-row>
@@ -119,7 +118,32 @@ var temp = {
             </el-row>
 
             {{SO}}
+    
+            <el-dialog v-bind:title="newTagDialogConfig.title" :visible.sync="newTagDialogConfig.visibility">
+                <el-form class="newTagDialog">
+                    <el-form-item label="标签名称">
+                        <el-input v-model="newTag.name" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="运动项目">
+                        <el-select v-model="newTag.sportId" 
+                            clearable
+                            filterable
+                            placeholder="请选择">
+                            <el-option
+                                v-for="item in sports"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="newTagDialogConfig.visibility = false">取 消</el-button>
+                    <el-button type="primary" @click="newTagDialogConfig.visibility = false">确 定</el-button>
+                </div>
+                {{newTag}}
+            </el-dialog>
         </div>
      `
-     
 }

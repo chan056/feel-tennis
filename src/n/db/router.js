@@ -27,10 +27,19 @@ var routerConfig = {
 
     // POST
     '/video': function(res, req){
-        r.operate('creatVedio', params, res)
+        if(req.method.toLowerCase() == 'post'){
+            var formidable = require('formidable');
+
+            var form = new formidable.IncomingForm();
+
+            form.parse(req, function(err, fields, files){
+                r.operate('creatVedio', fields, res, 'post');
+            });
+        }
+        
     },
 
-    // 上传文件
+    // POST 上传文件
     '/upload/:type': function(params, res, req){
         var formidable = require('formidable');
         var path = require('path');
