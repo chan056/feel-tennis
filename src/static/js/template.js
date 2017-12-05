@@ -1,4 +1,5 @@
 var temp = {
+    // VISITOR
     sports: `
         <div id="album-list">
             <ol>
@@ -37,7 +38,9 @@ var temp = {
         </div>
      `,
 
-     upload: `
+    
+    // ADMIN
+    upload: `
         <div>
             <h2>视频上传页面</h2>
 
@@ -99,7 +102,8 @@ var temp = {
                 <el-col :span="4">
                     <el-upload
                         class="upload-demo"
-                        action="/upload/video"
+                        action="/upload"
+                        :data="{type:'video'}"
                         :on-preview="handlePreview"
                         :on-remove="handleRemove"
                         :on-success="handleSuccess"
@@ -117,8 +121,6 @@ var temp = {
                 <el-button v-on:click="postVedio" >提交</el-button>
             </el-row>
 
-            {{SO}}
-    
             <el-dialog v-bind:title="newTagDialogConfig.title" :visible.sync="newTagDialogConfig.visibility">
                 <el-form class="newTagDialog">
                     <el-form-item label="标签名称">
@@ -140,9 +142,8 @@ var temp = {
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="newTagDialogConfig.visibility = false">取 消</el-button>
-                    <el-button type="primary" @click="newTagDialogConfig.visibility = false">确 定</el-button>
+                    <el-button type="primary" @click="newTagDialogConfig.visibility = false; postTag();">确 定</el-button>
                 </div>
-                {{newTag}}
             </el-dialog>
         </div>
      `

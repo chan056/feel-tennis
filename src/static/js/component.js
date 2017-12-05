@@ -66,7 +66,14 @@ const Upload = {
 			title: '新建标签',
 		};
 
-		var d = {SO: {}, albums: [], tags: [], sports: [], newTagDialogConfig: newTagDialogConfig, newTag: {}};
+		var d = {
+			SO: {}, 
+			albums: [], 
+			tags: [], 
+			sports: [], 
+			newTagDialogConfig: newTagDialogConfig, 
+			newTag: {},
+		};
 
 		d.fileList = [];
 
@@ -108,6 +115,14 @@ const Upload = {
 			xhr('/video', function(){
 				console.log(arguments)
 			}, 'post', so);
+		},
+
+		postTag(){
+
+			xhr('/tag', function(){
+				console.log(arguments)
+			}, 'post', this.newTag);
+			
 		}
 	},
 	template: temp.upload

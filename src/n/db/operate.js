@@ -71,18 +71,37 @@ var operations = {
 			
 			res.end('success');
 		});
-	}
+	},
+
+	creatTag: function(res, postObj){
+		var sql = `INSERT INTO tag 
+			(name, sport_id)
+			VALUES (?, ?)`;
+
+		conn.query(sql, [postObj.name, postObj.sportId], function(err, result, fields){
+			if(err)
+				throw err;
+			
+			res.end('success');
+		});
+	},
 }
 
-module.exports.operate = function (operationName, params, response, reqMethod) {
-	console.log(arguments[0], arguments[1])
-	reqMethod = reqMethod || 'get';
-	if(reqMethod == 'get'){
-		qualification = generateQuerySQL(params);
-		operations[operationName](response, qualification);
-	}else if(reqMethod == 'post'){
-		operations[operationName](response, params);
-	}
+module.exports.query = function (operationName, params, response) {
+	// console.log(arguments[0], arguments[1])
+	qualification = generateQuerySQL(params);
+	operations[operationName](response, qualification);
+
+}
+
+module.exports.post = function (operationName, request, response) {
+	// console.log(arguments[0], arguments[1])
+	var formidable = require('formidable');
+	var form = new formidable.IncomingForm();
+
+	form.parse(request, function(err, fields, files){
+		operations[operationName](response, fields);
+	});
 }
 
 function generateQuerySQL(params) {

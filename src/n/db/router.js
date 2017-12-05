@@ -2,50 +2,65 @@ var r =  require('./operate');
 
 var routerConfig = {
     '/sports': function(params, res){
-        r.operate('querySport', params, res);
+        r.query('querySport', params, res);
     },
 
     '/albums': function(params, res){
-        r.operate('queryAlbumList', params, res);
+        r.query('queryAlbumList', params, res);
     },
 
     '/sports/:sport_id/albums': function(params, res){
-        r.operate('queryAlbumList', params, res);
+        r.query('queryAlbumList', params, res);
     },
     
     '/albums/:album_id/videos': function(params, res){
-        r.operate('queryAlbum', params, res);
+        r.query('queryAlbum', params, res);
     },
     
     '/videos/:album_id': function(params, res){
-        r.operate('queryVideo', params, res);
+        r.query('queryVideo', params, res);
     },
 
     '/tags(/:sport_id)?': function(params, res){
-        r.operate('queryTag', params, res);
+        r.query('queryTag', params, res);
     },
 
     // POST
     '/video': function(res, req){
-        if(req.method.toLowerCase() == 'post'){
-            var formidable = require('formidable');
 
-            var form = new formidable.IncomingForm();
+        // if(req.method.toLowerCase() == 'post'){
+        //     var formidable = require('formidable');
 
-            form.parse(req, function(err, fields, files){
-                r.operate('creatVedio', fields, res, 'post');
-            });
-        }
+        //     var form = new formidable.IncomingForm();
+
+        //     form.parse(req, function(err, fields, files){
+        //         r.post('creatVedio', fields, res, 'post');
+        //     });
+        // }
+        r.post('creatVedio', req, res);
+    },
+
+    '/tag': function(res, req){
         
+        // if(req.method.toLowerCase() == 'post'){
+        //     var formidable = require('formidable');
+
+        //       var form = new formidable.IncomingForm();
+
+        //     form.parse(req, function(err, fields, files){
+        //         r.post('creatTag', fields, res, 'post');
+        //   });
+        // }
+        
+        r.post('creatTag', req, res);
     },
 
     // POST 上传文件
-    '/upload/:type': function(params, res, req){
+    '/upload': function(res, req){
         var formidable = require('formidable');
         var path = require('path');
         var fs = require('fs');
 
-        let type = '';
         // create an incoming form object
         let form = new formidable.IncomingForm();
         let absPath = '',
@@ -65,6 +80,10 @@ var routerConfig = {
             relPath = path.join(uploadDir, file.name);
 
             fs.rename(file.path, absPath);
+        });
+
+        form.on('field', function(){
+            console.log(arguments);
         });
     
         // log any errors that occur
