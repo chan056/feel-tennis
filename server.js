@@ -7,7 +7,7 @@ var path = require('path');
 var formidable = require('formidable');
 
 
-var mine = require('./mine').types;
+var mime = require('./mime').types;
 var tools = require('./src/n/tool');
 
 var server = http.createServer(function(request, response) {
@@ -21,7 +21,7 @@ var server = http.createServer(function(request, response) {
 	
 	var ext = path.extname(pathname);
 	ext = ext ? ext.slice(1) : 'unknown';
-	var contentType = mine[ext];
+	var contentType = mime[ext];
 
 	if(contentType){// 静态资源
 		var realPath;

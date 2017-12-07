@@ -46,7 +46,7 @@ const Video = {
 	data: function () {
 		var d = {video: [], src: ''};
 		var propsData = this.$options.propsData;
-		let videoDir = "../uploads/";
+		let videoDir = "../upload/";
 
 		xhr('/videos/' + propsData.videoId, function(resData){
 			d.video = resData[0];

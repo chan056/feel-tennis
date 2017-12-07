@@ -20,5 +20,7 @@ exports.types = {
     "xml": "text/xml",
     "ttf": "text/ttf",
     "woff": "text/woff",
-    "map": 'text/plain'
+    "map": 'text/plain',
+    "m3u8": 'text/plain',
+    "ts": 'video/MP2T '
 };
