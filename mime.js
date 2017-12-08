@@ -21,6 +21,7 @@ exports.types = {
     "ttf": "text/ttf",
     "woff": "text/woff",
     "map": 'text/plain',
-    "m3u8": 'text/plain',
-    "ts": 'video/MP2T '
+    "m3u8": 'application/vnd.apple.mpegurl',// application/vnd.apple.mpegurl
+    "ts": 'video/mp2t'
+    
 };
