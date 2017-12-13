@@ -2,7 +2,7 @@ const Sports = {
 	data: function () {
 		var d = {sports: []};
 
-		xhr('/sports', function(resData){
+		tools.xhr('/sports', function(resData){
 			d.sports = resData;
 		});
 
@@ -17,7 +17,7 @@ const AlbumList = {
 	data: function () {
 		var d = {albumList: []};
 		var propsData = this.$options.propsData;
-		xhr('/sports/' + propsData.sportId + '/albums', function(resData){
+		tools.xhr('/sports/' + propsData.sportId + '/albums', function(resData){
 			d.albumList = resData;
 		});
 
@@ -32,7 +32,7 @@ const Album = {
 	data: function () {
 		var d = {albumVideoList: []};
 		var propsData = this.$options.propsData;
-		xhr('/albums/' + propsData.albumId + '/videos', function(resData){
+		tools.xhr('/albums/' + propsData.albumId + '/videos', function(resData){
 			d.albumVideoList = resData;
 		});
 
@@ -48,14 +48,19 @@ const Video = {
 		var propsData = this.$options.propsData;
 		let videoDir = "../upload/";
 
-		xhr('/videos/' + propsData.videoId, function(resData){
+		tools.xhr('/videos/' + propsData.videoId, function(resData){
 			d.video = resData[0];
 			d.src =  videoDir + d.video.id + ".mp4";
 		});
 
 		return d;
 	},
-	template: temp.video
+	template: temp.video,
+	created() {
+		tools.insertScriptTag(1, "https://cdn.jsdelivr.net/npm/hls.js@latest", {onload: function(){
+			tools.insertScriptTag(2, FRAGMENTS.playHLS);
+		}});
+	}
 };
 
 const Upload = {
@@ -77,15 +82,15 @@ const Upload = {
 
 		d.fileList = [];
 
-		xhr('/albums', function(resData){
+		tools.xhr('/albums', function(resData){
 			d.albums = resData;
 		});
 
-		xhr('/tags', function(resData){
+		tools.xhr('/tags', function(resData){
 			d.tags = resData;
 		});
 		
-		xhr('/sports', function(resData){
+		tools.xhr('/sports', function(resData){
 			d.sports = resData;
 		});
 
@@ -112,14 +117,14 @@ const Upload = {
 			let so = Object.assign({}, this.SO);
 			so.tag = this.SO.tag.join(',');
 
-			xhr('/video', function(){
+			tools.xhr('/video', function(){
 				console.log(arguments)
 			}, 'post', so);
 		},
 
 		postTag(){
 
-			xhr('/tag', function(){
+			tools.xhr('/tag', function(){
 				console.log(arguments)
 			}, 'post', this.newTag);
 			

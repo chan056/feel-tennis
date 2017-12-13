@@ -7,7 +7,11 @@ const routes = [
 	// 获取‘某专辑’下的‘视频列表’
 	{ path: '/albums/:albumId', component: Album, props: true, },
 	// 获取‘某视频’的信息
-	{ path: '/videos/:videoId', component: Video, props: true, },
+	{ 
+		path: '/videos/:videoId', 
+		component: Video, 
+		props: true,
+	},
 
 	{ path: '/upload', component: Upload, props: true, },
 ];
@@ -17,7 +21,10 @@ const router = new VueRouter({
 });
 
 const app = new Vue({
-	router
-}).$mount('#router');
+	el: '#router',
+	router: router
+})/* .$mount('#router') */;
 
-
+// const nav = new Vue({
+// 	el: '#nav'
+// });
