@@ -15,8 +15,8 @@ const Sports = {
 const AlbumList = {
 	props: ['sportId'],
 	data: function () {
-		var d = {albumList: []};
 		var propsData = this.$options.propsData;
+		var d = {albumList: []};
 		tools.xhr('/sports/' + propsData.sportId + '/albums', function(resData){
 			d.albumList = resData;
 		});
@@ -25,6 +25,16 @@ const AlbumList = {
 	},
 
 	template: temp.albumList,
+
+	methods: {
+		
+	},
+
+	computed: {
+		// albumList: function(){
+			
+		// }
+	}
 };
 
 const Album = {

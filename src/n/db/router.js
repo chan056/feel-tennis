@@ -5,6 +5,10 @@ var routerConfig = {
         r.query('querySport', params, res);
     },
 
+    // '/sports/:sport_id': function(params, res){
+    //     r.query('querySport', params, res);
+    // },
+
     '/albums': function(params, res){
         r.query('queryAlbumList', params, res);
     },
