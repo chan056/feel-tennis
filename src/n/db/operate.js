@@ -2,8 +2,19 @@ let conn = require('./connect.js').conn;
 let tools = require('../tool');
 
 var operations = {
-	querySport: function (res, qualification) {
+	querySports: function (res, qualification) {
 
+		conn.query('SELECT * from sport' + qualification, function (err, result, fields) {
+			if (err) throw err;
+
+			result = JSON.stringify(result);
+			res.end(result)
+		});
+
+	},
+
+	querySport: function (res, qualification) {
+		
 		conn.query('SELECT * from sport' + qualification, function (err, result, fields) {
 			if (err) throw err;
 
@@ -54,7 +65,6 @@ var operations = {
 
 			result = JSON.stringify(result);
 			res.end(result);
-
 			
 		});
 
@@ -87,11 +97,22 @@ var operations = {
 	},
 }
 
+// 执行SQL
+module.exports.excuteSQL = function (sql, res) {
+	conn.query(sql,  function(err, result, fields){
+		if(err)
+			throw err;
+		
+		result = JSON.stringify(result);
+		res.end(result)
+	});
+}
+
+// 基础查询
 module.exports.query = function (operationName, params, response) {
 	// console.log(arguments[0], arguments[1])
 	qualification = generateQuerySQL(params);
 	operations[operationName](response, qualification);
-
 }
 
 module.exports.post = function (operationName, request, response) {

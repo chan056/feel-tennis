@@ -2,12 +2,12 @@ var r =  require('./operate');
 
 var routerConfig = {
     '/sports': function(params, res){
-        r.query('querySport', params, res);
+        r.query('querySports', params, res);
     },
 
-    // '/sports/:sport_id': function(params, res){
-    //     r.query('querySport', params, res);
-    // },
+    '/sports/:id': function(params, res){
+        r.query('querySport', params, res);
+    },
 
     '/albums': function(params, res){
         r.query('queryAlbumList', params, res);
@@ -27,6 +27,49 @@ var routerConfig = {
 
     '/tags(/:sport_id)?': function(params, res){
         r.query('queryTag', params, res);
+    },
+
+    // 收集所有和导航有关信息
+    // 根据 sportId albumId videoId
+    '/navInfo/:depth/:id': function(params, res){
+        if(params.depth == 1){
+            r.query('querySport', {id: params.id}, res);
+        }else if(params.depth == 2){
+            let sql = `SELECT
+                    a.id AS aId ,
+                    a. NAME AS aName ,
+                    s.id AS sId,
+                    s.NAME as sName
+                FROM
+                    album AS a ,
+                    sport AS s
+                WHERE
+                    a.sport_id = s.id
+                AND a.id = ` + params.id;
+
+                r.excuteSQL(sql, res);
+        }else if(params.depth == 3){
+            let sql = `SELECT
+                v.id AS vId,
+                v.headline AS vHeadline,
+                a.id AS aId ,
+                a. NAME AS aName ,
+                s.id AS sId,
+                s.NAME as sName
+            FROM
+                video as v,
+                album AS a ,
+                sport AS s
+            WHERE
+                a.sport_id = s.id
+                AND
+                v.album_id = a.id
+                AND 
+                v.id = ` + params.id;
+            
+                r.excuteSQL(sql, res);
+        }
+        // console.log(params);
     },
 
     // POST

@@ -12,7 +12,7 @@ var temp = {
     albumList: `
         <div id="album-list">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item :to="{ path: '/' }">当前项目名称</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/sports/' + crumb.id }">{{crumb.name}}</el-breadcrumb-item>
             </el-breadcrumb>
             <ol>
                 <li v-for="album in albumList">
@@ -24,8 +24,8 @@ var temp = {
     album: `
         <div>
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item :to="{ path: '/' }">当前项目名称</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{ path: '/' }">当前专辑名称</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/sports/' + crumb.sId }">{{crumb.sName}}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/albums/' + crumb.aId }">{{crumb.aName}}</el-breadcrumb-item>
             </el-breadcrumb>
             <h2>Feel Tennis</h2>
             <ul class="list">
@@ -39,9 +39,9 @@ var temp = {
     video: `
         <div>
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item :to="{ path: '/' }">当前项目名称</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{ path: '/' }">当前专辑名称</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{ path: '/' }">当前视频名称</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/sports/' + crumb.sId }">{{crumb.sName}}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/albums/' + crumb.aId }">{{crumb.aName}}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/videos/' + crumb.vId }">{{crumb.vHeadline}}</el-breadcrumb-item>
             </el-breadcrumb>
             <video id="video" controls="controls">Not support this browser, please use Chrome.</video> 
         </div>

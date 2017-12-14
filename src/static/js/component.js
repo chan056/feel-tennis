@@ -16,9 +16,13 @@ const AlbumList = {
 	props: ['sportId'],
 	data: function () {
 		var propsData = this.$options.propsData;
-		var d = {albumList: []};
+		var d = {albumList: [], crumb: {}};
 		tools.xhr('/sports/' + propsData.sportId + '/albums', function(resData){
 			d.albumList = resData;
+		});
+
+		tools.xhr('/navInfo/1/' + propsData.sportId, function(resData){
+			d.crumb = resData[0];
 		});
 
 		return d;
@@ -40,10 +44,14 @@ const AlbumList = {
 const Album = {
 	props: ['albumId'],
 	data: function () {
-		var d = {albumVideoList: []};
+		var d = {albumVideoList: [], crumb: {},};
 		var propsData = this.$options.propsData;
 		tools.xhr('/albums/' + propsData.albumId + '/videos', function(resData){
 			d.albumVideoList = resData;
+		});
+
+		tools.xhr('/navInfo/2/' + propsData.albumId, function(resData){
+			d.crumb = resData[0];
 		});
 
 		return d;
@@ -54,13 +62,17 @@ const Album = {
 const Video = {
 	props: ['videoId'],
 	data: function () {
-		var d = {video: [], src: ''};
+		var d = {video: [], crumb: {}, src: ''};
 		var propsData = this.$options.propsData;
 		let videoDir = "../upload/";
 
 		tools.xhr('/videos/' + propsData.videoId, function(resData){
 			d.video = resData[0];
 			d.src =  videoDir + d.video.id + ".mp4";
+		});
+
+		tools.xhr('/navInfo/3/' + propsData.videoId, function(resData){
+			d.crumb = resData[0];
 		});
 
 		return d;
