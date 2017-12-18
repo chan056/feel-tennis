@@ -19,8 +19,16 @@ const routes = [
 	{ path: '/albums/:albumId', component: Album, props: true, },
 	// 获取‘某视频’的信息
 	{ 
-		path: '/videos/:videoId', 
+		path: '/video/:videoId', 
 		component: Video, 
+		props: true,
+	},
+
+	// 根据标签列出视频
+	{ 
+		path: '/videosByTag/:tagId', 
+		component: videosByTag, 
+		name: 'videosByTag',
 		props: true,
 	},
 

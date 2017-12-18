@@ -98,13 +98,17 @@ var operations = {
 }
 
 // 执行SQL
-module.exports.excuteSQL = function (sql, res) {
+module.exports.excuteSQL = function (sql, res, fn) {
 	conn.query(sql,  function(err, result, fields){
 		if(err)
 			throw err;
 		
-		result = JSON.stringify(result);
-		res.end(result)
+		if(fn){
+			fn(result);
+		}else{
+			result = JSON.stringify(result);
+			res.end(result);
+		}
 	});
 }
 

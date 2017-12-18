@@ -6,7 +6,7 @@ var routerConfig = {
     },
 
     '/sports/:id': function(params, res){
-        r.query('querySport', params, res);
+        r.query('querySport', params, res);tag
     },
 
     '/albums': function(params, res){
@@ -27,6 +27,30 @@ var routerConfig = {
 
     '/tags(/:sport_id)?': function(params, res){
         r.query('queryTag', params, res);
+    },
+
+    '/albumTags/:albumId': function(params, res){
+        let sql = `select tag from album where id=` + params.albumId;
+        r.excuteSQL(sql, res, function(data){
+            // data = JSON.stringify(data);
+            let tagObj = data[0];
+            if(tagObj && tagObj.tag){
+                sql = 'select * from tag where id in (' + tagObj.tag + ')';
+                r.excuteSQL(sql, res);
+            }
+        });
+    },
+
+    '/videoTags/:videoId': function(params, res){
+        let sql = `select tag from video where id=` + params.videoId;
+        r.excuteSQL(sql, res, function(data){
+            // data = JSON.stringify(data);
+            let tagObj = data[0];
+            if(tagObj && tagObj.tag){
+                sql = 'select * from tag where id in (' + tagObj.tag + ')';
+                r.excuteSQL(sql, res);
+            }
+        });
     },
 
     // 收集所有和导航有关信息

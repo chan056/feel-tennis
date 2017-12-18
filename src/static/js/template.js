@@ -28,9 +28,14 @@ var temp = {
                 <el-breadcrumb-item :to="{ path: '/albums/' + crumb.aId }">{{crumb.aName}}</el-breadcrumb-item>
             </el-breadcrumb>
             <h2>Feel Tennis</h2>
+            <div class="tags">
+                <el-button round v-for="tag in tags" >
+                    <router-link :to="{name: 'videosByTag', params: {tagId: tag.id}}">{{tag.name}}</router-link>
+                </el-button>
+            </div>
             <ul class="list">
                 <li v-for="video in albumVideoList">
-                    <router-link :to="{path: '/videos/'+ video.album_id }">{{ video.headline }}</router-link>
+                    <router-link :to="{path: '/video/'+ video.album_id }">{{ video.headline }}</router-link>
                 </li>
             </ul>
         </div>
@@ -43,9 +48,39 @@ var temp = {
                 <el-breadcrumb-item :to="{ path: '/albums/' + crumb.aId }">{{crumb.aName}}</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{ path: '/videos/' + crumb.vId }">{{crumb.vHeadline}}</el-breadcrumb-item>
             </el-breadcrumb>
+            <div class="tags">
+                <el-button round v-for="tag in tags" >
+                    <router-link :to="{name: 'videosByTag', params: {tagId: tag.id}}">{{tag.name}}</router-link>
+                </el-button>
+            </div>
             <video id="video" controls="controls">Not support this browser, please use Chrome.</video> 
         </div>
-     `,
+    `,
+
+    videosByTag: `
+        <div>
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item :to="{ path: '/sports' }">首页</el-breadcrumb-item>
+            </el-breadcrumb>
+            
+            <el-row :gutter="20">
+                <el-col :span="6" v-for="video in videos">
+                    <div class="grid-content bg-purple">
+                        <el-card :body-style="{ padding: '0px' }">
+                            <img src="~examples/assets/images/hamburger.png" class="image">
+                            <div style="padding: 14px;">
+                                <span>{{video.headline}}</span>
+                                <div class="bottom clearfix">
+                                    <time class="time">date</time>
+                                    <el-button type="text" class="button">操作按钮</el-button>
+                                </div>
+                            </div>
+                        </el-card>
+                    </div>
+                </el-col>
+            </el-row>
+        </div>
+    `,
     
     // ADMIN
     upload: `

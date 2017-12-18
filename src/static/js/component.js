@@ -44,14 +44,24 @@ const AlbumList = {
 const Album = {
 	props: ['albumId'],
 	data: function () {
-		var d = {albumVideoList: [], crumb: {},};
-		var propsData = this.$options.propsData;
-		tools.xhr('/albums/' + propsData.albumId + '/videos', function(resData){
+		let d = {albumVideoList: [], crumb: {}, tags:[]};
+		let propsData = this.$options.propsData;
+		let albumId = propsData.albumId;
+
+		tools.xhr('/albums/' + albumId + '/videos', function(resData){
 			d.albumVideoList = resData;
 		});
 
-		tools.xhr('/navInfo/2/' + propsData.albumId, function(resData){
+		tools.xhr('/navInfo/2/' + albumId, function(resData){
 			d.crumb = resData[0];
+		});
+
+		tools.xhr('/navInfo/2/' + albumId, function(resData){
+			d.crumb = resData[0];
+		});
+
+		tools.xhr('/albumTags/' + albumId, function(resData){
+			d.tags = resData;
 		});
 
 		return d;
@@ -62,17 +72,20 @@ const Album = {
 const Video = {
 	props: ['videoId'],
 	data: function () {
-		var d = {video: [], crumb: {}, src: ''};
-		var propsData = this.$options.propsData;
-		let videoDir = "../upload/";
+		let d = {video: [], crumb: {}, tags: []};
+		let propsData = this.$options.propsData;
+		let videoId = propsData.videoId;
 
-		tools.xhr('/videos/' + propsData.videoId, function(resData){
+		tools.xhr('/videos/' + videoId, function(resData){
 			d.video = resData[0];
-			d.src =  videoDir + d.video.id + ".mp4";
 		});
 
-		tools.xhr('/navInfo/3/' + propsData.videoId, function(resData){
+		tools.xhr('/navInfo/3/' + videoId, function(resData){
 			d.crumb = resData[0];
+		});
+
+		tools.xhr('/videoTags/' + videoId, function(resData){
+			d.tags = resData;
 		});
 
 		return d;
@@ -82,6 +95,30 @@ const Video = {
 		tools.insertScriptTag(1, "https://cdn.jsdelivr.net/npm/hls.js@latest", {onload: function(){
 			tools.insertScriptTag(2, FRAGMENTS.playHLS);
 		}});
+	}
+};
+
+const videosByTag = {
+	props: ['tagId'],
+	data: function () {
+		var d = {videos: []};
+		var propsData = this.$options.propsData;
+		let videoDir = "../upload/";
+
+		tools.xhr('/videos/' + propsData.tagId, function(resData){
+			d.videos = resData;
+			// d.src =  videoDir + d.video.id + ".mp4";
+		});
+
+		// tools.xhr('/navInfo/3/' + propsData.tagId, function(resData){
+		// 	d.crumb = resData[0];
+		// });
+
+		return d;
+	},
+	template: temp.videosByTag,
+	created() {
+
 	}
 };
 
