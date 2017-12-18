@@ -17,16 +17,19 @@
 				<img src="/multimedia/img/logo.jpg" alt="">
 			</el-col>
 
-			<el-col :span="12">
+			<el-col :span="6" :offset="12">
 				<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-					<el-form-item label="活动名称" prop="name">
-						<el-input v-model="ruleForm.name"></el-input>
-					</el-form-item>
-	
-					<el-form-item>
-						<el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-						<el-button @click="resetForm('ruleForm')">重置</el-button>
-					</el-form-item>
+					<el-row>
+						<el-col :span=16>
+							<el-form-item label="活动名称" prop="name">
+								<el-input v-model="ruleForm.name"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span=6 :offset=2>
+								<el-button type="primary" @click="submitForm('ruleForm')">查询</el-button>
+						</el-col>
+					</el-row>
+
 				</el-form>
 			</el-col>
 		</el-row>
