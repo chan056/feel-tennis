@@ -4,25 +4,41 @@
 <head>
 	<meta charset="UTF-8">
 	<title>ChanTube</title>
+	<link rel="shortcut icon" href="/multimedia/img/logo.ico">
 	<link rel="stylesheet" href="../css/common.css">
 	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 	<link rel="stylesheet" href="../css/comp.css">
 </head>
 
 <body>
-	<header>I'm header</header>
-	<!-- <div id="nav">
-		<el-breadcrumb separator-class="el-icon-arrow-right">
-			<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-			<el-breadcrumb-item>活动管理</el-breadcrumb-item>
-			<el-breadcrumb-item>活动列表</el-breadcrumb-item>
-			<el-breadcrumb-item>活动详情</el-breadcrumb-item>
-		</el-breadcrumb>
-	</div> -->
+	<header id="header">
+		<el-row>
+			<el-col :span="6">
+				<img src="/multimedia/img/logo.jpg" alt="">
+			</el-col>
+
+			<el-col :span="12">
+				<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+					<el-form-item label="活动名称" prop="name">
+						<el-input v-model="ruleForm.name"></el-input>
+					</el-form-item>
+	
+					<el-form-item>
+						<el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+						<el-button @click="resetForm('ruleForm')">重置</el-button>
+					</el-form-item>
+				</el-form>
+			</el-col>
+		</el-row>
+	</header>
+	<br>
+
 	<div id="router">
 		<router-view class="view"></router-view>
 	</div>
-	<footer>I'm footer</footer>
+
+	<br>
+	<footer>Footer</footer>
 </body>
 <script src="../lib/v.js"></script>
 <script src="../lib/vue-router.js"></script>

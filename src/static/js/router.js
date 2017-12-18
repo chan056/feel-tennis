@@ -44,11 +44,40 @@ const app = new Vue({
 	router: router,
 	mounted: function () {
 		// console.log(this.$breadcrumbs)
-	}
+	},
 })/* .$mount('#router') */;
 
-// const nav = new Vue({
-// 	el: '#nav'
-// });
+const nav = new Vue({
+	el: '#header',
+
+	data: {
+		ruleForm: {
+			name: '',
+		},
+		rules: {
+			name: [
+			  { required: true, message: '请输入活动名称', trigger: 'blur' },
+			  { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+			],
+		}
+	},
+
+	methods: {
+		submitForm(formName) {
+			this.$refs[formName].validate((valid) => {
+			if (valid) {
+				alert('submit!');
+			} else {
+				console.log('error submit!!');
+				return false;
+			}
+			});
+		},
+		resetForm(formName) {
+			this.$refs[formName].resetFields();
+		}
+	}
+	// component
+});
 
 // Vue.set( target, key, value )
