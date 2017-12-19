@@ -115,7 +115,7 @@ module.exports.excuteSQL = function (sql, res, fn) {
 // 基础查询 a=1&b=2
 module.exports.query = function (operation, params, response) {
 	// console.log(arguments[0], arguments[1])
-	clause = tools.newClause(params, conn);
+	clause = tools.newClause(params);
 	if(clause){
 		clause = ' where ' + clause;
 	}

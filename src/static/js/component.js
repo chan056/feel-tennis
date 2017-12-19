@@ -100,30 +100,35 @@ const Video = {
 
 const videos = {
 	data: function () {
-		// console.log(this, )
 		var d = {videos: []};
-		var propsData = this.$options.propsData;
-		var route = this.$route;
-
-		let videoDir = "../upload/";
-
-		// {a:1, b:2} 转化成 ?a=1&b=2
-		let q = $.param(route.query);
-		q = q? ('?' + q): '';
-		tools.xhr('/videos' + q, function(resData){
-			d.videos = resData;
-			// d.src =  videoDir + d.video.id + ".mp4";
-		});
-
-		// tools.xhr('/navInfo/3/' + propsData.tagId, function(resData){
-		// 	d.crumb = resData[0];
-		// });
+		this.refreshVlist();
 
 		return d;
 	},
 	template: temp.videos,
 	created() {
+		
+	},
+	beforeRouteUpdate(to, from, next) {
+		console.log('update ........', to, this.$route)
+		setTimeout(this.refreshVlist, 20);// ? 触发时， $route还未更新
+		next();
+	},
 
+	methods: {
+		refreshVlist: function(){
+			var route = this.$route;
+			
+			// {a:1, b:2} 转化成 ?a=1&b=2
+			let q = $.param(route.query);
+			q = q? ('?' + q): '';
+
+			_t = this;
+
+			tools.xhr('/videos' + q, function(resData){
+				_t.videos = resData;
+			});
+		} 
 	}
 };
 

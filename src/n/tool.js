@@ -11,7 +11,7 @@ function isEmpty(obj) {
 	return (Object.getOwnPropertyNames(obj).length === 0);
 }
 
-function newClause(params, conn) {
+function newClause(params) {
 	
 	if (isEmpty(params)) {
 		return '';
@@ -21,7 +21,7 @@ function newClause(params, conn) {
 	var n = 0;
 	for (var i in params) {
 		let k = params[i];
-		k = conn.escape(k);
+		// k = conn.escape(k);
 
 		n == 0?
 			qualification += i + '=' + k:

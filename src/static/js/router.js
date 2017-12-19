@@ -30,6 +30,12 @@ const routes = [
 		component: videos, 
 		// name: 'videos',
 		// props: true,
+		beforeRouteUpdate(to, from, next) {
+			// react to route changes...
+			// don't forget to call next()
+			console.log(to, from)
+			next();
+		}
 	},
 
 	{ path: '/upload', component: Upload, props: true, },
@@ -71,7 +77,8 @@ const nav = new Vue({
 		submitForm(formName) {
 			this.$refs[formName].validate((valid) => {
 			if (valid) {
-				alert('submit!');
+				location.hash = "#/videos?headline=" + this.ruleForm.name
+				// this.ruleForm.name = '';
 			} else {
 				console.log('error submit!!');
 				return false;

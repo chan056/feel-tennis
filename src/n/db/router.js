@@ -29,11 +29,30 @@ const routerConfig = {
     '/videos': function(params, res){
         // r.query('queryVideo', params, res);
         
-        let sql = `select * from video WHERE CONCAT(',',tag,',')  like '%,` + params.tagId + `,%'`;
-        delete params.tagId;
+        let sql = `select * from video`;
+
+        if(params && !tools.isEmpty(params)){
+            sql += ' where';
+        }
+
+        var clauses = [];
+        if(params.tagId){
+            clauses.push(`CONCAT(',',tag,',')  like '%,` + params.tagId + `,%'`)
+            delete params.tagId;
+        }
+
+        if(params.headline){
+            clauses.push(`headline like '%` + params.headline + `%'`);
+            delete params.headline;
+        }
+        
         let clause = tools.newClause(params);
         if(clause){
-            sql += ` and ` + clause;
+            clauses.push(clause);
+        }
+
+        if(clauses.length){
+            sql += ' ' + clauses.join(' and ');
         }
 
         r.excuteSQL(sql, res);
