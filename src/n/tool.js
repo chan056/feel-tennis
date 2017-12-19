@@ -11,7 +11,30 @@ function isEmpty(obj) {
 	return (Object.getOwnPropertyNames(obj).length === 0);
 }
 
+function newClause(params, conn) {
+	
+	if (isEmpty(params)) {
+		return '';
+	}
+
+	var qualification = '';
+	var n = 0;
+	for (var i in params) {
+		let k = params[i];
+		k = conn.escape(k);
+
+		n == 0?
+			qualification += i + '=' + k:
+			qualification += ' and ' + i + '=' + k;
+
+		n ++;
+	}
+
+	return qualification;
+}
+
 module.exports = {
     response404: response404,
-    isEmpty: isEmpty
+    isEmpty: isEmpty,
+    newClause: newClause
 }

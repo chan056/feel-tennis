@@ -26,10 +26,10 @@ const routes = [
 
 	// 根据标签列出视频
 	{ 
-		path: '/videosByTag/:tagId', 
-		component: videosByTag, 
-		name: 'videosByTag',
-		props: true,
+		path: '/videos', 
+		component: videos, 
+		// name: 'videos',
+		// props: true,
 	},
 
 	{ path: '/upload', component: Upload, props: true, },
@@ -38,6 +38,11 @@ const routes = [
 const router = new VueRouter({
 	routes
 });
+
+router.beforeEach((to, from, next) => {
+	console.log(from.fullPath, '==>', to.fullPath);
+	next();
+})
 
 const app = new Vue({
 	el: '#router',

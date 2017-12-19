@@ -48,7 +48,7 @@ var operations = {
 	},
 
 	queryVideo: function (res, qualification) {
-		
+
 		conn.query('SELECT * from video' + qualification, function (err, result, fields) {
 			if (err) throw err;
 
@@ -112,42 +112,26 @@ module.exports.excuteSQL = function (sql, res, fn) {
 	});
 }
 
-// 基础查询
-module.exports.query = function (operationName, params, response) {
+// 基础查询 a=1&b=2
+module.exports.query = function (operation, params, response) {
 	// console.log(arguments[0], arguments[1])
-	qualification = generateQuerySQL(params);
-	operations[operationName](response, qualification);
+	clause = tools.newClause(params, conn);
+	if(clause){
+		clause = ' where ' + clause;
+	}
+	console.log(params, clause)
+	operations[operation](response, clause);
 }
 
-module.exports.post = function (operationName, request, response) {
+module.exports.post = function (operation, request, response) {
 	// console.log(arguments[0], arguments[1])
 	var formidable = require('formidable');
 	var form = new formidable.IncomingForm();
 
 	form.parse(request, function(err, fields, files){
-		operations[operationName](response, fields);
+		operations[operation](response, fields);
 	});
 }
 
-function generateQuerySQL(params) {
-	
-	if (tools.isEmpty(params)) {
-		return '';
-	}
 
-	var qualification = ' where ';
-	var n = 0;
-	for (var i in params) {
-		let k = params[i];
-		k = conn.escape(k);
-
-		n == 0?
-			qualification += i + '=' + k:
-			qualification += ' and ' + i + '=' + k;
-
-		n ++;
-	}
-
-	return qualification;
-}
 

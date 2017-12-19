@@ -4,7 +4,7 @@ var routerConfig = require('./router');
 var tools = require('../tool');
 
 // 从路径中抽取参数
-function resolveApiPath(pathname, res, req) {
+function resolveApiPath(res, req) {
     var paramsMathed = {};
     var pathMatch;
     var fnMatched;
@@ -15,7 +15,7 @@ function resolveApiPath(pathname, res, req) {
         keys = [];
 
         var pathReg = pathToRegexp(k, keys);
-        pathMatch = pathReg.exec(pathname);
+        pathMatch = pathReg.exec(UO.pathname);
 
         if (pathMatch) {
             fnMatched = f;
@@ -36,7 +36,9 @@ function resolveApiPath(pathname, res, req) {
         let reqMethod = req.method;
 
         if (reqMethod == 'GET') {
-            fnMatched(paramsMathed, res, req);
+            // 将params和query结合
+            let queryParams = Object.assign(paramsMathed, UO.query);
+            fnMatched(queryParams, res);
         } else {
             if (reqMethod == 'POST') {
                 fnMatched(res, req);

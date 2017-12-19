@@ -98,14 +98,19 @@ const Video = {
 	}
 };
 
-const videosByTag = {
-	props: ['tagId'],
+const videos = {
 	data: function () {
+		// console.log(this, )
 		var d = {videos: []};
 		var propsData = this.$options.propsData;
+		var route = this.$route;
+
 		let videoDir = "../upload/";
 
-		tools.xhr('/videos/' + propsData.tagId, function(resData){
+		// {a:1, b:2} 转化成 ?a=1&b=2
+		let q = $.param(route.query);
+		q = q? ('?' + q): '';
+		tools.xhr('/videos' + q, function(resData){
 			d.videos = resData;
 			// d.src =  videoDir + d.video.id + ".mp4";
 		});
@@ -116,7 +121,7 @@ const videosByTag = {
 
 		return d;
 	},
-	template: temp.videosByTag,
+	template: temp.videos,
 	created() {
 
 	}

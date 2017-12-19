@@ -1,12 +1,13 @@
-var r =  require('./operate');
+let r =  require('./operate');
+let tools = require('../tool');
 
-var routerConfig = {
+const routerConfig = {
     '/sports': function(params, res){
         r.query('querySports', params, res);
     },
 
     '/sports/:id': function(params, res){
-        r.query('querySport', params, res);tag
+        r.query('querySport', params, res);
     },
 
     '/albums': function(params, res){
@@ -23,6 +24,19 @@ var routerConfig = {
     
     '/videos/:album_id': function(params, res){
         r.query('queryVideo', params, res);
+    },
+
+    '/videos': function(params, res){
+        // r.query('queryVideo', params, res);
+        
+        let sql = `select * from video WHERE CONCAT(',',tag,',')  like '%,` + params.tagId + `,%'`;
+        delete params.tagId;
+        let clause = tools.newClause(params);
+        if(clause){
+            sql += ` and ` + clause;
+        }
+
+        r.excuteSQL(sql, res);
     },
 
     '/tags(/:sport_id)?': function(params, res){

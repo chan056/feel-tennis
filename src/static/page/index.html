@@ -14,7 +14,11 @@
 	<header id="header">
 		<el-row>
 			<el-col :span="6">
-				<img src="/multimedia/img/logo.jpg" alt="">
+				<a href="#/sports">
+					<img src="/multimedia/img/logo.jpg" alt="">
+				</a>
+				
+				<!-- <router-link :to="{path: '/sports/1' }">xxx</router-link>  -->
 			</el-col>
 
 			<el-col :span="6" :offset="12">
@@ -47,6 +51,7 @@
 <script src="../lib/vue-router.js"></script>
 
 <script src="../lib/axios.min.js"></script>
+<script src="../lib/zepto.js"></script>
 <!-- <script src="../lib/breadcrumbs.js"></script> -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 

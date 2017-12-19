@@ -21,6 +21,7 @@ var temp = {
             </ol>
         </div>
     `,
+
     album: `
         <div>
             <el-breadcrumb separator="/">
@@ -30,7 +31,7 @@ var temp = {
             <h2>Feel Tennis</h2>
             <div class="tags">
                 <el-button round v-for="tag in tags" >
-                    <router-link :to="{name: 'videosByTag', params: {tagId: tag.id}}">{{tag.name}}</router-link>
+                    <router-link :to="{path: '/videos?tagId=' + tag.id}">{{tag.name}}</router-link>
                 </el-button>
             </div>
             <ul class="list">
@@ -39,8 +40,8 @@ var temp = {
                 </li>
             </ul>
         </div>
-    `
-    ,
+    `,
+
     video: `
         <div>
             <el-breadcrumb separator="/">
@@ -50,14 +51,14 @@ var temp = {
             </el-breadcrumb>
             <div class="tags">
                 <el-button round v-for="tag in tags" >
-                    <router-link :to="{name: 'videosByTag', params: {tagId: tag.id}}">{{tag.name}}</router-link>
+                    <router-link :to="{name: 'videos?tagId=1'}">{{tag.name}}</router-link>
                 </el-button>
             </div>
             <video id="video" controls="controls">Not support this browser, please use Chrome.</video> 
         </div>
     `,
 
-    videosByTag: `
+    videos: `
         <div>
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ path: '/sports' }">首页</el-breadcrumb-item>

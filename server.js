@@ -12,8 +12,8 @@ var tools = require('./src/n/tool');
 
 var server = http.createServer(function(request, response) {
 	// console.log(request.headers)
-	var pathname = url.parse(request.url).pathname;
-	global.pathname = pathname;// 存储为全局对象
+	let uo = url.parse(request.url, true);
+	pathname = uo.pathname;
 
 	if(pathname == '/'){
 		pathname = '/page/index.html';
@@ -51,9 +51,12 @@ var server = http.createServer(function(request, response) {
 		if(ext && ext != 'unknown')
 			return tools.response404(response)
 		// todo 拦截无理请求
+
+		global.UO = uo;
 		let resolveApiPathModule = require('./src/n/db/resolveApiPath');
-		resolveApiPathModule.resolveApiPath(pathname, response, request);
+		resolveApiPathModule.resolveApiPath(response, request);
 	}
 });
+
 server.listen(PORT);
 console.log("Server runing at port: " + PORT + ".");
