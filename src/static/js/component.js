@@ -1,3 +1,43 @@
+const HeaderComponent = {
+	el: '#header',
+
+	template: temp.header,
+
+	data: {
+		ruleForm: {
+			name: '',
+		},
+		rules: {
+			name: [
+			//   { required: true, message: ' '/* , trigger: 'blur'  */},
+			  { min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' }
+			],
+		}
+	},
+
+	methods: {
+		submitForm(formName) {
+			let name = $.trim(this.ruleForm.name);
+			if(!name)
+				return;
+
+			this.$refs[formName].validate((valid) => {
+				if (valid) {
+					location.hash = "#/videos?headline=" + this.ruleForm.name;
+					// this.ruleForm.name = '';
+				} else {
+					console.log('error submit!!');
+					return false;
+				}
+			});
+		},
+		resetForm(formName) {
+			this.$refs[formName].resetFields();
+		}
+	}
+	// component
+};
+
 const Sports = {
 	data: function () {
 		var d = {sports: []};
