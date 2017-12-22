@@ -133,8 +133,8 @@ const Video = {
 	template: temp.video,
 	created() {
 		tools.insertScriptTag(1, "https://cdn.jsdelivr.net/npm/hls.js@latest", {onload: function(){
-			tools.insertScriptTag(2, FRAGMENTS.playHLS);
-		}});
+			tools.insertScriptTag(2, FRAGMENTS.playHLS, {id: 'hls-frag'});
+		}, id: 'hls'});
 	}
 };
 

@@ -16,6 +16,11 @@ let tools = {
      * 文档中插入脚本
      */
     insertScriptTag: function(type, str, attrs){
+        let id = attrs.id;
+        if(id && $('script#' + id).length){
+            $('script#' + id).remove();
+        }
+
         let script = document.createElement('script');
         for(let i in attrs){
             script[i] = attrs[i];
@@ -29,6 +34,5 @@ let tools = {
 
         document.body.appendChild(script);
     }
-
     
 };
