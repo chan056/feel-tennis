@@ -131,16 +131,6 @@ const routerConfig = {
 
     // POST
     '/video': function(res, req){
-
-        // if(req.method.toLowerCase() == 'post'){
-        //     var formidable = require('formidable');
-
-        //     var form = new formidable.IncomingForm();
-
-        //     form.parse(req, function(err, fields, files){
-        //         r.post('creatVedio', fields, res, 'post');
-        //     });
-        // }
         r.post('creatVedio', req, res);
     },
 

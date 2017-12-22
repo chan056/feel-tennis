@@ -11,6 +11,7 @@ var mime = require('./mime').types;
 var tools = require('./src/n/tool');
 
 var server = http.createServer(function(request, response) {
+	// getClientIp(request);
 	// console.log(request.headers)
 	let uo = url.parse(request.url, true);
 	pathname = uo.pathname;
@@ -60,3 +61,13 @@ var server = http.createServer(function(request, response) {
 
 server.listen(PORT);
 console.log("Server runing at port: " + PORT + ".");
+
+function getClientIp(req) {
+	// console.log( req.headers['x-forwarded-for']);
+	console.log(req.connection.remoteAddress );
+	
+	// console.log(req.socket.remoteAddress );
+	
+	// console.log(req.connection.socket.remoteAddress );
+	
+};

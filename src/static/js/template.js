@@ -81,7 +81,7 @@ var temp = {
                     <router-link :to="{name: 'videos?tagId=1'}">{{tag.name}}</router-link>
                 </el-button>
             </div>
-            <video id="video" controls="controls">Not support this browser, please use Chrome.</video> 
+            <video id="video" controls="controls" height="400">Not support this browser, please use Chrome.</video> 
         </div>
     `,
 

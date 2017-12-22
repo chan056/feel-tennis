@@ -48,6 +48,10 @@ var operations = {
 	},
 
 	queryVideo: function (res, qualification) {
+		/* let updateSQL = `update stat set v_show = v_show + 1;
+			update video set impression = impression + 1;` */
+		conn.query('update stat set v_show = v_show + 1');
+		conn.query('update video set impression = impression + 1' + qualification);
 
 		conn.query('SELECT * from video' + qualification, function (err, result, fields) {
 			if (err) throw err;
@@ -119,7 +123,7 @@ module.exports.query = function (operation, params, response) {
 	if(clause){
 		clause = ' where ' + clause;
 	}
-	console.log(params, clause)
+	// console.log(params, clause)
 	operations[operation](response, clause);
 }
 
