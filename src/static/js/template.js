@@ -95,7 +95,7 @@ var temp = {
                 <el-col :span="6" v-for="video in videos">
                     <div class="grid-content bg-purple">
                         <el-card :body-style="{ padding: '0px' }">
-                            <img src="/" class="image">
+                            <img src="/img/logo.jpg" class="image">
                             <div style="padding: 14px;">
                                 <span>{{video.headline}}</span>
                                 <div class="bottom clearfix">
