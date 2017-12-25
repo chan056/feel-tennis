@@ -39,6 +39,7 @@ const routes = [
 	},
 
 	{ path: '/upload', component: Upload, props: true, },
+	{ path: '/feedback', component: Feedback,},
 ];
 
 const router = new VueRouter({
