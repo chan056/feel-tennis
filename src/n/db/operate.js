@@ -87,6 +87,19 @@ var operations = {
 		});
 	},
 
+	creatFeedback: function(res, postObj, req){
+		var sql = `INSERT INTO feedback 
+			(description, ip, site, email, files)
+			VALUES (?, ?, ?, ?, ?)`;
+
+		conn.query(sql, [postObj.desc, req.connection.remoteAddress, postObj.site, postObj.email, postObj.files], function(err, result, fields){
+			if(err)
+				console.log(err.sql, err.sqlMessage) ;
+			
+			res.end('success');
+		});
+	},
+
 	creatTag: function(res, postObj){
 		var sql = `INSERT INTO tag 
 			(name, sport_id)
@@ -133,7 +146,7 @@ module.exports.post = function (operation, request, response) {
 	var form = new formidable.IncomingForm();
 
 	form.parse(request, function(err, fields, files){
-		operations[operation](response, fields);
+		operations[operation](response, fields, request);
 	});
 }
 

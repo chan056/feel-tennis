@@ -198,7 +198,9 @@ const routerConfig = {
         form.parse(req);
     },
 
-    
+    '/feedback': function(res, req){
+        r.post('creatFeedback', req, res);
+    }
 }
 
 module.exports = routerConfig;
