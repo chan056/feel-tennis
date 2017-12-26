@@ -244,37 +244,69 @@ const Upload = {
 
 const Feedback = {
 	data: function () {
-		var d = {};
+		var d = {files: [], fileList: []};
 		d.form = {
 			desc: '',
 			site: '',
 			email: '',
-			fileList: []
 		};
 
-		// tools.xhr('/sports', function(resData){
-		// 	d.sports = resData;
-		// });
+		let rules = {
+			desc: [
+				{ required: true, message: '请填写问题描述',  },
+				{ min: 10, max: 500, message: '长度在 10 到 500 个字符', trigger: 'blur' }
+			],
+			site: [
+				{ message: '请填写相关网址', trigger: 'blur' }
+			],
+			email: [
+				{ type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
+			],
+		}
+
+		d.rules = rules;
 
 		return d;
 	},
 
 	methods:{
-		onSubmit: function () {
-			console.log('submit!');
+		submitForm(formName) {
+			this.$refs[formName].validate((valid) => {
+				let d = Object.assign({}, this.form);
+				d.files = this.files.join(',');
+
+				if (valid) {
+					tools.xhr('/feedback', function(resData){
+						this.resetForm('form');
+					}.bind(this), 'post', d);
+				} else {
+					return false;
+				}
+			});
+		},
+		resetForm(formName) {
+			this.$refs[formName].resetFields();
+			this.files = [];
+			this.fileList = [];
 		},
 		handleRemove(file, fileList) {
-			console.log(file, fileList);
-		},
-		handlePreview(file) {
-			console.log(file);
+			this.files = [];
+			// 从fileList从提取files
+			fileList.forEach(function(f){
+				let relPath = f.response.relPath;
+				this.files.push(relPath);
+			}.bind(this));
 		},
 		handleExceed(files, fileList) {
 			this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
 		},
-		handleSuccess(file){
-			// this.form.fileList.push({name: '1', url: file.relPath});
+		handleSuccess(res, file){
+			this.files.push(res.relPath);
 		},
+
+		goback: function(){
+			history.back();
+		}
 	},
 
 	template: temp.feedback,
