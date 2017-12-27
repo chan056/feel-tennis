@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <video id="video"></video> 
+    <video id="video" width="500"></video> 
     <!-- /upload/to/Watching -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
@@ -15,12 +15,15 @@
         var video = document.getElementById('video');
         var hls = new Hls();
 
-        // hls.loadSource('https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8');
-        hls.loadSource('/multimedia/ts/playlist.m3u8');
-        
         hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED,function() {
-            video.play();
+
+        hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+            // hls.loadSource('https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8');
+            hls.loadSource('/multimedia/ts/playlist.m3u8');
+            hls.on(Hls.Events.MANIFEST_PARSED,function() {
+                console.log(arguments[1])
+                video.play();
+            });
         });
     }
     </script>

@@ -65,7 +65,7 @@ var temp = {
             </div>
             <ul class="list">
                 <li v-for="video in albumVideoList">
-                    <router-link :to="{path: '/video/'+ video.album_id }">{{ video.headline }}</router-link>
+                    <router-link :to="{path: '/video/'+ video.id }">{{ video.headline }}</router-link>
                 </li>
             </ul>
         </div>
@@ -80,10 +80,14 @@ var temp = {
             </el-breadcrumb>
             <div class="tags">
                 <el-button round v-for="tag in tags" >
-                    <router-link :to="{name: 'videos?tagId=1'}">{{tag.name}}</router-link>
+                    <router-link :to="{path: '/videos?tagId=' + tag.id}">{{tag.name}}</router-link>
                 </el-button>
             </div>
             <video id="video" controls="controls" height="400">Not support this browser, please use Chrome.</video> 
+            <div>
+                <el-button>开始截图</el-button>
+                <el-button>暂停截图</el-button>
+            </div>
         </div>
     `,
 
@@ -97,7 +101,9 @@ var temp = {
                 <el-col :span="6" v-for="video in videos">
                     <div class="grid-content bg-purple">
                         <el-card :body-style="{ padding: '0px' }">
-                            <img src="/img/logo.jpg" class="image">
+                            <router-link :to="{path: '/video/' + video.id}">
+                                <img src="/img/logo.jpg" class="image">
+                            </router-link>
                             <div style="padding: 14px;">
                                 <span>{{video.headline}}</span>
                                 <div class="bottom clearfix">
