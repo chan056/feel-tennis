@@ -1,3 +1,5 @@
+// 从视频中获取截图
+
 var ffmpeg = require('fluent-ffmpeg');
 var chalk = require('chalk');
 

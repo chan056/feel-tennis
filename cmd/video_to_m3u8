@@ -1,41 +1,34 @@
-/*** 视频切片 ***/
-
-// https://www.cnblogs.com/JeroZeng/p/5846272.html
-// 可用
-ffmpeg -i 1.mp4 -c:v libx264 -c:a aac -strict -2  -hls_list_size 0 -f hls ./ts/1.m3u8
-
-// https://www.ffmpeg.org/ffmpeg.html
-官方文档
-
-// https://www.cnblogs.com/frost-yen/p/5848781.html
-ffmpeg 常用命令
+// 官方文档 https://www.ffmpeg.org/ffmpeg.html
 
 
+// ffmpeg 常用命令 https://www.cnblogs.com/frost-yen/p/5848781.html
 
 
-// ***************
+===================视频切片 
+
+// 单分辨率
 // https://docs.peer5.com/guides/production-ready-hls-vod/
 
 ffprobe -hide_banner beach.mkv
 
 ffmpeg -i 2.mp4 -vf scale=w=1280:h=720:force_original_aspect_ratio=decrease -c:a aac -ar 48000 -b:a 128k -c:v h264 -profile:v main -crf 20 -g 48 -keyint_min 48 -sc_threshold 0 -b:v 2500k -maxrate 2675k -bufsize 3750k -hls_time 4 -hls_playlist_type vod -hls_segment_filename 720p_%03d.ts 720p.m3u8
 
-// 多分辨率 ***************
-// Terminal
+// 多分辨率
+// Mac Terminal
 ffmpeg -hide_banner -y -i 2.mp4 \
   -vf scale=w=640:h=360:force_original_aspect_ratio=decrease -c:a aac -ar 48000 -c:v h264 -profile:v main -crf 20 -sc_threshold 0 -g 48 -keyint_min 48 -hls_time 4 -hls_playlist_type vod  -b:v 800k -maxrate 856k -bufsize 1200k -b:a 96k -hls_segment_filename ts/360p_%03d.ts ts/360p.m3u8 \
   -vf scale=w=842:h=480:force_original_aspect_ratio=decrease -c:a aac -ar 48000 -c:v h264 -profile:v main -crf 20 -sc_threshold 0 -g 48 -keyint_min 48 -hls_time 4 -hls_playlist_type vod -b:v 1400k -maxrate 1498k -bufsize 2100k -b:a 128k -hls_segment_filename ts/480p_%03d.ts ts/480p.m3u8 \
   -vf scale=w=1280:h=720:force_original_aspect_ratio=decrease -c:a aac -ar 48000 -c:v h264 -profile:v main -crf 20 -sc_threshold 0 -g 48 -keyint_min 48 -hls_time 4 -hls_playlist_type vod -b:v 2800k -maxrate 2996k -bufsize 4200k -b:a 128k -hls_segment_filename ts/720p_%03d.ts ts/720p.m3u8 \
   -vf scale=w=1920:h=1080:force_original_aspect_ratio=decrease -c:a aac -ar 48000 -c:v h264 -profile:v main -crf 20 -sc_threshold 0 -g 48 -keyint_min 48 -hls_time 4 -hls_playlist_type vod -b:v 5000k -maxrate 5350k -bufsize 7500k -b:a 192k -hls_segment_filename ts/1080p_%03d.ts ts/1080p.m3u8
 
-// CMD
+// Windows CMD
 ffmpeg -hide_banner -y -i 2.mp4 -vf scale=w=640:h=360:force_original_aspect_ratio=decrease -c:a aac -ar 48000 -c:v h264 -profile:v main -crf 20 -sc_threshold 0 -g 48 -keyint_min 48 -hls_time 4 -hls_playlist_type vod  -b:v 800k -maxrate 856k -bufsize 1200k -b:a 96k -hls_segment_filename ts/360p_%03d.ts ts/360p.m3u8 &
 ffmpeg -hide_banner -y -i 2.mp4 -vf scale=w=842:h=480:force_original_aspect_ratio=decrease -c:a aac -ar 48000 -c:v h264 -profile:v main -crf 20 -sc_threshold 0 -g 48 -keyint_min 48 -hls_time 4 -hls_playlist_type vod -b:v 1400k -maxrate 1498k -bufsize 2100k -b:a 128k -hls_segment_filename ts/480p_%03d.ts ts/480p.m3u8 &
 ffmpeg -hide_banner -y -i 2.mp4 -vf scale=w=1280:h=720:force_original_aspect_ratio=decrease -c:a aac -ar 48000 -c:v h264 -profile:v main -crf 20 -sc_threshold 0 -g 48 -keyint_min 48 -hls_time 4 -hls_playlist_type vod -b:v 2800k -maxrate 2996k -bufsize 4200k -b:a 128k -hls_segment_filename ts/720p_%03d.ts ts/720p.m3u8 &
 ffmpeg -hide_banner -y -i 2.mp4 -vf scale=w=1920:h=1080:force_original_aspect_ratio=decrease -c:a aac -ar 48000 -c:v h264 -profile:v main -crf 20 -sc_threshold 0 -g 48 -keyint_min 48 -hls_time 4 -hls_playlist_type vod -b:v 5000k -maxrate 5350k -bufsize 7500k -b:a 192k -hls_segment_filename ts/1080p_%03d.ts ts/1080p.m3u8
 
 
-#playlist
+// playlist EXAMPLE
 
 #EXTM3U
 #EXT-X-VERSION:3
@@ -47,3 +40,18 @@ ffmpeg -hide_banner -y -i 2.mp4 -vf scale=w=1920:h=1080:force_original_aspect_ra
 720p.m3u8
 #EXT-X-STREAM-INF:BANDWIDTH=5000000,RESOLUTION=1920x1080
 1080p.m3u8
+
+
+===========视频->GIF
+// 生成 palette:
+
+// ffmpeg -i 3.mp4 -y -ss 6 -t 4 -vf fps=10,scale=320:-1:flags=lanczos,palettegen palette.png
+
+// 用palette生成GIF:
+
+// ffmpeg -i input.flv -i palette.png -ss 6 -t 4 -filter_complex \
+// "fps=10,scale=320:-1:flags=lanczos[x];[x][1:v]paletteuse" output.gif
+
+
+// 可用
+ffmpeg -i 3.mp4 -ss 4 -t 4 -r 10 -vf scale=136:240 3.gif -hide_banner
