@@ -2,7 +2,7 @@ const ffmpeg = require('fluent-ffmpeg');
 
 var ffmpegInstance = ffmpeg({
     source: '3.mp4'
-}).size('200x?');
+}).size('400x?');
 
 // ffmpeg -i 3.mp4 -ss 4 -t 4 -r 10 -vf scale=136:240 3.gif -hide_banner
 
@@ -14,7 +14,7 @@ end = function(){
     console.log('end')
 }
 error = function(){
-    console.log(arguments)
+    console.log(arguments[0])
 }
 
 output = `gif/3-${Date.now()}.gif`;
