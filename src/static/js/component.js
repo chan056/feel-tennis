@@ -112,7 +112,7 @@ const Album = {
 const Video = {
 	props: ['videoId'],
 	data: function () {
-		let d = {video: [], crumb: {}, tags: [], captureParams: {}};
+		let d = {video: [], crumb: {}, tags: [], captureParams: {}, previewerVisible: false, gifLink: ''};
 		let propsData = this.$options.propsData;
 		let videoId = propsData.videoId;
 
@@ -140,7 +140,38 @@ const Video = {
 	},
 	methods: {
 		captureCountdown: function(){
-			this.captureParams.st = this.getVideoTime();
+			let _this = this;
+			let captureBtn = $('#capture-btn');
+			let counting = captureBtn.data('counting');
+
+			if(!counting){
+				captureBtn.data('counting', true);
+				_this.captureParams.st = _this.getVideoTime();
+
+				countdown();
+			}else{
+				clearCountdown();
+				_this.capture();
+			}
+
+			// 倒计时
+			function countdown(){
+				let t = 10;
+				_this.intervalId = setInterval(function(){
+					t--;
+					captureBtn.val('截图中 ' + t);
+
+					if(t == 0){
+						clearCountdown();
+					}
+				}, 1000)
+			};
+
+			function clearCountdown(){
+				clearInterval(_this.intervalId);
+				captureBtn.data('counting', false);
+				captureBtn.val('开始截图');
+			}
 		},
 
 		capture: function(){
@@ -154,13 +185,18 @@ const Video = {
 				console.log(resData);
 				this.captureParams = {id: this.captureParams.id};
 
-				var gifLInk = resData;
-				$('#previewer').attr('src', gifLInk);
+				var gifLink = resData;
+				this.gifLink = gifLink;
+				
 			}.bind(this));
 		},
 
 		getVideoTime: function(){
 			return $('#video')[0].currentTime;
+		},
+
+		preview: function(){
+			this.previewerVisible = true;
 		}
 	}
 };

@@ -85,10 +85,25 @@ var temp = {
             </div>
             <video id="video" controls="controls" height="400">Not support this browser, please use Chrome.</video> 
             <div>
-                <el-button @click="captureCountdown()">开始截图</el-button>
-                <el-button @click="capture()">暂停截图</el-button>
-                <img id="previewer" src=""></img>
+                <input type="button" value="开始截图" @click="captureCountdown()" id="capture-btn" class=""/>
+                <!--<el-button @click="captureCountdown()">开始截图</el-button>-->
+                <!--<el-button @click="capture()">暂停截图</el-button>-->
+                <el-button v-if="gifLink" @click="preview()">预览</el-button>
             </div>
+
+            <el-dialog
+                title="动态截图预览"
+                :visible.sync="previewerVisible"
+                width="30%"
+                >
+                <p v-if="gifLink" style="text-align: center;">
+                    <img v-bind:src="gifLink" />
+                </p>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="previewerVisible = false">确 定</el-button>
+                </span>
+            </el-dialog>
+
         </div>
     `,
 
