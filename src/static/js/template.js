@@ -85,8 +85,9 @@ var temp = {
             </div>
             <video id="video" controls="controls" height="400">Not support this browser, please use Chrome.</video> 
             <div>
-                <el-button>开始截图</el-button>
-                <el-button>暂停截图</el-button>
+                <el-button @click="captureCountdown()">开始截图</el-button>
+                <el-button @click="capture()">暂停截图</el-button>
+                <img id="previewer" src=""></img>
             </div>
         </div>
     `,

@@ -1,0 +1,19 @@
+// http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html
+// https://superuser.com/questions/556029/how-do-i-convert-a-video-to-gif-using-ffmpeg-with-reasonable-quality?newreg=74f57fea1edb47a78588ef5c4fc4469d
+
+
+i 输入的文件地址
+ss 视频开始时间
+t 持续时长
+r 帧率
+vf 滤镜
+hide_banner 隐藏部分提示
+
+// 模糊版
+ffmpeg -i 3.mp4 -ss 4 -t 4 -r 10 -vf scale=136:240 3.gif -hide_banner
+
+// 清晰版
+// 生成 palette:
+ffmpeg -y -ss 8 -t 3 -i 3.mp4 -vf fps=10,scale=400:-1:flags=lanczos,palettegen palette.png
+// 用palette生成GIF:
+ffmpeg -y -ss 8 -t 3 -i 3.mp4 -i palette.png -filter_complex "fps=10,scale=400:-1:flags=lanczos[x];[x][1:v]paletteuse" 3.gif

@@ -129,23 +129,17 @@ const routerConfig = {
         // console.log(params);
     },
 
+    '/gifLink': function(params, res){
+        let ff = require('./ffmpeg/g.js').ff;
+        ff(params, res);
+    },
+
     // POST
     '/video': function(res, req){
         r.post('creatVedio', req, res);
     },
 
     '/tag': function(res, req){
-        
-        // if(req.method.toLowerCase() == 'post'){
-        //     var formidable = require('formidable');
-
-        //       var form = new formidable.IncomingForm();
-
-        //     form.parse(req, function(err, fields, files){
-        //         r.post('creatTag', fields, res, 'post');
-        //   });
-        // }
-        
         r.post('creatTag', req, res);
     },
 
@@ -200,7 +194,7 @@ const routerConfig = {
 
     '/feedback': function(res, req){
         r.post('creatFeedback', req, res);
-    }
+    },
 }
 
 module.exports = routerConfig;

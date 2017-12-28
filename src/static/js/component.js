@@ -112,9 +112,11 @@ const Album = {
 const Video = {
 	props: ['videoId'],
 	data: function () {
-		let d = {video: [], crumb: {}, tags: []};
+		let d = {video: [], crumb: {}, tags: [], captureParams: {}};
 		let propsData = this.$options.propsData;
 		let videoId = propsData.videoId;
+
+		d.captureParams.id = videoId;
 
 		tools.xhr('/videos/' + videoId, function(resData){
 			d.video = resData[0];
@@ -135,6 +137,31 @@ const Video = {
 		tools.insertScriptTag(1, "https://cdn.jsdelivr.net/npm/hls.js@latest", {onload: function(){
 			tools.insertScriptTag(2, FRAGMENTS.playHLS, {id: 'hls-frag'});
 		}, id: 'hls'});
+	},
+	methods: {
+		captureCountdown: function(){
+			this.captureParams.st = this.getVideoTime();
+		},
+
+		capture: function(){
+			this.captureParams.et = this.getVideoTime();
+
+			if(!this.captureParams === undefined){
+				return;
+			}
+			
+			tools.xhr('/gifLink?' + $.param(this.captureParams), function(resData){
+				console.log(resData);
+				this.captureParams = {id: this.captureParams.id};
+
+				var gifLInk = resData;
+				$('#previewer').attr('src', gifLInk);
+			}.bind(this));
+		},
+
+		getVideoTime: function(){
+			return $('#video')[0].currentTime;
+		}
 	}
 };
 
