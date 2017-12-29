@@ -4,7 +4,7 @@ FRAGMENTS = {
             var video = document.getElementById('video');
             var hls = new Hls();
 
-            hls.loadSource('/multimedia/ts/playlist.m3u8');
+            hls.loadSource('/multimedia/ts/000001/_.m3u8');
             
             hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED,function() {

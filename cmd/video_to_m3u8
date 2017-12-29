@@ -1,11 +1,7 @@
 // 官方文档 https://www.ffmpeg.org/ffmpeg.html
-
-
 // ffmpeg 常用命令 https://www.cnblogs.com/frost-yen/p/5848781.html
 
-
 ===================视频切片 
-
 // 单分辨率
 // https://docs.peer5.com/guides/production-ready-hls-vod/
 
