@@ -135,8 +135,26 @@ const Video = {
 	template: temp.video,
 	created() {
 		tools.insertScriptTag(1, "https://cdn.jsdelivr.net/npm/hls.js@latest", {onload: function(){
-			tools.insertScriptTag(2, FRAGMENTS.playHLS, {id: 'hls-frag'});
+			tools.insertScriptTag(2, FRAGMENTS.attachVideo, {id: 'hls-frag'});
 		}, id: 'hls'});
+
+		// <script src="http://siloor.com/youtube.external.subtitle/static/youtube.external.subtitle/youtube.external.subtitle.js"></script>
+			// <script src="http://siloor.com/youtube.external.subtitle/static/js/subtitles.parser.js"></script>
+		
+		var t = 0;
+		tools.insertScriptTag(1, "http://siloor.com/youtube.external.subtitle/static/youtube.external.subtitle/youtube.external.subtitle.js", {onload: function(){
+			t ++ ;
+			if(t == 2){
+				tools.insertScriptTag(2, FRAGMENTS.attachSubtitle, {id: 'subtitle-frag'});
+			}
+		}, id: 'external-subtitle'});
+
+		tools.insertScriptTag(1, "http://siloor.com/youtube.external.subtitle/static/js/subtitles.parser.js", {onload: function(){
+			t ++ ;
+			if(t == 2){
+				tools.insertScriptTag(2, FRAGMENTS.attachSubtitle, {id: 'subtitle-frag'});
+			}
+		}, id: 'subtitle-parser'});
 	},
 	methods: {
 		captureCountdown: function(){

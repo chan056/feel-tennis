@@ -22,6 +22,6 @@ exports.types = {
     "woff": "text/woff",
     "map": 'text/plain',
     "m3u8": 'application/vnd.apple.mpegurl',// application/vnd.apple.mpegurl
-    "ts": 'video/mp2t'
-    
+    "ts": 'video/mp2t',
+    "srt": 'application/x-subrip'
 };

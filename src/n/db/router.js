@@ -134,6 +134,11 @@ const routerConfig = {
         ff(params, res);
     },
 
+    '/srt': function(params, res){
+        let parseSrt = require('./srt_parser.js').parseSrt;
+        parseSrt('t.srt', res);
+    },
+
     // POST
     '/video': function(res, req){
         r.post('creatVedio', req, res);
