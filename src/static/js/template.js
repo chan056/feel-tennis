@@ -83,7 +83,10 @@ var temp = {
                     <router-link :to="{path: '/videos?tagId=' + tag.id}">{{tag.name}}</router-link>
                 </el-button>
             </div>
-            <video id="video" controls="controls" height="400">Not support this browser, please use Chrome.</video> 
+            <div id="palyer-wrapper">
+                <video id="video" controls="controls" height="400">Not support this browser, please use Chrome.</video>
+                <p class="subtitle"></p>
+            </div>
             <div>
                 <input type="button" value="开始截图" @click="captureCountdown()" id="capture-btn" class=""/>
                 <!--<el-button @click="captureCountdown()">开始截图</el-button>-->

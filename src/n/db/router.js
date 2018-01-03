@@ -176,7 +176,7 @@ const routerConfig = {
         });
 
         form.on('field', function(){
-            console.log(arguments);
+            console.log('onfield', arguments);
         });
     
         // log any errors that occur
@@ -186,11 +186,13 @@ const routerConfig = {
     
         // once all the files have been uploaded, send a request to the client
         form.on('end', function() {
+            // console.log('onend', arguments)
             var d = {
                 absPath: absPath,
                 relPath: relPath
             }
             res.end(JSON.stringify(d));
+            
         });
     
         // parse the incoming request containing the form data

@@ -83,7 +83,21 @@ var operations = {
 			if(err)
 				throw err;
 			
+			console.log(arguments)
 			res.end('success');
+
+			// 根据生成的videoId 重命名
+			let insertId = result.insertId;
+			let absPath = postObj.absPath;
+
+			const fs = require('fs');
+			const path = require('path');
+			let ext = path.extname(absPath)
+			let p = path.resolve(__dirname, `../../static/multimedia/pristine_v/${insertId}${ext}`);
+
+			fs.rename(absPath, p);
+			// console.log(insertId, absPath)
+			require('./ffmpeg/m3u.js').m3u(insertId);
 		});
 	},
 

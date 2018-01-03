@@ -32,7 +32,58 @@ let tools = {
             script.innerHTML = str;
         }
 
+        // console.log(script);
+
         document.body.appendChild(script);
-    }
-    
+    },
+
+    // 给视频绑定字幕
+    // 通过轮询的方式 每x秒检测一次
+    // 根据SRT DATA中的start time 和end time 定位字幕
+    attachSubtile: function(video, srts, interval, fn){
+        interval = interval || 500;
+
+        let lastSrtId;
+        let lastSrtIndex;// 上个匹配到的srt id，用于优化查找速度
+        let curSubtitle;
+
+        setInterval(function(){
+            let curVtime = video.currentTime;
+            curVtime = curVtime * 1000;// 微秒
+            let srt, srtId, subtitle;
+            let st, et;// 微秒
+
+            let i = 0;
+            l = srts.length;
+
+            if(lastSrtIndex){
+                i = lastSrtIndex;
+            }
+
+            for(; i<l; i++){
+                srt = srts[i];
+                st = srt.startTime;
+                et = srt.endTime;
+                srtId = srt.id;
+
+                if(curVtime >= st && curVtime <= et){
+                    lastSrtId = srtId;
+                    
+                    curSubtitle = subtitle = srt.text;
+                    // console.log(/* '循环次数 '+Z, */ subtitle)
+                    if(i != lastSrtIndex){
+                        fn(subtitle);
+                        lastSrtIndex = i;
+                    }
+                    
+                    break;
+                }else{
+                    if(i == l-1){
+                        lastSrtIndex = undefined;
+                    }
+                }
+            }
+
+        }, interval)
+    },
 };

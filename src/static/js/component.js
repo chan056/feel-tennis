@@ -115,6 +115,7 @@ const Video = {
 		let d = {video: [], crumb: {}, tags: [], captureParams: {}, previewerVisible: false, gifLink: ''};
 		let propsData = this.$options.propsData;
 		let videoId = propsData.videoId;
+		// d.videoId = videoId;
 
 		d.captureParams.id = videoId;
 
@@ -129,32 +130,33 @@ const Video = {
 		tools.xhr('/videoTags/' + videoId, function(resData){
 			d.tags = resData;
 		});
+		
+		tools.xhr('/srt', function(resData){
+			// console.log(resData);
+			let v = $('#video');
+			let playerWrapper = $('#palyer-wrapper')
+
+			tools.attachSubtile(v[0], resData, 500, function(subtitle){
+				// console.log(subtite);
+
+				playerWrapper.find('.subtitle').text(subtitle).css({
+
+				});
+			});
+		});
 
 		return d;
 	},
 	template: temp.video,
 	created() {
 		tools.insertScriptTag(1, "https://cdn.jsdelivr.net/npm/hls.js@latest", {onload: function(){
-			tools.insertScriptTag(2, FRAGMENTS.attachVideo, {id: 'hls-frag'});
-		}, id: 'hls'});
+			tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
+		}.bind(this), id: 'hls'});
 
-		// <script src="http://siloor.com/youtube.external.subtitle/static/youtube.external.subtitle/youtube.external.subtitle.js"></script>
-			// <script src="http://siloor.com/youtube.external.subtitle/static/js/subtitles.parser.js"></script>
-		
-		var t = 0;
-		tools.insertScriptTag(1, "http://siloor.com/youtube.external.subtitle/static/youtube.external.subtitle/youtube.external.subtitle.js", {onload: function(){
-			t ++ ;
-			if(t == 2){
-				tools.insertScriptTag(2, FRAGMENTS.attachSubtitle, {id: 'subtitle-frag'});
-			}
-		}, id: 'external-subtitle'});
-
-		tools.insertScriptTag(1, "http://siloor.com/youtube.external.subtitle/static/js/subtitles.parser.js", {onload: function(){
-			t ++ ;
-			if(t == 2){
-				tools.insertScriptTag(2, FRAGMENTS.attachSubtitle, {id: 'subtitle-frag'});
-			}
-		}, id: 'subtitle-parser'});
+		// var t = 0;
+		// tools.insertScriptTag(1, "http://siloor.com/youtube.external.subtitle/static/youtube.external.subtitle/youtube.external.subtitle.js", {onload: function(){
+		// 		tools.insertScriptTag(2, FRAGMENTS.attachSubtitle, {id: 'subtitle-frag'});
+		// }, id: 'external-subtitle'});
 	},
 	methods: {
 		captureCountdown: function(){
@@ -301,6 +303,7 @@ const Upload = {
 		},
 		handleSuccess(file){
 			console.log(file);
+			this.SO.absPath = file.absPath;
 		},
 
 		postVedio(){
