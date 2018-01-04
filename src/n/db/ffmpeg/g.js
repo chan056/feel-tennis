@@ -1,10 +1,10 @@
 module.exports.ff = function(capturtParams, res){
-    let filename = capturtParams.id,
+    let videoName = capturtParams.vId,
         st = capturtParams.st,
         et = capturtParams.et,
         duration = et - st;
 
-    if(filename === undefined || st === undefined || et === undefined)
+    if(videoName === undefined || st === undefined || et === undefined)
         return res.end('fail');
 
     const ffmpeg = require('fluent-ffmpeg');
@@ -12,10 +12,10 @@ module.exports.ff = function(capturtParams, res){
     let path = require('path');
     let dir = path.resolve(__dirname, '../../../static')
 
-    let vSouce = dir + `/upload/${filename}.mp4`;
+    let vSouce = dir + `/multimedia/pristine_v/${videoName}.mp4`;// todo 视频格式不是固定的
 
     let outputPallete = dir + '/multimedia/gif/palette.png';
-    let outputGif = dir + `/multimedia/gif/${filename}-${Date.now()}.gif`;
+    let outputGif = dir + `/multimedia/gif/${videoName}-${Date.now()}.gif`;
 
     paletteInputOptions = [`-ss ${st}`, `-t ${duration}`, '-r 10', '-hide_banner', '-y'];
     paletteOutputOptions = ['-vf fps=10,scale=400:-1:flags=lanczos,palettegen'];

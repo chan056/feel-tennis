@@ -117,7 +117,7 @@ const Video = {
 		let videoId = propsData.videoId;
 		// d.videoId = videoId;
 
-		d.captureParams.id = videoId;
+		d.captureParams.vId = videoId;
 
 		tools.xhr('/videos/' + videoId, function(resData){
 			d.video = resData[0];
@@ -167,6 +167,7 @@ const Video = {
 			if(!counting){
 				captureBtn.data('counting', true);
 				_this.captureParams.st = _this.getVideoTime();
+				_this.captureParams.vId = _this.videoId;
 
 				countdown();
 			}else{
