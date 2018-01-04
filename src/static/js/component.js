@@ -315,7 +315,11 @@ const Upload = {
 			so.tag = this.SO.tag.join(',');
 
 			tools.xhr('/video', function(){
-				console.log(arguments)
+				console.log(arguments);
+				this.$message({
+					message: '视频创建成功',
+					type: 'success'
+				});
 			}, 'post', so);
 		},
 

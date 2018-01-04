@@ -83,7 +83,7 @@ var operations = {
 			if(err)
 				throw err;
 			
-			console.log(arguments)
+			// console.log(arguments)
 			res.end('success');
 
 			// 根据生成的videoId 重命名
