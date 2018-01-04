@@ -4,16 +4,16 @@
   "description": "",
   "main": "mine.js",
   "dependencies": {
-    "formidable": "^1.1.1",
-    "mysql": "^2.15.0",
-    "path-to-regexp": "^2.1.0",
-    "webpack": "^3.8.1",
-    
     "bluebird": "3.5.0",
+    "del": "2.2.2",
     "fluent-ffmpeg": "",
+    "formidable": "^1.1.1",
     "lodash": "4.17.4",
     "moment": "2.18.1",
-    "del": "2.2.2"
+    "mysql": "^2.15.0",
+    "path-to-regexp": "^2.1.0",
+    "subtitles-parser": "0.0.2",
+    "webpack": "^3.8.1"
   },
   "devDependencies": {
     "fluent-ffmpeg": "^2.1.2"

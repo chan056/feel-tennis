@@ -131,7 +131,7 @@ const Video = {
 			d.tags = resData;
 		});
 		
-		tools.xhr('/srt', function(resData){
+		tools.xhr('/srt/' + videoId, function(resData){
 			// console.log(resData);
 			let v = $('#video');
 			let playerWrapper = $('#palyer-wrapper')
@@ -301,9 +301,13 @@ const Upload = {
 		handleExceed(files, fileList) {
 			this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
 		},
-		handleSuccess(file){
-			console.log(file);
-			this.SO.absPath = file.absPath;
+		handleSuccess(res){
+			// console.log(res);
+			this.SO.videoAbsPath = res.absPath;
+		},
+
+		handleSubtitleSuccess(res){
+			this.SO.subtitleAbsPath = res.absPath;
 		},
 
 		postVedio(){

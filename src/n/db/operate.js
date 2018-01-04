@@ -88,16 +88,17 @@ var operations = {
 
 			// 根据生成的videoId 重命名
 			let insertId = result.insertId;
-			let absPath = postObj.absPath;
+			let videoAbsPath = postObj.videoAbsPath;
+			let subtitleAbsPath = postObj.subtitleAbsPath;
 
 			const fs = require('fs');
 			const path = require('path');
-			let ext = path.extname(absPath)
-			let p = path.resolve(__dirname, `../../static/multimedia/pristine_v/${insertId}${ext}`);
-
-			fs.rename(absPath, p);
-			// console.log(insertId, absPath)
-			require('./ffmpeg/m3u.js').m3u(insertId);
+			let ext = path.extname(videoAbsPath);
+			
+			let videoStorePath = path.resolve(__dirname, `../../static/multimedia/pristine_v/${insertId}${ext}`);
+			fs.rename(videoAbsPath, videoStorePath);// 用于生成gif
+			// console.log(insertId, videoAbsPath)
+			require('./ffmpeg/m3u.js').m3u(insertId, videoStorePath, subtitleAbsPath);
 		});
 	},
 

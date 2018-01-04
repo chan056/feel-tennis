@@ -2,48 +2,43 @@
 ffmpeg -hide_banner -y -i 2.mp4 -vf scale=w=1280:h=720:force_original_aspect_ratio=decrease -c:a aac -ar 48000 -c:v h264 -profile:v main -crf 20 -sc_threshold 0 -g 48 -keyint_min 48 -hls_time 4 -hls_playlist_type vod -b:v 2800k -maxrate 2996k -bufsize 4200k -b:a 128k -hls_segment_filename ts/720p_%03d.ts ts/720p.m3u8 */
 
 // ==========child_process============
-module.exports.m3u = function(vId){
+module.exports.m3u = function(vId, videoStorePath, subtitleAbsPath){
     const exec = require('child_process').exec;
     const path = require('path');
     const fs = require('fs');
 
-    // let vId = 1;// video id
-
     let dir = path.resolve(__dirname, '../../../static')
-    let vSouce = path.resolve(dir, `./multimedia/pristine_v/${vId}.mp4`);
+    // let vSouce = path.resolve(dir, `./multimedia/pristine_v/${vId}${videoExt}`);
     let tsDir = path.resolve(dir, `./multimedia/ts/${vId}`);
 
     fs.exists(tsDir, function(doExist){
         if(!doExist){
             fs.mkdir(tsDir, function(){
                 execM3U();
+                storeSubtitle();
             });
         }else{
             execM3U();
+            storeSubtitle();
         }
     });
-
-    let tsFile = path.resolve(tsDir, './480p_%03d.ts');
-    let m3u8File = path.resolve(tsDir, './480p.m3u8');
-
-    let cmd = `ffmpeg -hide_banner -y -i ${vSouce} -vf scale=w=842:h=480:force_original_aspect_ratio=decrease -c:a aac -ar 48000 -c:v h264 -profile:v main -crf 20 -sc_threshold 0 -g 48 -keyint_min 48 -hls_time 4 -hls_playlist_type vod -b:v 1400k -maxrate 1498k -bufsize 2100k -b:a 128k -hls_segment_filename ${tsFile} ${m3u8File}`;
 
     function execM3U(){
         let sourcePlaylist = path.resolve(tsDir, '../playlist.m3u8');
         let targetPlaylist = path.resolve(tsDir, './_.m3u8');
 
+        // 复制一份多分辨率控制列表
         fs.readFile(sourcePlaylist, (err, data) => {
             fs.writeFile(targetPlaylist, data, (err) => {
                 if (err) throw err;
                 console.log('The file has been saved!');
             });
         });
-        
 
-        // fs.copyFile(sourcePlaylist, targetPlaylist, (err) => {
-        //     if (err) throw err;
-        //     console.log('source.txt was copied to destination.txt');
-        // });
+        let tsFile = path.resolve(tsDir, './480p_%03d.ts');
+        let m3u8File = path.resolve(tsDir, './480p.m3u8');
+
+        let cmd = `ffmpeg -hide_banner -y -i ${videoStorePath} -vf scale=w=842:h=480:force_original_aspect_ratio=decrease -c:a aac -ar 48000 -c:v h264 -profile:v main -crf 20 -sc_threshold 0 -g 48 -keyint_min 48 -hls_time 4 -hls_playlist_type vod -b:v 1400k -maxrate 1498k -bufsize 2100k -b:a 128k -hls_segment_filename ${tsFile} ${m3u8File}`;
 
         exec(cmd, function(error, stdout, stderr){
             if(error) {
@@ -53,6 +48,12 @@ module.exports.m3u = function(vId){
             console.log('stdout: ' + stdout);
             console.log('stderr: ' + typeof stderr);
         });
+    }
+
+    function storeSubtitle(){
+        // 多字幕 todo
+        let subtitleStorePath = path.resolve(tsDir, `./subtitle`);
+        fs.rename(subtitleAbsPath, subtitleStorePath);
     }
 }
 

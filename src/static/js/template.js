@@ -194,7 +194,7 @@ var temp = {
 
             <el-row>
                 <el-col :span="4">
-                    <label>文件</label>
+                    <label>视频</label>
                 </el-col>
 
                 <el-col :span="4">
@@ -207,6 +207,28 @@ var temp = {
                         :on-success="handleSuccess"
                         multiple
                         :limit="3"
+                        :on-exceed="handleExceed"
+                        :file-list="fileList"
+                        >
+                        <el-button size="small" type="primary">点击上传</el-button>
+                    </el-upload>
+                </el-col>
+            </el-row>
+
+            <el-row>
+                <el-col :span="4">
+                    <label>字幕</label>
+                </el-col>
+
+                <el-col :span="4">
+                    <el-upload
+                        class="upload-demo"
+                        action="/upload"
+                        :data="{type:'subtitle'}"
+                        :on-remove="handleRemove"
+                        :on-success="handleSubtitleSuccess"
+                        multiple
+                        :limit="1"
                         :on-exceed="handleExceed"
                         :file-list="fileList"
                         >

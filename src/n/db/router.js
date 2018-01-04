@@ -134,9 +134,10 @@ const routerConfig = {
         ff(params, res);
     },
 
-    '/srt': function(params, res){
+    '/srt/:vId': function(params, res){
+        // console.log(params)
         let parseSrt = require('./srt_parser.js').parseSrt;
-        parseSrt('t.srt', res);
+        parseSrt(params.vId, res);
     },
 
     // POST
@@ -154,48 +155,50 @@ const routerConfig = {
         var path = require('path');
         var fs = require('fs');
 
-        // create an incoming form object
         let form = new formidable.IncomingForm();
         let absPath = '',
             relPath = '';
+
+        let fileType;
         
-        // specify that we want to allow the user to upload multiple files in a single request
         form.multiples = true;
     
-        // store all uploads in the /uploads directory
         form.uploadDir = path.join(__dirname, "../../static", '/upload');
         let uploadDir = '/upload';
     
-        // every time a file has been uploaded successfully,
-        // rename it to it's orignal name
         form.on('file', function(field, file) {
-            absPath = path.join(form.uploadDir, file.name);
-            relPath = path.join(uploadDir, file.name);
 
-            fs.rename(file.path, absPath);
+            if(fileType == 'video'){
+                absPath = path.join(form.uploadDir, file.name);
+                relPath = path.join(uploadDir, file.name);
+                fs.rename(file.path, absPath);// 没必要rename todo
+            }else if(fileType == 'subtitle'){
+                absPath = path.join(form.uploadDir, file.name);
+                relPath = path.join(uploadDir, file.name);
+                fs.rename(file.path, absPath);
+            }
         });
 
-        form.on('field', function(){
-            console.log('onfield', arguments);
+        form.on('field', function(k, v){
+            if(k === 'type'){
+                fileType = v;
+            }
+            // console.log('onfield', arguments);
         });
     
-        // log any errors that occur
         form.on('error', function(err) {
             console.log('An error has occured: \n' + err);
         });
     
-        // once all the files have been uploaded, send a request to the client
         form.on('end', function() {
-            // console.log('onend', arguments)
             var d = {
-                absPath: absPath,
+                absPath: absPath,// 不能返回路径todo，会暴露服务器信息
                 relPath: relPath
             }
             res.end(JSON.stringify(d));
             
         });
     
-        // parse the incoming request containing the form data
         form.parse(req);
     },
 
