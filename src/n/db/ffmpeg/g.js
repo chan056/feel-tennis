@@ -12,7 +12,7 @@ module.exports.ff = function(capturtParams, res){
     let path = require('path');
     let dir = path.resolve(__dirname, '../../../static')
 
-    let vSouce = dir + `/multimedia/pristine_v/${videoName}.mp4`;// todo 视频格式不是固定的
+    let vSouce = dir + `/multimedia/pristine_v/${videoName}${capturtParams.ext}`;// todo 视频格式不是固定的
 
     let outputPallete = dir + '/multimedia/gif/palette.png';
     let outputGif = dir + `/multimedia/gif/${videoName}-${Date.now()}.gif`;

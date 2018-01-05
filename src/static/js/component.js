@@ -121,6 +121,7 @@ const Video = {
 
 		tools.xhr('/videos/' + videoId, function(resData){
 			d.video = resData[0];
+			d.captureParams.ext = d.video.video_ext;
 		});
 
 		tools.xhr('/navInfo/3/' + videoId, function(resData){
@@ -321,7 +322,7 @@ const Upload = {
 					message: '视频创建成功',
 					type: 'success'
 				});
-			}, 'post', so);
+			}.bind(this), 'post', so);
 		},
 
 		postTag(){

@@ -75,29 +75,34 @@ var operations = {
 	},
 
 	creatVedio: function(res, postObj){
-		var sql = `INSERT INTO video 
-			(album_id, headline, tag)
-			VALUES (?, ?, ?)`;
+		const path = require('path');
 
-		conn.query(sql, [postObj.albumId, postObj.headline, postObj.tag], function(err, result, fields){
+		let videoAbsPath = postObj.videoAbsPath;
+		let ext = path.extname(videoAbsPath);
+		// if(ext){
+		// 	ext = ext.replace(/\./, '');
+		// }
+
+		var sql = `INSERT INTO video 
+			(album_id, headline, tag, video_ext)
+			VALUES (?, ?, ?, ?)`;
+
+		conn.query(sql, [postObj.albumId, postObj.headline, postObj.tag, ext], function(err, result, fields){
 			if(err)
 				throw err;
-			
-			// console.log(arguments)
+
 			res.end('success');
 
-			// 根据生成的videoId 重命名
+			// 根据生成的videoId 储存视频
 			let insertId = result.insertId;
-			let videoAbsPath = postObj.videoAbsPath;
 			let subtitleAbsPath = postObj.subtitleAbsPath;
 
 			const fs = require('fs');
-			const path = require('path');
-			let ext = path.extname(videoAbsPath);
 			
 			let videoStorePath = path.resolve(__dirname, `../../static/multimedia/pristine_v/${insertId}${ext}`);
 			fs.rename(videoAbsPath, videoStorePath);// 用于生成gif
-			// console.log(insertId, videoAbsPath)
+			
+			// 生成包含视频和字幕的目录
 			require('./ffmpeg/m3u.js').m3u(insertId, videoStorePath, subtitleAbsPath);
 		});
 	},

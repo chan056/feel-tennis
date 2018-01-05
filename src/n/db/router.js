@@ -22,13 +22,18 @@ const routerConfig = {
         r.query('queryAlbum', params, res);
     },
     
-    '/videos/:album_id': function(params, res){
+    // 根据video id 查询某个视频
+    '/videos/:id': function(params, res){
         r.query('queryVideo', params, res);
     },
 
+    // 根据video id 查询某个视频
+    // '/videos/:id': function(params, res){
+    //     r.query('queryVideo', params, res);
+    // },
+
+    // 根据关键字搜索视频
     '/videos': function(params, res){
-        // r.query('queryVideo', params, res);
-        
         let sql = `select * from video`;
 
         if(params && !tools.isEmpty(params)){
