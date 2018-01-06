@@ -5,22 +5,30 @@ const routes = [
 		path: '/sports', 
 		component: Sports, 
 		/* alias: '/', */
+		meta: {title: '首页'}
 	},
 	// 获取‘某运动项目’下的‘专辑列表’
 	{ 
 		path: '/sports/:sportId', 
-		component: AlbumList, 
+		component: AlbumList,
+		meta: {title: '专辑列表'},
 		// props: true, 
 		props: function(route){
 			return {sportId: route.params.sportId}
 		},
 	},
 	// 获取‘某专辑’下的‘视频列表’
-	{ path: '/albums/:albumId', component: Album, props: true, },
+	{ 
+		path: '/albums/:albumId', 
+		component: Album, 
+		props: true, 
+		meta: {title: '视频列表'},
+	},
 	// 获取‘某视频’的信息
 	{ 
 		path: '/video/:videoId', 
 		component: Video, 
+		meta: {title: '视频'},
 		props: true,
 	},
 
@@ -28,8 +36,7 @@ const routes = [
 	{ 
 		path: '/videos', 
 		component: videos, 
-		// name: 'videos',
-		// props: true,
+		meta: {title: '视频列表'},
 		beforeRouteUpdate(to, from, next) {
 			// react to route changes...
 			// don't forget to call next()
@@ -38,8 +45,17 @@ const routes = [
 		}
 	},
 
-	{ path: '/upload', component: Upload, props: true, },
-	{ path: '/feedback', component: Feedback,},
+	{ 
+		path: '/upload', 
+		component: Upload, 
+		meta: {title: '视频上传页'},
+		props: true, 
+	},
+	{ 
+		path: '/feedback', 
+		component: Feedback,
+		meta: {title: '反馈'},
+	},
 ];
 
 const router = new VueRouter({
@@ -47,6 +63,10 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+	if(to.meta.title){
+		document.title = to.meta.title
+	}
+
 	console.log(from.fullPath, '==>', to.fullPath);
 	next();
 })
