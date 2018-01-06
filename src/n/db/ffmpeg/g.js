@@ -3,6 +3,8 @@ module.exports.ff = function(capturtParams, res){
         st = capturtParams.st,
         et = capturtParams.et,
         duration = et - st;
+    
+    capturtParams.ext = capturtParams.ext || '.mp4';
 
     if(videoName === undefined || st === undefined || et === undefined)
         return res.end('fail');
