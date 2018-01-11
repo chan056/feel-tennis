@@ -20,7 +20,7 @@ var temp = {
                             </el-form-item>
                         </el-col>
                         <el-col :span=6 :offset=2>
-                                <el-button type="primary" @click="submitForm('ruleForm')">查询</el-button>
+                            <el-button type="primary" @click="submitForm('ruleForm')">查询</el-button>
                         </el-col>
                     </el-row>
 
