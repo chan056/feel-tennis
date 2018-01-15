@@ -1,5 +1,5 @@
 const routeConfig = [
-	// { path: '/', redirect: '/sports' },
+	{ path: '/', redirect: '/sports' },
 	// 获取所有‘运动’项目
 	{ 
 		path: '/sports', 

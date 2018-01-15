@@ -1,32 +1,40 @@
 var temp = {
     header: `
-        <el-row>
-            <el-col :span="6">
-                <a href="#/sports">
-                    <img src="/img/logo.jpg" alt="">
-                </a>
+        <div id="header">
+            <el-row>
+                <el-col :span="6">
+                    <a href="#/sports">
+                        <img src="/img/logo.jpg" alt="">
+                    </a>
 
-                <a href="#/feedback">意见&建议</a>
-                
-                <!-- <router-link :to="{path: '/sports/1' }">xxx</router-link>  -->
-            </el-col>
+                    <a href="#/feedback">意见&建议</a>
+                    
+                    <!-- <router-link :to="{path: '/sports/1' }">xxx</router-link>  -->
+                </el-col>
 
-            <el-col :span="6" :offset="12">
-                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                    <el-row>
-                        <el-col :span=16>
-                            <el-form-item label="" prop="name">
-                                <el-input v-model="ruleForm.name"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span=6 :offset=2>
-                            <el-button type="primary" @click="submitForm('ruleForm')">查询</el-button>
-                        </el-col>
-                    </el-row>
+                <el-col :span="6" :offset="12">
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                        <el-row>
+                            <el-col :span=16>
+                                <el-form-item label="" prop="name">
+                                    <el-input v-model="ruleForm.name"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span=6 :offset=2>
+                                <el-button type="primary" @click="submitForm('ruleForm')">查询</el-button>
+                            </el-col>
+                        </el-row>
 
-                </el-form>
-            </el-col>
-        </el-row>
+                    </el-form>
+                </el-col>
+            </el-row>
+        </div>
+    `,
+
+    aside: `
+        <div id="aside">
+            aside
+        </div>
     `,
     // VISITOR
     sports: `

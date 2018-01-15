@@ -11,10 +11,13 @@
 </head>
 
 <body>
-	<header id="header"></header>
-	<aside></aside>
-	<router-view id="main-router" class="view"></router-view>
+	<app>
+		<app-header></app-header>
+		<app-aside></app-aside>
+		<router-view id="main" class="view"></router-view>
+	</app>
 </body>
+
 <script src="../lib/v.js"></script>
 <script src="../lib/vue-router.js"></script>
 

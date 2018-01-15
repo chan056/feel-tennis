@@ -1,4 +1,9 @@
 $(function(){
+
+	const navInstance = new Vue(HeaderComponent);
+
+	const asideInstance = new Vue(AsideComponent);
+
 	const mainRouter = new VueRouter({
 		routes: routeConfig
 	});
@@ -10,9 +15,6 @@ $(function(){
 	
 	const mainInstance = new Vue({
 		router: mainRouter,
-	}).$mount('#main-router');
-	
-	const navInstance = new Vue(HeaderComponent);
+	}).$mount('#main');
 
-	const asideInstance = new Vue();
-})
+});
