@@ -55,11 +55,11 @@ var temp = {
     // VISITOR
     sports: `
         <div id="album-list">
-            <ol>
-                <li v-for="sport in sports">
+            <ul class="block-list sport-list">
+                <li class="" v-for="sport in sports">
                     <router-link :to="{path: '/sports/'+ sport.id }">{{ sport.name }}</router-link> 
                 </li>
-            </ol>
+            </ul>
         </div>
     `,
     albumList: `
