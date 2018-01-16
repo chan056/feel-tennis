@@ -2,28 +2,30 @@ var temp = {
     header: `
         <div id="header">
             <el-row>
-                <el-col :span="6">
-                    <a href="#/sports">
-                        <img src="/img/logo.jpg" alt="">
-                    </a>
+                <el-col :span="3">
+                    <i class="el-icon-menu aside-menu-btn"></i>
+                    <a href="#/sports" id="logo"></a>
                     
-                    <!-- <router-link :to="{path: '/sports/1' }">xxx</router-link>  -->
                 </el-col>
 
-                <el-col :span="6" :offset="12">
-                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                <el-col :span="9">
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm"  class="">
                         <el-row>
-                            <el-col :span=16>
+                            <el-col :span=20>
                                 <el-form-item label="" prop="name">
                                     <el-input v-model="ruleForm.name"></el-input>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span=6 :offset=2>
-                                <el-button type="primary" @click="submitForm('ruleForm')">查询</el-button>
+                            <el-col :span=4>
+                                <el-button style="width: 100%;" icon="el-icon-search" @click="submitForm('ruleForm')"></el-button>
                             </el-col>
                         </el-row>
-
                     </el-form>
+                </el-col>
+
+                <el-col :span="6" :offset="6" class="masthead">
+                    <i class="el-icon-view"></i>
+                    <i class="el-icon-news"></i>
                 </el-col>
             </el-row>
         </div>

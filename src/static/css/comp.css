@@ -52,6 +52,37 @@
 #header .el-form-item.is-error .el-input__inner {
   border-color: #dcdfe6;
 }
+#header .aside-menu-btn {
+  float: left;
+  margin: 20px 30px 0;
+  cursor: pointer;
+}
+#header #logo {
+  display: inline-block;
+  width: 85px;
+  height: 66px;
+  background-image: url("/img/logo.jpg");
+}
+#header .el-form {
+  padding-top: 12px;
+}
+#header .el-form-item {
+  margin-bottom: 0;
+}
+#header [class^=el-icon-] {
+  font-size: 2rem;
+}
+#header .el-icon-search {
+  font-size: 1rem;
+}
+#header .masthead {
+  margin-top: 20px;
+}
+#header .masthead i {
+  float: right;
+  margin-right: 20px;
+  cursor: pointer;
+}
 .newTagDialog .el-input {
   width: 300px;
 }
