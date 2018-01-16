@@ -2,7 +2,13 @@
 body,
 p,
 ul,
-ol {
+ol,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
   padding: 0;
 }
@@ -17,14 +23,27 @@ ul,
 ol {
   list-style-type: none;
 }
+a {
+  color: inherit;
+}
 .fl {
   float: left;
 }
 .fr {
   float: right;
 }
+.clr {
+  clear: both;
+}
 .ovh {
   overflow: hidden;
+}
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both;
 }
 .text-cnt {
   text-align: center;

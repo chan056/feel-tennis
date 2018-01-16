@@ -44,8 +44,8 @@ var temp = {
             
             <div id="footer">
                 <a class="guide-links-primary" href="#/feedback">关于</a>
-                <a class="guide-links-primary" href="#/feedback">关于</a>
-                <a class="guide-links-primary" href="#/feedback">关于</a>
+                <a class="guide-links-primary" href="#/feedback">1</a>
+                <a class="guide-links-primary" href="#/feedback">2</a>
             </div>
             <div id="llc">
                 <span class="">2018 ChanTube</span>
@@ -55,23 +55,39 @@ var temp = {
     // VISITOR
     sports: `
         <div id="album-list">
-            <ul class="block-list sport-list">
+            <ul class="block-list spt-list">
                 <li class="" v-for="sport in sports">
-                    <router-link :to="{path: '/sports/'+ sport.id }">{{ sport.name }}</router-link> 
+                    <img src="/img/logo.jpg" class="block-thumb spt-thumb"/>
+                    <h3 class="block-title spt-title">
+                        <router-link :to="{path: '/sports/'+ sport.id }" :title="sport.name">{{ sport.name }}</router-link>
+                    </h3>
+                    <p class="clearfix">
+                        <span class="play-count fl">1</span>
+                        <span class="update-time fr">2</span>
+                    </p>
                 </li>
             </ul>
         </div>
     `,
+    
     albumList: `
         <div id="album-list">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ path: '/sports/' + crumb.id }">{{crumb.name}}</el-breadcrumb-item>
             </el-breadcrumb>
-            <ol>
+            <ul class="block-list">
                 <li v-for="album in albumList">
-                    <router-link v-on:click="alert(album.name)" :to="{path: '/albums/'+ album.id }">{{ album.name }}</router-link> 
+                    <img src="/img/logo.jpg" class="block-thumb album-thumb"/>
+                    <h3 class="block-title album-title">
+                        <router-link v-on:click="alert(album.name)" :to="{path: '/albums/'+ album.id }">{{ album.name }}</router-link>
+                    </h3>
+                    <div>author 关于作者</div>
+                    <p class="clearfix">
+                        <span class="play-count fl">1</span>
+                        <span class="update-time fr">2</span>
+                    </p>
                 </li>
-            </ol>
+            </ul>
         </div>
     `,
 
@@ -87,9 +103,17 @@ var temp = {
                     <router-link :to="{path: '/videos?tagId=' + tag.id}">{{tag.name}}</router-link>
                 </el-button>
             </div>
-            <ul class="list">
+            <ul class="block-list">
                 <li v-for="video in albumVideoList">
-                    <router-link :to="{path: '/video/'+ video.id }">{{ video.headline }}</router-link>
+                    <img src="/img/logo.jpg" class="block-thumb video-thumb"/>
+                    <h3 class="block-title video-title">
+                        <router-link :to="{path: '/video/'+ video.id }">{{ video.headline }}</router-link>
+                    </h3>
+                    <div>author</div>
+                    <p class="clearfix">
+                        <span class="play-count fl">1</span>
+                        <span class="update-time fr">2</span>
+                    </p>
                 </li>
             </ul>
         </div>
@@ -140,24 +164,19 @@ var temp = {
                 <el-breadcrumb-item :to="{ path: '/sports' }">首页</el-breadcrumb-item>
             </el-breadcrumb>
             
-            <el-row :gutter="20">
-                <el-col :span="6" v-for="video in videos">
-                    <div class="grid-content bg-purple">
-                        <el-card :body-style="{ padding: '0px' }">
-                            <router-link :to="{path: '/video/' + video.id}">
-                                <img src="/img/logo.jpg" class="image">
-                            </router-link>
-                            <div style="padding: 14px;">
-                                <span>{{video.headline}}</span>
-                                <div class="bottom clearfix">
-                                    <time class="time">date</time>
-                                    <el-button type="text" class="button">操作按钮</el-button>
-                                </div>
-                            </div>
-                        </el-card>
-                    </div>
-                </el-col>
-            </el-row>
+            <ul class="block-list">
+                <li v-for="video in videos">
+                    <img src="/img/logo.jpg" class="block-thumb video-thumb"/>
+                    <h3 class="block-title video-title">
+                        <router-link :to="{path: '/video/' + video.id}">{{ video.headline }}</router-link>
+                    </h3>
+                    <div>author</div>
+                    <p class="clearfix">
+                        <span class="play-count fl">1</span>
+                        <span class="update-time fr">2</span>
+                    </p>
+                </li>
+            </ul>
         </div>
     `,
     

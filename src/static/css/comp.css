@@ -49,6 +49,21 @@
   width: 1284px;
   margin: auto;
 }
+.block-list .block-thumb {
+  display: block;
+  width: 100%;
+  height: 118px;
+}
+.block-list .block-title {
+  margin: 8px auto;
+  font-weight: normal;
+  font-size: inherit;
+}
+.block-list .block-title a {
+  text-decoration: none;
+  max-height: 52px;
+  overflow: hidden;
+}
 #header .el-form-item.is-success .el-input__inner {
   border-color: #dcdfe6;
 }
@@ -117,12 +132,4 @@
 .image {
   width: 100%;
   display: block;
-}
-.clearfix:before,
-.clearfix:after {
-  display: table;
-  content: "";
-}
-.clearfix:after {
-  clear: both;
 }
