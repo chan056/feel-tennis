@@ -1,10 +1,40 @@
 /* reset */
-body, p{margin: 0;}
-
+body,
+p,
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
 body {
   font-size: 16px;
 }
-
-.fl{float: left}
-.fr{float: right}
-.ovh{overflow: hidden}
+div,
+li {
+  box-shadow: 0 0 1px #fc0404;
+}
+ul,
+ol {
+  list-style-type: none;
+}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.ovh {
+  overflow: hidden;
+}
+.text-cnt {
+  text-align: center;
+}
+.block-list {
+  overflow: hidden;
+}
+.block-list li {
+  float: left;
+  min-height: 100px;
+  width: 210px;
+  margin: 0 4px 24px 0;
+}

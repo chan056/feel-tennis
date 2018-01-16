@@ -1,5 +1,5 @@
 const HeaderComponent = {
-	el: '#header',
+	el: 'app-header',
 
 	template: temp.header,
 
@@ -10,7 +10,7 @@ const HeaderComponent = {
 		rules: {
 			name: [
 			//   { required: true, message: ' '/* , trigger: 'blur'  */},
-			  { min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' }
+				{ min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' }
 			],
 		}
 	},
@@ -36,6 +36,20 @@ const HeaderComponent = {
 		}
 	}
 	// component
+};
+
+const AsideComponent = {
+	el: 'app-aside',
+
+	template: temp.aside,
+
+	data: {
+		
+	},
+
+	methods: {
+		
+	}
 };
 
 const Sports = {

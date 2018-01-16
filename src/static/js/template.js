@@ -1,41 +1,65 @@
 var temp = {
     header: `
-        <el-row>
-            <el-col :span="6">
-                <a href="#/sports">
-                    <img src="/img/logo.jpg" alt="">
-                </a>
+        <div id="header">
+            <el-row>
+                <el-col :span="3">
+                    <i class="el-icon-menu aside-menu-btn"></i>
+                    <a href="#/sports" id="logo"></a>
+                    
+                </el-col>
 
-                <a href="#/feedback">意见&建议</a>
-                
-                <!-- <router-link :to="{path: '/sports/1' }">xxx</router-link>  -->
-            </el-col>
+                <el-col :span="9">
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm"  class="">
+                        <el-row>
+                            <el-col :span=20>
+                                <el-form-item label="" prop="name">
+                                    <el-input v-model="ruleForm.name"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span=4>
+                                <el-button style="width: 100%;" icon="el-icon-search" @click="submitForm('ruleForm')"></el-button>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                </el-col>
 
-            <el-col :span="6" :offset="12">
-                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                    <el-row>
-                        <el-col :span=16>
-                            <el-form-item label="" prop="name">
-                                <el-input v-model="ruleForm.name"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span=6 :offset=2>
-                                <el-button type="primary" @click="submitForm('ruleForm')">查询</el-button>
-                        </el-col>
-                    </el-row>
+                <el-col :span="6" :offset="6" class="masthead">
+                    <i class="el-icon-view"></i>
+                    <i class="el-icon-news"></i>
+                </el-col>
+            </el-row>
+        </div>
+    `,
 
-                </el-form>
-            </el-col>
-        </el-row>
+    aside: `
+        <div id="aside">
+            <div class="guide-section">
+                <div class="guide-entry">
+                    <a href="#/feedback" class="guide-entry-renderer">
+                        <i class="el-icon-service icon"></i>
+                        <span class="text">发送反馈</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div id="footer">
+                <a class="guide-links-primary" href="#/feedback">关于</a>
+                <a class="guide-links-primary" href="#/feedback">关于</a>
+                <a class="guide-links-primary" href="#/feedback">关于</a>
+            </div>
+            <div id="llc">
+                <span class="">2018 ChanTube</span>
+            </div>
+        </div>
     `,
     // VISITOR
     sports: `
         <div id="album-list">
-            <ol>
-                <li v-for="sport in sports">
+            <ul class="block-list sport-list">
+                <li class="" v-for="sport in sports">
                     <router-link :to="{path: '/sports/'+ sport.id }">{{ sport.name }}</router-link> 
                 </li>
-            </ol>
+            </ul>
         </div>
     `,
     albumList: `
