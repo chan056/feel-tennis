@@ -5,6 +5,10 @@ body {
   font-size: 16px;
 }
 
+div{box-shadow: 0 0 1px rgb(153, 145, 145);}
+
 .fl{float: left}
 .fr{float: right}
 .ovh{overflow: hidden}
+
+.text-cnt{text-align: center}

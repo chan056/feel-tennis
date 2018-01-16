@@ -6,8 +6,6 @@ var temp = {
                     <a href="#/sports">
                         <img src="/img/logo.jpg" alt="">
                     </a>
-
-                    <a href="#/feedback">意见&建议</a>
                     
                     <!-- <router-link :to="{path: '/sports/1' }">xxx</router-link>  -->
                 </el-col>
@@ -33,7 +31,23 @@ var temp = {
 
     aside: `
         <div id="aside">
-            aside
+            <div class="guide-section">
+                <div class="guide-entry">
+                    <a href="#/feedback" class="guide-entry-renderer">
+                        <i class="el-icon-service icon"></i>
+                        <span class="text">发送反馈</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div id="footer">
+                <a class="guide-links-primary" href="#/feedback">关于</a>
+                <a class="guide-links-primary" href="#/feedback">关于</a>
+                <a class="guide-links-primary" href="#/feedback">关于</a>
+            </div>
+            <div id="llc">
+                <span class="">2018 ChanTube</span>
+            </div>
         </div>
     `,
     // VISITOR

@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>ChanTube</title>
+		<link rel="shortcut icon" href="/img/logo.ico">
+		<link rel="stylesheet" href="../css/common.css">
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../css/comp.css">
+	</head>
 
-<head>
-	<meta charset="UTF-8">
-	<title>ChanTube</title>
-	<link rel="shortcut icon" href="/img/logo.ico">
-	<link rel="stylesheet" href="../css/common.css">
-	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-	<link rel="stylesheet" href="../css/comp.css">
-</head>
+	<body>
+		<app>
+			<app-header></app-header>
+			<div id="root-container">
+				<app-aside></app-aside>
+				<router-view id="main" class="view"></router-view>
+			</div>
+		</app>
+	</body>
 
-<body>
-	<app>
-		<app-header></app-header>
-		<app-aside></app-aside>
-		<router-view id="main" class="view"></router-view>
-	</app>
-</body>
+	<script src="../lib/v.js"></script>
+	<script src="../lib/vue-router.js"></script>
 
-<script src="../lib/v.js"></script>
-<script src="../lib/vue-router.js"></script>
+	<script src="../lib/axios.min.js"></script>
+	<script src="../lib/zepto.js"></script>
+	<!-- <script src="../lib/breadcrumbs.js"></script> -->
+	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
 
-<script src="../lib/axios.min.js"></script>
-<script src="../lib/zepto.js"></script>
-<!-- <script src="../lib/breadcrumbs.js"></script> -->
-<script src="https://unpkg.com/element-ui/lib/index.js"></script>
-
-<script src="../js/tools.js"></script>
-<script src="../js/template.js"></script>
-<script src="../js/g-component.js"></script>
-<script src="../js/component.js"></script>
-<script src="../js/fragment.js"></script>
-<script src="../js/router_config.js"></script>
-<script src="../js/tube.js"></script>
+	<script src="../js/tools.js"></script>
+	<script src="../js/template.js"></script>
+	<script src="../js/g-component.js"></script>
+	<script src="../js/component.js"></script>
+	<script src="../js/fragment.js"></script>
+	<script src="../js/router_config.js"></script>
+	<script src="../js/tube.js"></script>
 </html>
