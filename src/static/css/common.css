@@ -26,6 +26,9 @@ ol {
 a {
   color: inherit;
 }
+em {
+  font-style: normal;
+}
 .fl {
   float: left;
 }

@@ -18,3 +18,15 @@ let tagCreatorConstructor = Vue.extend({
 });
 
 Vue.component('tagCreator', tagCreatorConstructor);
+
+// 2周之前
+Vue.component('UpdateTime', {
+    template: '<em>{{timeSlot}}</em>',
+    props: ['timestamp'],
+    data: function(){
+        var propsData = this.$options.propsData;
+        return {
+            timeSlot: tools.formatTimeSlot(propsData.timestamp)
+        };
+    }
+});

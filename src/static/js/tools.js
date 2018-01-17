@@ -86,4 +86,39 @@ let tools = {
 
         }, interval)
     },
+
+    // 将时间戳转换 “周、月、年”
+    formatTimeSlot: function (timestamp){
+        let now = + new Date();
+        let timeSlot = now - timestamp;
+
+        // 1天 1周 1月 1年
+        const hourMS = 60 * 60 * 1000;
+        const dayMS = 24 * hourMS;
+        const weekMS = dayMS * 7;
+        const monthMS = dayMS * 30;
+        const yearMS = dayMS * 365;
+        
+        let s = '';
+
+        if(timestamp && timeSlot > 0){
+            if(timeSlot < hourMS){
+                s = '刚刚';
+            }else if(timeSlot < dayMS){
+                s = Math.floor(timeSlot / hourMS) + '小时前';
+            }else if(timeSlot < weekMS){
+                s = Math.floor(timeSlot / dayMS) + '天前';
+            }else if(timeSlot < monthMS){
+                s = Math.floor(timeSlot / weekMS) + '周前';
+            }else if(timeSlot < yearMS){
+                s = Math.floor(timeSlot / monthMS) + '月前';
+            }else{
+                s = Math.floor(timeSlot / yearMS) + '年前';
+            }
+
+            return s;
+        }
+
+        return '';
+    }
 };

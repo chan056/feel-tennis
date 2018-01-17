@@ -61,7 +61,9 @@ var temp = {
                         <img src="/img/logo.jpg" class="block-thumb spt-thumb"/>
                         <p class="clearfix">
                             <span class="play-count fl">{{sport.impression}}次观看</span>
-                            <span class="update-time fr">1周前</span>
+                            <span class="update-time fr">
+                                <UpdateTime :timestamp="sport.update_time"></UpdateTime>
+                            </span>
                         </p>
                     </router-link>
                 </li>
@@ -84,7 +86,9 @@ var temp = {
                         <div>author 关于作者</div>
                         <p class="clearfix">
                             <span class="play-count fl">{{album.impression}}次观看</span>
-                            <span class="update-time fr">1周前</span>
+                            <span class="update-time fr">
+                                <UpdateTime :timestamp="album.update_time"></UpdateTime>
+                            </span>
                         </p>
                     </router-link>
                 </li>
@@ -114,7 +118,9 @@ var temp = {
                         <div>author</div>
                         <p class="clearfix">
                             <span class="play-count fl">{{video.impression}}次观看</span>
-                            <span class="update-time fr">2周前</span>
+                            <span class="update-time fr">
+                                <UpdateTime :timestamp="video.update_time"></UpdateTime>
+                            </span>
                         </p>
                     </router-link>
                 </li>
@@ -177,7 +183,9 @@ var temp = {
                         <div>author</div>
                         <p class="clearfix">
                             <span class="play-count fl">1次观看</span>
-                            <span class="update-time fr">2周前</span>
+                            <span class="update-time fr">
+                                <UpdateTime :timestamp="video.update_time"></UpdateTime>
+                            </span>
                         </p>
                     </router-link>
                 </li>
