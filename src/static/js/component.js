@@ -274,9 +274,14 @@ const videos = {
 const Upload = {
 	props: [''],
 	data: function () {
-		let newTagDialogConfig = {
+		let tagConfig = {
 			visibility: false,
 			title: '新建标签',
+		};
+
+		let albumConfig = {
+			visibility: false,
+			title: '新建专辑',
 		};
 
 		var d = {
@@ -284,7 +289,8 @@ const Upload = {
 			albums: [], 
 			tags: [], 
 			sports: [], 
-			newTagDialogConfig: newTagDialogConfig, 
+			tagConfig: tagConfig, 
+			albumConfig: albumConfig,
 			newTag: {},
 		};
 

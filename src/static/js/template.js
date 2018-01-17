@@ -213,6 +213,8 @@ var temp = {
                         </el-option>
                     </el-select>
                 </el-col>
+                
+                <el-button v-on:click="" @click="albumConfig.visibility = true">新建Album</el-button>
             </el-row>
 
             <el-row>
@@ -245,7 +247,7 @@ var temp = {
                     </el-select>
                 </el-col>
                 
-                <el-button v-on:click="" @click="newTagDialogConfig.visibility = true">新建Tag</el-button>
+                <el-button v-on:click="" @click="tagConfig.visibility = true">新建Tag</el-button>
             </el-row>
 
             <el-row>
@@ -297,7 +299,7 @@ var temp = {
                 <el-button v-on:click="postVedio" >提交</el-button>
             </el-row>
 
-            <el-dialog v-bind:title="newTagDialogConfig.title" :visible.sync="newTagDialogConfig.visibility">
+            <el-dialog v-bind:title="albumConfig.title" :visible.sync="albumConfig.visibility">
                 <el-form class="newTagDialog">
                     <el-form-item label="标签名称">
                         <el-input v-model="newTag.name" auto-complete="off"></el-input>
@@ -317,8 +319,33 @@ var temp = {
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="newTagDialogConfig.visibility = false">取 消</el-button>
-                    <el-button type="primary" @click="newTagDialogConfig.visibility = false; postTag();">确 定</el-button>
+                    <el-button @click="albumConfig.visibility = false">取 消</el-button>
+                    <el-button type="primary" @click="albumConfig.visibility = false; postTag();">确 定</el-button>
+                </div>
+            </el-dialog>
+
+            <el-dialog v-bind:title="tagConfig.title" :visible.sync="tagConfig.visibility">
+                <el-form class="newTagDialog">
+                    <el-form-item label="标签名称">
+                        <el-input v-model="newTag.name" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="运动项目">
+                        <el-select v-model="newTag.sportId" 
+                            clearable
+                            filterable
+                            placeholder="请选择">
+                            <el-option
+                                v-for="item in sports"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="tagConfig.visibility = false">取 消</el-button>
+                    <el-button type="primary" @click="tagConfig.visibility = false; postTag();">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
