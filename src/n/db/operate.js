@@ -55,6 +55,11 @@ var operations = {
 
 		conn.query('SELECT * from video' + qualification, function (err, result, fields) {
 			if (err) throw err;
+			
+			// 更新关联的表
+			let albumId = result[0].album_id;
+			conn.query('update album set impression = impression + 1 where id=' + albumId);
+			conn.query('update sport set impression = impression + 1 where id = (select sport_id from album where id = ' + albumId + ')');
 
 			result = JSON.stringify(result);
 			res.end(result);
@@ -84,10 +89,10 @@ var operations = {
 		// }
 
 		var sql = `INSERT INTO video 
-			(album_id, headline, tag, video_ext)
-			VALUES (?, ?, ?, ?)`;
+			(album_id, headline, tag, video_ext, update_time)
+			VALUES (?, ?, ?, ?, ?)`;
 
-		conn.query(sql, [postObj.albumId, postObj.headline, postObj.tag, ext], function(err, result, fields){
+		conn.query(sql, [postObj.albumId, postObj.headline, postObj.tag, ext, +new Date()], function(err, result, fields){
 			if(err)
 				throw err;
 
@@ -104,6 +109,13 @@ var operations = {
 			
 			// 生成包含视频和字幕的目录
 			require('./ffmpeg/m3u.js').m3u(insertId, videoStorePath, subtitleAbsPath);
+
+			// 更新album 和 sport
+			let now = +new Date();
+			let albumId = postObj.albumId;
+
+			conn.query('update album set update_time = ' + now + ' where id=' + albumId);
+			conn.query('update sport set update_time = ' + now + ' where id = (select sport_id from album where id = ' + albumId + ')');
 		});
 	},
 
