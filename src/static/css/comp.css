@@ -44,10 +44,14 @@
   flex-grow: 1;
   flex-shrink: 0;
   flex-basis: 300px;
+  padding: 20px 0;
 }
 #main-router-view {
   width: 1284px;
   margin: auto;
+}
+#main-router-view .el-breadcrumb {
+  margin-bottom: 20px;
 }
 .block-list .block-thumb {
   display: block;

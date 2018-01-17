@@ -57,3 +57,6 @@ a {
   width: 210px;
   margin: 0 4px 24px 0;
 }
+.block-list a {
+  text-decoration: none;
+}
