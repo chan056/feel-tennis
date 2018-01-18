@@ -27,6 +27,9 @@ const routerConfig = {
         r.query('queryVideo', params, res);
     },
 
+    '/makers': function(params, res){
+        r.query('queryMaker', params, res);
+    },
     // 根据video id 查询某个视频
     // '/videos/:id': function(params, res){
     //     r.query('queryVideo', params, res);
@@ -152,6 +155,10 @@ const routerConfig = {
 
     '/tag': function(res, req){
         r.post('creatTag', req, res);
+    },
+
+    '/album': function(res, req){
+        r.post('creatAlbum', req, res);
     },
 
     // POST 上传文件

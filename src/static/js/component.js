@@ -289,24 +289,18 @@ const Upload = {
 			albums: [], 
 			tags: [], 
 			sports: [], 
+			makers: [],
 			tagConfig: tagConfig, 
 			albumConfig: albumConfig,
 			newTag: {},
+			newAlbum: {}
 		};
 
 		d.fileList = [];
 
-		tools.xhr('/albums', function(resData){
-			d.albums = resData;
-		});
-
-		tools.xhr('/tags', function(resData){
-			d.tags = resData;
-		});
-		
-		tools.xhr('/sports', function(resData){
-			d.sports = resData;
-		});
+		this.queryAlbums();
+		this.queryTags();
+		this.querySports();
 
 		return d;
 	},
@@ -351,6 +345,47 @@ const Upload = {
 				console.log(arguments)
 			}, 'post', this.newTag);
 			
+		},
+
+		openAlbumDialog(){
+			this.albumConfig.visibility = true;
+			this.queryMakers();
+		},
+
+		postAlbum(){
+			tools.xhr('/album', function(){
+				// console.log(arguments);
+				this.$message({
+					message: '专辑创建成功',
+					type: 'success'
+				});
+
+				this.queryAlbums();
+			}.bind(this), 'post', this.newAlbum);
+		},
+
+		queryAlbums(){
+			tools.xhr('/albums', function(resData){
+				this.albums = resData;
+			}.bind(this));
+		},
+
+		queryTags(){
+			tools.xhr('/tags', function(resData){
+				this.tags = resData;
+			}.bind(this));
+		},
+
+		querySports(){
+			tools.xhr('/sports', function(resData){
+				this.sports = resData;
+			}.bind(this));
+		},
+
+		queryMakers(){
+			tools.xhr('/makers', function(resData){
+				this.makers = resData;
+			}.bind(this));
 		}
 	},
 	template: temp.upload

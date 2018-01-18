@@ -67,6 +67,16 @@ var operations = {
 
 	},
 
+	queryMaker: function(res, qualification) {
+		conn.query('SELECT * from maker' + qualification, function (err, result, fields) {
+			if (err) throw err;
+
+			result = JSON.stringify(result);
+
+			res.end(result)
+		});
+	},
+
 	queryTag: function (res, qualification) {
 
 		conn.query('SELECT * from tag' + qualification, function (err, result, fields) {
@@ -145,7 +155,18 @@ var operations = {
 		});
 	},
 
-	
+	creatAlbum: function(res, postObj){
+		var sql = `INSERT INTO album 
+			(sport_id, author_id, name, tag)
+			VALUES (?, ?, ?, ?)`;
+
+		conn.query(sql, [postObj.sportId, postObj.maker, postObj.name, postObj.tag], function(err, result, fields){
+			if(err)
+				throw err;
+			// console.log(arguments);
+			res.end('success');
+		});
+	},
 }
 
 // 执行SQL

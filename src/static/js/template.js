@@ -214,7 +214,7 @@ var temp = {
                     </el-select>
                 </el-col>
                 
-                <el-button v-on:click="" @click="albumConfig.visibility = true">新建Album</el-button>
+                <el-button @click="openAlbumDialog();">新建Album</el-button>
             </el-row>
 
             <el-row>
@@ -300,12 +300,10 @@ var temp = {
             </el-row>
 
             <el-dialog v-bind:title="albumConfig.title" :visible.sync="albumConfig.visibility">
-                <el-form class="newTagDialog">
-                    <el-form-item label="标签名称">
-                        <el-input v-model="newTag.name" auto-complete="off"></el-input>
-                    </el-form-item>
+                <el-form class="newAlbumDialog">
+                {{newAlbum}}
                     <el-form-item label="运动项目">
-                        <el-select v-model="newTag.sportId" 
+                        <el-select v-model="newAlbum.sportId" 
                             clearable
                             filterable
                             placeholder="请选择">
@@ -317,10 +315,39 @@ var temp = {
                             </el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item label="制作者">
+                        <el-select v-model="newAlbum.maker" 
+                            clearable
+                            filterable
+                            placeholder="请选择">
+                            <el-option
+                                v-for="item in makers"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="标签">
+                        <el-select v-model="newAlbum.tag" 
+                            clearable
+                            filterable
+                            placeholder="请选择">
+                            <el-option
+                                v-for="item in tags"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="专辑名称">
+                        <el-input v-model="newAlbum.name" auto-complete="off"></el-input>
+                    </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="albumConfig.visibility = false">取 消</el-button>
-                    <el-button type="primary" @click="albumConfig.visibility = false; postTag();">确 定</el-button>
+                    <el-button type="primary" @click="albumConfig.visibility = false; postAlbum();">确 定</el-button>
                 </div>
             </el-dialog>
 
