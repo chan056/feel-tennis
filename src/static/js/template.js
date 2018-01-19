@@ -204,7 +204,7 @@ var temp = {
                 </el-col>
 
                 <el-col :span="4">
-                    <el-select v-model="SO.albumId" clearable placeholder="请选择">
+                    <el-select v-model="SO.albumId" clearable placeholder="请选择" @command="chooseAlbumHandler">
                         <el-option
                             v-for="item in albums"
                             :key="item.id"
@@ -215,6 +215,15 @@ var temp = {
                 </el-col>
                 
                 <el-button @click="openAlbumDialog();">新建Album</el-button>
+            </el-row>
+
+            <el-row v-if="selectedMaker">
+                <el-col :span="4">
+                    <label>专辑作者</label>
+                </el-col>
+                <el-col :span="4">
+                    <el-input v-model="selectedMaker" :disabled="!!selectedMaker" placeholder="请输入标题"></el-input>
+                </el-col>
             </el-row>
 
             <el-row>
@@ -327,6 +336,7 @@ var temp = {
                                 :value="item.id">
                             </el-option>
                         </el-select>
+                        <el-button @click="makerConfig.visibility=true">创建</el-button>
                     </el-form-item>
                     <el-form-item label="标签">
                         <el-select v-model="newAlbum.tag" 
@@ -375,6 +385,21 @@ var temp = {
                     <el-button type="primary" @click="tagConfig.visibility = false; postTag();">确 定</el-button>
                 </div>
             </el-dialog>
+
+            <el-dialog v-bind:title="makerConfig.title" :visible.sync="makerConfig.visibility">
+                <el-form class="newTagDialog">
+                    <el-form-item label="名字">
+                        <el-input v-model="newMaker.name" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="描述">
+                        <el-input v-model="newMaker.desc" type="textarea""></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="makerConfig.visibility = false">取 消</el-button>
+                    <el-button type="primary" @click="makerConfig.visibility = false; postMaker();">确 定</el-button>
+                </div>
+            </el-dialog>
         </div>
      `,
 
@@ -421,6 +446,5 @@ var temp = {
             <!-- {{form}}
             {{files}} -->
         </div>
-        
     `
 }

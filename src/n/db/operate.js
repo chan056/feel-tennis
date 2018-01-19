@@ -67,6 +67,16 @@ var operations = {
 
 	},
 
+	queryMakers: function(res, qualification) {
+		conn.query('SELECT * from maker' + qualification, function (err, result, fields) {
+			if (err) throw err;
+
+			result = JSON.stringify(result);
+
+			res.end(result)
+		});
+	},
+
 	queryMaker: function(res, qualification) {
 		conn.query('SELECT * from maker' + qualification, function (err, result, fields) {
 			if (err) throw err;
@@ -161,6 +171,19 @@ var operations = {
 			VALUES (?, ?, ?, ?)`;
 
 		conn.query(sql, [postObj.sportId, postObj.maker, postObj.name, postObj.tag], function(err, result, fields){
+			if(err)
+				throw err;
+			// console.log(arguments);
+			res.end('success');
+		});
+	},
+
+	createMaker: function(res, postObj){
+		var sql = `INSERT INTO maker 
+			(name, description)
+			VALUES (?, ?)`;
+
+		conn.query(sql, [postObj.name, postObj.desc], function(err, result, fields){
 			if(err)
 				throw err;
 			// console.log(arguments);

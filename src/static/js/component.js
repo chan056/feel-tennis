@@ -284,6 +284,11 @@ const Upload = {
 			title: '新建专辑',
 		};
 
+		let makerConfig = {
+			visibility: false,
+			title: '新建制作中',
+		};
+
 		var d = {
 			SO: {}, 
 			albums: [], 
@@ -292,8 +297,11 @@ const Upload = {
 			makers: [],
 			tagConfig: tagConfig, 
 			albumConfig: albumConfig,
+			makerConfig: makerConfig,
 			newTag: {},
-			newAlbum: {}
+			newAlbum: {},
+			newMaker:{},
+			selectedMaker: ''
 		};
 
 		d.fileList = [];
@@ -347,6 +355,17 @@ const Upload = {
 			
 		},
 
+		postMaker(){
+			tools.xhr('/maker', function(){
+				console.log(arguments);
+				this.$message({
+					message: '制作者创建成功',
+					type: 'success'
+				});
+				this.queryMakers();
+			}.bind(this), 'post', this.newMaker);
+		},
+
 		openAlbumDialog(){
 			this.albumConfig.visibility = true;
 			this.queryMakers();
@@ -361,6 +380,7 @@ const Upload = {
 				});
 
 				this.queryAlbums();
+
 			}.bind(this), 'post', this.newAlbum);
 		},
 
@@ -386,8 +406,29 @@ const Upload = {
 			tools.xhr('/makers', function(resData){
 				this.makers = resData;
 			}.bind(this));
-		}
+		},
+
+		chooseAlbumHandler(){
+			console.log('chooseAlbumHandler', arguments);
+		},
+
+		queryMaker(makerId){
+			tools.xhr('/maker/' + makerId, function(resData){
+				let makerInfo = resData[0];
+				if(makerInfo){
+					this.selectedMaker = resData[0].name;
+				}else{
+					this.selectedMaker = '';
+				}
+			}.bind(this));
+		},
+
 	},
+
+	watch: {'SO.albumId': function(to, from){
+		this.queryMaker(to)
+	}},
+
 	template: temp.upload
 };
 

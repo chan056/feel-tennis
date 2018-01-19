@@ -28,6 +28,10 @@ const routerConfig = {
     },
 
     '/makers': function(params, res){
+        r.query('queryMakers', params, res);
+    },
+
+    '/maker/:id': function(params, res){
         r.query('queryMaker', params, res);
     },
     // 根据video id 查询某个视频
@@ -159,6 +163,10 @@ const routerConfig = {
 
     '/album': function(res, req){
         r.post('creatAlbum', req, res);
+    },
+
+    '/maker': function(res, req){
+        r.post('createMaker', req, res);
     },
 
     // POST 上传文件
