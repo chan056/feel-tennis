@@ -53,6 +53,9 @@
 #main-router-view .el-breadcrumb {
   margin-bottom: 20px;
 }
+#main-router-view .el-row {
+  margin-top: 20px;
+}
 .block-list .block-thumb {
   display: block;
   width: 100%;
@@ -107,6 +110,10 @@
 }
 .newTagDialog .el-input {
   width: 300px;
+}
+.new-album-btn,
+.new-tag-btn {
+  margin-left: 20px;
 }
 #palyer-wrapper {
   display: inline-block;

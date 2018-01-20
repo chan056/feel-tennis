@@ -63,3 +63,9 @@ em {
 .block-list a {
   text-decoration: none;
 }
+.el-dialog {
+  width: 500px;
+}
+.el-form-item__content {
+  margin-left: 100px;
+}

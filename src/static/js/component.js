@@ -286,7 +286,7 @@ const Upload = {
 
 		let makerConfig = {
 			visibility: false,
-			title: '新建制作中',
+			title: '新建制作者',
 		};
 
 		var d = {

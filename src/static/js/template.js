@@ -214,7 +214,7 @@ var temp = {
                     </el-select>
                 </el-col>
                 
-                <el-button @click="openAlbumDialog();">新建Album</el-button>
+                <el-button @click="openAlbumDialog();" class="new-album-btn">新建Album</el-button>
             </el-row>
 
             <el-row v-if="selectedMaker">
@@ -256,7 +256,7 @@ var temp = {
                     </el-select>
                 </el-col>
                 
-                <el-button v-on:click="" @click="tagConfig.visibility = true">新建Tag</el-button>
+                <el-button v-on:click="" @click="tagConfig.visibility = true" class="new-tag-btn">新建Tag</el-button>
             </el-row>
 
             <el-row>
@@ -305,7 +305,10 @@ var temp = {
             </el-row>
 
             <el-row>
-                <el-button v-on:click="postVedio" >提交</el-button>
+                <el-col :span="4">&nbsp;</el-col>
+                <el-col :span="4">
+                    <el-button v-on:click="postVedio" class="new-video-btn">提交</el-button>
+                </el-col>
             </el-row>
 
             <el-dialog v-bind:title="albumConfig.title" :visible.sync="albumConfig.visibility">
@@ -351,7 +354,7 @@ var temp = {
                         </el-select>
                     </el-form-item>
                     <el-form-item label="专辑名称">
-                        <el-input v-model="newAlbum.name" auto-complete="off"></el-input>
+                        <el-input v-model="newAlbum.name" auto-complete="off" style="width: 217px;"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -391,7 +394,7 @@ var temp = {
                         <el-input v-model="newMaker.name" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="描述">
-                        <el-input v-model="newMaker.desc" type="textarea""></el-input>
+                        <el-input v-model="newMaker.desc" type="textarea" style="width: 300px;"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
