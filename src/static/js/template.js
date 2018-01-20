@@ -310,7 +310,6 @@ var temp = {
 
             <el-dialog v-bind:title="albumConfig.title" :visible.sync="albumConfig.visibility">
                 <el-form class="newAlbumDialog">
-                {{newAlbum}}
                     <el-form-item label="运动项目">
                         <el-select v-model="newAlbum.sportId" 
                             clearable
