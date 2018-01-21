@@ -108,6 +108,19 @@
   margin-right: 20px;
   cursor: pointer;
 }
+.el-breadcrumb span {
+  font-size: 1.5rem;
+}
+.tags {
+  margin-bottom: 30px;
+}
+.tags .el-tag {
+  margin-right: 10px;
+  font-size: 1rem;
+}
+.tags a {
+  text-decoration: none;
+}
 .newTagDialog .el-input {
   width: 300px;
 }

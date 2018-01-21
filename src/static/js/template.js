@@ -79,11 +79,11 @@ var temp = {
             <ul class="block-list">
                 <li v-for="album in albumList">
                     <router-link v-on:click="alert(album.name)" :to="{path: '/albums/'+ album.id }">
-                        <img src="/img/logo.jpg" class="block-thumb album-thumb"/>
+                        <img :src="album.cover" class="block-thumb album-thumb"/>
                         <h3 class="block-title album-title">
                             {{ album.name }}
                         </h3>
-                        <div>author 关于作者</div>
+                        <div>关于作者</div>
                         <p class="clearfix">
                             <span class="play-count fl">{{album.impression}}次观看</span>
                             <span class="update-time fr">
@@ -102,11 +102,10 @@ var temp = {
                 <el-breadcrumb-item :to="{ path: '/sports/' + crumb.sId }">{{crumb.sName}}</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{ path: '/albums/' + crumb.aId }">{{crumb.aName}}</el-breadcrumb-item>
             </el-breadcrumb>
-            <h2>Feel Tennis</h2>
             <div class="tags">
-                <el-button round v-for="tag in tags" >
+                <el-tag type="info" v-for="tag in tags" >
                     <router-link :to="{path: '/videos?tagId=' + tag.id}">{{tag.name}}</router-link>
-                </el-button>
+                </el-tag>
             </div>
             <ul class="block-list">
                 <li v-for="video in albumVideoList">
@@ -136,9 +135,9 @@ var temp = {
                 <el-breadcrumb-item :to="{ path: '/video/' + crumb.vId }">{{crumb.vHeadline}}</el-breadcrumb-item>
             </el-breadcrumb>
             <div class="tags">
-                <el-button round v-for="tag in tags" >
+                <el-tag type="info" v-for="tag in tags" >
                     <router-link :to="{path: '/videos?tagId=' + tag.id}">{{tag.name}}</router-link>
-                </el-button>
+                </el-tag>
             </div>
             <div id="palyer-wrapper">
                 <video id="video" controls="controls" height="400">Not support this browser, please use Chrome.</video>
@@ -169,9 +168,9 @@ var temp = {
 
     videos: `
         <div>
-            <el-breadcrumb separator="/">
+            <!-- <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ path: '/sports' }">首页</el-breadcrumb-item>
-            </el-breadcrumb>
+            </el-breadcrumb> -->
             
             <ul class="block-list">
                 <li v-for="video in videos">
@@ -277,7 +276,7 @@ var temp = {
                         :on-exceed="handleExceed"
                         :file-list="fileList"
                         >
-                        <el-button size="small" type="primary">点击上传</el-button>
+                        <el-button size="small" type="primary">上传视频</el-button>
                     </el-upload>
                 </el-col>
             </el-row>
@@ -299,7 +298,7 @@ var temp = {
                         :on-exceed="handleExceed"
                         :file-list="fileList"
                         >
-                        <el-button size="small" type="primary">点击上传</el-button>
+                        <el-button size="small" type="primary">上传字幕</el-button>
                     </el-upload>
                 </el-col>
             </el-row>
@@ -355,6 +354,21 @@ var temp = {
                     </el-form-item>
                     <el-form-item label="专辑名称">
                         <el-input v-model="newAlbum.name" auto-complete="off" style="width: 217px;"></el-input>
+                    </el-form-item>
+                    <el-form-item label="">
+                        <el-upload
+                            class="album-cover-uploader"
+                            action="/upload"
+                            :data="{type:'img'}"
+                            :on-remove="handleRemove"
+                            :on-success="handleAlbumCoverSuccess"
+                            multiple
+                            :limit="1"
+                            :on-exceed="handleExceed"
+                            :file-list="fileList"
+                            >
+                            <el-button size="" type="primary">上传封面</el-button>
+                        </el-upload>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -436,7 +450,7 @@ var temp = {
                         :on-exceed="handleExceed"
                         :file-list="fileList"
                         >
-                        <el-button size="" type="primary">点击上传</el-button>
+                        <el-button size="" type="primary">上传截图</el-button>
                     </el-upload>
                 </el-form-item>
                 

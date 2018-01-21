@@ -343,6 +343,11 @@ const Upload = {
 			this.SO.subtitleAbsPath = res.absPath;
 		},
 
+		handleAlbumCoverSuccess(res){
+			debugger;
+			this.newAlbum.cover = res.relPath;
+		},
+
 		postVedio(){
 			let so = Object.assign({}, this.SO);
 			so.tag = this.SO.tag.join(',');
@@ -435,7 +440,11 @@ const Upload = {
 	},
 
 	watch: {'SO.albumId': function(to, from){
-		this.queryMaker(to)
+		if(to){
+			this.queryMaker(to)
+		}else{
+			this.selectedMaker = '';
+		}
 	}},
 
 	template: temp.upload

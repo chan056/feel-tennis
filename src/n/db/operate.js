@@ -167,10 +167,10 @@ var operations = {
 
 	creatAlbum: function(res, postObj){
 		var sql = `INSERT INTO album 
-			(sport_id, author_id, name, tag)
-			VALUES (?, ?, ?, ?)`;
+			(sport_id, author_id, name, tag, cover)
+			VALUES (?, ?, ?, ?, ?)`;
 
-		conn.query(sql, [postObj.sportId, postObj.maker, postObj.name, postObj.tag], function(err, result, fields){
+		conn.query(sql, [postObj.sportId, postObj.maker, postObj.name, postObj.tag, postObj.cover], function(err, result, fields){
 			if(err)
 				throw err;
 			// console.log(arguments);

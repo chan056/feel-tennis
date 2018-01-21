@@ -196,6 +196,10 @@ const routerConfig = {
                 absPath = path.join(form.uploadDir, file.name);
                 relPath = path.join(uploadDir, file.name);
                 fs.rename(file.path, absPath);
+            }else if(fileType == 'img'){
+                absPath = path.join(form.uploadDir, file.name);
+                relPath = path.join(uploadDir, file.name);
+                fs.rename(file.path, absPath);
             }
         });
 
