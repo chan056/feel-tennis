@@ -166,6 +166,15 @@ const Video = {
 	created() {
 		tools.insertScriptTag(1, "https://cdn.jsdelivr.net/npm/hls.js@latest", {onload: function(){
 			tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
+			video.onpause = function(){
+				// console.log('pause');
+				// 停止匹配字幕 todo
+			}
+
+			video.onended = function(){
+				// console.log('ended');
+				$('.subtitle').text('');
+			}
 		}.bind(this), id: 'hls'});
 
 		// var t = 0;
