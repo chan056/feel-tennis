@@ -1,3 +1,9 @@
+html {
+  font-size: 10px;
+}
+app {
+  font-size: 14px;
+}
 #root-container {
   display: flex;
   flex-direction: row;
@@ -95,10 +101,10 @@
   margin-bottom: 0;
 }
 #header [class^=el-icon-] {
-  font-size: 2rem;
+  font-size: 3rem;
 }
 #header .el-icon-search {
-  font-size: 1rem;
+  font-size: 1.5rem;
 }
 #header .masthead {
   margin-top: 20px;
@@ -109,14 +115,14 @@
   cursor: pointer;
 }
 .el-breadcrumb span {
-  font-size: 1.5rem;
+  font-size: 2.4rem;
 }
 .tags {
   margin-bottom: 30px;
 }
 .tags .el-tag {
   margin-right: 10px;
-  font-size: 1rem;
+  font-size: 1.6rem;
 }
 .tags a {
   text-decoration: none;
@@ -156,4 +162,8 @@
 .image {
   width: 100%;
   display: block;
+}
+#about pre {
+  white-space: pre-line;
+  font-size: 14px;
 }

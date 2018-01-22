@@ -12,9 +12,6 @@ h6 {
   margin: 0;
   padding: 0;
 }
-body {
-  font-size: 16px;
-}
 div,
 li {
   box-shadow: 0 0 1px #dfeceb;
@@ -63,9 +60,15 @@ em {
 .block-list a {
   text-decoration: none;
 }
+.block-list .block-info {
+  padding: 8px 0;
+}
 .el-dialog {
   width: 500px;
 }
 .el-form-item__content {
   margin-left: 100px;
+}
+.update-time:before {
+  content: '• ';
 }

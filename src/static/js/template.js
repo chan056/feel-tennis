@@ -59,9 +59,9 @@ var temp = {
                 <li class="" v-for="sport in sports">
                     <router-link :to="{path: '/sports/'+ sport.id }" :title="sport.name">
                         <img src="/img/logo.jpg" class="block-thumb spt-thumb"/>
-                        <p class="clearfix">
-                            <span class="play-count fl">{{sport.impression}}次观看</span>
-                            <span class="update-time fr">
+                        <p class="clearfix block-info">
+                            <span class="play-count">{{sport.impression}}次观看</span>
+                            <span class="update-time">
                                 <UpdateTime :timestamp="sport.update_time"></UpdateTime>
                             </span>
                         </p>
@@ -83,10 +83,10 @@ var temp = {
                         <h3 class="block-title album-title">
                             {{ album.name }}
                         </h3>
-                        <div>关于作者</div>
-                        <p class="clearfix">
-                            <span class="play-count fl">{{album.impression}}次观看</span>
-                            <span class="update-time fr">
+                        <div class="author">author</div>
+                        <p class="clearfix block-info">
+                            <span class="play-count">{{album.impression}}次观看</span>
+                            <span class="update-time">
                                 <UpdateTime :timestamp="album.update_time"></UpdateTime>
                             </span>
                         </p>
@@ -114,10 +114,10 @@ var temp = {
                         <h3 class="block-title video-title">
                             {{ video.headline }}
                         </h3>
-                        <div>author</div>
-                        <p class="clearfix">
-                            <span class="play-count fl">{{video.impression}}次观看</span>
-                            <span class="update-time fr">
+                        <div class="author">author</div>
+                        <p class="clearfix block-info">
+                            <span class="play-count">{{video.impression}}次观看</span>
+                            <span class="update-time">
                                 <UpdateTime :timestamp="video.update_time"></UpdateTime>
                             </span>
                         </p>
@@ -179,10 +179,10 @@ var temp = {
                         <h3 class="block-title video-title">
                             {{ video.headline }}
                         </h3>
-                        <div>author</div>
-                        <p class="clearfix">
-                            <span class="play-count fl">1次观看</span>
-                            <span class="update-time fr">
+                        <div class="author">author</div>
+                        <p class="clearfix block-info">
+                            <span class="play-count">{{video.impression}}次观看</span>
+                            <span class="update-time">
                                 <UpdateTime :timestamp="video.update_time"></UpdateTime>
                             </span>
                         </p>
@@ -420,7 +420,7 @@ var temp = {
      `,
 
     feedback: `
-        <div style="width: 600px; margin: auto; border: 1px solid; padding: 10px 20px;">
+        <div style="width: 600px; margin: auto; border: 1px solid #999; padding: 10px 20px;">
             <h2 class="ovh" style="border-bottom: 1px solid;">
                 <span class="fl">发生了什么</span>
                 <i class="fr el-icon-back" @click="goback()" style="cursor: pointer;"></i>
@@ -462,5 +462,28 @@ var temp = {
             <!-- {{form}}
             {{files}} -->
         </div>
-    `
+    `,
+
+    about: `
+    <div><div id="about">
+    <!--不知道为什么外面要套两层-->
+        <pre>
+        为什么做？
+
+            1. 喜欢网球
+                &nbsp;&nbsp;17年初，在老同学的引导下，开始打网球，顶多是个新手，不过每个星期必打，除非下雨天。没人催我，来回路上1个半小时，就这样打了1年。我想肯定是喜欢在场上奔跑挥拍的感觉。碰到很多喜欢网球的年轻人，我能为大家做什么？
+
+            2. 资料太少而且凌乱
+                &nbsp;&nbsp;像我一样走“野路子”的不少，选个"好看的"基础拍就开始在场上瞎挥，一小戳人坚持了下来，技术日渐长进，动作也开始定型，想进一步肯定需要有前人指导，不然等于做无用功。大多请不起教练的“野路子”选择去网上找视频，但是非常凌乱、稀少、古老，我想是否能用我所学的给大家一个学习网球或者其他技能的一个平台。
+
+            3. 工作原因
+                &nbsp;&nbsp;有不少球友年龄可能和我差不多，在职场几年，前途不见明朗，做的重复的事让自己逐渐消沉、迷失自我。我一直在思考，对什么感兴趣，怎样才能影响别人，帮助别人，帮助自己。
+
+                
+        意见和建议尽管提（左侧有反馈按钮），甚至喜欢的明星或者内容都可以提，很有可能出现在下一次更新中 :）
+        </pre>
+    </div></div>
+    `,
+
+    aboutMake: ''
 }

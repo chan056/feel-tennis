@@ -519,3 +519,16 @@ const Feedback = {
 
 	template: temp.feedback,
 };
+
+const About = {
+	data: function () {
+		var d = {};
+		return d;
+	},
+
+	methods:{
+		
+	},
+
+	template: temp.about,
+};

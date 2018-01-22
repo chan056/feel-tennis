@@ -1,5 +1,11 @@
 @img-dir-path: '/img/';
 
+html {
+  font-size: 10px;
+}
+
+app{font-size: 14px;}
+
 #root-container{
   display: flex;
   flex-direction: row;
@@ -82,8 +88,8 @@
   .el-form{padding-top: 12px;}
   .el-form-item {margin-bottom: 0;}
 
-  [class^=el-icon-]{font-size: 2rem;}
-  .el-icon-search{font-size: 1rem;}
+  [class^=el-icon-]{font-size: 3rem;}
+  .el-icon-search{font-size: 1.5rem;}
 
   .masthead{
     margin-top: 20px;
@@ -93,13 +99,13 @@
 
 // 层级导航
 .el-breadcrumb{
-  span{font-size: 1.5rem;}
+  span{font-size: 2.4rem;}
 }
 
 // 标签
 .tags{
   margin-bottom: 30px;
-  .el-tag{margin-right: 10px; font-size: 1rem;}
+  .el-tag{margin-right: 10px; font-size: 1.6rem;}
   a{text-decoration: none;}
 }
 
@@ -139,3 +145,7 @@
   display: block;
 }
 
+// 关于站长
+#about{
+  pre{white-space: pre-line; font-size: 14px;}
+}
