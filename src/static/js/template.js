@@ -110,7 +110,7 @@ var temp = {
             <ul class="block-list">
                 <li v-for="video in albumVideoList">
                     <router-link :to="{path: '/video/'+ video.id }">
-                        <img src="/img/logo.jpg" class="block-thumb video-thumb"/>
+                        <img :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb video-thumb"/>
                         <h3 class="block-title video-title">
                             {{ video.headline }}
                         </h3>

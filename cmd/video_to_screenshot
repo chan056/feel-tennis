@@ -1,0 +1,1 @@
+ffmpeg -ss 00:10:00 -i "t.mp4" -y -f image2 -vframes 1 -s 200x100 test.jpg

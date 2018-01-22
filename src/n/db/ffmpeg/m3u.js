@@ -8,6 +8,8 @@ module.exports.m3u = function(vId, videoStorePath, subtitleAbsPath){
     const path = require('path');
     const fs = require('fs');
 
+    let coveSize = '210x118';// 视频截图尺寸
+
     let multiResolution = {
         360: {scaleW: 640, scaleH: 360, bv: 800, maxrate: 856, bufsize: 1200, ba: 96},
         480: {scaleW: 842, scaleH: 480, bv: 1400, maxrate: 1498, bufsize: 2100, ba: 128},
@@ -25,10 +27,12 @@ module.exports.m3u = function(vId, videoStorePath, subtitleAbsPath){
             fs.mkdir(tsDir, function(){
                 execM3U();
                 storeSubtitle();
+                screenShot();
             });
         }else{
             execM3U();
             storeSubtitle();
+            screenShot();
         }
     });
 
@@ -63,10 +67,70 @@ module.exports.m3u = function(vId, videoStorePath, subtitleAbsPath){
         }
     }
 
+    // 生成视频封面
+    function generateVideoCover(){
+        const exec = require('child_process').exec;
+        let vDurationCmd = `coder$ ffprobe -show_format ${videoStorePath} | sed -n '/duration/s/.*=//p'`;
+        let screenshotCmd = `ffmpeg -ss 00:10:00 -i ${videoStorePath} -y -f image2 -vframes 1 -s 210x118 cover.jpg`;
+
+        exec(vDurationCmd, function(error, out){
+            if(error){
+                console.log(error);
+            }
+
+            console.log(out)
+        })
+
+    }
+
     function storeSubtitle(){
         // 多字幕 todo
         let subtitleStorePath = path.resolve(tsDir, `./subtitle`);
         fs.rename(subtitleAbsPath, subtitleStorePath);
+    }
+
+    function screenShot (){
+    
+        const exec = require('child_process').exec;
+        let vDurationCmd = `ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 ${videoStorePath}`;
+    
+        exec(vDurationCmd, function(error, duration){
+            if(error){
+                console.log(error);
+            }
+    
+            let coverPath = path.resolve(tsDir, './cover.jpg');
+            let screenshotCmd = `ffmpeg -ss ${formatTime(duration/2)} -i ${videoStorePath} -y -f image2 -vframes 1 -s ${coveSize} ${coverPath}`;
+            exec(screenshotCmd, function(err){
+                if(err){
+                    console.log(err);
+                }
+            });
+        })
+    
+        // 61 => 00:01:01
+        function formatTime(seconds){
+            const m = 60;
+            const h = 3600;
+    
+            let hour = Math.floor(seconds/h);
+            hour = zeroFill(hour);
+    
+            seconds = seconds%h;
+    
+            let minute = Math.floor(seconds/m);
+            minute = zeroFill(minute);
+    
+            seconds = seconds%m;
+            seconds = zeroFill(seconds);
+            // seconds = seconds.toFixed(0);
+    
+            return hour + ':' + minute + ':' + seconds;
+    
+            function zeroFill (v){
+                return v < 10? '0'+v: v;
+            }
+        }
     }
 }
 
