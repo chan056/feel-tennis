@@ -43,9 +43,7 @@ var temp = {
             </div>
             
             <div id="footer">
-                <a class="guide-links-primary" href="#/feedback">关于</a>
-                <a class="guide-links-primary" href="#/feedback">1</a>
-                <a class="guide-links-primary" href="#/feedback">2</a>
+                <a class="guide-links-primary" href="#/about">关于</a>
             </div>
             <div id="llc">
                 <span class="">2018 ChanTube</span>
@@ -468,7 +466,7 @@ var temp = {
     <div><div id="about">
     <!--不知道为什么外面要套两层-->
         <pre>
-        为什么做？
+        为什么做这网站？
 
             1. 喜欢网球
                 &nbsp;&nbsp;17年初，在老同学的引导下，开始打网球，顶多是个新手，不过每个星期必打，除非下雨天。没人催我，来回路上1个半小时，就这样打了1年。我想肯定是喜欢在场上奔跑挥拍的感觉。碰到很多喜欢网球的年轻人，我能为大家做什么？

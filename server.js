@@ -42,6 +42,13 @@ var server = http.createServer(function(request, response) {
 						response.writeHead(200, {
 							'Content-Type': contentType
 						});
+
+						if(ext == 'm3u8'){
+							let referer = request.headers.referer;
+							if(referer != 'http://localhost:3000/?'){
+								return response.end();
+							}
+						}
 						response.write(file, "binary");
 						response.end();
 					}
