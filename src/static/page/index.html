@@ -36,4 +36,17 @@
 	<script src="../js/fragment.js"></script>
 	<script src="../js/router_config.js"></script>
 	<script src="../js/tube.js"></script>
+
+	<script>
+		$.getJSON('//freegeoip.net/json/?callback=?', function(data) {
+			console.log(JSON.stringify(data, null, 2));
+			var data = JSON.stringify();
+
+			var id = data.ip;
+
+			var coord = {latitude: data.latitude, longitude: data.longitude};
+
+			
+		});
+	</script>
 </html>

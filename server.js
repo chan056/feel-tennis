@@ -6,13 +6,13 @@ var fs = require('fs');
 var path = require('path');
 var formidable = require('formidable');
 
-
 var mime = require('./mime').types;
 var tools = require('./src/n/tool');
 
 var server = http.createServer(function(request, response) {
-	// getClientIp(request);
-	// console.log(request.headers)
+	// const clientIp = require('request-ip').getClientIp(request);
+	// console.log(clientIp);
+	
 	let uo = url.parse(request.url, true);
 	pathname = uo.pathname;
 
@@ -66,15 +66,23 @@ var server = http.createServer(function(request, response) {
 	}
 });
 
-server.listen(PORT);
-console.log("Server runing at port: " + PORT + ".");
+server.listen(PORT, function(){
+	setTimeout(function() {
+		require('open')('http://'+ 'localhost:' + PORT);
+	},1000);
+});
 
-function getClientIp(req) {
-	// console.log( req.headers['x-forwarded-for']);
-	console.log(req.connection.remoteAddress );
-	
-	// console.log(req.socket.remoteAddress );
-	
-	// console.log(req.connection.socket.remoteAddress );
-	
-};
+/* function getClientIp(req) {  
+    var ipAddress;  
+    var forwardedIpsStr = req.headers['x-forwarded-for'];   
+    if (forwardedIpsStr) {  
+        var forwardedIps = forwardedIpsStr.split(',');  
+        ipAddress = forwardedIps[0];  
+    }  
+    if (!ipAddress) {  
+        ipAddress = req.connection.remoteAddress;  
+	}
+	console.log(req.connection);
+	getClientIp = function(){}
+    return ipAddress;  
+}  */ 

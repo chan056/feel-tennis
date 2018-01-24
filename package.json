@@ -16,7 +16,9 @@
     "webpack": "^3.8.1"
   },
   "devDependencies": {
-    "fluent-ffmpeg": "^2.1.2"
+    "fluent-ffmpeg": "^2.1.2",
+    "open": "0.0.5",
+    "request-ip": "^2.0.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
