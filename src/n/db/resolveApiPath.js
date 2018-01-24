@@ -1,6 +1,6 @@
 var pathToRegexp = require('path-to-regexp');
 
-var routerConfig = require('./router');
+var routerConfig = require('./routerConfig');
 var tools = require('../tool');
 
 // 从路径中抽取参数

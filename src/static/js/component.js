@@ -33,6 +33,19 @@ const HeaderComponent = {
 		},
 		resetForm(formName) {
 			this.$refs[formName].resetFields();
+		},
+
+		login(){
+			tools.xhr('/login', function(){
+				// console.log(arguments);
+				this.$message({
+					message: '登陆成功',
+					type: 'success'
+				});
+			}.bind(this), 'post', {
+				name: 'cy',
+				psw: 62191056
+			});
 		}
 	}
 	// component

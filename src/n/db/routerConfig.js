@@ -153,6 +153,10 @@ const routerConfig = {
     },
 
     // POST
+    '/login': function(res, req){
+        r.post('login', req, res);
+    },
+
     '/video': function(res, req){
         r.post('creatVedio', req, res);
     },

@@ -24,7 +24,7 @@ var temp = {
                 </el-col>
 
                 <el-col :span="6" :offset="6" class="masthead">
-                    <i class="el-icon-view"></i>
+                    <i class="el-icon-view" @click="login();"></i>
                     <i class="el-icon-news"></i>
                 </el-col>
             </el-row>

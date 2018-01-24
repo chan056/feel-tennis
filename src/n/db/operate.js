@@ -99,6 +99,25 @@ var operations = {
 
 	},
 
+	// POST
+	login: function(res, postObj, req){
+		var sql = `select * from usr where name=? and psw=?`;
+
+		conn.query(sql, [postObj.name, postObj.psw], function(err, result, fields){
+			if(err)
+				throw err;
+			
+			if(result[0].id){
+				req.session.put('name', postObj.name);
+
+				res.end('success');
+			}else{
+
+			}
+			// console.log(result, fields);
+		});
+	},
+
 	creatVedio: function(res, postObj){
 		const path = require('path');
 
