@@ -56,9 +56,9 @@ module.exports.config = function(request, response) {
 			return tools.response404(response)
 		// todo 拦截无理请求
 
-		global.UO = uo;
-
+		// 读取文件的过程 异步
 		session.startSession(request, response, function(){
+			global.UO = uo;
 			// if (request.session.has('name')){
                 let storedName = request.session.get('name')
 				storedName && console.log(storedName);

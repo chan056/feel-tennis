@@ -23,6 +23,8 @@ function resolveApiPath(res, req) {
         }
     }
 
+    // console.log(keys)
+
     if (pathMatch) {
         for (let i = 0, l = keys.length; i < l; i++) {
             let key = keys[i];
