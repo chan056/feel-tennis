@@ -50,21 +50,58 @@ var operations = {
 	queryVideo: function (res, qualification) {
 		/* let updateSQL = `update stat set v_show = v_show + 1;
 			update video set impression = impression + 1;` */
-		conn.query('update stat set v_show = v_show + 1');
-		conn.query('update video set impression = impression + 1' + qualification);
+		
 
-		conn.query('SELECT * from video' + qualification, function (err, result, fields) {
-			if (err) throw err;
-			
-			// 更新关联的表
-			let albumId = result[0].album_id;
-			conn.query('update album set impression = impression + 1 where id=' + albumId);
-			conn.query('update sport set impression = impression + 1 where id = (select sport_id from album where id = ' + albumId + ')');
+		// console.log(global.usr);
+		// 更新
+		usr = global.usr;
+		if(usr){
+			let usrType = usr.type;
 
-			result = JSON.stringify(result);
-			res.end(result);
-		});
+			if(usrType == 2){
+				usrIP = usr.name;
+				conn.query(`select * from tmp_usr where ip = '${usrIP}'`, function(err, result){
+					if(result){
+						// update view
+						// 假如同个局域网的不同人访问
+						// 同个局域网用户提交的IP信息是相同的
 
+						let view = result[0].view;
+						console.log(view +1);
+						if(view < 100){
+							conn.query(`update tmp_usr set view=view+1 where ip='${usrIP}'`);
+							queryVinfo(view);
+						}else{
+							// 定时清楚view
+							res.end('VIEW_MAXIMIUM');
+						}
+					}else{
+						conn.query(`INSERT INTO tmp_usr (ip, view) VALUES ('${usrIP}', 1)`);
+						queryVinfo();
+					}
+				});
+			} else if(usrType == 1){
+				queryVinfo();
+			}
+		}
+
+		function queryVinfo(dayPlayCount){
+			conn.query('SELECT * from video' + qualification, function (err, result, fields) {
+				if (err) throw err;
+				
+				// 更新关联的表
+				let albumId = result[0].album_id;
+	
+				conn.query('update stat set v_show = v_show + 1');
+				conn.query('update video set impression = impression + 1' + qualification);
+				conn.query('update album set impression = impression + 1 where id=' + albumId);
+				conn.query('update sport set impression = impression + 1 where id = (select sport_id from album where id = ' + albumId + ')');
+	
+				result = JSON.stringify(result);
+				result.dayPlayCount = dayPlayCount;
+				res.end(result);
+			});
+		}
 	},
 
 	queryMakers: function(res, qualification) {

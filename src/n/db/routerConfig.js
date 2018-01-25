@@ -147,7 +147,7 @@ const routerConfig = {
     },
 
     '/srt/:vId': function(params, res){
-        console.log('srt', params.vId)
+        // console.log('srt', params.vId)
         let parseSrt = require('./srt_parser.js').parseSrt;
         parseSrt(params.vId, res);
     },

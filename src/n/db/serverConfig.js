@@ -62,7 +62,42 @@ module.exports.config = function(request, response) {
 			// if (request.session.has('name')){
                 let storedName = request.session.get('name')
 				storedName && console.log(storedName);
-			// }
+            // }
+            if(storedName){// 已经登陆的用户
+				global.usr = {
+					type: 1,
+					name: storedName
+				}
+			}else{//未登录的用户 设置cookie
+				const signature = '16charlongsecret';
+				const nodeCookie = require('node-cookie');
+				let crypto = require('./crypto.js');
+				
+				let getClientIp = require('./getClientIp.js').getClientIp;
+				let ip = getClientIp(request);
+                let ipEncrypted = crypto.aesEncrypt(ip, 'key');
+				
+				var tmpUsrInCookie = nodeCookie.get(request, 'tmpUsr');
+				// console.log(ip);
+				
+				if(!tmpUsrInCookie){
+					nodeCookie.create(response, 'tmpUsr', ipEncrypted);
+					global.usr = {
+						type: 2,
+						name: ip
+					}
+				}else{
+					// console.log(crypto.aesDecrypt(tmpUsrInCookie, 'key'))
+					let ipDecrepted = crypto.aesDecrypt(tmpUsrInCookie, 'key');
+
+					if(ipDecrepted == ip){
+						global.usr = {
+							type: 2,
+							name: ipDecrepted
+						}
+					}
+				}
+            }
 
 			let resolveApiPathModule = require('./resolveApiPath');
 			resolveApiPathModule.resolveApiPath(response, request);
