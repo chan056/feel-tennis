@@ -26,6 +26,8 @@
 
 	<script src="../lib/axios.min.js"></script>
 	<script src="../lib/zepto.js"></script>
+
+	<script src="../lib/js.cookie.min.js"></script>
 	<!-- <script src="../lib/breadcrumbs.js"></script> -->
 	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
 
@@ -38,6 +40,7 @@
 	<script src="../js/tube.js"></script>
 
 	<script>
+		// 获取坐标
 		$.getJSON('//freegeoip.net/json/?callback=?', function(data) {
 			console.log(JSON.stringify(data, null, 2));
 			var data = JSON.stringify(data);
@@ -48,5 +51,9 @@
 
 			
 		});
+
+		
 	</script>
+
+	
 </html>

@@ -61,22 +61,22 @@ var operations = {
 			if(usrType == 2){
 				usrIP = usr.name;
 				conn.query(`select * from tmp_usr where ip = '${usrIP}'`, function(err, result){
-					if(result){
-						// update view
+					if(result[0]){
+						// update today impression
 						// 假如同个局域网的不同人访问
 						// 同个局域网用户提交的IP信息是相同的
 
-						let view = result[0].view;
-						console.log(view +1);
-						if(view < 100){
-							conn.query(`update tmp_usr set view=view+1 where ip='${usrIP}'`);
-							queryVinfo(view);
+						let impression = result[0].impression;
+						// console.log(impression +1);
+						if(impression < 100){
+							conn.query(`update tmp_usr set impression=impression+1 where ip='${usrIP}'`);
+							queryVinfo(impression);
 						}else{
-							// 定时清楚view
-							res.end('VIEW_MAXIMIUM');
+							// 定时清除impression
+							res.end('IMPRESSION');
 						}
 					}else{
-						conn.query(`INSERT INTO tmp_usr (ip, view) VALUES ('${usrIP}', 1)`);
+						conn.query(`INSERT INTO tmp_usr (ip, impression) VALUES ('${usrIP}', 1)`);
 						queryVinfo();
 					}
 				});

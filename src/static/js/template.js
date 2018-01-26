@@ -24,8 +24,8 @@ var temp = {
                 </el-col>
 
                 <el-col :span="6" :offset="6" class="masthead">
-                    <i class="el-icon-view" @click="login();"></i>
-                    <i class="el-icon-news"></i>
+                    <i class="el-icon-view" title="资料" @click="login();"></i>
+                    <i class="el-icon-news" title="消息"></i>
                 </el-col>
             </el-row>
         </div>
