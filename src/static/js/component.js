@@ -47,6 +47,10 @@ const HeaderComponent = {
 				name: 'cy',
 				psw: 62191056
 			});
+		},
+
+		handleSelect(){
+			console.log(arguments);
 		}
 	},
 	mounted: function () {

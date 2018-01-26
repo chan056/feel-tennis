@@ -48,13 +48,9 @@ var operations = {
 	},
 
 	queryVideo: function (res, qualification) {
-		/* let updateSQL = `update stat set v_show = v_show + 1;
-			update video set impression = impression + 1;` */
-		
-
-		// console.log(global.usr);
-		// 更新
 		usr = global.usr;
+		const maxDayView = 100;
+
 		if(usr){
 			let usrType = usr.type;
 
@@ -62,26 +58,36 @@ var operations = {
 				usrIP = usr.name;
 				conn.query(`select * from tmp_usr where ip = '${usrIP}'`, function(err, result){
 					if(result[0]){
-						// update today impression
+						// update dayview
 						// 假如同个局域网的不同人访问
 						// 同个局域网用户提交的IP信息是相同的
 
-						let impression = result[0].impression;
-						// console.log(impression +1);
-						if(impression < 100){
-							conn.query(`update tmp_usr set impression=impression+1 where ip='${usrIP}'`);
-							queryVinfo(impression);
+						let dayview = result[0].dayview;
+						// console.log(dayview +1);
+						if(dayview < maxDayView){
+							conn.query(`update tmp_usr set dayview=dayview+1 where ip='${usrIP}'`);
+							queryVinfo(dayview);
 						}else{
-							// 定时清除impression
-							res.end('IMPRESSION');
+							// 定时清除dayview
+							res.end('dayview');
 						}
 					}else{
-						conn.query(`INSERT INTO tmp_usr (ip, impression) VALUES ('${usrIP}', 1)`);
+						conn.query(`INSERT INTO tmp_usr (ip, dayview) VALUES ('${usrIP}', 1)`);
 						queryVinfo();
 					}
 				});
 			} else if(usrType == 1){
-				queryVinfo();
+				conn.query(`select * from usr where name = '${usr.name}'`, function(err, result){
+					let usrRecord = result[0];
+					let dayview = usrRecord.dayview || 0;
+
+					if(dayview < maxDayView){
+						conn.query(`update usr set dayview=dayview+1 where id='${usrRecord.id}'`);
+						queryVinfo(dayview);
+					}else{
+						res.end('dayview');
+					}
+				});
 			}
 		}
 
