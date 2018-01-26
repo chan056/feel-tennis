@@ -114,6 +114,13 @@ app {
   margin-right: 20px;
   cursor: pointer;
 }
+#header .avatar-btn {
+  width: 100px;
+  float: right;
+}
+#header .avatar-btn .el-icon-arrow-down {
+  display: none;
+}
 .el-breadcrumb span {
   font-size: 2.4rem;
 }

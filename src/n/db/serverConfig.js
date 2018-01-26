@@ -60,13 +60,13 @@ module.exports.config = function(request, response) {
 		session.startSession(request, response, function(){
 			global.UO = uo;
 			// if (request.session.has('name')){
-                let storedName = request.session.get('name')
-				storedName && console.log(storedName);
+                let sessionName = request.session.get('name');
+				sessionName && console.log(sessionName);
             // }
-            if(storedName){// 已经登陆的用户
+            if(sessionName){// 已经登陆的用户
 				global.usr = {
 					type: 1,
-					name: storedName
+					name: sessionName
 				}
 			}else{//未登录的用户 设置cookie
 				const signature = '16charlongsecret';

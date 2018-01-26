@@ -24,7 +24,16 @@ var temp = {
                 </el-col>
 
                 <el-col :span="6" :offset="6" class="masthead">
-                    <i class="el-icon-view" title="资料" @click="login();"></i>
+                    <el-menu :default-active="activeIndex" class="el-menu-demo avatar-btn" mode="horizontal" @select="handleSelect">
+                        <el-submenu index="1">
+                            <template slot="title">
+                                <i class="el-icon-view" title="资料" @click="login();"></i>
+                            </template>
+                            <el-menu-item index="1-1">选项1</el-menu-item>
+                            <el-menu-item index="1-2">选项2</el-menu-item>
+                            <el-menu-item index="1-3">选项3</el-menu-item>
+                        </el-submenu>
+                    </el-menu>
                     <i class="el-icon-news" title="消息"></i>
                 </el-col>
             </el-row>
