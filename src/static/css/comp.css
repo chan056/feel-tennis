@@ -97,7 +97,7 @@ app {
 #header .el-form {
   padding-top: 12px;
 }
-#header .el-form-item {
+#header #searchForm .el-form-item {
   margin-bottom: 0;
 }
 #header [class^=el-icon-] {
@@ -113,6 +113,16 @@ app {
   float: right;
   margin-right: 20px;
   cursor: pointer;
+}
+#header .masthead .el-submenu__title {
+  height: auto !important;
+  line-height: inherit !important;
+}
+#header .masthead .el-menu--horizontal .el-submenu .el-menu {
+  top: 30px;
+}
+#header .masthead .el-submenu__title {
+  border-bottom-width: 0 !important;
 }
 #header .avatar-btn {
   width: 100px;

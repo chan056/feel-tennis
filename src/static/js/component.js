@@ -4,28 +4,47 @@ const HeaderComponent = {
 	template: temp.header,
 
 	data: {
-		ruleForm: {
+		searchForm: {
 			name: '',
 		},
+
 		rules: {
 			name: [
 			//   { required: true, message: ' '/* , trigger: 'blur'  */},
 				{ min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' }
 			],
 		},
+
+		registForm: {
+			formLabelWidth:'100px',
+			visible: false,
+			name: '',
+			psw: ''
+		},
+
+		loginForm: {
+			formLabelWidth: '100px',
+			visible: false,
+			name: '',
+			psw: ''
+		},
+
+		logoutForm: {
+			visible: false
+		}
 		// message: 'xxx'
 	},
 
 	methods: {
 		submitForm(formName) {
-			let name = $.trim(this.ruleForm.name);
+			let name = $.trim(this.searchForm.name);
 			if(!name)
 				return;
 
 			this.$refs[formName].validate((valid) => {
 				if (valid) {
-					location.hash = "#/videos?headline=" + this.ruleForm.name;
-					// this.ruleForm.name = '';
+					location.hash = "#/videos?headline=" + this.searchForm.name;
+					// this.searchForm.name = '';
 				} else {
 					console.log('error submit!!');
 					return false;
@@ -51,6 +70,15 @@ const HeaderComponent = {
 
 		handleSelect(){
 			console.log(arguments);
+		},
+
+		beforeLogout(){
+			this.$confirm('确认关闭？')
+			.then(_ => {
+				this.logoutForm.visible = false;
+				done();
+			})
+			.catch(_ => {});
 		}
 	},
 	mounted: function () {
@@ -58,7 +86,7 @@ const HeaderComponent = {
 		var tmpUsr = Cookies.get('tmpUsr');	
 		if(tmpUsr){
 			tmpUsr = tmpUsr.substr(3, 10);
-			console.log($('#header .el-icon-view'), $('#header .el-icon-view').length);
+			// console.log($('#header .el-icon-view'), $('#header .el-icon-view').length);
 			$('#header .el-icon-view').attr('title', tmpUsr).addClass('tmp-usr');
 		}	
 	},

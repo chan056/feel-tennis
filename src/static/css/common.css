@@ -72,3 +72,6 @@ em {
 .update-time:before {
   content: '• ';
 }
+.el-form-item {
+  margin-bottom: 20px;
+}
