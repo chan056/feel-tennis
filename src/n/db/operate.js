@@ -51,10 +51,22 @@ var operations = {
 		usr = global.usr;
 		const maxDayView = 100;
 
+		/* 
+			查询是否存在临时用户
+				没有
+					新建
+				有
+					更新
+			超过当天视频播放量
+				是
+					重定向到所属专辑视频列表
+				否
+					返回视频信息
+		*/
 		if(usr){
 			let usrType = usr.type;
 
-			if(usrType == 2){
+			if(usrType == 2){// 临时
 				usrIP = usr.name;
 				conn.query(`select * from tmp_usr where ip = '${usrIP}'`, function(err, result){
 					if(result[0]){
@@ -69,29 +81,35 @@ var operations = {
 							queryVinfo(dayview);
 						}else{
 							// 定时清除dayview
-							res.end('dayview');
+							res.writeHead(302, {
+								'Location': '/?#/albums/1'
+							});
+							res.end('exceed dayview');
 						}
 					}else{
 						conn.query(`INSERT INTO tmp_usr (ip, dayview) VALUES ('${usrIP}', 1)`);
 						queryVinfo();
 					}
 				});
-			} else if(usrType == 1){
+			} else if(usrType == 1){// 注册
 				conn.query(`select * from usr where name = '${usr.name}'`, function(err, result){
 					let usrRecord = result[0];
-					let dayview = usrRecord.dayview || 0;
+					let dayView = usrRecord.dayview || 0;
 
-					if(dayview < maxDayView){
+					if(dayView < maxDayView){
 						conn.query(`update usr set dayview=dayview+1 where id='${usrRecord.id}'`);
-						queryVinfo(dayview);
+						queryVinfo(dayView);
 					}else{
-						res.end('dayview');
+						res.writeHead(302, {
+							'Location': '/?#/albums/1'
+						});
+						res.end('exceed dayview');
 					}
 				});
 			}
 		}
 
-		function queryVinfo(dayPlayCount){
+		function queryVinfo(dayView){
 			conn.query('SELECT * from video' + qualification, function (err, result, fields) {
 				if (err) throw err;
 				
@@ -102,9 +120,9 @@ var operations = {
 				conn.query('update video set impression = impression + 1' + qualification);
 				conn.query('update album set impression = impression + 1 where id=' + albumId);
 				conn.query('update sport set impression = impression + 1 where id = (select sport_id from album where id = ' + albumId + ')');
-	
+
 				result = JSON.stringify(result);
-				result.dayPlayCount = dayPlayCount;
+				result.dayView = dayView;// 查询成功的话 返回当天播放次数
 				res.end(result);
 			});
 		}

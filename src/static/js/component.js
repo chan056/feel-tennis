@@ -212,7 +212,6 @@ const Video = {
 		// d.videoId = videoId;
 
 		d.captureParams.vId = videoId;
-
 		tools.xhr('/videos/' + videoId, function(resData){
 			d.video = resData[0];
 			d.captureParams.ext = d.video.video_ext;

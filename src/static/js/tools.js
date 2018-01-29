@@ -7,7 +7,7 @@ let tools = {
            sfn && sfn(response.data)
         })
         .catch(function (error) {
-            console.log(error);
+            console.log(arguments);
         });
     },
     
