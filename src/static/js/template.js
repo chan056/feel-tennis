@@ -5,39 +5,80 @@ var temp = {
                 <el-col :span="3">
                     <i class="el-icon-menu aside-menu-btn"></i>
                     <a href="#/sports" id="logo"></a>
-                    
                 </el-col>
 
                 <el-col :span="9">
-                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm"  class="">
+                    <el-form :model="searchForm" :rules="rules" ref="searchForm"  class="" id="searchForm">
                         <el-row>
                             <el-col :span=20>
                                 <el-form-item label="" prop="name">
-                                    <el-input v-model="ruleForm.name"></el-input>
+                                    <el-input v-model="searchForm.name"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span=4>
-                                <el-button style="width: 100%;" icon="el-icon-search" @click="submitForm('ruleForm')"></el-button>
+                                <el-button style="width: 100%;" icon="el-icon-search" @click="submitForm('searchForm')"></el-button>
                             </el-col>
                         </el-row>
                     </el-form>
                 </el-col>
 
                 <el-col :span="6" :offset="6" class="masthead">
-                    <el-menu class="el-menu-demo avatar-btn" mode="horizontal" @select="handleSelect">
+                    <el-menu class="el-menu-demo avatar-btn" mode="horizontal" id="">
                         <el-submenu index="1">
                             <template slot="title">
-                                <i class="el-icon-view" title="资料" @click="login();"></i>
+                                <i class="el-icon-view" title="" @click="login();"></i>
                             </template>
-                            <el-menu-item index="1-1">登录</el-menu-item>
-                            <el-menu-item index="1-2">注册</el-menu-item>
+                            <el-menu-item index="1-1" @click="loginForm.visible = true;">登陆</el-menu-item>
+                            <el-menu-item index="1-2" @click="registForm.visible = true;">注册</el-menu-item>
                             <el-menu-item index="1-3">资料</el-menu-item>
-                            <el-menu-item index="1-4">登出</el-menu-item>
+                            <el-menu-item index="1-4" @click="logoutForm.visible=true;">登出</el-menu-item>
                         </el-submenu>
                     </el-menu>
                     <i class="el-icon-news" title="消息"></i>
                 </el-col>
             </el-row>
+
+            <el-dialog title="注册" :visible.sync="registForm.visible">
+                <el-form :model="registForm">
+                    <el-form-item label="用户名" :label-width="registForm.formLabelWidth">
+                        <el-input v-model="registForm.name" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" :label-width="registForm.formLabelWidth">
+                        <el-input v-model="registForm.psw" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="registForm.visible = false">取 消</el-button>
+                    <el-button type="primary" @click="registForm.visible = true">登 陆</el-button>
+                </div>
+            </el-dialog>
+
+            <el-dialog title="登陆" :visible.sync="loginForm.visible">
+                <el-form :model="loginForm">
+                    <el-form-item label="用户名" :label-width="loginForm.formLabelWidth">
+                        <el-input v-model="loginForm.name" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" :label-width="loginForm.formLabelWidth">
+                        <el-input v-model="loginForm.psw" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="loginForm.visible = false">取 消</el-button>
+                    <el-button type="primary" @click="loginForm.visible = true">登 陆</el-button>
+                </div>
+            </el-dialog>
+
+            <el-dialog
+                title="登出"
+                :visible.sync="logoutForm.visible"
+                width="30%"
+                :before-close="beforeLogout">
+                <span>确认登出</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="logoutForm.visible = false">取 消</el-button>
+                    <el-button type="primary" @click="logoutForm.visible = false">确 定</el-button>
+                </span>
+                </el-dialog>
         </div>
     `,
 
