@@ -124,6 +124,12 @@ app {
 #header .masthead .el-submenu__title {
   border-bottom-width: 0 !important;
 }
+#header .masthead .el-menu {
+  text-align: center;
+}
+#header .masthead .el-menu-item {
+  min-width: 70px !important;
+}
 #header .avatar-btn {
   width: 100px;
   float: right;

@@ -66,7 +66,22 @@ var operations = {
 		if(usr){
 			let usrType = usr.type;
 
-			if(usrType == 2){// 临时
+			if(usrType == 1){// 注册
+				conn.query(`select * from usr where name = '${usr.name}'`, function(err, result){
+					let usrRecord = result[0];
+					let dayView = usrRecord.dayview || 0;
+
+					if(dayView < maxDayView){
+						conn.query(`update usr set dayview=dayview+1 where id='${usrRecord.id}'`);
+						queryVinfo(dayView);
+					}else{
+						res.writeHead(302, {
+							'Location': '/?#/albums/1'
+						});
+						res.end('exceed dayview');
+					}
+				});
+			}else if(usrType == 2){// 临时
 				usrIP = usr.name;
 				conn.query(`select * from tmp_usr where ip = '${usrIP}'`, function(err, result){
 					if(result[0]){
@@ -89,21 +104,6 @@ var operations = {
 					}else{
 						conn.query(`INSERT INTO tmp_usr (ip, dayview) VALUES ('${usrIP}', 1)`);
 						queryVinfo();
-					}
-				});
-			} else if(usrType == 1){// 注册
-				conn.query(`select * from usr where name = '${usr.name}'`, function(err, result){
-					let usrRecord = result[0];
-					let dayView = usrRecord.dayview || 0;
-
-					if(dayView < maxDayView){
-						conn.query(`update usr set dayview=dayview+1 where id='${usrRecord.id}'`);
-						queryVinfo(dayView);
-					}else{
-						res.writeHead(302, {
-							'Location': '/?#/albums/1'
-						});
-						res.end('exceed dayview');
 					}
 				});
 			}

@@ -23,7 +23,7 @@ var temp = {
                 </el-col>
 
                 <el-col :span="6" :offset="6" class="masthead">
-                    <el-menu class="el-menu-demo avatar-btn" mode="horizontal" id="">
+                    <el-menu class="el-menu-demo avatar-btn" mode="horizontal">
                         <el-submenu index="1">
                             <template slot="title">
                                 <i class="el-icon-view" title="" @click=""></i>
@@ -91,10 +91,18 @@ var temp = {
                         <span class="text">发送反馈</span>
                     </a>
                 </div>
+
+                <div class="guide-entry">
+                    <a href="#/upload" class="guide-entry-renderer">
+                        <i class="el-icon-upload icon"></i>
+                        <span class="text">上传</span>
+                    </a>
+                </div>
             </div>
             
             <div id="footer">
                 <a class="guide-links-primary" href="#/about">关于</a>
+                
             </div>
             <div id="llc">
                 <span class="">2018 ChanTube</span>
