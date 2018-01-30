@@ -57,19 +57,53 @@ const HeaderComponent = {
 
 		login(){
 			tools.xhr('/login', function(){
-				// console.log(arguments);
 				this.$message({
 					message: '登陆成功',
 					type: 'success'
 				});
+
+				this.loginForm.visible = false;
 			}.bind(this), 'post', {
-				name: 'cy',
-				psw: 62191056
+				name: this.loginForm.name,
+				psw: this.loginForm.psw
+			}, function(res){
+				let status = res.status;
+				let statusText = res.statusText;
+
+				if(status == 401){
+					this.$message({
+						message: '登陆失败，请检查用户名、密码',
+						type: 'error'
+					});
+				}
+			}.bind(this));
+		},
+
+		regist(){
+			tools.xhr('/regist', function(){
+				this.$message({
+					message: '注册成功',
+					type: 'success'
+				});
+
+				this.registForm.visible = false;
+			}.bind(this), 'post', {
+				name: this.registForm.name,
+				psw: this.registForm.psw
 			});
 		},
 
+		logout(){
+			tools.xhr('/regist', function(){
+				this.$message({
+					message: '登出成功',
+					type: 'success'
+				});
+			}.bind(this));
+		},
+
 		handleSelect(){
-			console.log(arguments);
+			console.log('handleSelect', arguments);
 		},
 
 		beforeLogout(){

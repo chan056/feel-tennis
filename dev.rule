@@ -1,0 +1,33 @@
+=================REST====================
+看Url就知道要什么
+看http method就知道干什么
+看http status  code就知道结果如何
+
+    ==================状态码==================
+    statusCode、statusMessage 写在头信息里
+
+    // 只有布尔值
+        1/0
+
+    // 包含数据
+        // 包含一个对象
+        {name: 1, gender: 2, address: 3}}
+
+    // 包含一堆对象（列表）
+    [
+        {name: 1, gender: 2, address: 3},
+        {name: 1, gender: 2, address: 3},
+    ]
+
+    ==================URL=====================
+    URL中只使用名词来指定资源，原则上不使用动词。
+    “资源”是REST架构或者说整个网络处理的核心。
+
+    ==================METHOD==================
+
+    GET    用来获取资源，
+    POST  用来新建资源（也可以用于更新资源），
+    PUT    用来更新资源，
+    DELETE  用来删除资源。比如：DELETE http://api.qc.com/v1/friends: 删除某人的好友 （在http parameter指定好友id）
+    POST http://api.qc.com/v1/friends: 添加好友
+    UPDATE http://api.qc.com/v1/profile: 更新个人资料

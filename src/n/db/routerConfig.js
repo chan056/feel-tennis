@@ -157,6 +157,10 @@ const routerConfig = {
         r.post('login', req, res);
     },
 
+    '/regist': function(res, req){
+        r.post('regist', req, res);
+    },
+
     '/video': function(res, req){
         r.post('creatVedio', req, res);
     },

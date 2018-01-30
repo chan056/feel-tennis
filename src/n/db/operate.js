@@ -168,14 +168,31 @@ var operations = {
 			if(err)
 				throw err;
 			
-			if(result[0].id){
+			if(result[0] && result[0].id){
 				req.session.put('name', postObj.name);
 
 				res.end('success');
 			}else{
-
+				res.statusCode = 401;
+				res.end(JSON.stringify({isLogin: false}));
 			}
 			// console.log(result, fields);
+		});
+	},
+
+	regist: function(res, postObj, req){
+		var sql = `INSERT INTO usr 
+			(name, psw)
+			VALUES (?, ?)`;
+
+		conn.query(sql, [postObj.name, postObj.psw], function(err, result, fields){
+			if(err)
+				throw err;
+
+			if(result.affectedRows == 1){
+				res.statusMessage = 'regist success';
+				res.end();
+			}
 		});
 	},
 

@@ -26,7 +26,7 @@ var temp = {
                     <el-menu class="el-menu-demo avatar-btn" mode="horizontal" id="">
                         <el-submenu index="1">
                             <template slot="title">
-                                <i class="el-icon-view" title="" @click="login();"></i>
+                                <i class="el-icon-view" title="" @click=""></i>
                             </template>
                             <el-menu-item index="1-1" @click="loginForm.visible = true;">登陆</el-menu-item>
                             <el-menu-item index="1-2" @click="registForm.visible = true;">注册</el-menu-item>
@@ -49,11 +49,11 @@ var temp = {
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button type="primary" @click="registForm.visible = false">取 消</el-button>
-                    <el-button type="primary" @click="registForm.visible = true">登 陆</el-button>
+                    <el-button type="primary" @click="registForm.visible = true; regist();">注 册</el-button>
                 </div>
             </el-dialog>
 
-            <el-dialog title="登陆" :visible.sync="loginForm.visible">
+            <el-dialog title="登录" :visible.sync="loginForm.visible">
                 <el-form :model="loginForm">
                     <el-form-item label="用户名" :label-width="loginForm.formLabelWidth">
                         <el-input v-model="loginForm.name" auto-complete="off"></el-input>
@@ -63,8 +63,8 @@ var temp = {
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="loginForm.visible = false">取 消</el-button>
-                    <el-button type="primary" @click="loginForm.visible = true">登 陆</el-button>
+                    <el-button type="primary" @click="loginForm.visible = false;">取 消</el-button>
+                    <el-button type="primary" @click="loginForm.visible = true; login();">登 录</el-button>
                 </div>
             </el-dialog>
 
@@ -76,7 +76,7 @@ var temp = {
                 <span>确认登出</span>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="logoutForm.visible = false">取 消</el-button>
-                    <el-button type="primary" @click="logoutForm.visible = false">确 定</el-button>
+                    <el-button type="primary" @click="logoutForm.visible = false; logout();">确 定</el-button>
                 </span>
                 </el-dialog>
         </div>

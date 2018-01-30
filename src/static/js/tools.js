@@ -1,5 +1,5 @@
 let tools = {
-    xhr: function xhr(api, sfn, type, params){
+    xhr: function xhr(api, sfn, type, params, errorHandle){
         type = type || 'get';
     
         axios[type](api, params)
@@ -7,7 +7,8 @@ let tools = {
            sfn && sfn(response.data)
         })
         .catch(function (error) {
-            console.log(arguments);
+            // console.log(error);
+            errorHandle && errorHandle(error.response);
         });
     },
     
