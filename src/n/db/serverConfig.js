@@ -59,17 +59,15 @@ module.exports.config = function(request, response) {
 		// 读取文件的过程 异步
 		session.startSession(request, response, function(){
 			global.UO = uo;
-			// if (request.session.has('name')){
-                let sessionName = request.session.get('name');
-				sessionName && console.log(sessionName);
-            // }
-            if(sessionName){// 已经登陆的用户
+			let usrId = request.session.get('id');
+			// req.session.put('id', usrId);
+            if(usrId){// 已经登陆的用户
 				global.usr = {
 					type: 1,
-					name: sessionName
+					usrId: usrId
 				}
 			}else{//未登录的用户 设置cookie
-				const signature = '16charlongsecret';
+				// const signature = '16charlongsecret';
 				const nodeCookie = require('node-cookie');
 				let crypto = require('./crypto.js');
 				
@@ -84,7 +82,7 @@ module.exports.config = function(request, response) {
 					nodeCookie.create(response, 'tmpUsr', ipEncrypted);
 					global.usr = {
 						type: 2,
-						name: ip
+						ip: ip
 					}
 				}else{
 					// console.log(crypto.aesDecrypt(tmpUsrInCookie, 'key'))
@@ -93,11 +91,13 @@ module.exports.config = function(request, response) {
 					if(ipDecrepted == ip){
 						global.usr = {
 							type: 2,
-							name: ipDecrepted
+							ip: ipDecrepted
 						}
 					}
 				}
-            }
+			}
+			
+			// console.log(global.usr);
 
 			let resolveApiPathModule = require('./resolveApiPath');
 			resolveApiPathModule.resolveApiPath(response, request);

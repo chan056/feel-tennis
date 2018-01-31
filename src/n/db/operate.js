@@ -67,7 +67,7 @@ var operations = {
 			let usrType = usr.type;
 
 			if(usrType == 1){// 注册
-				conn.query(`select * from usr where name = '${usr.name}'`, function(err, result){
+				conn.query(`select * from usr where id = '${usr.id}'`, function(err, result){
 					let usrRecord = result[0];
 					let dayView = usrRecord.dayview || 0;
 
@@ -82,7 +82,7 @@ var operations = {
 					}
 				});
 			}else if(usrType == 2){// 临时
-				usrIP = usr.name;
+				usrIP = usr.ip;
 				conn.query(`select * from tmp_usr where ip = '${usrIP}'`, function(err, result){
 					if(result[0]){
 						// update dayview
@@ -160,6 +160,25 @@ var operations = {
 
 	},
 
+	loginInfo: function(res){
+		// console.log(global.usr);
+		let usr = global.usr;
+
+		let resData;
+
+		if(usr.type == 1){
+			conn.query('select name,dayview from usr where id = ' + usr.usrId, function(err, result){
+				if (err) throw err;
+
+				result = JSON.stringify(result[0]);
+				res.end(result);
+			});
+			// res.end()
+		}else if(usr.type == 2){
+			res.end('')
+		}
+	},
+
 	// POST
 	login: function(res, postObj, req){
 		var sql = `select * from usr where name=? and psw=?`;
@@ -169,7 +188,7 @@ var operations = {
 				throw err;
 			
 			if(result[0] && result[0].id){
-				req.session.put('name', postObj.name);
+				req.session.put('id', result[0].id);
 
 				res.end('success');
 			}else{

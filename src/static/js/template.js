@@ -23,17 +23,16 @@ var temp = {
                 </el-col>
 
                 <el-col :span="6" :offset="6" class="masthead">
-                    <el-menu class="el-menu-demo avatar-btn" mode="horizontal">
-                        <el-submenu index="1">
-                            <template slot="title">
-                                <i class="el-icon-view" title="" @click=""></i>
-                            </template>
-                            <el-menu-item index="1-1" @click="loginForm.visible = true;">登陆</el-menu-item>
-                            <el-menu-item index="1-2" @click="registForm.visible = true;">注册</el-menu-item>
-                            <el-menu-item index="1-3">资料</el-menu-item>
-                            <el-menu-item index="1-4" @click="logoutForm.visible=true;">登出</el-menu-item>
-                        </el-submenu>
-                    </el-menu>
+                    <el-dropdown id="usr-btns" class="fr" @command="handleUsrBtns">
+                        <i class="el-icon-view" title="" @click=""></i>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item v-if="!loginUsrInfo.name" command="login">登录</el-dropdown-item>
+                            <el-dropdown-item v-if="!loginUsrInfo.name" command="regist">注册</el-dropdown-item>
+                            <el-dropdown-item v-if="loginUsrInfo.name" command="datum">资料</el-dropdown-item>
+                            <el-dropdown-item v-if="loginUsrInfo.name"command="logout">登出</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+
                     <i class="el-icon-news" title="消息"></i>
                 </el-col>
             </el-row>

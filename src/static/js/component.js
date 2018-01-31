@@ -31,7 +31,9 @@ const HeaderComponent = {
 
 		logoutForm: {
 			visible: false
-		}
+		},
+
+		loginUsrInfo: {}
 		// message: 'xxx'
 	},
 
@@ -55,8 +57,30 @@ const HeaderComponent = {
 			this.$refs[formName].resetFields();
 		},
 
+		handleUsrBtns(index){
+			let t = this;
+			let o = {
+				'login': function(){
+					t.loginForm.visible = true;
+				},
+				'regist': function(){
+					t.registForm.visible = true;
+				},
+				'datum': function(){
+					// t.logoutForm.visible=true;
+				},
+				'logout': function(){
+					t.logoutForm.visible=true;
+				}
+			};
+
+			o[index] && o[index]();
+		},
+
 		login(){
 			tools.xhr('/login', function(){
+				this.fetchUsrLoginInfo();
+
 				this.$message({
 					message: '登陆成功',
 					type: 'success'
@@ -94,12 +118,14 @@ const HeaderComponent = {
 		},
 
 		logout(){
-			tools.xhr('/regist', function(){
+			tools.xhr('/logout', function(){
 				this.$message({
 					message: '登出成功',
 					type: 'success'
 				});
-			}.bind(this));
+
+				this.fetchUsrLoginInfo();
+			}.bind(this), 'post');
 		},
 
 		handleSelect(){
@@ -113,6 +139,13 @@ const HeaderComponent = {
 				done();
 			})
 			.catch(_ => {});
+		},
+
+		fetchUsrLoginInfo(){
+			// 首次打开时 获取用户信息
+			tools.xhr('/loginInfo', function(loginUsrInfo){
+				this.loginUsrInfo = loginUsrInfo || {};
+			}.bind(this));
 		}
 	},
 	mounted: function () {
@@ -122,7 +155,9 @@ const HeaderComponent = {
 			tmpUsr = tmpUsr.substr(3, 10);
 			// console.log($('#header .el-icon-view'), $('#header .el-icon-view').length);
 			$('#header .el-icon-view').attr('title', tmpUsr).addClass('tmp-usr');
-		}	
+		}
+
+		this.fetchUsrLoginInfo();
 	},
 	// beforeCreate: function () {
 	// 	console.group('beforeCreate 创建前状态===============》');
