@@ -73,7 +73,7 @@ module.exports.config = function(request, response) {
 			}else{//未登录的用户 设置cookie
 				// const signature = '16charlongsecret';
 				const nodeCookie = require('node-cookie');
-				let crypto = require('./crypto.js');
+				let crypto = require('../crypto.js');
 				
 				let getClientIp = require('./getClientIp.js').getClientIp;
 				let ip = getClientIp(request);
@@ -97,12 +97,12 @@ module.exports.config = function(request, response) {
 							type: 2,
 							ip: ipDecrepted
 						}
+					}else{
+						res.end('');
 					}
 				}
 			}
 			
-			// console.log(global.usr);
-
 			let resolveApiPathModule = require('./resolveApiPath');
 			resolveApiPathModule.resolveApiPath(response, request);
 		})

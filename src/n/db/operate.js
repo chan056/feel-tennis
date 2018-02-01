@@ -67,7 +67,7 @@ var operations = {
 			let usrType = usr.type;
 
 			if(usrType == 1){// 注册
-				conn.query(`select * from usr where id = '${usr.id}'`, function(err, result){
+				conn.query(`select * from usr where id = '${usr.usrId}'`, function(err, result){
 					let usrRecord = result[0];
 					let dayView = usrRecord.dayview || 0;
 
@@ -244,7 +244,7 @@ var operations = {
 			fs.rename(videoAbsPath, videoStorePath);// 用于生成gif
 			
 			// 生成包含视频和字幕的目录
-			require('./ffmpeg/m3u.js').m3u(insertId, videoStorePath, subtitleAbsPath);
+			require('../ffmpeg/m3u.js').m3u(insertId, videoStorePath, subtitleAbsPath);
 
 			// 更新album 和 sport
 			let now = +new Date();

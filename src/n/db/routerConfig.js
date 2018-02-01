@@ -142,12 +142,12 @@ const routerConfig = {
     },
 
     '/gifLink': function(params, res){
-        let ff = require('./ffmpeg/g.js').ff;
+        let ff = require('../ffmpeg/g.js').ff;
         ff(params, res);
     },
 
     '/srt/:vId': function(params, res){
-        let parseSrt = require('./srt_parser.js').parseSrt;
+        let parseSrt = require('../srtParser.js').parseSrt;
         parseSrt(params.vId, res);
     },
 
