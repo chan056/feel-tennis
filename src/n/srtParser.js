@@ -7,9 +7,12 @@ module.exports = {
         var dir = path.resolve(__dirname, '../../static/multimedia/ts/');
         srt = path.resolve(dir, `./${vId}/subtitle`);
 
-        var srtStream = fs.readFileSync(srt,'utf8');
-        var data = parser.fromSrt(srtStream, true);
-        // console.log(data);
-        res.end(JSON.stringify(data));
+        if(fs.exists(srt)){
+            var srtStream = fs.readFileSync(srt,'utf8');
+            var data = parser.fromSrt(srtStream, true);
+            // console.log(data);
+            res.end(JSON.stringify(data));
+        }
+        
     }
 }

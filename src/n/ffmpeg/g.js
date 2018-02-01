@@ -12,7 +12,7 @@ module.exports.ff = function(capturtParams, res){
     const ffmpeg = require('fluent-ffmpeg');
 
     let path = require('path');
-    let dir = path.resolve(__dirname, '../../../static')
+    let dir = path.resolve(__dirname, '../../static')
 
     let vSouce = dir + `/multimedia/pristine_v/${videoName}${capturtParams.ext}`;// todo 视频格式不是固定的
 
