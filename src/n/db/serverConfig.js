@@ -60,12 +60,16 @@ module.exports.config = function(request, response) {
 		session.startSession(request, response, function(){
 			global.UO = uo;
 			let usrId = request.session.get('id');
-			// req.session.put('id', usrId);
-            if(usrId){// 已经登陆的用户
+
+			if(usrId){// 已经登陆的用户
+				
+				request.session.put('id', usrId);
 				global.usr = {
 					type: 1,
 					usrId: usrId
 				}
+
+				console.log(global.usr);
 			}else{//未登录的用户 设置cookie
 				// const signature = '16charlongsecret';
 				const nodeCookie = require('node-cookie');
