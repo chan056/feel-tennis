@@ -19,7 +19,9 @@ module.exports.config = function(req, res) {
 
 	if(contentType){// 静态资源
 		var realPath;
-		realPath = path.join("src/static", pathname)
+		// path.resolve(__dirname, '../../static')
+		realPath = path.join("src/static", pathname);
+		console.log(realPath);
 
 		fs.exists(realPath, function(exists) {
 			if (!exists) {
@@ -38,15 +40,19 @@ module.exports.config = function(req, res) {
 
 						if(ext == 'm3u8'){
 							let referer = req.headers.referer;
+
 							if(referer != 'http://localhost:3000/?' && referer != 'http://localhost:3000/'){
 								return res.end();
+							}else{
+								res.write(file, "binary");
+								res.end();
 							}
 						}
 
 						// 拼接admin部分
-						// if(uo.pathname.match(/tube\.js$/)){
-						// 	tumour.joinIndexJS(req, res);
-						// }
+						if(uo.pathname.match(/tube\.js$/)){
+							return tumour.joinIndexJS(req, res);
+						}
 
 						res.write(file, "binary");
 						res.end();
@@ -69,12 +75,12 @@ module.exports.config = function(req, res) {
 			
 			if(usr){// 已经登陆的用户
 				// usr = JSON.parse(usr);
-				console.log(usr)
+				// console.log(usr)
 				// 延长session时间
 				req.session.put('usr', usr);
 				global.usrInfo = {
 					type: 1,
-					usr: usr
+					usrId: usr
 				}
 			}else{//未登录的用户 设置cookie
 				// const signature = '16charlongsecret';
@@ -83,12 +89,12 @@ module.exports.config = function(req, res) {
 				
 				let getClientIp = require('./getClientIp.js').getClientIp;
 				let ip = getClientIp(req);
-                let ipEncrypted = crypto.aesEncrypt(ip, 'key');
 				
 				var tmpUsrInCookie = nodeCookie.get(req, 'tmpUsr');
 				// console.log(ip);
 				
 				if(!tmpUsrInCookie){
+					let ipEncrypted = crypto.aesEncrypt(ip, 'key');
 					nodeCookie.create(res, 'tmpUsr', ipEncrypted);
 					global.usrInfo = {
 						type: 2,
@@ -98,13 +104,13 @@ module.exports.config = function(req, res) {
 					// console.log(crypto.aesDecrypt(tmpUsrInCookie, 'key'))
 					let ipDecrepted = crypto.aesDecrypt(tmpUsrInCookie, 'key');
 
-					if(ipDecrepted == ip){
+					if(ipDecrepted == ip){//防止第三方登录，视为加密手段
 						global.usrInfo = {
 							type: 2,
 							ip: ipDecrepted
 						}
 					}else{
-						res.end('');
+						res.end('user type error ！');
 					}
 				}
 			}

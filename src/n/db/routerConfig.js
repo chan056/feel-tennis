@@ -160,37 +160,37 @@ const routerConfig = {
     // },
 
     // ============POST=============
-    '/login': function(res, req){
+    '/login': function(req, res){
         r.post('login', req, res);
     },
 
-    '/logout': function(res, req){
+    '/logout': function(req, res){
         req.session.forget('usr');
         res.end();
     },
     
-    '/regist': function(res, req){
+    '/regist': function(req, res){
         r.post('regist', req, res);
     },
 
-    '/video': function(res, req){
+    '/video': function(req, res){
         r.post('creatVedio', req, res);
     },
 
-    '/tag': function(res, req){
+    '/tag': function(req, res){
         r.post('creatTag', req, res);
     },
 
-    '/album': function(res, req){
+    '/album': function(req, res){
         r.post('creatAlbum', req, res);
     },
 
-    '/maker': function(res, req){
+    '/maker': function(req, res){
         r.post('createMaker', req, res);
     },
 
     // POST 上传文件
-    '/upload': function(res, req){
+    '/upload': function(req, res){
         var formidable = require('formidable');
         var path = require('path');
         var fs = require('fs');
@@ -246,7 +246,7 @@ const routerConfig = {
         form.parse(req);
     },
 
-    '/feedback': function(res, req){
+    '/feedback': function(req, res){
         r.post('creatFeedback', req, res);
     },
 }

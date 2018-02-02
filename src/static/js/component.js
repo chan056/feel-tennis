@@ -79,14 +79,16 @@ const HeaderComponent = {
 
 		login(){
 			tools.xhr('/login', function(){
-				this.fetchUsrLoginInfo();
+				// this.fetchUsrLoginInfo();
 
 				this.$message({
-					message: '登陆成功',
+					message: '登录成功',
 					type: 'success'
 				});
 
-				this.loginForm.visible = false;
+				location.reload();
+
+				// this.loginForm.visible = false;
 			}.bind(this), 'post', {
 				name: this.loginForm.name,
 				psw: this.loginForm.psw
@@ -96,7 +98,7 @@ const HeaderComponent = {
 
 				if(status == 401){
 					this.$message({
-						message: '登陆失败，请检查用户名、密码',
+						message: '登录失败，请检查用户名、密码',
 						type: 'error'
 					});
 				}
@@ -148,8 +150,14 @@ const HeaderComponent = {
 			tools.xhr('/loginInfo', function(loginUsrInfo){
 				this.loginUsrInfo = loginUsrInfo || {};
 
-				if(this.loginUsrInfo.isAdmin){
+				let name = loginUsrInfo.name;
+				$('#header .el-icon-view').attr('title', name).addClass('usr');
+
+				if(this.loginUsrInfo.isAdmin == 1){
 					// location.reload();
+					$('#upload-entry').show();
+				}else{
+					$('#upload-entry').hide();
 				}
 			}.bind(this));
 		}

@@ -38,6 +38,9 @@ em {
 .ovh {
   overflow: hidden;
 }
+.hidden {
+  display: none;
+}
 .clearfix:after {
   display: table;
   content: "";

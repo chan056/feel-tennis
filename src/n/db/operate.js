@@ -48,7 +48,7 @@ var operations = {
 	},
 
 	queryVideo: function (res, qualification) {
-		usr = global.usrInfo;
+		usrInfo = global.usrInfo;
 		const maxDayView = 100;
 		const tmpUsrDayView = 10;
 
@@ -64,11 +64,11 @@ var operations = {
 				否
 					返回视频信息
 		*/
-		if(usr){
-			let usrType = usr.type;
+		if(usrInfo){
+			let usrType = usrInfo.type;
 
 			if(usrType == 1){// 注册
-				conn.query(`select * from usr where id = '${usr.usrId}'`, function(err, result){
+				conn.query(`select * from usr where id = '${usrInfo.usrId}'`, function(err, result){
 					let usrRecord = result[0];
 					let dayView = usrRecord.dayview || 0;
 
@@ -83,7 +83,7 @@ var operations = {
 					}
 				});
 			}else if(usrType == 2){// 临时
-				usrIP = usr.ip;
+				usrIP = usrInfo.ip;
 				conn.query(`select * from tmp_usr where ip = '${usrIP}'`, function(err, result){
 					if(result[0]){
 						// update dayview
@@ -108,6 +108,8 @@ var operations = {
 					}
 				});
 			}
+		}else{
+			res.end('user type error！');
 		}
 
 		function queryVinfo(dayView){
@@ -164,8 +166,7 @@ var operations = {
 		let usrInfo = global.usrInfo;
 		
 		if(usrInfo.type == 1){
-			let usr = JSON.parse(usrInfo.usr);
-			conn.query('select name,dayview,isAdmin from usr where id = ' + usr.id, function(err, result){
+			conn.query('select name,dayview,isAdmin from usr where id = ' + usrInfo.usrId, function(err, result){
 				if (err) throw err;
 
 				result = JSON.stringify(result[0]);
@@ -186,8 +187,7 @@ var operations = {
 				throw err;
 			
 			if(result[0] && result[0].id){
-				req.session.put('usr', JSON.stringify(result[0]));
-
+				req.session.put('usr', result[0].id);
 				res.end('success');
 			}else{
 				res.statusCode = 401;

@@ -84,14 +84,14 @@ var temp = {
     aside: `
         <div id="aside">
             <div class="guide-section">
-                <div class="guide-entry">
+                <div class="guide-entry" id="feedback-entry">
                     <a href="#/feedback" class="guide-entry-renderer">
                         <i class="el-icon-service icon"></i>
                         <span class="text">发送反馈</span>
                     </a>
                 </div>
 
-                <div class="guide-entry">
+                <div class="guide-entry hidden" id="upload-entry">
                     <a href="#/upload" class="guide-entry-renderer">
                         <i class="el-icon-upload icon"></i>
                         <span class="text">上传</span>

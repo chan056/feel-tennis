@@ -43,7 +43,7 @@ function resolveApiPath(res, req) {
             fnMatched(queryParams, res);
         } else {
             if (reqMethod == 'POST') {
-                fnMatched(res, req);
+                fnMatched(req, res);
             }
         }
     } else {
