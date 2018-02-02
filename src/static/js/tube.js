@@ -17,5 +17,4 @@ $(function(){
 		router: mainRouter,
 	}).$mount('#main-router-view');
 
-	
 });

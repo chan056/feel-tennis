@@ -155,13 +155,17 @@ const routerConfig = {
         r.query('loginInfo', params, res);
     },
 
+    // '/joinIndexJS': function(params, res){
+    //     r.query('joinIndexJS', params, res);
+    // },
+
     // ============POST=============
     '/login': function(res, req){
         r.post('login', req, res);
     },
 
     '/logout': function(res, req){
-        req.session.forget('id');
+        req.session.forget('usr');
         res.end();
     },
     

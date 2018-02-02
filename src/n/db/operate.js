@@ -48,8 +48,9 @@ var operations = {
 	},
 
 	queryVideo: function (res, qualification) {
-		usr = global.usr;
+		usr = global.usrInfo;
 		const maxDayView = 100;
+		const tmpUsrDayView = 10;
 
 		/* 
 			查询是否存在临时用户
@@ -91,7 +92,7 @@ var operations = {
 
 						let dayview = result[0].dayview;
 						// console.log(dayview +1);
-						if(dayview < maxDayView){
+						if(dayview < tmpUsrDayView){
 							conn.query(`update tmp_usr set dayview=dayview+1 where ip='${usrIP}'`);
 							queryVinfo(dayview);
 						}else{
@@ -155,26 +156,23 @@ var operations = {
 
 			result = JSON.stringify(result);
 			res.end(result);
-			
 		});
 
 	},
 
 	loginInfo: function(res){
-		// console.log(global.usr);
-		let usr = global.usr;
-
-		let resData;
-
-		if(usr.type == 1){
-			conn.query('select name,dayview from usr where id = ' + usr.usrId, function(err, result){
+		let usrInfo = global.usrInfo;
+		
+		if(usrInfo.type == 1){
+			let usr = JSON.parse(usrInfo.usr);
+			conn.query('select name,dayview,isAdmin from usr where id = ' + usr.id, function(err, result){
 				if (err) throw err;
 
 				result = JSON.stringify(result[0]);
 				res.end(result);
 			});
 			// res.end()
-		}else if(usr.type == 2){
+		}else if(usrInfo.type == 2){
 			res.end('')
 		}
 	},
@@ -188,7 +186,7 @@ var operations = {
 				throw err;
 			
 			if(result[0] && result[0].id){
-				req.session.put('id', result[0].id);
+				req.session.put('usr', JSON.stringify(result[0]));
 
 				res.end('success');
 			}else{

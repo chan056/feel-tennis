@@ -1,15 +1,12 @@
-module.exports.config = function(request, response) {
-	var url = require('url');
-    var fs = require('fs');
-    var path = require('path');
-    var mime = require('./mime').types;
+module.exports.config = function(req, res) {
+	const url = require('url');
+    const fs = require('fs');
+    const path = require('path');
+    const mime = require('./mime').types;
+    const tools = require('../tool');
+	const uo = url.parse(req.url, true);
+	const tumour = require('../tumour');
 
-    var NodeSession = require('node-session');
-    let session = new NodeSession({secret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD'});
-
-    var tools = require('../tool');
-	
-	let uo = url.parse(request.url, true);
 	pathname = uo.pathname;
 
 	if(pathname == '/'){
@@ -26,65 +23,74 @@ module.exports.config = function(request, response) {
 
 		fs.exists(realPath, function(exists) {
 			if (!exists) {
-				tools.response404(response);
+				tools.response404(res);
 			} else {
 				fs.readFile(realPath, "binary", function(err, file) {
 					if (err) {
-						response.writeHead(500, {
+						res.writeHead(500, {
 							'Content-Type': 'text/plain'
 						});
-						response.end(err);
+						res.end(err);
 					} else {
-						response.writeHead(200, {
+						res.writeHead(200, {
 							'Content-Type': contentType
 						});
 
 						if(ext == 'm3u8'){
-							let referer = request.headers.referer;
-							if(referer != 'http://localhost:3000/?'){
-								return response.end();
+							let referer = req.headers.referer;
+							if(referer != 'http://localhost:3000/?' && referer != 'http://localhost:3000/'){
+								return res.end();
 							}
 						}
-						response.write(file, "binary");
-						response.end();
+
+						// 拼接admin部分
+						// if(uo.pathname.match(/tube\.js$/)){
+						// 	tumour.joinIndexJS(req, res);
+						// }
+
+						res.write(file, "binary");
+						res.end();
 					}
 				});
 			}
 		});
 	}else{// API
 		if(ext && ext != 'unknown')
-			return tools.response404(response)
+			return tools.response404(res)
 		// todo 拦截无理请求
 
+		let NodeSession = require('node-session');
+    	let session = new NodeSession({secret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD'});
+
 		// 读取文件的过程 异步
-		session.startSession(request, response, function(){
+		session.startSession(req, res, function(){
 			global.UO = uo;
-			let usrId = request.session.get('id');
-
-			if(usrId){// 已经登陆的用户
-				
-				request.session.put('id', usrId);
-				global.usr = {
+			let usr = req.session.get('usr');
+			
+			if(usr){// 已经登陆的用户
+				// usr = JSON.parse(usr);
+				console.log(usr)
+				// 延长session时间
+				req.session.put('usr', usr);
+				global.usrInfo = {
 					type: 1,
-					usrId: usrId
+					usr: usr
 				}
-
-				console.log(global.usr);
 			}else{//未登录的用户 设置cookie
 				// const signature = '16charlongsecret';
 				const nodeCookie = require('node-cookie');
 				let crypto = require('../crypto.js');
 				
 				let getClientIp = require('./getClientIp.js').getClientIp;
-				let ip = getClientIp(request);
+				let ip = getClientIp(req);
                 let ipEncrypted = crypto.aesEncrypt(ip, 'key');
 				
-				var tmpUsrInCookie = nodeCookie.get(request, 'tmpUsr');
+				var tmpUsrInCookie = nodeCookie.get(req, 'tmpUsr');
 				// console.log(ip);
 				
 				if(!tmpUsrInCookie){
-					nodeCookie.create(response, 'tmpUsr', ipEncrypted);
-					global.usr = {
+					nodeCookie.create(res, 'tmpUsr', ipEncrypted);
+					global.usrInfo = {
 						type: 2,
 						ip: ip
 					}
@@ -93,7 +99,7 @@ module.exports.config = function(request, response) {
 					let ipDecrepted = crypto.aesDecrypt(tmpUsrInCookie, 'key');
 
 					if(ipDecrepted == ip){
-						global.usr = {
+						global.usrInfo = {
 							type: 2,
 							ip: ipDecrepted
 						}
@@ -104,7 +110,7 @@ module.exports.config = function(request, response) {
 			}
 			
 			let resolveApiPathModule = require('./resolveApiPath');
-			resolveApiPathModule.resolveApiPath(response, request);
+			resolveApiPathModule.resolveApiPath(res, req);
 		})
 	}
 }

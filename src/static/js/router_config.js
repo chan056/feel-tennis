@@ -45,7 +45,6 @@ const routeConfig = [
 		}
 	},
 
-	{ path: '/upload', component: Upload, props: true, },
 	{ path: '/feedback', component: Feedback,},                                                                                                                                                                                                                                                                                                                                                                          
 	{ path: '/about', component: About,},
 ];

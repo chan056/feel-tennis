@@ -134,23 +134,31 @@ const HeaderComponent = {
 
 		beforeLogout(){
 			this.$confirm('确认关闭？')
-			.then(_ => {
+			.then(function(){
 				this.logoutForm.visible = false;
 				done();
 			})
-			.catch(_ => {});
+			.catch(function(){
+
+			});
 		},
 
 		fetchUsrLoginInfo(){
 			// 首次打开时 获取用户信息
 			tools.xhr('/loginInfo', function(loginUsrInfo){
 				this.loginUsrInfo = loginUsrInfo || {};
+
+				if(this.loginUsrInfo.isAdmin){
+					// location.reload();
+				}
 			}.bind(this));
 		}
 	},
 	mounted: function () {
 		// 用户管理
-		var tmpUsr = Cookies.get('tmpUsr');	
+		var tmpUsr = Cookies.get('tmpUsr');
+		var tmpUsrPsw = Cookies.get('tmpUsrPsw');
+		
 		if(tmpUsr){
 			tmpUsr = tmpUsr.substr(3, 10);
 			// console.log($('#header .el-icon-view'), $('#header .el-icon-view').length);
@@ -454,176 +462,6 @@ const videos = {
 			});
 		} 
 	}
-};
-
-const Upload = {
-	props: [''],
-	data: function () {
-		let tagConfig = {
-			visibility: false,
-			title: '新建标签',
-		};
-
-		let albumConfig = {
-			visibility: false,
-			title: '新建专辑',
-		};
-
-		let makerConfig = {
-			visibility: false,
-			title: '新建制作者',
-		};
-
-		var d = {
-			SO: {}, 
-			albums: [], 
-			tags: [], 
-			sports: [], 
-			makers: [],
-			tagConfig: tagConfig, 
-			albumConfig: albumConfig,
-			makerConfig: makerConfig,
-			newTag: {},
-			newAlbum: {},
-			newMaker:{},
-			selectedMaker: ''
-		};
-
-		d.fileList = [];
-
-		this.queryAlbums();
-		this.queryTags();
-		this.querySports();
-
-		return d;
-	},
-	methods: {
-		alert: function(){
-			console.log(arguments);
-		},
-		handleRemove(file, fileList) {
-			console.log(file, fileList);
-		},
-		handlePreview(file) {
-			console.log(file);
-		},
-		handleExceed(files, fileList) {
-			this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-		},
-		handleSuccess(res){
-			// console.log(res);
-			this.SO.videoAbsPath = res.absPath;
-		},
-
-		handleSubtitleSuccess(res){
-			this.SO.subtitleAbsPath = res.absPath;
-		},
-
-		handleAlbumCoverSuccess(res){
-			debugger;
-			this.newAlbum.cover = res.relPath;
-		},
-
-		postVedio(){
-			let so = Object.assign({}, this.SO);
-			so.tag = this.SO.tag.join(',');
-
-			tools.xhr('/video', function(){
-				console.log(arguments);
-				this.$message({
-					message: '视频创建成功',
-					type: 'success'
-				});
-			}.bind(this), 'post', so);
-		},
-
-		postTag(){
-
-			tools.xhr('/tag', function(){
-				console.log(arguments)
-			}, 'post', this.newTag);
-			
-		},
-
-		postMaker(){
-			tools.xhr('/maker', function(){
-				console.log(arguments);
-				this.$message({
-					message: '制作者创建成功',
-					type: 'success'
-				});
-				this.queryMakers();
-			}.bind(this), 'post', this.newMaker);
-		},
-
-		openAlbumDialog(){
-			this.albumConfig.visibility = true;
-			this.queryMakers();
-		},
-
-		postAlbum(){
-			tools.xhr('/album', function(){
-				// console.log(arguments);
-				this.$message({
-					message: '专辑创建成功',
-					type: 'success'
-				});
-
-				this.queryAlbums();
-
-			}.bind(this), 'post', this.newAlbum);
-		},
-
-		queryAlbums(){
-			tools.xhr('/albums', function(resData){
-				this.albums = resData;
-			}.bind(this));
-		},
-
-		queryTags(){
-			tools.xhr('/tags', function(resData){
-				this.tags = resData;
-			}.bind(this));
-		},
-
-		querySports(){
-			tools.xhr('/sports', function(resData){
-				this.sports = resData;
-			}.bind(this));
-		},
-
-		queryMakers(){
-			tools.xhr('/makers', function(resData){
-				this.makers = resData;
-			}.bind(this));
-		},
-
-		chooseAlbumHandler(){
-			console.log('chooseAlbumHandler', arguments);
-		},
-
-		queryMaker(makerId){
-			tools.xhr('/maker/' + makerId, function(resData){
-				let makerInfo = resData[0];
-				if(makerInfo){
-					this.selectedMaker = resData[0].name;
-				}else{
-					this.selectedMaker = '';
-				}
-			}.bind(this));
-		},
-
-	},
-
-	watch: {'SO.albumId': function(to, from){
-		if(to){
-			this.queryMaker(to)
-		}else{
-			this.selectedMaker = '';
-		}
-	}},
-
-	template: temp.upload
 };
 
 const Feedback = {
