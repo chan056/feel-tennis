@@ -21,7 +21,7 @@ module.exports.config = function(req, res) {
 		var realPath;
 		// path.resolve(__dirname, '../../static')
 		realPath = path.join(global.root, "src/static", pathname);
-		console.log(global.root, realPath);
+		// console.log(global.root, realPath);
 
 		fs.exists(realPath, function(exists) {
 			if (!exists) {
@@ -96,7 +96,7 @@ module.exports.config = function(req, res) {
 				if(!tmpUsrInCookie){
 					let ipEncrypted = crypto.aesEncrypt(ip, 'key');
 					nodeCookie.create(res, 'tmpUsr', ipEncrypted);
-					
+
 					global.usrInfo = {
 						type: 2,
 						ip: ip
