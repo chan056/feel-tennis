@@ -99,6 +99,7 @@ logo
 视频剩余总数 √
 定时清除dayview todo
 播放计数，视频中段才累加？
+dayview -> dayView
 
 ==================待优化==================
 throw error
