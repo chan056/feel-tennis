@@ -11,7 +11,7 @@ module.exports = {
             if(doExsit){
                 var srtStream = fs.readFileSync(srt,'utf8');
                 var data = parser.fromSrt(srtStream, true);
-                console.log(data);
+                // console.log(data);
                 res.end(JSON.stringify(data));
             }else{
                 res.statusCode = 404;

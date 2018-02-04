@@ -1,14 +1,16 @@
 module.exports = {
     joinIndexJS: function(req, res){
-        var path = require('path');
+        const path = require('path');
         const fs = require('fs');
-        let NodeSession = require('node-session');
-    	let session = new NodeSession({secret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD'});
+        const constants = require('./constant');
+        const NodeSession = require('node-session');
+
+        let session = new NodeSession({secret: constants.sessionSecret});
 
 		// 读取文件的过程 异步
 		session.startSession(req, res, function(){
             let usr = req.session.get('usr');
-            console.log('login user id:' + usr);
+            // console.log('login user id:' + usr);
             if(usr){
                 let conn = require('./db/connect.js').conn;
 

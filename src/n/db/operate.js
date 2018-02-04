@@ -47,63 +47,66 @@ var operations = {
 
 	},
 
+	/* 
+		查询是否存在临时用户
+			没有
+				新建
+			有
+				更新
+		超过当天视频播放量
+			是
+				重定向到所属专辑视频列表
+			否
+				返回视频信息
+	*/
 	queryVideo: function (res, qualification) {
+		const constants = require('../constant');
 		usrInfo = global.usrInfo;
-		const maxDayView = 100;
-		const tmpUsrDayView = 10;
-
-		/* 
-			查询是否存在临时用户
-				没有
-					新建
-				有
-					更新
-			超过当天视频播放量
-				是
-					重定向到所属专辑视频列表
-				否
-					返回视频信息
-		*/
+		let dayView = 0;
+		let dayViewLeft = 0;
+		
 		if(usrInfo){
 			let usrType = usrInfo.type;
 
 			if(usrType == 1){// 注册
 				conn.query(`select * from usr where id = '${usrInfo.usrId}'`, function(err, result){
 					let usrRecord = result[0];
-					let dayView = usrRecord.dayview || 0;
+					dayView = usrRecord.dayView || 0;
 
-					if(dayView < maxDayView){
-						conn.query(`update usr set dayview=dayview+1 where id='${usrRecord.id}'`);
+					if(dayView < constants.maxDayView){
+						conn.query(`update usr set dayView=dayView+1 where id='${usrRecord.id}'`);
+						dayViewLeft = constants.maxDayView - dayView - 1;
 						queryVinfo(dayView);
 					}else{
-						res.writeHead(302, {
-							'Location': '/?#/albums/1'
-						});
-						res.end('exceed dayview');
+						res.end('exceed dayView');
 					}
 				});
 			}else if(usrType == 2){// 临时
 				usrIP = usrInfo.ip;
 				conn.query(`select * from tmp_usr where ip = '${usrIP}'`, function(err, result){
-					if(result[0]){
-						// update dayview
-						// 假如同个局域网的不同人访问
+					let tmpUsrRecord = result[0];
+					if(tmpUsrRecord){
+						// update dayView
+						// 假如同个局域网的不同人访问 !! todo
 						// 同个局域网用户提交的IP信息是相同的
 
-						let dayview = result[0].dayview;
-						// console.log(dayview +1);
-						if(dayview < tmpUsrDayView){
-							conn.query(`update tmp_usr set dayview=dayview+1 where ip='${usrIP}'`);
-							queryVinfo(dayview);
+						dayView = tmpUsrRecord.dayView;
+						// console.log(dayView +1);
+						if(dayView < constants.tmpUsrDayView){
+							conn.query(`update tmp_usr set dayView=dayView+1 where ip='${usrIP}'`);
+							dayViewLeft = constants.tmpUsrDayView - dayView - 1;
+							queryVinfo(dayView);
 						}else{
-							// 定时清除dayview
-							res.writeHead(302, {
-								'Location': '/?#/albums/1'
-							});
-							res.end('exceed dayview');
+							// 跳转到首页？
+							// res.writeHead(302, {
+							// 	'Location': '/?#/albums/1'
+							// });
+							res.end('exceed dayView');
 						}
 					}else{
-						conn.query(`INSERT INTO tmp_usr (ip, dayview) VALUES ('${usrIP}', 1)`);
+						conn.query(`INSERT INTO tmp_usr (ip, dayView) VALUES ('${usrIP}', 1)`);
+						dayView = 1;
+						dayViewLeft = constants.tmpUsrDayView - 1;
 						queryVinfo();
 					}
 				});
@@ -124,8 +127,8 @@ var operations = {
 				conn.query('update album set impression = impression + 1 where id=' + albumId);
 				conn.query('update sport set impression = impression + 1 where id = (select sport_id from album where id = ' + albumId + ')');
 
-				result = JSON.stringify(result);
-				result.dayView = dayView;// 查询成功的话 返回当天播放次数
+				result[0].dayViewLeft = dayViewLeft;// 查询成功的话 返回当天播放次数
+				result = JSON.stringify(result[0]);
 				res.end(result);
 			});
 		}
@@ -174,6 +177,7 @@ var operations = {
 			});
 			// res.end()
 		}else if(usrInfo.type == 2){
+			// console.log(usrInfo);
 			res.end('')
 		}
 	},

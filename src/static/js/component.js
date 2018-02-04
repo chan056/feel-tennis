@@ -326,9 +326,34 @@ const Video = {
 
 		d.captureParams.vId = videoId;
 		tools.xhr('/videos/' + videoId, function(resData){
-			d.video = resData[0];
+			d.video = resData;
 			d.captureParams.ext = d.video.video_ext;
-		});
+			
+			let dayViewLeft = resData.dayViewLeft;
+			
+			if(dayViewLeft > -1){
+				if(dayViewLeft > 5){
+					this.$message(`当天剩余播放次数 ${resData.dayViewLeft}次`);
+				}else{
+					this.$message({message: `当天剩余播放次数 ${resData.dayViewLeft || 0}次`, type: 'warning'});
+				}
+
+				tools.insertScriptTag(1, "https://cdn.jsdelivr.net/npm/hls.js@latest", {onload: function(){
+					tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
+					video.onpause = function(){
+						// console.log('pause');
+						// 停止匹配字幕 todo
+					}
+
+					video.onended = function(){
+						// console.log('ended');
+						$('.subtitle').text('');
+					}
+				}.bind(this), id: 'hls'});
+			}else{
+				this.$message({message: `当天剩余播放次数 0次，请点击右上角注册`, type: 'error'});
+			}
+		}.bind(this));
 
 		tools.xhr('/navInfo/3/' + videoId, function(resData){
 			d.crumb = resData[0];
@@ -356,23 +381,19 @@ const Video = {
 	},
 	template: temp.video,
 	created() {
-		tools.insertScriptTag(1, "https://cdn.jsdelivr.net/npm/hls.js@latest", {onload: function(){
-			tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
-			video.onpause = function(){
-				// console.log('pause');
-				// 停止匹配字幕 todo
-			}
+		// tools.insertScriptTag(1, "https://cdn.jsdelivr.net/npm/hls.js@latest", {onload: function(){
+		// 	tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
+		// 	video.onpause = function(){
+		// 		// console.log('pause');
+		// 		// 停止匹配字幕 todo
+		// 	}
 
-			video.onended = function(){
-				// console.log('ended');
-				$('.subtitle').text('');
-			}
-		}.bind(this), id: 'hls'});
+		// 	video.onended = function(){
+		// 		// console.log('ended');
+		// 		$('.subtitle').text('');
+		// 	}
+		// }.bind(this), id: 'hls'});
 
-		// var t = 0;
-		// tools.insertScriptTag(1, "http://siloor.com/youtube.external.subtitle/static/youtube.external.subtitle/youtube.external.subtitle.js", {onload: function(){
-		// 		tools.insertScriptTag(2, FRAGMENTS.attachSubtitle, {id: 'subtitle-frag'});
-		// }, id: 'external-subtitle'});
 	},
 	methods: {
 		captureCountdown: function(){

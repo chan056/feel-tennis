@@ -6,6 +6,7 @@ module.exports.config = function(req, res) {
     const tools = require('../tool');
 	const uo = url.parse(req.url, true);
 	const tumour = require('../tumour');
+	const constants = require('../constant');
 
 	pathname = uo.pathname;
 
@@ -17,11 +18,15 @@ module.exports.config = function(req, res) {
 	ext = ext ? ext.slice(1) : 'unknown';
 	var contentType = mime[ext];
 
-	if(contentType){// 静态资源
+	if(contentType){
+		disposeStaticResource();
+	}else{
+		disposeApi();
+	}
+
+	function disposeStaticResource(){
 		var realPath;
-		// path.resolve(__dirname, '../../static')
 		realPath = path.join(global.root, "src/static", pathname);
-		// console.log(global.root, realPath);
 
 		fs.exists(realPath, function(exists) {
 			if (!exists) {
@@ -41,16 +46,18 @@ module.exports.config = function(req, res) {
 						if(ext == 'm3u8'){
 							let referer = req.headers.referer;
 
-							if(referer != 'http://localhost:3000/?' && referer != 'http://localhost:3000/'){
+							if(referer != constants.whiteList + '?' && referer != constants.whiteList){
 								return res.end();
 							}else{
+								let conn = require('./connect').conn;
+								conn.query('select * f')
 								res.write(file, "binary");
 								return res.end();
 							}
 						}
 
 						// 拼接admin部分
-						if(uo.pathname.match(/tube\.js$/)){
+						if(uo.pathname.match(new RegExp(constants.bootJS + '$'))){
 							return tumour.joinIndexJS(req, res);
 						}
 
@@ -60,13 +67,15 @@ module.exports.config = function(req, res) {
 				});
 			}
 		});
-	}else{// API
+	}
+
+	function disposeApi(){
 		if(ext && ext != 'unknown')
 			return tools.response404(res)
 		// todo 拦截无理请求
 
 		var NodeSession = require('node-session');
-    	let session = new NodeSession({secret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD'});
+    	let session = new NodeSession({secret: constants.sessionSecret});
 
 		// 读取文件的过程 异步
 		session.startSession(req, res, function(){
@@ -74,8 +83,6 @@ module.exports.config = function(req, res) {
 			let usr = req.session.get('usr');
 			
 			if(usr){// 已经登陆的用户
-				// usr = JSON.parse(usr);
-				// console.log(usr)
 				// 延长session时间
 				req.session.put('usr', usr);
 				global.usrInfo = {
@@ -122,6 +129,6 @@ module.exports.config = function(req, res) {
 			
 			let resolveApiPathModule = require('./resolveApiPath');
 			resolveApiPathModule.resolveApiPath(res, req);
-		})
+		});
 	}
 }
