@@ -2,6 +2,8 @@ var PORT = 3000;
 
 var http = require('http');
 
+global.root = __dirname;
+
 var server = http.createServer(require('./src/n/db/serverConfig').config);
 
 server.listen(PORT, function(){

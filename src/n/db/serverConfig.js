@@ -20,8 +20,8 @@ module.exports.config = function(req, res) {
 	if(contentType){// 静态资源
 		var realPath;
 		// path.resolve(__dirname, '../../static')
-		realPath = path.join("src/static", pathname);
-		console.log(realPath);
+		realPath = path.join(global.root, "src/static", pathname);
+		console.log(global.root, realPath);
 
 		fs.exists(realPath, function(exists) {
 			if (!exists) {
@@ -64,8 +64,8 @@ module.exports.config = function(req, res) {
 		if(ext && ext != 'unknown')
 			return tools.response404(res)
 		// todo 拦截无理请求
-		
-		let NodeSession = require('node-session');
+
+		var NodeSession = require('node-session');
     	let session = new NodeSession({secret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD'});
 
 		// 读取文件的过程 异步
@@ -87,16 +87,16 @@ module.exports.config = function(req, res) {
 				const nodeCookie = require('node-cookie');
 				let crypto = require('../crypto.js');
 				
-				var clientIp = require('client-ip');
-				var ip = clientIp(req);
+				let clientIp = require('client-ip');
+				let ip = clientIp(req);
 				
 				var tmpUsrInCookie = nodeCookie.get(req, 'tmpUsr');
 				// console.log(ip);
 				
 				if(!tmpUsrInCookie){
 					let ipEncrypted = crypto.aesEncrypt(ip, 'key');
-					nodeCookie.create(res, 'tmpUsr', ipEncrypted);// todo cookie时间
-
+					nodeCookie.create(res, 'tmpUsr', ipEncrypted);
+					
 					global.usrInfo = {
 						type: 2,
 						ip: ip
