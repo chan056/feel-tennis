@@ -45,7 +45,7 @@ module.exports.config = function(req, res) {
 								return res.end();
 							}else{
 								res.write(file, "binary");
-								res.end();
+								return res.end();
 							}
 						}
 
@@ -64,7 +64,7 @@ module.exports.config = function(req, res) {
 		if(ext && ext != 'unknown')
 			return tools.response404(res)
 		// todo 拦截无理请求
-
+		
 		let NodeSession = require('node-session');
     	let session = new NodeSession({secret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD'});
 
@@ -87,15 +87,16 @@ module.exports.config = function(req, res) {
 				const nodeCookie = require('node-cookie');
 				let crypto = require('../crypto.js');
 				
-				let getClientIp = require('./getClientIp.js').getClientIp;
-				let ip = getClientIp(req);
+				var clientIp = require('client-ip');
+				var ip = clientIp(req);
 				
 				var tmpUsrInCookie = nodeCookie.get(req, 'tmpUsr');
 				// console.log(ip);
 				
 				if(!tmpUsrInCookie){
 					let ipEncrypted = crypto.aesEncrypt(ip, 'key');
-					nodeCookie.create(res, 'tmpUsr', ipEncrypted);
+					nodeCookie.create(res, 'tmpUsr', ipEncrypted);// todo cookie时间
+
 					global.usrInfo = {
 						type: 2,
 						ip: ip
@@ -104,7 +105,11 @@ module.exports.config = function(req, res) {
 					// console.log(crypto.aesDecrypt(tmpUsrInCookie, 'key'))
 					let ipDecrepted = crypto.aesDecrypt(tmpUsrInCookie, 'key');
 
-					if(ipDecrepted == ip){//防止第三方登录，视为加密手段
+					// ip相当于用户名 存储在浏览器的IP相当于密码
+					if(ipDecrepted == ip){
+						// let ipEncrypted = crypto.aesEncrypt(ip, 'key');
+						// nodeCookie.create(res, 'tmpUsr', ipEncrypted);// 延长cookie时间
+
 						global.usrInfo = {
 							type: 2,
 							ip: ipDecrepted
