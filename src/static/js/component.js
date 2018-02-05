@@ -351,7 +351,11 @@ const Video = {
 					}
 				}.bind(this), id: 'hls'});
 			}else{
-				this.$message({message: `当天剩余播放次数 0次，请点击右上角注册`, type: 'error'});
+				this.$message({
+					dangerouslyUseHTMLString: true,
+					message: `当天剩余播放次数 0次，<br/>请点击右上角注册或登录查看更多视频`, 
+					type: 'error'
+				});
 			}
 		}.bind(this));
 

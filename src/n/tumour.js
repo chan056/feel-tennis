@@ -5,7 +5,12 @@ module.exports = {
         const constants = require('./constant');
         const NodeSession = require('node-session');
 
-        let session = new NodeSession({secret: constants.sessionSecret});
+        let session = new NodeSession({
+            secret: constants.sessionSecret,
+            'lifetime': 60 * 60 * 1000, // 1 hour
+            'expireOnClose': false,
+            'cookie': 'yi_tube',
+        });
 
 		// 读取文件的过程 异步
 		session.startSession(req, res, function(){
