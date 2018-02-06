@@ -308,6 +308,43 @@ var operations = {
 			res.end('success');
 		});
 	},
+
+	// 用户评论操作
+	comment: function(res, postObj){
+		let sql = `INSERT INTO usr_comment 
+		(commenter_id, comment_type, comment)
+		VALUES (?, ?, ?)`;
+
+		global.usrInfo = {
+			type: 1,
+			usrId: usr
+		}
+		if(global.usrInfo && global.usrInfo.type == 1){
+			conn.query(sql, [global.usrInfo.usrId, postObj.commentType, postObj.comment], function(err, result, fields){
+				if(err)
+					throw err;
+				// console.log(arguments);
+				res.end('success');
+			});
+	
+			// 赞/贬
+			if(1){
+				sql = `update video set support_time=support_time+1 where id = ?`;
+			}else{
+				sql = `update video set degrade_time=degrade_time+1 where id = ?`;
+			}
+	
+			conn.query(sql, [postObj.vId], function(err, result, fields){
+				if(err)
+					throw err;
+				// console.log(arguments);
+				res.end('success');
+			});
+		}else{
+			// res.statusCode = xx;
+			res.end('登录后再操作')
+		}
+	}
 }
 
 // 执行SQL

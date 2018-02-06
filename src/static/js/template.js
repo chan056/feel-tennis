@@ -199,6 +199,16 @@ var temp = {
                 <video id="video" controls="controls" height="400">Not support this browser, please use Chrome.</video>
                 <p class="subtitle"></p>
             </div>
+            <div id="usr-operation-desk">
+                <div class="fl">{{video.impression}}次观看</div>
+                <ul class="fr block-list">
+                    <li id="support-btn">顶<em>{{video.support_time}}</em></li>
+                    <li id="degrade-btn">贬<em>{{video.degrade_time}}</em></li>
+                    <li id="share-btn">分享<i></i></li>
+                    <li id="enshrine-btn">收藏</li>
+                </ul>
+                <br class="clr">
+            </div>
             <div>
                 <input type="button" value="开始截图" @click="captureCountdown()" id="capture-btn" class=""/>
                 <!--<el-button @click="captureCountdown()">开始截图</el-button>-->
@@ -218,7 +228,6 @@ var temp = {
                     <el-button type="primary" @click="previewerVisible = false">确 定</el-button>
                 </span>
             </el-dialog>
-
         </div>
     `,
 
