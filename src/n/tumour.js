@@ -23,7 +23,7 @@ module.exports = {
                     if(err) throw err;
 
                     if(result && result[0]){
-                        if(result[0].isAdmin == 1){
+                        if(result[0].is_admin == 1){
                             var concat = require('concat-files');
                     
                             let dir = path.resolve(__dirname, '../static');

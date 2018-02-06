@@ -71,10 +71,10 @@ var operations = {
 			if(usrType == 1){// 注册
 				conn.query(`select * from usr where id = '${usrInfo.usrId}'`, function(err, result){
 					let usrRecord = result[0];
-					dayView = usrRecord.dayView || 0;
+					dayView = usrRecord.day_view || 0;
 
 					if(dayView < constants.maxDayView){
-						conn.query(`update usr set dayView=dayView+1 where id='${usrRecord.id}'`);
+						conn.query(`update usr set day_view=day_view+1 where id='${usrRecord.id}'`);
 						dayViewLeft = constants.maxDayView - dayView - 1;
 						queryVinfo(dayView);
 					}else{
@@ -90,10 +90,10 @@ var operations = {
 						// 假如同个局域网的不同人访问 !! todo
 						// 同个局域网用户提交的IP信息是相同的
 
-						dayView = tmpUsrRecord.dayView;
+						dayView = tmpUsrRecord.day_view;
 						// console.log(dayView +1);
 						if(dayView < constants.tmpUsrDayView){
-							conn.query(`update tmp_usr set dayView=dayView+1 where ip='${usrIP}'`);
+							conn.query(`update tmp_usr set day_view=day_view+1 where ip='${usrIP}'`);
 							dayViewLeft = constants.tmpUsrDayView - dayView - 1;
 							queryVinfo(dayView);
 						}else{
@@ -104,7 +104,7 @@ var operations = {
 							res.end('exceed dayView');
 						}
 					}else{
-						conn.query(`INSERT INTO tmp_usr (ip, dayView) VALUES ('${usrIP}', 1)`);
+						conn.query(`INSERT INTO tmp_usr (ip, day_view) VALUES ('${usrIP}', 1)`);
 						dayView = 1;
 						dayViewLeft = constants.tmpUsrDayView - 1;
 						queryVinfo();
@@ -169,7 +169,7 @@ var operations = {
 		let usrInfo = global.usrInfo;
 		
 		if(usrInfo.type == 1){
-			conn.query('select name,dayview,isAdmin from usr where id = ' + usrInfo.usrId, function(err, result){
+			conn.query('select name, day_view, is_admin from usr where id = ' + usrInfo.usrId, function(err, result){
 				if (err) throw err;
 
 				result = JSON.stringify(result[0]);

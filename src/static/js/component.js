@@ -153,7 +153,7 @@ const HeaderComponent = {
 				let name = loginUsrInfo.name;
 				$('#header .el-icon-view').attr('title', name).addClass('usr');
 
-				if(this.loginUsrInfo.isAdmin == 1){
+				if(this.loginUsrInfo.is_admin == 1){
 					// location.reload();
 					$('#upload-entry').show();
 				}else{
