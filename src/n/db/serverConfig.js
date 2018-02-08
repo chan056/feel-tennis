@@ -87,7 +87,7 @@ module.exports.config = function(req, res) {
 		session.startSession(req, res, function(){
 			global.UO = uo;
 			let usr = req.session.get('usr');
-			console.log(usr)
+			// console.log(usr)
 			if(usr){// 已经登陆的用户
 				// 延长session时间
 				req.session.put('usr', usr);

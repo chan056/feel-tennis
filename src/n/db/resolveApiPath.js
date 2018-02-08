@@ -45,6 +45,10 @@ function resolveApiPath(res, req) {
             if (reqMethod == 'POST') {
                 fnMatched(req, res);
             }
+
+            if (reqMethod == 'PATCH') {
+                fnMatched(req, res);
+            }
         }
     } else {
         tools.response404(res);

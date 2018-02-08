@@ -56,7 +56,7 @@ app{font-size: 14px;}
 }
 
 #main-router-view{
-  width: 1284px; margin: auto;
+  width: 1000px; margin: auto;
   .el-breadcrumb{margin-bottom: 20px;}
   .el-row{margin-top: 20px;}
 }
@@ -126,10 +126,21 @@ app{font-size: 14px;}
 
 .new-album-btn, .new-tag-btn{margin-left: 20px;}
 
+
 // video
 #palyer-wrapper{
   display: inline-block; position: relative;
   .subtitle{position: absolute;  width: 100%; bottom: 30px; text-align: center; font-size: 24px; color: #eee; text-shadow: 2px 2px 2px rgb(65, 59, 59);}
+  max-width: 800px;
+}
+
+#usr-operation-desk{
+  margin: 30px 0px;
+
+  .block-list{
+    li{cursor: pointer;}
+    li:not(:last-child){margin-right: 20px;}
+  }
 }
 
 // #videos

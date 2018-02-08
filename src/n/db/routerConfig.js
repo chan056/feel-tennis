@@ -159,7 +159,7 @@ const routerConfig = {
     //     r.query('joinIndexJS', params, res);
     // },
 
-    // ============POST=============
+    // ============POST 新建资源=============
     '/login': function(req, res){
         r.post('login', req, res);
     },
@@ -249,6 +249,16 @@ const routerConfig = {
     '/feedback': function(req, res){
         r.post('creatFeedback', req, res);
     },
+
+    // ============put update完整资源=============
+
+    '/voteVideo': function(req, res){
+        r.patch('voteVideo', req, res);
+    },
+
+    // patch update部分资源
+
+    // delete 删除资源
 }
 
 module.exports = routerConfig;

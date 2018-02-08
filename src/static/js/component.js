@@ -322,7 +322,6 @@ const Video = {
 		let d = {video: [], crumb: {}, tags: [], captureParams: {}, previewerVisible: false, gifLink: ''};
 		let propsData = this.$options.propsData;
 		let videoId = propsData.videoId;
-		// d.videoId = videoId;
 
 		d.captureParams.vId = videoId;
 		tools.xhr('/videos/' + videoId, function(resData){
@@ -340,12 +339,12 @@ const Video = {
 
 				tools.insertScriptTag(1, "https://cdn.jsdelivr.net/npm/hls.js@latest", {onload: function(){
 					tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
-					video.onpause = function(){
+					$('#video').onpause = function(){
 						// console.log('pause');
 						// 停止匹配字幕 todo
 					}
 
-					video.onended = function(){
+					$('#video').onended = function(){
 						// console.log('ended');
 						$('.subtitle').text('');
 					}
@@ -397,7 +396,6 @@ const Video = {
 		// 		$('.subtitle').text('');
 		// 	}
 		// }.bind(this), id: 'hls'});
-
 	},
 	methods: {
 		captureCountdown: function(){
@@ -459,7 +457,13 @@ const Video = {
 
 		preview: function(){
 			this.previewerVisible = true;
-		}
+		},
+
+		vote: function(type){
+			tools.xhr('/voteVideo', function(resData){
+
+			}, 'patch', {type: type, vId: this.videoId});
+		},
 	}
 };
 

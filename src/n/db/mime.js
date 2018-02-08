@@ -20,6 +20,7 @@ exports.types = {
     "xml": "text/xml",
     "ttf": "text/ttf",
     "woff": "text/woff",
+    "woff2": "text/woff2",
     "map": 'text/plain',
     "m3u8": 'application/vnd.apple.mpegurl',// application/vnd.apple.mpegurl
     "ts": 'video/mp2t',

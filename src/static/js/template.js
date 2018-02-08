@@ -2,7 +2,7 @@ var temp = {
     header: `
         <div id="header">
             <el-row>
-                <el-col :span="3">
+                <el-col :span="4">
                     <i class="el-icon-menu aside-menu-btn"></i>
                     <a href="#/sports" id="logo"></a>
                 </el-col>
@@ -202,10 +202,10 @@ var temp = {
             <div id="usr-operation-desk">
                 <div class="fl">{{video.impression}}次观看</div>
                 <ul class="fr block-list">
-                    <li id="support-btn">顶<em>{{video.support_time}}</em></li>
-                    <li id="degrade-btn">贬<em>{{video.degrade_time}}</em></li>
-                    <li id="share-btn">分享<i></i></li>
-                    <li id="enshrine-btn">收藏</li>
+                    <li id="support-btn" @click="vote(1)"><i class="fa fa-thumbs-o-up"></i><em>{{video.support_time}}</em></li>
+                    <li id="degrade-btn" @click="vote(-1)"><i class="fa fa-thumbs-o-down"></i><em>{{video.degrade_time}}</em></li>
+                    <li id="share-btn"><i class="fa fa-share"></i>分享</li>
+                    <li id="enshrine-btn"><i class="fa fa-plus"></i></li>
                 </ul>
                 <br class="clr">
             </div>

@@ -344,7 +344,26 @@ var operations = {
 			// res.statusCode = xx;
 			res.end('登录后再操作')
 		}
-	}
+	},
+
+	// PATCH
+	voteVideo: function(res, postObj){
+		let voteType = postObj.type;
+		let sql = '';
+
+		if(voteType == 1){
+			sql = `update video set support_time=support_time+1 where id = ?`;
+		}else if(voteType == -1){
+			sql = `update video set degrade_time=degrade_time+1 where id = ?`;
+		}
+
+		conn.query(sql, [postObj.vId], function(err, result, fields){
+			if(err)
+				throw err;
+			// console.log(arguments);
+			res.end('success');
+		});
+	},
 }
 
 // 执行SQL
@@ -383,5 +402,13 @@ module.exports.post = function (operation, request, response) {
 	});
 }
 
+module.exports.patch = function (operation, request, response) {
+	// console.log(arguments[0], arguments[1])
+	var formidable = require('formidable');
+	var form = new formidable.IncomingForm();
 
+	form.parse(request, function(err, fields, files){
+		operations[operation](response, fields, request);
+	});
+}
 
