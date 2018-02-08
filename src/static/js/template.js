@@ -22,7 +22,7 @@ var temp = {
                     </el-form>
                 </el-col>
 
-                <el-col :span="6" :offset="6" class="masthead">
+                <el-col :span="6" :offset="5" class="masthead">
                     <el-dropdown id="usr-btns" class="fr" @command="handleUsrBtns">
                         <i class="el-icon-view" title="" @click=""></i>
                         <el-dropdown-menu slot="dropdown">

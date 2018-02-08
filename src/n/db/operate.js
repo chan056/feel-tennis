@@ -347,22 +347,45 @@ var operations = {
 	},
 
 	// PATCH
-	voteVideo: function(res, postObj){
-		let voteType = postObj.type;
+	voteVideo: function(res, patchObj){
+		let voteType = patchObj.type;
 		let sql = '';
 
-		if(voteType == 1){
-			sql = `update video set support_time=support_time+1 where id = ?`;
-		}else if(voteType == -1){
-			sql = `update video set degrade_time=degrade_time+1 where id = ?`;
-		}
+		let voted = patchObj.voted;
 
-		conn.query(sql, [postObj.vId], function(err, result, fields){
-			if(err)
-				throw err;
-			// console.log(arguments);
-			res.end('success');
-		});
+		if(global.usrInfo && global.usrInfo.type == 1){
+			if(voteType == 1){
+				if(voted){
+					sql = `update video set support_time=support_time-1 where id = ?`;
+				}else{
+					sql = `update video set support_time=support_time+1 where id = ?`;
+				}
+			}else if(voteType == -1){
+				if(voted){
+					sql = `update video set degrade_time=degrade_time-1 where id = ?`;
+				}else{
+					sql = `update video set degrade_time=degrade_time+1 where id = ?`;
+				}
+			}
+	
+			conn.query(sql, [patchObj.vId], function(err, result, fields){
+				if(err)
+					throw err;
+
+				let sql = `select support_time,degrade_time from video where id=?`
+				conn.query(sql, [patchObj.vId], function(err, result, fields){
+					if(err)
+						throw err;
+	
+					result = result[0];
+					// console.log(arguments);
+					res.end(JSON.stringify(result));
+				});
+			});
+		}else{
+			res.statusCode = 401;
+			res.end();
+		}
 	},
 }
 
