@@ -315,10 +315,10 @@ var operations = {
 		(commenter_id, comment_type, comment)
 		VALUES (?, ?, ?)`;
 
-		global.usrInfo = {
-			type: 1,
-			usrId: usr
-		}
+		// global.usrInfo = {
+		// 	type: 1,
+		// 	usrId: usr
+		// }
 		if(global.usrInfo && global.usrInfo.type == 1){
 			conn.query(sql, [global.usrInfo.usrId, postObj.commentType, postObj.comment], function(err, result, fields){
 				if(err)
@@ -346,42 +346,66 @@ var operations = {
 		}
 	},
 
-	// PATCH
+	// ===============PATCH================
+	// 投票
 	voteVideo: function(res, patchObj){
 		let voteType = patchObj.type;
 		let sql = '';
+		var sql2 = '';
 
-		let voted = patchObj.voted;
+		let voteStatus = patchObj.voteStatus;
+		let needClearOther = patchObj.needClearOther;
+		let vId = patchObj.vId;
 
 		if(global.usrInfo && global.usrInfo.type == 1){
+			
 			if(voteType == 1){
-				if(voted){
-					sql = `update video set support_time=support_time-1 where id = ?`;
-				}else{
+				if(voteStatus == 1){
 					sql = `update video set support_time=support_time+1 where id = ?`;
+					if(needClearOther){
+						sql2 = `update video set degrade_time=degrade_time-1 where id = ?`;
+					}
+				}else if(voteStatus == 0){
+					sql = `update video set support_time=support_time-1 where id = ?`;
 				}
 			}else if(voteType == -1){
-				if(voted){
-					sql = `update video set degrade_time=degrade_time-1 where id = ?`;
-				}else{
+				if(voteStatus == -1){
 					sql = `update video set degrade_time=degrade_time+1 where id = ?`;
+					if(needClearOther){
+						sql2 = `update video set support_time=support_time-1 where id = ?`;
+					}
+				}else if(voteStatus == 0){
+					sql = `update video set degrade_time=degrade_time-1 where id = ?`;
 				}
 			}
-	
-			conn.query(sql, [patchObj.vId], function(err, result, fields){
+
+			conn.query(sql, [vId], function(err, result, fields){
 				if(err)
 					throw err;
 
+				if(sql2){
+					conn.query(sql2, [vId], function(err, result){
+						if(err)
+							throw err;
+
+						collectVideoVoteInfo();
+					});
+				}else{
+					collectVideoVoteInfo();
+				}
+			});
+
+			function collectVideoVoteInfo(){
 				let sql = `select support_time,degrade_time from video where id=?`
-				conn.query(sql, [patchObj.vId], function(err, result, fields){
+				conn.query(sql, [vId], function(err, result, fields){
 					if(err)
 						throw err;
 	
 					result = result[0];
-					// console.log(arguments);
+					console.log(voteStatus, result);
 					res.end(JSON.stringify(result));
 				});
-			});
+			}
 		}else{
 			res.statusCode = 401;
 			res.end();

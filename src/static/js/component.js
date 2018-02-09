@@ -467,35 +467,61 @@ const Video = {
 
 		// 用户 和 赞/贬 视频的对应关系  需要新建
 		vote: function(type, e){
+
 			let thumbUpBtn = $('.fa-thumbs-o-up'),
 				thumbDownBtn = $('.fa-thumbs-o-down');
 
-			let voted = false;
-
-
-			if(type == 1){// 赞
-				if(thumbUpBtn.is('.fa-thumbs-up')){
-					voted = true;
-				}
-			}else if(type == -1){// 贬
-				if(thumbDownBtn.is('.fa-thumbs-down')){
-					voted = true;
-				}
+			if(type == 1){
+				thumbUpBtn.toggleClass('fa-thumbs-up');
+			}else if(type == -1){
+				thumbDownBtn.toggleClass('fa-thumbs-down')
 			}
 
+			// 投票状态 0 -1 1
+			var voteStatus;
+			var needClearOther = 0;
+
+			collectVoteStatus();
+
+			// alert(needClearOther)
 			tools.xhr('/voteVideo', function(resData){
-				if(type == 1){// 赞
-					thumbUpBtn.toggleClass('fa-thumbs-up');
+				if(type == 1){
 					thumbUpBtn.next().text(resData.support_time);
-				}else if(type == -1){// 贬
-					thumbDownBtn.toggleClass('fa-thumbs-down')
+					thumbDownBtn.next().text(resData.degrade_time);
+				}else if(type == -1){
+					thumbUpBtn.next().text(resData.support_time);
 					thumbDownBtn.next().text(resData.degrade_time);
 				}
-			}, 'patch', {type: type, voted: voted, vId: this.videoId}, function(res){
+			}, 'patch', {voteStatus: voteStatus, type: type, vId: this.videoId, needClearOther: needClearOther}, function(res){
 				if(res.status == 401){
 					this.$message.error('请登录后再操作');// todo 在公共部分处理
 				}
 			}.bind(this));
+
+			function collectVoteStatus(){
+
+				if(type == 1){
+					if(thumbUpBtn.is('.fa-thumbs-up')){
+						voteStatus = 1;
+
+						if(thumbDownBtn.is('.fa-thumbs-down')){
+							needClearOther = 1;
+						}
+					}else{
+						voteStatus = 0;
+					}
+				}else if(type == -1){
+					if(thumbDownBtn.is('.fa-thumbs-down')){
+						voteStatus = -1;
+						if(thumbUpBtn.is('.fa-thumbs-up')){
+							needClearOther = 1;
+						}
+					}else{
+						voteStatus = 0;
+					}
+				}
+
+			}
 		},
 	}
 };
