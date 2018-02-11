@@ -303,15 +303,9 @@ const Album = {
 			d.crumb = resData[0];
 		});
 
-		tools.xhr('/navInfo/2/' + albumId, function(resData){
-			d.crumb = resData[0];
-		});
-
 		tools.xhr('/albumTags/' + albumId, function(resData){
 			d.tags = resData;
 		});
-
-		this.queryVoteComment();
 
 		return d;
 	},
