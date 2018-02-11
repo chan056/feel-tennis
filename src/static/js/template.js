@@ -202,8 +202,8 @@ var temp = {
             <div id="usr-operation-desk">
                 <div class="fl">{{video.impression}}次观看</div>
                 <ul class="fr block-list">
-                    <li id="support-btn" @click="vote(1)"><i class="fa fa-thumbs-o-up"></i><em>{{video.support_time}}</em></li>
-                    <li id="degrade-btn" @click="vote(-1)"><i class="fa fa-thumbs-o-down"></i><em>{{video.degrade_time}}</em></li>
+                    <li id="support-btn" @click="vote(1)"><i :class="comment==1? 'fa fa-thumbs-o-up fa-thumbs-up': 'fa fa-thumbs-o-up'"></i><em>{{video.support_time}}</em></li>
+                    <li id="degrade-btn" @click="vote(-1)"><i :class="comment==-1? 'fa fa-thumbs-o-down fa-thumbs-down': 'fa fa-thumbs-o-down'"></i><em>{{video.degrade_time}}</em></li>
                     <li id="share-btn"><i class="fa fa-share"></i>分享</li>
                     <li id="enshrine-btn"><i class="fa fa-plus"></i></li>
                 </ul>

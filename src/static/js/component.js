@@ -311,6 +311,8 @@ const Album = {
 			d.tags = resData;
 		});
 
+		this.queryVoteComment();
+
 		return d;
 	},
 	template: temp.album
@@ -319,7 +321,7 @@ const Album = {
 const Video = {
 	props: ['videoId'],
 	data: function () {
-		let d = {video: [], crumb: {}, tags: [], captureParams: {}, previewerVisible: false, gifLink: ''};
+		let d = {video: [], crumb: {}, tags: [], captureParams: {}, previewerVisible: false, gifLink: '', comment: 0};
 		let propsData = this.$options.propsData;
 		let videoId = propsData.videoId;
 
@@ -468,6 +470,8 @@ const Video = {
 		// 用户 和 赞/贬 视频的对应关系  需要新建
 		vote: function(type, e){
 
+			let t = this;
+
 			let thumbUpBtn = $('.fa-thumbs-o-up'),
 				thumbDownBtn = $('.fa-thumbs-o-down');
 
@@ -482,47 +486,51 @@ const Video = {
 			var needClearOther = 0;
 
 			collectVoteStatus();
-
+			// return console.log({voteStatus: voteStatus, type: type, vId: this.videoId, needClearOther: needClearOther});
 			// alert(needClearOther)
-			tools.xhr('/voteVideo', function(resData){
-				if(type == 1){
-					thumbUpBtn.next().text(resData.support_time);
-					thumbDownBtn.next().text(resData.degrade_time);
-				}else if(type == -1){
-					thumbUpBtn.next().text(resData.support_time);
-					thumbDownBtn.next().text(resData.degrade_time);
-				}
+			tools.xhr('/voteVideo', function(res){
+				t.queryVoteComment();
+
+				$('#support-btn em').text(res.support_time);
+				$('#degrade-btn em').text(res.degrade_time);
 			}, 'patch', {voteStatus: voteStatus, type: type, vId: this.videoId, needClearOther: needClearOther}, function(res){
-				if(res.status == 401){
-					this.$message.error('请登录后再操作');// todo 在公共部分处理
-				}
+				// if(res.status == 401){
+				// 	this.$message.error('请登录后再操作');// todo 在公共部分处理
+				// }
 			}.bind(this));
 
 			function collectVoteStatus(){
-
+				let cmt  = t.comment;
 				if(type == 1){
-					if(thumbUpBtn.is('.fa-thumbs-up')){
+					if(cmt == 0){
 						voteStatus = 1;
-
-						if(thumbDownBtn.is('.fa-thumbs-down')){
-							needClearOther = 1;
-						}
-					}else{
+					}else if(cmt == 1){
 						voteStatus = 0;
+					}else if(cmt == -1){
+						voteStatus = 1;
+						needClearOther = 1;
 					}
 				}else if(type == -1){
-					if(thumbDownBtn.is('.fa-thumbs-down')){
+					if(cmt == 0){
 						voteStatus = -1;
-						if(thumbUpBtn.is('.fa-thumbs-up')){
-							needClearOther = 1;
-						}
-					}else{
+					}else if(cmt == 1){
+						voteStatus = -1;
+						needClearOther = 1;
+					}else if(cmt == -1){
 						voteStatus = 0;
 					}
-				}
 
+				}
 			}
 		},
+
+		queryVoteComment: function(){
+			tools.xhr('/queryVoteComment/' + this.videoId, function(res){
+				let comment = res[0].comment;
+				this.comment = comment;
+			}.bind(this));
+		}
+		
 	}
 };
 

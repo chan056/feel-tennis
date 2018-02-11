@@ -127,11 +127,30 @@ var operations = {
 				conn.query('update album set impression = impression + 1 where id=' + albumId);
 				conn.query('update sport set impression = impression + 1 where id = (select sport_id from album where id = ' + albumId + ')');
 
-				result[0].dayViewLeft = dayViewLeft;// 查询成功的话 返回当天播放次数
+				result[0].dayViewLeft = dayViewLeft;// 查询成功的话 返回当天播放剩余次数
 				result = JSON.stringify(result[0]);
 				res.end(result);
 			});
 		}
+	},
+
+	queryVoteComment: function(res, qualification){
+		console.log(global.usrInfo)
+		if(global.usrInfo && global.usrInfo.type == 1){
+			let sql = `select comment from usr_comment  and usr_id=${global.usrInfo.usrId}`;
+
+			conn.query(sql, function(err, result){
+				if(err)
+					throw err;
+
+				console.log(sql, result)
+				res.end(JSON.stringify(result));
+			});
+
+		}else{
+			res.end('登录后再操作')
+		}
+		
 	},
 
 	queryMakers: function(res, qualification) {
@@ -309,43 +328,6 @@ var operations = {
 		});
 	},
 
-	// 用户评论操作
-	comment: function(res, postObj){
-		let sql = `INSERT INTO usr_comment 
-		(commenter_id, comment_type, comment)
-		VALUES (?, ?, ?)`;
-
-		// global.usrInfo = {
-		// 	type: 1,
-		// 	usrId: usr
-		// }
-		if(global.usrInfo && global.usrInfo.type == 1){
-			conn.query(sql, [global.usrInfo.usrId, postObj.commentType, postObj.comment], function(err, result, fields){
-				if(err)
-					throw err;
-				// console.log(arguments);
-				res.end('success');
-			});
-	
-			// 赞/贬
-			if(1){
-				sql = `update video set support_time=support_time+1 where id = ?`;
-			}else{
-				sql = `update video set degrade_time=degrade_time+1 where id = ?`;
-			}
-	
-			conn.query(sql, [postObj.vId], function(err, result, fields){
-				if(err)
-					throw err;
-				// console.log(arguments);
-				res.end('success');
-			});
-		}else{
-			// res.statusCode = xx;
-			res.end('登录后再操作')
-		}
-	},
-
 	// ===============PATCH================
 	// 投票
 	voteVideo: function(res, patchObj){
@@ -357,13 +339,16 @@ var operations = {
 		let needClearOther = patchObj.needClearOther;
 		let vId = patchObj.vId;
 
+		let usrId;
+
 		if(global.usrInfo && global.usrInfo.type == 1){
-			
+			usrId = global.usrInfo.usrId;
+
 			if(voteType == 1){
 				if(voteStatus == 1){
 					sql = `update video set support_time=support_time+1 where id = ?`;
 					if(needClearOther){
-						sql2 = `update video set degrade_time=degrade_time-1 where id = ?`;
+						sql = `update video set support_time=support_time+1,degrade_time=degrade_time-1 where id = ?`;
 					}
 				}else if(voteStatus == 0){
 					sql = `update video set support_time=support_time-1 where id = ?`;
@@ -372,26 +357,38 @@ var operations = {
 				if(voteStatus == -1){
 					sql = `update video set degrade_time=degrade_time+1 where id = ?`;
 					if(needClearOther){
-						sql2 = `update video set support_time=support_time-1 where id = ?`;
+						sql = `update video set degrade_time=degrade_time+1,support_time=support_time-1  where id = ?`
 					}
 				}else if(voteStatus == 0){
 					sql = `update video set degrade_time=degrade_time-1 where id = ?`;
 				}
 			}
 
-			conn.query(sql, [vId], function(err, result, fields){
+			conn.query(sql, [vId], function(err, result){
 				if(err)
 					throw err;
 
-				if(sql2){
-					conn.query(sql2, [vId], function(err, result){
+				collectVideoVoteInfo();
+			});
+
+			sql = `select id from usr_comment where usr_id=? and video_id=? and comment_type=?`;
+			conn.query(sql, [usrId, vId, '1'], function(err, result){
+				if(err)
+					throw err;
+
+				if(result && result[0]){
+					sql = `update usr_comment set comment=? where usr_id=? and video_id=? and comment_type=?`;
+					conn.query(sql, [voteStatus, usrId, vId, '1'], function(err, result){
 						if(err)
 							throw err;
-
-						collectVideoVoteInfo();
 					});
 				}else{
-					collectVideoVoteInfo();
+					sql = `insert into usr_comment (usr_id, video_id, comment_type, comment) values (?,?,?,?)`;
+					console.log(sql);
+					conn.query(sql, [usrId, vId, '1', voteStatus], function(err, result){
+						if(err)
+							throw err;
+					});
 				}
 			});
 
@@ -402,7 +399,6 @@ var operations = {
 						throw err;
 	
 					result = result[0];
-					console.log(voteStatus, result);
 					res.end(JSON.stringify(result));
 				});
 			}

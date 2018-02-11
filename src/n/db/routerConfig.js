@@ -155,6 +155,16 @@ const routerConfig = {
         r.query('loginInfo', params, res);
     },
 
+    '/queryVoteComment/:vId': function(params, res){
+        if(global.usrInfo && global.usrInfo.type == 1){
+			let sql = `select comment from usr_comment where video_id=${params.vId} and comment_type='1' and usr_id=${global.usrInfo.usrId}`;
+
+            r.excuteSQL(sql, res);
+		}else{
+			res.end('need login !')
+		}
+    },
+
     // '/joinIndexJS': function(params, res){
     //     r.query('joinIndexJS', params, res);
     // },
@@ -255,6 +265,7 @@ const routerConfig = {
     '/voteVideo': function(req, res){
         r.patch('voteVideo', req, res);
     },
+    
 
     // patch update部分资源
 
