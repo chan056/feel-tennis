@@ -73,15 +73,8 @@ module.exports.config = function(req, res) {
 	function disposeApi(){
 		if(ext && ext != 'unknown')
 			return tools.response404(res)
-		// todo 拦截无理请求
 
-		var NodeSession = require('node-session');
-    	let session = new NodeSession({
-			secret: constants.sessionSecret,
-			'lifetime': 60 * 60 * 1000, // 1 hour
-			'expireOnClose': false,
-			'cookie': 'yi_tube',
-		});
+		let session = require('../session.js').newSession();
 
 		// 读取文件的过程 异步
 		session.startSession(req, res, function(){

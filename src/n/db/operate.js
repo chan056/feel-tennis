@@ -119,6 +119,7 @@ var operations = {
 			conn.query('SELECT * from video' + qualification, function (err, result, fields) {
 				if (err) throw err;
 				
+				let vInfo = result[0];
 				// 更新关联的表
 				let albumId = result[0].album_id;
 	
@@ -127,30 +128,12 @@ var operations = {
 				conn.query('update album set impression = impression + 1 where id=' + albumId);
 				conn.query('update sport set impression = impression + 1 where id = (select sport_id from album where id = ' + albumId + ')');
 
-				result[0].dayViewLeft = dayViewLeft;// 查询成功的话 返回当天播放剩余次数
-				result = JSON.stringify(result[0]);
+				vInfo.dayViewLeft = dayViewLeft;// 查询成功的话 返回当天播放剩余次数
+				result = JSON.stringify(vInfo);
 				res.end(result);
+				
 			});
 		}
-	},
-
-	queryVoteComment: function(res, qualification){
-		console.log(global.usrInfo)
-		if(global.usrInfo && global.usrInfo.type == 1){
-			let sql = `select comment from usr_comment  and usr_id=${global.usrInfo.usrId}`;
-
-			conn.query(sql, function(err, result){
-				if(err)
-					throw err;
-
-				console.log(sql, result)
-				res.end(JSON.stringify(result));
-			});
-
-		}else{
-			res.end('登录后再操作')
-		}
-		
 	},
 
 	queryMakers: function(res, qualification) {

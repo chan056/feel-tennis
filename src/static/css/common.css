@@ -13,8 +13,12 @@ h6 {
   padding: 0;
 }
 div,
-li {
+li,
+img {
   box-shadow: 0 0 1px #dfeceb;
+}
+img {
+  background-color: #cde;
 }
 ul,
 ol {

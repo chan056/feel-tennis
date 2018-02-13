@@ -11,7 +11,7 @@ function isEmpty(obj) {
 	return (Object.getOwnPropertyNames(obj).length === 0);
 }
 
-function newClause(params) {
+function newQueryClause(params) {
 	
 	if (isEmpty(params)) {
 		return '';
@@ -36,5 +36,5 @@ function newClause(params) {
 module.exports = {
     response404: response404,
     isEmpty: isEmpty,
-    newClause: newClause
+	newClause: newQueryClause,
 }

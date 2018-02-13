@@ -55,10 +55,10 @@ var temp = {
             <el-dialog title="登录" :visible.sync="loginForm.visible">
                 <el-form :model="loginForm">
                     <el-form-item label="用户名" :label-width="loginForm.formLabelWidth">
-                        <el-input v-model="loginForm.name" auto-complete="off"></el-input>
+                        <el-input v-model="loginForm.name" auto-complete="on"></el-input>
                     </el-form-item>
                     <el-form-item label="密码" :label-width="loginForm.formLabelWidth">
-                        <el-input v-model="loginForm.psw" auto-complete="off"></el-input>
+                        <el-input id="last-login-iput" v-model="loginForm.psw" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -202,8 +202,14 @@ var temp = {
             <div id="usr-operation-desk">
                 <div class="fl">{{video.impression}}次观看</div>
                 <ul class="fr block-list">
-                    <li id="support-btn" @click="vote(1)"><i :class="comment==1? 'fa fa-thumbs-o-up fa-thumbs-up': 'fa fa-thumbs-o-up'"></i><em>{{video.support_time}}</em></li>
-                    <li id="degrade-btn" @click="vote(-1)"><i :class="comment==-1? 'fa fa-thumbs-o-down fa-thumbs-down': 'fa fa-thumbs-o-down'"></i><em>{{video.degrade_time}}</em></li>
+                    <li id="support-btn" @click="vote(1)">
+                        <i v-bind:class="{ 'fa-thumbs-up': like==1, 'fa': 1, 'fa-thumbs-o-up': 1}"></i>
+                        <em>{{video.support_time}}</em>
+                    </li>
+                    <li id="degrade-btn" @click="vote(-1)">
+                        <i v-bind:class="{ 'fa-thumbs-down': like==-1, 'fa': 1, 'fa-thumbs-o-down': 1}"></i>
+                        <em>{{video.degrade_time}}</em>
+                    </li>
                     <li id="share-btn"><i class="fa fa-share"></i>分享</li>
                     <li id="enshrine-btn"><i class="fa fa-plus"></i></li>
                 </ul>

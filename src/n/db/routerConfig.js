@@ -155,11 +155,14 @@ const routerConfig = {
         r.query('loginInfo', params, res);
     },
 
+	// 查询当前用户是否点赞当前视频
     '/queryVoteComment/:vId': function(params, res){
         if(global.usrInfo && global.usrInfo.type == 1){
 			let sql = `select comment from usr_comment where video_id=${params.vId} and comment_type='1' and usr_id=${global.usrInfo.usrId}`;
 
-            r.excuteSQL(sql, res);
+            r.excuteSQL(sql, res, function(result){
+                res.end(JSON.stringify(result[0]));
+            });
 		}else{
 			res.end('need login !')
 		}

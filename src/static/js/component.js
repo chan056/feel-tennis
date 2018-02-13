@@ -62,6 +62,16 @@ const HeaderComponent = {
 			let o = {
 				'login': function(){
 					t.loginForm.visible = true;
+					// 回车提交事件
+					// console.log($('#last-login-iput'))
+					setTimeout(function(){
+						$('#last-login-iput').off('keyup.login').on('keyup.login', function(e){
+							var keyCode = e.keyCode;
+							if(keyCode == 13){
+								t.login();
+							}
+						});
+					}, 500)
 				},
 				'regist': function(){
 					t.registForm.visible = true;
@@ -165,7 +175,7 @@ const HeaderComponent = {
 	mounted: function () {
 		// 用户管理
 		var tmpUsr = Cookies.get('tmpUsr');
-		var tmpUsrPsw = Cookies.get('tmpUsrPsw');
+		// var tmpUsrPsw = Cookies.get('tmpUsrPsw');
 		
 		if(tmpUsr){
 			tmpUsr = tmpUsr.substr(3, 10);
@@ -315,7 +325,7 @@ const Album = {
 const Video = {
 	props: ['videoId'],
 	data: function () {
-		let d = {video: [], crumb: {}, tags: [], captureParams: {}, previewerVisible: false, gifLink: '', comment: 0};
+		let d = {video: [], crumb: {}, tags: [], captureParams: {}, previewerVisible: false, gifLink: '', like: 0, likeLocking: false};
 		let propsData = this.$options.propsData;
 		let videoId = propsData.videoId;
 
@@ -352,6 +362,9 @@ const Video = {
 					type: 'error'
 				});
 			}
+
+			// var like = resData.like;
+			// console.log(like);
 		}.bind(this));
 
 		tools.xhr('/navInfo/3/' + videoId, function(resData){
@@ -392,6 +405,8 @@ const Video = {
 		// 		$('.subtitle').text('');
 		// 	}
 		// }.bind(this), id: 'hls'});
+
+		this.queryVoteComment();
 	},
 	methods: {
 		captureCountdown: function(){
@@ -463,17 +478,19 @@ const Video = {
 
 		// 用户 和 赞/贬 视频的对应关系  需要新建
 		vote: function(type, e){
+			if(this.likeLocking){
+				return;
+			}
 
 			let t = this;
+			// let thumbUpBtn = $('.fa-thumbs-o-up'),
+			// 	thumbDownBtn = $('.fa-thumbs-o-down');
 
-			let thumbUpBtn = $('.fa-thumbs-o-up'),
-				thumbDownBtn = $('.fa-thumbs-o-down');
-
-			if(type == 1){
-				thumbUpBtn.toggleClass('fa-thumbs-up');
-			}else if(type == -1){
-				thumbDownBtn.toggleClass('fa-thumbs-down')
-			}
+			// if(type == 1){
+			// 	thumbUpBtn.toggleClass('fa-thumbs-up');
+			// }else if(type == -1){
+			// 	thumbDownBtn.toggleClass('fa-thumbs-down')
+			// }
 
 			// 投票状态 0 -1 1
 			var voteStatus;
@@ -487,20 +504,23 @@ const Video = {
 
 				$('#support-btn em').text(res.support_time);
 				$('#degrade-btn em').text(res.degrade_time);
+
+				t.likeLocking = false;
 			}, 'patch', {voteStatus: voteStatus, type: type, vId: this.videoId, needClearOther: needClearOther}, function(res){
 				if(res.status == 401){
 					this.$message.error('请登录后再操作');// todo 在公共部分处理
-					if(type == 1){
-						thumbUpBtn.toggleClass('fa-thumbs-up');
-					}else if(type == -1){
-						thumbDownBtn.toggleClass('fa-thumbs-down')
-					}
+					// if(type == 1){
+					// 	thumbUpBtn.toggleClass('fa-thumbs-up');
+					// }else if(type == -1){
+					// 	thumbDownBtn.toggleClass('fa-thumbs-down')
+					// }
 				}
+				t.likeLocking = false;
 			}.bind(this));
 
 			function collectVoteStatus(){
-				let cmt  = t.comment;
-				if(type == 1){
+				let cmt  = t.like;// 点击之前的like
+				if(type == 1){// 点了“赞”
 					if(cmt == 0){
 						voteStatus = 1;
 					}else if(cmt == 1){
@@ -525,8 +545,9 @@ const Video = {
 
 		queryVoteComment: function(){
 			tools.xhr('/queryVoteComment/' + this.videoId, function(res){
-				let comment = res[0].comment;
-				this.comment = comment;
+				let like = res.comment;
+				console.log(like);
+				this.like = like;
 			}.bind(this));
 		}
 		
