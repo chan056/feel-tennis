@@ -488,9 +488,14 @@ const Video = {
 				$('#support-btn em').text(res.support_time);
 				$('#degrade-btn em').text(res.degrade_time);
 			}, 'patch', {voteStatus: voteStatus, type: type, vId: this.videoId, needClearOther: needClearOther}, function(res){
-				// if(res.status == 401){
-				// 	this.$message.error('请登录后再操作');// todo 在公共部分处理
-				// }
+				if(res.status == 401){
+					this.$message.error('请登录后再操作');// todo 在公共部分处理
+					if(type == 1){
+						thumbUpBtn.toggleClass('fa-thumbs-up');
+					}else if(type == -1){
+						thumbDownBtn.toggleClass('fa-thumbs-down')
+					}
+				}
 			}.bind(this));
 
 			function collectVoteStatus(){
