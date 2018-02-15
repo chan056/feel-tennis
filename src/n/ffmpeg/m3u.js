@@ -19,16 +19,16 @@ module.exports.m3u = function(vId, videoStorePath, subtitleAbsPath){
     delete multiResolution[360];
     delete multiResolution[1280];
 
-    let dir = path.resolve(__dirname, '../../../static')
+    let dir = path.resolve(__dirname, '../../static')
     let tsDir = path.resolve(dir, `./multimedia/ts/${vId}`);
 
     fs.exists(tsDir, function(doExist){
         if(!doExist){
-            fs.mkdir(tsDir, function(){
-                execM3U();
-                storeSubtitle();
-                screenShot();
-            });
+            fs.mkdirSync(tsDir, 0777);
+
+            execM3U();
+            storeSubtitle();
+            screenShot();
         }else{
             execM3U();
             storeSubtitle();

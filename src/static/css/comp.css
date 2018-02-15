@@ -92,7 +92,7 @@ app {
 #header #logo {
   display: inline-block;
   width: 85px;
-  height: 66px;
+  height: 61px;
   background-image: url("/img/logo.jpg");
 }
 #header .el-form {
@@ -173,6 +173,9 @@ app {
 }
 #usr-operation-desk .block-list li:not(:last-child) {
   margin-right: 20px;
+}
+#video-container {
+  width: 210px;
 }
 .time {
   font-size: 13px;

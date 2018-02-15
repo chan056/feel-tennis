@@ -114,7 +114,7 @@ var temp = {
             <ul class="block-list spt-list">
                 <li class="" v-for="sport in sports">
                     <router-link :to="{path: '/sports/'+ sport.id }" :title="sport.name">
-                        <img src="/img/logo.jpg" class="block-thumb spt-thumb"/>
+                        <img :src="'/img/cover/sport/' + sport.id + '.jpg'" class="block-thumb spt-thumb"/>
                         <p class="clearfix block-info">
                             <span class="play-count">{{sport.impression}}次观看</span>
                             <span class="update-time">
@@ -132,10 +132,10 @@ var temp = {
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ path: '/sports/' + crumb.id }">{{crumb.name}}</el-breadcrumb-item>
             </el-breadcrumb>
-            <ul class="block-list">
+            <ul id="video-container" class="block-list">
                 <li v-for="album in albumList">
                     <router-link v-on:click="alert(album.name)" :to="{path: '/albums/'+ album.id }">
-                        <img :src="album.cover" class="block-thumb album-thumb"/>
+                        <img :src="'/img/cover/album/' + album.id + '.jpg'" class="block-thumb album-thumb"/>
                         <h3 class="block-title album-title">
                             {{ album.name }}
                         </h3>

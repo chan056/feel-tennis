@@ -287,13 +287,26 @@ var operations = {
 
 	creatAlbum: function(res, postObj){
 		var sql = `INSERT INTO album 
-			(sport_id, author_id, name, tag, cover)
-			VALUES (?, ?, ?, ?, ?)`;
+			(sport_id, author_id, name, tag, update_time)
+			VALUES (?, ?, ?, ?, ${+new Date()})`;
 
-		conn.query(sql, [postObj.sportId, postObj.maker, postObj.name, postObj.tag, postObj.cover], function(err, result, fields){
+		conn.query(sql, [postObj.sportId, postObj.maker, postObj.name, postObj.tag], function(err, result, fields){
 			if(err)
 				throw err;
 			// console.log(arguments);
+
+			let albumId = result.insertId;;
+
+			let fs = require('fs'),
+				path = require('path');
+
+			let sourceCoverPath = path.resolve(__dirname, `../../static${postObj.cover}`),
+				destCoverPath = path.resolve(__dirname, `../../static/img/cover/album/` + albumId + '.jpg');// 封面格式动态 todo
+				
+			fs.rename(sourceCoverPath, destCoverPath, function(){
+				console.log('专辑封面移动完成');
+			});
+
 			res.end('success');
 		});
 	},
