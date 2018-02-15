@@ -545,8 +545,8 @@ const Video = {
 
 		queryVoteComment: function(){
 			tools.xhr('/queryVoteComment/' + this.videoId, function(res){
-				let like = res.comment;
-				console.log(like);
+				let like = res.comment || 0;
+				// console.log(like);
 				this.like = like;
 			}.bind(this));
 		}

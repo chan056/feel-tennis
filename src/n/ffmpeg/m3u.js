@@ -83,6 +83,10 @@ module.exports.m3u = function(vId, videoStorePath, subtitleAbsPath){
 
     }
 
+    function generatePreviewVideo(){
+        
+    }
+
     function storeSubtitle(){
         // 多字幕 todo
         let subtitleStorePath = path.resolve(tsDir, `./subtitle`);
