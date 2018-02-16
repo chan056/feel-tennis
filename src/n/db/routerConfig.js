@@ -142,8 +142,8 @@ const routerConfig = {
     },
 
     '/gifLink': function(params, res){
-        let ff = require('../ffmpeg/g.js').ff;
-        ff(params, res);
+        let createDynamicPreview = require('../ffmpeg/gif.js').createDynamicPreview;
+        createDynamicPreview(params, res);
     },
 
     '/srt/:vId': function(params, res){

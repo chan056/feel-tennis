@@ -319,7 +319,25 @@ const Album = {
 
 		return d;
 	},
-	template: temp.album
+	template: temp.album,
+	methods: {
+		dynamivePreview: function(e){
+
+			$(e.target).attr('src', function(){
+				// console.log(arguments);
+				return arguments[1].replace('cover.jpg', 'd_cover.gif');
+			});
+			
+		},
+
+		staticPreview: function(e){
+
+			$(e.target).attr('src', function(){
+				return arguments[1].replace('d_cover.gif', 'cover.jpg');
+			});
+			
+		},
+	}
 };
 
 const Video = {

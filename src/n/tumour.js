@@ -18,12 +18,15 @@ module.exports = {
                     if(err) throw err;
 
                     if(result && result[0]){
+                        let dir = path.resolve(__dirname, '../static');
+                        let f1 = dir + '/js/admin.js';
+                        let f2 = dir + '/js/tube.js';
+                        
+                        
                         if(result[0].is_admin == 1){
                             var concat = require('concat-files');
                     
-                            let dir = path.resolve(__dirname, '../static');
-                            let f1 = dir + '/js/admin.js';
-                            let f2 = dir + '/js/tube.js';
+                            
                             let tmp = dir + '/js/tmp.js'
 
                             concat([
@@ -36,6 +39,11 @@ module.exports = {
                                     res.write(file, "binary");
                                     res.end();
                                 });
+                            });
+                        }else{
+                            fs.readFile(path.resolve(dir, f2), "binary", function(err, file) {
+                                res.write(file, "binary");
+                                res.end();
                             });
                         }
                     }

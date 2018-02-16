@@ -166,7 +166,7 @@ var temp = {
             <ul class="block-list">
                 <li v-for="video in albumVideoList">
                     <router-link :to="{path: '/video/'+ video.id }">
-                        <img :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb video-thumb"/>
+                        <img @mouseover="dynamivePreview($event);" @mouseout="staticPreview($event);" :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb video-thumb"/>
                         <h3 class="block-title video-title">
                             {{ video.headline }}
                         </h3>

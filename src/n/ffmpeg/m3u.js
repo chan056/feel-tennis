@@ -7,6 +7,7 @@ module.exports.m3u = function(vId, videoStorePath, subtitleAbsPath){
     const exec = require('child_process').exec;
     const path = require('path');
     const fs = require('fs');
+    const tool = require('../tool');
 
     let coveSize = '210x118';// 视频截图尺寸
 
@@ -29,10 +30,12 @@ module.exports.m3u = function(vId, videoStorePath, subtitleAbsPath){
             execM3U();
             storeSubtitle();
             screenShot();
+            dynamicPreview();
         }else{
             execM3U();
             storeSubtitle();
             screenShot();
+            dynamicPreview();
         }
     });
 
@@ -88,6 +91,9 @@ module.exports.m3u = function(vId, videoStorePath, subtitleAbsPath){
     }
 
     function storeSubtitle(){
+        if(!subtitleAbsPath)
+            return;
+
         // 多字幕 todo
         let subtitleStorePath = path.resolve(tsDir, `./subtitle`);
         fs.rename(subtitleAbsPath, subtitleStorePath);
@@ -104,51 +110,39 @@ module.exports.m3u = function(vId, videoStorePath, subtitleAbsPath){
             }
     
             let coverPath = path.resolve(tsDir, './cover.jpg');
-            let screenshotCmd = `ffmpeg -ss ${formatTime(duration/2)} -i ${videoStorePath} -y -f image2 -vframes 1 -s ${coveSize} ${coverPath}`;
+            let screenshotCmd = `ffmpeg -ss ${tool.formatTime(duration/2)} -i ${videoStorePath} -y -f image2 -vframes 1 -s ${coveSize} ${coverPath}`;
             exec(screenshotCmd, function(err){
                 if(err){
                     console.log(err);
                 }
             });
         })
+        
+    }
+
+    // 动态预览
+    function dynamicPreview(){
+        const exec = require('child_process').exec;
+        let vDurationCmd = `ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 ${videoStorePath}`;
+        let CONSTANTS = require('../constant');
     
-        // 61 => 00:01:01
-        function formatTime(seconds){
-            const m = 60;
-            const h = 3600;
-    
-            let hour = Math.floor(seconds/h);
-            hour = zeroFill(hour);
-    
-            seconds = seconds%h;
-    
-            let minute = Math.floor(seconds/m);
-            minute = zeroFill(minute);
-    
-            seconds = seconds%m;
-            seconds = zeroFill(seconds);
-            // seconds = seconds.toFixed(0);
-    
-            return hour + ':' + minute + ':' + seconds;
-    
-            function zeroFill (v){
-                return v < 10? '0'+v: v;
+        exec(vDurationCmd, function(error, duration){
+            if(error){
+                console.log(error);
             }
-        }
+    
+            let gifModule = require('./gif');
+
+            gifModule.createDynamicPreview({
+                vId: vId,
+                st: duration / 2,
+                et: duration / 2 + CONSTANTS.dynamicPreview.duration,
+                scale: CONSTANTS.dynamicPreview.width,
+                output: tsDir + '/d_cover.gif',
+            });
+        })
     }
 }
-
-/* #EXTM3U
-#EXT-X-VERSION:3
-#EXT-X-STREAM-INF:BANDWIDTH=800000,RESOLUTION=640x360
-360p.m3u8
-#EXT-X-STREAM-INF:BANDWIDTH=1400000,RESOLUTION=842x480
-480p.m3u8
-#EXT-X-STREAM-INF:BANDWIDTH=2800000,RESOLUTION=1280x720
-720p.m3u8
-#EXT-X-STREAM-INF:BANDWIDTH=5000000,RESOLUTION=1920x1080
-1080p.m3u8 */
-// console.log(tsDir,tsFile,m3u8File, cmd);
 
 
 // ==========child_process spawn============

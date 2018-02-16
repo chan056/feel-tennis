@@ -33,8 +33,33 @@ function newQueryClause(params) {
 	return qualification;
 }
 
+// 61 => 00:01:01
+function formatTime(seconds){
+	const m = 60;
+	const h = 3600;
+
+	let hour = Math.floor(seconds/h);
+	hour = zeroFill(hour);
+
+	seconds = seconds%h;
+
+	let minute = Math.floor(seconds/m);
+	minute = zeroFill(minute);
+
+	seconds = seconds%m;
+	seconds = zeroFill(seconds);
+	// seconds = seconds.toFixed(0);
+
+	return hour + ':' + minute + ':' + seconds;
+
+	function zeroFill (v){
+		return v < 10? '0'+v: v;
+	}
+}
+
 module.exports = {
     response404: response404,
     isEmpty: isEmpty,
 	newClause: newQueryClause,
+	formatTime: formatTime,
 }
