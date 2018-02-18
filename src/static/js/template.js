@@ -45,6 +45,9 @@ var temp = {
                     <el-form-item label="密码" :label-width="registForm.formLabelWidth">
                         <el-input v-model="registForm.psw" auto-complete="off"></el-input>
                     </el-form-item>
+                    <el-form-item label="邮箱" :label-width="registForm.formLabelWidth">
+                        <el-input v-model="registForm.email" auto-complete="off"></el-input>
+                    </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button type="primary" @click="registForm.visible = false">取 消</el-button>

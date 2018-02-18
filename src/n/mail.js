@@ -1,11 +1,3 @@
-//邮件配置
-var emailConfig = {
-    senderEmail: {
-        service: 'QQ',
-        user: '374029208@qq.com',
-        pass: 'btwnqqiqgvjybiid',
-    }
- }
 /**
  *
  * @Description 邮件发送 
@@ -15,13 +7,13 @@ var emailConfig = {
 
 var nodemailer = require('nodemailer')
 var smtpTransport = require('nodemailer-smtp-transport');
-var config = emailConfig;// require('./config')
+var emailSender = require('./constant').emailSender;// require('./config')
 
 smtpTransport = nodemailer.createTransport(smtpTransport({
-    service: config.senderEmail.service,
+    service: emailSender.service,
     auth: {
-        user: config.senderEmail.user,
-        pass: config.senderEmail.pass
+        user: emailSender.user,
+        pass: emailSender.pass
     }
 }));
 
@@ -34,7 +26,7 @@ var sendMail = function (recipient, subject, html) {
 
     smtpTransport.sendMail({
 
-        from: config.senderEmail.user,
+        from: emailSender.user,
         to: recipient,
         subject: subject,
         html: html
@@ -47,6 +39,4 @@ var sendMail = function (recipient, subject, html) {
     
 }
 
-sendMail('chenyi@zjcap.cn','这是测试邮件', 'Hi chenyi@zjcap.cn,这是一封测试邮件');
-
-module.exports = sendMail;
+module.exports.sendMail = sendMail;

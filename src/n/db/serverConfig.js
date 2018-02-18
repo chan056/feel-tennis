@@ -4,23 +4,22 @@ module.exports.config = function(req, res) {
     const path = require('path');
     const mime = require('./mime').types;
     const tools = require('../tool');
-	const uo = url.parse(req.url, true);
 	// const tumour = require('../tumour');
 	const constants = require('../constant');
 
-	global.UO = uo;// !!!
-	pathname = uo.pathname;
+	let urlObj = url.parse(req.url, true);
+	let pathname = urlObj.pathname;
 
 	if(pathname == '/'){
 		pathname = '/page/index.html';
 	}
 	
 	var ext = path.extname(pathname);
-	ext = ext ? ext.slice(1) : 'unknown';
-	var contentType = mime[ext];
+	ext = ext ? ext.slice(1) : '';
 
-	if(contentType){
-		disposeStaticResource();
+	if(ext){
+		var contentType = mime[ext];
+		contentType? disposeStaticResource(): tools.response404(res);
 	}else{
 		disposeApi();
 	}
@@ -58,11 +57,6 @@ module.exports.config = function(req, res) {
 							}
 						}
 
-						// 拼接admin部分
-						// if(uo.pathname.match(new RegExp(constants.bootJS + '$'))){
-						// 	return tumour.joinIndexJS(req, res);
-						// }
-
 						res.write(file, "binary");
 						res.end();
 					}
@@ -72,9 +66,6 @@ module.exports.config = function(req, res) {
 	}
 
 	function disposeApi(){
-		if(ext && ext != 'unknown')
-			return tools.response404(res)
-
 		let session = require('../session.js').newSession();
 
 		// 读取文件的过程 异步

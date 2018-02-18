@@ -10,4 +10,9 @@ module.exports = {
         duration: 8,
         width: 210
     },
+    emailSender: {
+        service: 'QQ',
+        user: '374029208@qq.com',
+        pass: 'btwnqqiqgvjybiid',
+    }
 }

@@ -8,19 +8,21 @@ function resolveApiPath(res, req) {
     var pathMatch;
     var fnMatched;
     var keys;
+    var urlObj = require('url').parse(req.url, true);
 
     for (var k in routerConfig) {
         var f = routerConfig[k];
         keys = [];
 
         var pathReg = pathToRegexp(k, keys);
-        pathMatch = pathReg.exec(UO.pathname);
+        pathMatch = pathReg.exec(urlObj.pathname);
 
         if (pathMatch) {
             fnMatched = f;
             break;
         }
     }
+
 
     if (fnMatched) {
         console.log(k);
@@ -31,7 +33,7 @@ function resolveApiPath(res, req) {
 
         if(!impowered){
             res.statusCode = 401;
-            return res.end('Unauthorized: ' + UO.pathname);
+            return res.end('Unauthorized: ' + urlObj.pathname);
         }
         
         let reqMethod = req.method;
@@ -44,7 +46,7 @@ function resolveApiPath(res, req) {
                     paramsMathed[keyName] = pathMatch[i + 1]
             }
             // 将params和query结合
-            let queryParams = Object.assign(paramsMathed, UO.query);
+            let queryParams = Object.assign(paramsMathed, urlObj.query);
             
             fnMatched(queryParams, res);
         } else {

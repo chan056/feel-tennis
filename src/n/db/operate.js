@@ -202,9 +202,7 @@ var operations = {
 			
 			if(result[0] && result[0].id){
 				let info = JSON.stringify({id: result[0].id, isAdmin: result[0].is_admin});
-				req.session.put('usr', info, function(){
-					console.log('put')
-				});
+				req.session.put('usr', info);
 				res.end('success');
 			}else{
 				res.statusCode = 401;
@@ -216,16 +214,25 @@ var operations = {
 
 	regist: function(res, postObj, req){
 		var sql = `INSERT INTO usr 
-			(name, psw)
-			VALUES (?, ?)`;
+			(name, psw, email)
+			VALUES (?, ?, ?)`;
 
-		conn.query(sql, [postObj.name, postObj.psw], function(err, result, fields){
+		conn.query(sql, [postObj.name, postObj.psw, postObj.email], function(err, result, fields){
 			if(err)
 				throw err;
 
 			if(result.affectedRows == 1){
 				res.statusMessage = 'regist success';
-				res.end();
+				res.end('success');
+
+				let email = postObj.email;
+				if(email){
+					let emailSubject = 'chantube注册确认',
+						emailContent = `你好 ${postObj.name}, <a href="http://localhost:3000/#/email_confirm">点击</a>完成注册`;
+
+					let emailer = require('../mail');
+					emailer.sendMail(email, emailSubject, emailContent);
+				}
 			}
 		});
 	},

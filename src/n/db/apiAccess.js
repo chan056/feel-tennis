@@ -24,7 +24,7 @@ module.exports = {
         let apiAccessLevel = config[path];
         
         if(apiAccessLevel){
-            let authority = 0;
+            let authority = 1;
 
             let usr = global.usrInfo;
             if(usr.type == 1){
@@ -32,8 +32,6 @@ module.exports = {
                 if(usr.isAdmin == 1){
                     authority = 100;
                 }
-            }else{
-                authority = 1;
             }
 
             if(authority < apiAccessLevel){

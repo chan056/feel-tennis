@@ -125,7 +125,8 @@ const HeaderComponent = {
 				this.registForm.visible = false;
 			}.bind(this), 'post', {
 				name: this.registForm.name,
-				psw: this.registForm.psw
+				psw: this.registForm.psw,
+				email: this.registForm.email
 			});
 		},
 
