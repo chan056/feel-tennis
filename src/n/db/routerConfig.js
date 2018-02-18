@@ -40,6 +40,22 @@ const routerConfig = {
         r.query('queryMaker', params, res);
     },
 
+    '/emailConfirm': function(params, res){
+        let code = params.code;
+
+        let crypto = require('../crypto.js');
+        let decryptedCode = crypto.aesDecrypt(code, require('../constant').aesKey);
+        
+        console.log(decryptedCode);
+        decryptedCode = JSON.parse(decryptedCode);
+        let sql = `update usr set is_active = 1 where id = ${decryptedCode.id} and active_code = ${decryptedCode.code}`;
+        r.excuteSQL(sql, res, function(result){
+            if(result.affectedRows){
+                res.end();
+            }
+        });
+    },
+
     // 根据关键字搜索视频
     '/videos': function(params, res){
         let sql = `select * from video`;

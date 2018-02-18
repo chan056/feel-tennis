@@ -19,7 +19,8 @@ const HeaderComponent = {
 			formLabelWidth:'100px',
 			visible: false,
 			name: '',
-			psw: ''
+			psw: '',
+			email: 'chenyi056@163.com'
 		},
 
 		loginForm: {
@@ -117,12 +118,14 @@ const HeaderComponent = {
 
 		regist(){
 			tools.xhr('/regist', function(){
-				this.$message({
-					message: '注册成功',
-					type: 'success'
-				});
-
 				this.registForm.visible = false;
+
+				this.$alert('注册成功,请查收邮件激活账号', '提示', {
+					confirmButtonText: '确定',
+					callback: function(){
+						location.reload();
+					}
+				});
 			}.bind(this), 'post', {
 				name: this.registForm.name,
 				psw: this.registForm.psw,
@@ -695,3 +698,29 @@ const About = {
 
 	template: temp.about,
 };
+
+const EmailConfirm = {
+	data: function () {
+		var d = {};
+
+		this.sendConfirmData();
+
+		return d;
+	},
+
+	methods:{
+		sendConfirmData: function(){
+			tools.xhr('/emailConfirm' + location.search, function(resData){
+				this.$alert('账号已激活', '提示', {
+					confirmButtonText: '确定',
+					callback: function(){
+						location.href = '/';
+					}
+				});
+
+			}.bind(this));
+		}
+	},
+
+	template: temp.emailConfirm
+}

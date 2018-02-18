@@ -75,7 +75,7 @@ module.exports.config = function(req, res) {
 			if(usr){// 已经登陆的用户
 				// 延长session时间
 				// req.session.regenerate();
-				req.session.put('usr', usr);
+				// req.session.put('usr', usr);
 
 				usr = JSON.parse(usr);
 				global.usrInfo = {
@@ -84,7 +84,6 @@ module.exports.config = function(req, res) {
 					isAdmin: usr.isAdmin
 				}
 			}else{//未登录的用户 设置cookie
-				// const signature = '16charlongsecret';
 				const nodeCookie = require('node-cookie');
 				let crypto = require('../crypto.js');
 				
@@ -92,10 +91,9 @@ module.exports.config = function(req, res) {
 				let ip = clientIp(req);
 				
 				var tmpUsrInCookie = nodeCookie.get(req, 'tmpUsr');
-				// console.log(ip);
 				
 				if(!tmpUsrInCookie){
-					let ipEncrypted = crypto.aesEncrypt(ip, 'key');
+					let ipEncrypted = crypto.aesEncrypt(ip, constants.aesKey);
 					nodeCookie.create(res, 'tmpUsr', ipEncrypted);
 
 					global.usrInfo = {
@@ -103,14 +101,10 @@ module.exports.config = function(req, res) {
 						ip: ip
 					}
 				}else{
-					// console.log(crypto.aesDecrypt(tmpUsrInCookie, 'key'))
-					let ipDecrepted = crypto.aesDecrypt(tmpUsrInCookie, 'key');
+					let ipDecrepted = crypto.aesDecrypt(tmpUsrInCookie, constants.aesKey);
 
 					// ip相当于用户名 存储在浏览器的IP相当于密码
 					if(ipDecrepted == ip){
-						// let ipEncrypted = crypto.aesEncrypt(ip, 'key');
-						// nodeCookie.create(res, 'tmpUsr', ipEncrypted);// 延长cookie时间
-
 						global.usrInfo = {
 							type: 2,
 							ip: ipDecrepted

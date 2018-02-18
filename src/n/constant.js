@@ -1,4 +1,6 @@
 module.exports = {
+    aesKey: 'key',// 密钥
+
     whiteList: 'http://localhost:3000/',// 访问白名单
     bootJS: 'tube.js',// JS入口
     sessionSecret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD',// session 加密字符

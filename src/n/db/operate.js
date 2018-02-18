@@ -203,7 +203,9 @@ var operations = {
 			if(result[0] && result[0].id){
 				let info = JSON.stringify({id: result[0].id, isAdmin: result[0].is_admin});
 				req.session.put('usr', info);
-				res.end('success');
+
+				res.statusMessage = 'login success';
+				res.end();
 			}else{
 				res.statusCode = 401;
 				res.end(JSON.stringify({isLogin: false}));
@@ -213,22 +215,42 @@ var operations = {
 	},
 
 	regist: function(res, postObj, req){
-		var sql = `INSERT INTO usr 
-			(name, psw, email)
-			VALUES (?, ?, ?)`;
+		
+		let code = Math.floor(Math.random()*1000000000);
+		let email = postObj.email;
 
-		conn.query(sql, [postObj.name, postObj.psw, postObj.email], function(err, result, fields){
+		var sql = `INSERT INTO usr 
+			(name, psw, email, active_code)
+			VALUES (?, ?, ?, ?)`;
+		
+
+		conn.query(sql, [postObj.name, postObj.psw, email, code], function(err, result, fields){
 			if(err)
 				throw err;
 
-			if(result.affectedRows == 1){
+			let usrId = result.insertId;
+			if(usrId){
+
+				let info = JSON.stringify({id: usrId, isAdmin: 0});
+				req.session.put('usr', info);
+
 				res.statusMessage = 'regist success';
 				res.end('success');
 
-				let email = postObj.email;
 				if(email){
+					let activeCode = JSON.stringify({
+						id: usrId,
+						code: code
+					});
+
+					let crypto = require('../crypto.js');
+					let encryptedCode = crypto.aesEncrypt(activeCode, require('../constant').aesKey);
+
 					let emailSubject = 'chantube注册确认',
-						emailContent = `你好 ${postObj.name}, <a href="http://localhost:3000/#/email_confirm">点击</a>完成注册`;
+						emailContent = `你好 ${postObj.name}, 
+							<a href="http://localhost:3000?code=${encryptedCode}#/emailConfirm">点击</a>完成注册
+							<br/>
+							如无法打开，请复制以下链接 http://localhost:3000?code=${encryptedCode}#/emailConfirm`;
 
 					let emailer = require('../mail');
 					emailer.sendMail(email, emailSubject, emailContent);

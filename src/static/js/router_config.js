@@ -47,4 +47,5 @@ const routeConfig = [
 
 	{ path: '/feedback', component: Feedback,},                                                                                                                                                                                                                                                                                                                                                                          
 	{ path: '/about', component: About,},
+	{ path: '/emailConfirm', component: EmailConfirm},
 ];
