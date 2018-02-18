@@ -134,19 +134,22 @@ var temp = {
             </el-breadcrumb>
             <ul id="video-container" class="block-list">
                 <li v-for="album in albumList">
-                    <router-link v-on:click="alert(album.name)" :to="{path: '/albums/'+ album.id }">
+                    <router-link :to="{path: '/albums/'+ album.id }">
                         <img :src="'/img/cover/album/' + album.id + '.jpg'" class="block-thumb album-thumb"/>
-                        <h3 class="block-title album-title">
-                            {{ album.name }}
-                        </h3>
-                        <div class="author">author</div>
-                        <p class="clearfix block-info">
-                            <span class="play-count">{{album.impression}}次观看</span>
-                            <span class="update-time">
-                                <UpdateTime :timestamp="album.update_time"></UpdateTime>
-                            </span>
-                        </p>
                     </router-link>
+                    <h3 class="block-title album-title">
+                        {{ album.name }}
+                    </h3>
+                    
+                    <div class="author">
+                        <a target="_blank" :href="album.author_link">{{album.author_name}}</a>
+                    </div>
+                    <p class="clearfix block-info">
+                        <span class="play-count">{{album.impression}}次观看</span>
+                        <span class="update-time">
+                            <UpdateTime :timestamp="album.update_time"></UpdateTime>
+                        </span>
+                    </p>
                 </li>
             </ul>
         </div>
@@ -163,14 +166,14 @@ var temp = {
                     <router-link :to="{path: '/videos?tagId=' + tag.id}">{{tag.name}}</router-link>
                 </el-tag>
             </div>
-            <ul class="block-list">
+            <ul class="block-list video-list">
                 <li v-for="video in albumVideoList">
                     <router-link :to="{path: '/video/'+ video.id }">
                         <img @mouseover="dynamivePreview($event);" @mouseout="staticPreview($event);" :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb video-thumb"/>
-                        <h3 class="block-title video-title">
-                            {{ video.headline }}
+                        <h3 class="block-title video-title ellipsis">
+                            <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
                         </h3>
-                        <div class="author">author</div>
+                        <!-- <div class="author">author</div> -->
                         <p class="clearfix block-info">
                             <span class="play-count">{{video.impression}}次观看</span>
                             <span class="update-time">
@@ -243,14 +246,14 @@ var temp = {
                 <el-breadcrumb-item :to="{ path: '/sports' }">首页</el-breadcrumb-item>
             </el-breadcrumb> -->
             
-            <ul class="block-list">
+            <ul class="block-list video-list">
                 <li v-for="video in videos">
                     <router-link :to="{path: '/video/' + video.id}">
                         <img src="/img/logo.jpg" class="block-thumb video-thumb"/>
-                        <h3 class="block-title video-title">
-                            {{ video.headline }}
+                        <h3 class="block-title video-title ellipsis">
+                            <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
                         </h3>
-                        <div class="author">author</div>
+                        <!-- <div class="author">author</div> -->
                         <p class="clearfix block-info">
                             <span class="play-count">{{video.impression}}次观看</span>
                             <span class="update-time">
@@ -279,6 +282,9 @@ var temp = {
                 <el-form-item label="网址" prop="site">
                     <el-input v-model="form.site"></el-input>
                 </el-form-item>
+                <el-form-item label="微信" prop="email">
+                    <el-input v-model="form.wechat"></el-input>
+                </el-form-item>
                 <el-form-item label="电子邮件" prop="email">
                     <el-input v-model="form.email"></el-input>
                 </el-form-item>
@@ -286,7 +292,7 @@ var temp = {
                     <el-upload
                         class="upload-demo"
                         action="/upload"
-                        :data="{type:'feedback'}"
+                        :data="{type:'img'}"
                         :on-remove="handleRemove"
                         :on-success="handleSuccess"
                         multiple

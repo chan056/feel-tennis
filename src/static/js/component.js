@@ -612,6 +612,7 @@ const Feedback = {
 		d.form = {
 			desc: '',
 			site: '',
+			wechat: '',
 			email: '',
 		};
 
@@ -641,7 +642,11 @@ const Feedback = {
 
 				if (valid) {
 					tools.xhr('/feedback', function(resData){
-						this.resetForm('form');
+						// this.resetForm('form');
+						this.$message({
+							message: '感谢您的反馈',
+							type: 'success'
+						});
 					}.bind(this), 'post', d);
 				} else {
 					return false;
@@ -666,6 +671,7 @@ const Feedback = {
 		},
 		handleSuccess(res, file){
 			this.files.push(res.relPath);
+			d.filePath = res.relPath;
 		},
 
 		goback: function(){

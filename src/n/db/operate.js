@@ -24,23 +24,29 @@ var operations = {
 
 	},
 
-	queryAlbumList: function (res, qualification) {
+	queryAlbumList: function (res, qualification, params) {
 
-		conn.query('SELECT * from album' + qualification, function (err, result, fields) {
+		let sql = `select 
+			a.*, 
+			m.name as author_name,
+			m.description as author_description,
+			m.link as author_link
+			from album as a inner join maker as m 
+			where a.author_id = m.id 
+			and a.sport_id = ${params.sport_id}`
+		conn.query(sql, function (err, result, fields) {
 			if (err) throw err;
 
 			result = JSON.stringify(result);
 			res.end(result)
-
-			
 		});
 	},
 
-	queryAlbum: function (res, qualification) {
+	queryAlbum: function (res, qualification, params) {
 
 		conn.query('SELECT * from video' + qualification, function (err, result, fields) {
 			if (err) throw err;
-
+		
 			result = JSON.stringify(result);
 			res.end(result)
 		});
@@ -261,10 +267,18 @@ var operations = {
 
 	creatFeedback: function(res, postObj, req){
 		var sql = `INSERT INTO feedback 
-			(description, ip, site, email, files)
-			VALUES (?, ?, ?, ?, ?)`;
+			(description, ip, site, wechat, email, files, usr_id)
+			VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
-		conn.query(sql, [postObj.desc, req.connection.remoteAddress, postObj.site, postObj.email, postObj.files], function(err, result, fields){
+		conn.query(sql, [
+			postObj.desc, 
+			req.connection.remoteAddress, 
+			postObj.site, 
+			postObj.wechat, 
+			postObj.email, 
+			postObj.files,
+			global.usrInfo.usrId || ''
+		], function(err, result, fields){
 			if(err)
 				console.log(err.sql, err.sqlMessage) ;
 			
@@ -428,7 +442,7 @@ module.exports.query = function (operation, params, response) {
 		clause = ' where ' + clause;
 	}
 	// console.log(params, clause)
-	operations[operation](response, clause);
+	operations[operation](response, clause, params);
 }
 
 module.exports.post = function (operation, request, response) {
