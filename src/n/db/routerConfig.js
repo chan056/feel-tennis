@@ -2,6 +2,11 @@ let r =  require('./operate');
 let tools = require('../tool');
 
 const routerConfig = {
+    '/tube': function(params, res){
+	    const tumour = require('../tumour');
+		tumour.joinIndexJS(res);
+    },
+
     '/sports': function(params, res){
         r.query('querySports', params, res);
     },
@@ -34,10 +39,6 @@ const routerConfig = {
     '/maker/:id': function(params, res){
         r.query('queryMaker', params, res);
     },
-    // 根据video id 查询某个视频
-    // '/videos/:id': function(params, res){
-    //     r.query('queryVideo', params, res);
-    // },
 
     // 根据关键字搜索视频
     '/videos': function(params, res){
@@ -88,6 +89,8 @@ const routerConfig = {
 
     '/videoTags/:videoId': function(params, res){
         let sql = `select tag from video where id=` + params.videoId;
+        // console.log(sql);
+        
         r.excuteSQL(sql, res, function(data){
             // data = JSON.stringify(data);
             let tagObj = data[0];
@@ -265,12 +268,10 @@ const routerConfig = {
 
     // ============put update完整资源=============
 
+    // patch update部分资源
     '/voteVideo': function(req, res){
         r.patch('voteVideo', req, res);
     },
-    
-
-    // patch update部分资源
 
     // delete 删除资源
 }

@@ -5,9 +5,10 @@ module.exports.config = function(req, res) {
     const mime = require('./mime').types;
     const tools = require('../tool');
 	const uo = url.parse(req.url, true);
-	const tumour = require('../tumour');
+	// const tumour = require('../tumour');
 	const constants = require('../constant');
 
+	global.UO = uo;// !!!
 	pathname = uo.pathname;
 
 	if(pathname == '/'){
@@ -58,9 +59,9 @@ module.exports.config = function(req, res) {
 						}
 
 						// 拼接admin部分
-						if(uo.pathname.match(new RegExp(constants.bootJS + '$'))){
-							return tumour.joinIndexJS(req, res);
-						}
+						// if(uo.pathname.match(new RegExp(constants.bootJS + '$'))){
+						// 	return tumour.joinIndexJS(req, res);
+						// }
 
 						res.write(file, "binary");
 						res.end();
@@ -78,15 +79,18 @@ module.exports.config = function(req, res) {
 
 		// 读取文件的过程 异步
 		session.startSession(req, res, function(){
-			global.UO = uo;
 			let usr = req.session.get('usr');
-			// console.log(usr)
+
 			if(usr){// 已经登陆的用户
 				// 延长session时间
+				// req.session.regenerate();
 				req.session.put('usr', usr);
+
+				usr = JSON.parse(usr);
 				global.usrInfo = {
 					type: 1,
-					usrId: usr
+					usrId: usr.id,
+					isAdmin: usr.isAdmin
 				}
 			}else{//未登录的用户 设置cookie
 				// const signature = '16charlongsecret';

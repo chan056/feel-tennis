@@ -42,6 +42,7 @@ var operations = {
 			result = JSON.stringify(result);
 			res.end(result)
 		});
+
 	},
 
 	queryAlbum: function (res, qualification, params) {
@@ -71,7 +72,7 @@ var operations = {
 		usrInfo = global.usrInfo;
 		let dayView = 0;
 		let dayViewLeft = 0;
-		
+
 		if(usrInfo){
 			let usrType = usrInfo.type;
 
@@ -200,7 +201,10 @@ var operations = {
 				throw err;
 			
 			if(result[0] && result[0].id){
-				req.session.put('usr', result[0].id);
+				let info = JSON.stringify({id: result[0].id, isAdmin: result[0].is_admin});
+				req.session.put('usr', info, function(){
+					console.log('put')
+				});
 				res.end('success');
 			}else{
 				res.statusCode = 401;

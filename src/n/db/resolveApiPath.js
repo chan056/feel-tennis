@@ -22,23 +22,30 @@ function resolveApiPath(res, req) {
         }
     }
 
-    // console.log(keys)
-
-    if (pathMatch) {
-        for (let i = 0, l = keys.length; i < l; i++) {
-            let key = keys[i];
-            let keyName = key.name;
-            if (pathMatch[i + 1] != undefined)
-                paramsMathed[keyName] = pathMatch[i + 1]
-        }
-    }
-
     if (fnMatched) {
+        console.log(k);
+        // console.log(usrInfo, pathMatch);
+
+        // 临时用户 注册用户 admin
+        let impowered = require('./apiAccess').check(k);
+
+        if(!impowered){
+            res.statusCode = 401;
+            return res.end('Unauthorized: ' + UO.pathname);
+        }
+        
         let reqMethod = req.method;
 
         if (reqMethod == 'GET') {
+            for (let i = 0, l = keys.length; i < l; i++) {
+                let key = keys[i];
+                let keyName = key.name;
+                if (pathMatch[i + 1] != undefined)
+                    paramsMathed[keyName] = pathMatch[i + 1]
+            }
             // 将params和query结合
             let queryParams = Object.assign(paramsMathed, UO.query);
+            
             fnMatched(queryParams, res);
         } else {
             if (reqMethod == 'POST') {

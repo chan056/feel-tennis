@@ -23,13 +23,9 @@ function newQueryClause(params) {
 	for (var i in params) {
 		let k = params[i];
 
-		console.log(i, k);
-		
 		// i = mysql.escape(i);
 		k = mysql.escape(k);
 		
-		console.log(i, k, '=======')
-
 		n == 0?
 			qualification += i + '=' + k:
 			qualification += ' and ' + i + '=' + k;
