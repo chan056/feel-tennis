@@ -12,6 +12,7 @@ function isEmpty(obj) {
 }
 
 function newQueryClause(params) {
+	let mysql = require('mysql');
 	
 	if (isEmpty(params)) {
 		return '';
@@ -21,7 +22,13 @@ function newQueryClause(params) {
 	var n = 0;
 	for (var i in params) {
 		let k = params[i];
-		// k = conn.escape(k);
+
+		console.log(i, k);
+		
+		// i = mysql.escape(i);
+		k = mysql.escape(k);
+		
+		console.log(i, k, '=======')
 
 		n == 0?
 			qualification += i + '=' + k:

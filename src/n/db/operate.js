@@ -32,8 +32,10 @@ var operations = {
 			m.description as author_description,
 			m.link as author_link
 			from album as a inner join maker as m 
-			where a.author_id = m.id 
-			and a.sport_id = ${params.sport_id}`
+			where a.author_id = m.id`;
+		if(params.sport_id)
+			sql += ` and a.sport_id = ${params.sport_id}`;
+
 		conn.query(sql, function (err, result, fields) {
 			if (err) throw err;
 
@@ -43,7 +45,6 @@ var operations = {
 	},
 
 	queryAlbum: function (res, qualification, params) {
-
 		conn.query('SELECT * from video' + qualification, function (err, result, fields) {
 			if (err) throw err;
 		

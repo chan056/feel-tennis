@@ -1,5 +1,4 @@
 var pathToRegexp = require('path-to-regexp');
-
 var routerConfig = require('./routerConfig');
 var tools = require('../tool');
 
