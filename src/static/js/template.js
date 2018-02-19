@@ -8,7 +8,7 @@ var temp = {
                 </el-col>
 
                 <el-col :span="9">
-                    <el-form :model="searchForm" :rules="rules" ref="searchForm"  class="" id="searchForm">
+                    <el-form :model="searchForm" :rules="searchFormRules" ref="searchForm"  class="" id="searchForm">
                         <el-row>
                             <el-col :span=20>
                                 <el-form-item label="" prop="name">
@@ -38,19 +38,22 @@ var temp = {
             </el-row>
 
             <el-dialog title="注册" :visible.sync="registForm.visible">
-                <el-form :model="registForm">
-                    <el-form-item label="用户名" :label-width="registForm.formLabelWidth">
+                <el-form ref="registForm" :model="registForm" :rules="registFormRule">
+                    <el-form-item label="用户名" :label-width="registForm.formLabelWidth" required>
                         <el-input v-model="registForm.name" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="密码" :label-width="registForm.formLabelWidth">
+                    <el-form-item label="密码" :label-width="registForm.formLabelWidth" required>
                         <el-input v-model="registForm.psw" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="邮箱" :label-width="registForm.formLabelWidth">
-                        <el-input v-model="registForm.email" auto-complete="off"></el-input>
+                        <el-input type="email" v-model="registForm.email" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="" :label-width="registForm.formLabelWidth">
+                        <input v-model="registForm.captcha" class="jCaptcha" placeholder="请输入计算结果"/>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="registForm.visible = false">取 消</el-button>
+                    <el-button type="primary" @click="resetRegistForm(); registForm.visible = false;">取 消</el-button>
                     <el-button type="primary" @click="registForm.visible = true; regist();">注 册</el-button>
                 </div>
             </el-dialog>
@@ -276,7 +279,7 @@ var temp = {
                 <i class="fr el-icon-back" @click="goback()" style="cursor: pointer;"></i>
             </h2>
 
-            <el-form ref="form" :rules="rules" :model="form" label-width="80px" >
+            <el-form ref="feedback-form" :rules="rules" :model="form" label-width="80px" >
                 <el-form-item label="" label-width="0" prop="desc">
                     <el-input type="textarea" v-model="form.desc"></el-input>
                 </el-form-item>
@@ -309,7 +312,7 @@ var temp = {
                 
                 <el-form-item>
                     <el-button class="fr" type="primary" @click="submitForm('form')">发送</el-button>
-                    <el-button class="fr" style="margin-right: 10px;" @click="resetForm('form')">重置</el-button>
+                    <el-button class="fr" style="margin-right: 10px;" @click="resetForm('feedback-form')">重置</el-button>
                 </el-form-item>
             </el-form>
             <!-- {{form}}

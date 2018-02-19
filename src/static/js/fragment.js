@@ -1,9 +1,9 @@
 // JS fragment
 FRAGMENTS = {
     attachVideo: function(vId){
-        return `
+        return `{
             if(Hls.isSupported()) {
-                var video = document.getElementById('video');
+                var video = $('video')[0];
                 var hls = new Hls();
 
                 hls.loadSource('/multimedia/ts/`+ vId + `/_.m3u8');
@@ -15,10 +15,30 @@ FRAGMENTS = {
                     video.volume = 0;
                 });
             }
-        `
+        }`
     },
 
     attachSubtitle: `
         console.log('attachSubtitle loaded')
-    `
+    `,
+
+    captcha: `
+        {
+            if(!$('.jCaptcha').siblings('.jCaptchaText').length){
+                var myCaptcha = new jCaptcha({
+                    callback: function(response, $captchaInputElement) {
+                        if (response == 'success') {
+                            
+                        }else if (response == 'error') {
+                        }
+                    }
+                });
+        
+                $('.jCaptcha').on('blur', function(e) {
+                    e.preventDefault();
+                    myCaptcha.validate();
+                });
+            }
+        }
+    `,
 }

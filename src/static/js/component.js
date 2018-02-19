@@ -8,7 +8,7 @@ const HeaderComponent = {
 			name: '',
 		},
 
-		rules: {
+		searchFormRules: {
 			name: [
 			//   { required: true, message: ' '/* , trigger: 'blur'  */},
 				{ min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' }
@@ -20,7 +20,22 @@ const HeaderComponent = {
 			visible: false,
 			name: '',
 			psw: '',
-			email: 'chenyi056@163.com'
+			email: ''
+		},
+
+		registFormRule: {
+			name: [
+				{ required: true, message: '请输入用户名', trigger: 'blur' },
+			],
+			psw: [
+				{ required: true, message: '请输入密码', trigger: 'blur' },
+			],
+			email: [
+				{ type: 'email', required: true, message: '请输入正确格式邮箱', trigger: 'change' }
+			],
+			captcha: [
+				{ required: true, message: '请输入计算结果', trigger: 'blur' },
+			]
 		},
 
 		loginForm: {
@@ -76,6 +91,10 @@ const HeaderComponent = {
 				},
 				'regist': function(){
 					t.registForm.visible = true;
+					// 验证码
+					tools.insertScriptTag(1, "../lib/captcha.js", {onload: function(){
+						tools.insertScriptTag(2, FRAGMENTS.captcha, {id: 'captcha-frag'});
+					}.bind(this), id: 'captcha'});
 				},
 				'datum': function(){
 					// t.logoutForm.visible=true;
@@ -117,20 +136,32 @@ const HeaderComponent = {
 		},
 
 		regist(){
-			tools.xhr('/regist', function(){
-				this.registForm.visible = false;
-
-				this.$alert('注册成功,请查收邮件激活账号', '提示', {
-					confirmButtonText: '确定',
-					callback: function(){
-						location.reload();
-					}
-				});
-			}.bind(this), 'post', {
-				name: this.registForm.name,
-				psw: this.registForm.psw,
-				email: this.registForm.email
+			this.$refs['registForm'].validate(function(valid){
+				if (valid) {
+					console.log('valid')
+					tools.xhr('/regist', function(){
+						this.registForm.visible = false;
+		
+						this.$alert('注册成功,请查收邮件激活账号', '提示', {
+							confirmButtonText: '确定',
+							callback: function(){
+								location.reload();
+							}
+						});
+					}.bind(this), 'post', {
+						name: this.registForm.name,
+						psw: this.registForm.psw,
+						email: this.registForm.email
+					});
+				} else {
+					console.log('error submit!!');
+					return false;
+				}
 			});
+		},
+
+		resetRegistForm: function(){
+			this.$refs['registForm'].resetFields();
 		},
 
 		logout(){
@@ -179,11 +210,9 @@ const HeaderComponent = {
 	mounted: function () {
 		// 用户管理
 		var tmpUsr = Cookies.get('tmpUsr');
-		// var tmpUsrPsw = Cookies.get('tmpUsrPsw');
 		
 		if(tmpUsr){
 			tmpUsr = tmpUsr.substr(3, 10);
-			// console.log($('#header .el-icon-view'), $('#header .el-icon-view').length);
 			$('#header .el-icon-view').attr('title', tmpUsr).addClass('tmp-usr');
 		}
 
@@ -365,10 +394,10 @@ const Video = {
 					this.$message({message: `当天剩余播放次数 ${resData.dayViewLeft || 0}次`, type: 'warning'});
 				}
 
-				tools.insertScriptTag(1, "https://cdn.jsdelivr.net/npm/hls.js@latest", {onload: function(){
+				tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
 					tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
 					$('#video').onpause = function(){
-						// console.log('pause');
+						console.log('pause');
 						// 停止匹配字幕 todo
 					}
 
@@ -639,7 +668,7 @@ const Feedback = {
 	},
 
 	methods:{
-		submitForm(formName) {
+		submitForm: function(formName) {
 			this.$refs[formName].validate((valid) => {
 				let d = Object.assign({}, this.form);
 				d.files = this.files.join(',');
@@ -657,12 +686,12 @@ const Feedback = {
 				}
 			});
 		},
-		resetForm(formName) {
+		resetForm: function(formName) {
 			this.$refs[formName].resetFields();
 			this.files = [];
 			this.fileList = [];
 		},
-		handleRemove(file, fileList) {
+		handleRemove: function(file, fileList) {
 			this.files = [];
 			// 从fileList从提取files
 			fileList.forEach(function(f){
@@ -670,10 +699,10 @@ const Feedback = {
 				this.files.push(relPath);
 			}.bind(this));
 		},
-		handleExceed(files, fileList) {
+		handleExceed: function(files, fileList) {
 			this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
 		},
-		handleSuccess(res, file){
+		handleSuccess: function(res, file){
 			this.files.push(res.relPath);
 			d.filePath = res.relPath;
 		},

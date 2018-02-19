@@ -18,7 +18,11 @@ let tools = {
      */
     insertScriptTag: function(type, str, attrs){
         let id = attrs.id;
-        if(id && $('script#' + id).length){
+        if(id && $('script#' + id).length){// ? return
+            if(type == 1){
+                return attrs.onload();
+            }
+            
             $('script#' + id).remove();
         }
 
