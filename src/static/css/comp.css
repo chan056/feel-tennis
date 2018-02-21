@@ -194,3 +194,6 @@ app {
   white-space: pre-line;
   font-size: 14px;
 }
+#regist-btn {
+  display: none;
+}

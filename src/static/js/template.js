@@ -39,22 +39,22 @@ var temp = {
 
             <el-dialog title="注册" :visible.sync="registForm.visible">
                 <el-form ref="registForm" :model="registForm" :rules="registFormRule">
-                    <el-form-item label="用户名" :label-width="registForm.formLabelWidth" required>
+                    <el-form-item label="用户名" :label-width="registForm.formLabelWidth" prop="name">
                         <el-input v-model="registForm.name" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="密码" :label-width="registForm.formLabelWidth" required>
-                        <el-input v-model="registForm.psw" auto-complete="off"></el-input>
+                    <el-form-item label="密码" :label-width="registForm.formLabelWidth" prop="psw">
+                        <el-input type="password" v-model="registForm.psw" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="邮箱" :label-width="registForm.formLabelWidth">
+                    <el-form-item label="邮箱" :label-width="registForm.formLabelWidth" prop="email">
                         <el-input type="email" v-model="registForm.email" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="" :label-width="registForm.formLabelWidth">
+                    <el-form-item label="" :label-width="registForm.formLabelWidth" prop="captcha">
                         <input v-model="registForm.captcha" class="jCaptcha" placeholder="请输入计算结果"/>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="resetRegistForm(); registForm.visible = false;">取 消</el-button>
-                    <el-button type="primary" @click="registForm.visible = true; regist();">注 册</el-button>
+                    <el-button type="primary" @click="resetForm('registForm');">重 置</el-button>
+                    <el-button id="regist-btn" type="primary" @click="registForm.visible = true; regist();">注 册</el-button>
                 </div>
             </el-dialog>
 
@@ -64,7 +64,7 @@ var temp = {
                         <el-input v-model="loginForm.name" auto-complete="on"></el-input>
                     </el-form-item>
                     <el-form-item label="密码" :label-width="loginForm.formLabelWidth">
-                        <el-input id="last-login-iput" v-model="loginForm.psw" auto-complete="off"></el-input>
+                        <el-input type="password" id="last-login-iput" v-model="loginForm.psw" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">

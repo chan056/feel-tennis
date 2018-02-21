@@ -28,10 +28,12 @@ FRAGMENTS = {
                 var myCaptcha = new jCaptcha({
                     callback: function(response, $captchaInputElement) {
                         if (response == 'success') {
-                            
+                            $('#regist-btn').show();
                         }else if (response == 'error') {
+                            $('#regist-btn').hide();
                         }
-                    }
+                    },
+                    focusOnError: false
                 });
         
                 $('.jCaptcha').on('blur', function(e) {

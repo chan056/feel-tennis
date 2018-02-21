@@ -25,6 +25,7 @@ const HeaderComponent = {
 
 		registFormRule: {
 			name: [
+				{ min: 5, max: 30, message: '长度在 5-30', trigger: 'blur' },
 				{ required: true, message: '请输入用户名', trigger: 'blur' },
 			],
 			psw: [
@@ -50,7 +51,6 @@ const HeaderComponent = {
 		},
 
 		loginUsrInfo: {}
-		// message: 'xxx'
 	},
 
 	methods: {
@@ -88,6 +88,8 @@ const HeaderComponent = {
 							}
 						});
 					}, 500)
+
+					tools.insertScriptTag(1, '../lib/md5.js', 'md5');
 				},
 				'regist': function(){
 					t.registForm.visible = true;
@@ -95,6 +97,8 @@ const HeaderComponent = {
 					tools.insertScriptTag(1, "../lib/captcha.js", {onload: function(){
 						tools.insertScriptTag(2, FRAGMENTS.captcha, {id: 'captcha-frag'});
 					}.bind(this), id: 'captcha'});
+
+					tools.insertScriptTag(1, '../lib/md5.js', 'md5');
 				},
 				'datum': function(){
 					// t.logoutForm.visible=true;
@@ -108,6 +112,8 @@ const HeaderComponent = {
 		},
 
 		login(){
+			let trim = $.trim;
+			
 			tools.xhr('/login', function(){
 				// this.fetchUsrLoginInfo();
 
@@ -120,8 +126,8 @@ const HeaderComponent = {
 
 				// this.loginForm.visible = false;
 			}.bind(this), 'post', {
-				name: this.loginForm.name,
-				psw: this.loginForm.psw
+				name: trim(this.loginForm.name),
+				psw: md5(trim(this.loginForm.psw))
 			}, function(res){
 				let status = res.status;
 				let statusText = res.statusText;
@@ -136,32 +142,32 @@ const HeaderComponent = {
 		},
 
 		regist(){
+			let t = this;
 			this.$refs['registForm'].validate(function(valid){
 				if (valid) {
-					console.log('valid')
+					let trim = $.trim;
+
 					tools.xhr('/regist', function(){
-						this.registForm.visible = false;
+						t.registForm.visible = false;
 		
-						this.$alert('注册成功,请查收邮件激活账号', '提示', {
+						t.$alert('注册成功,请查收邮件激活账号', '提示', {
 							confirmButtonText: '确定',
 							callback: function(){
 								location.reload();
 							}
 						});
-					}.bind(this), 'post', {
-						name: this.registForm.name,
-						psw: this.registForm.psw,
-						email: this.registForm.email
+
+						t.resetRegistForm();
+					}.bind(t), 'post', {
+						name: trim(t.registForm.name),
+						psw: md5(trim(t.registForm.psw)),
+						email: trim(t.registForm.email)
 					});
 				} else {
 					console.log('error submit!!');
 					return false;
 				}
 			});
-		},
-
-		resetRegistForm: function(){
-			this.$refs['registForm'].resetFields();
 		},
 
 		logout(){

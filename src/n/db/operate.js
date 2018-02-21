@@ -215,46 +215,61 @@ var operations = {
 	},
 
 	regist: function(res, postObj, req){
-		
-		let code = Math.floor(Math.random()*1000000000);
-		let email = postObj.email;
-
-		var sql = `INSERT INTO usr 
-			(name, psw, email, active_code)
-			VALUES (?, ?, ?, ?)`;
-		
-
-		conn.query(sql, [postObj.name, postObj.psw, email, code], function(err, result, fields){
+		let ip = require('client-ip')(req);
+		conn.query(`SELECT * from usr WHERE IP=${ip} and regist_time > DATE_SUB(CURRENT_TIMESTAMP(),INTERVAL 1 DAY) `, function(err, result){
 			if(err)
 				throw err;
 
-			let usrId = result.insertId;
-			if(usrId){
-
-				let info = JSON.stringify({id: usrId, isAdmin: 0});
-				req.session.put('usr', info);
-
-				res.statusMessage = 'regist success';
-				res.end('success');
-
-				if(email){
-					let activeCode = JSON.stringify({
-						id: usrId,
-						code: code
-					});
-
-					let crypto = require('../crypto.js');
-					let encryptedCode = crypto.aesEncrypt(activeCode, require('../constant').aesKey);
-
-					let emailSubject = 'chantube注册确认',
-						emailContent = `你好 ${postObj.name}, 
-							<a href="http://localhost:3000?code=${encryptedCode}#/emailConfirm">点击</a>完成注册
-							<br/>
-							如无法打开，请复制以下链接 http://localhost:3000?code=${encryptedCode}#/emailConfirm`;
-
-					let emailer = require('../mail');
-					emailer.sendMail(email, emailSubject, emailContent);
-				}
+			// 1天内同个IP注册超过10个
+			// 将IP加入黑名单
+			if(result.length > 10){
+				// conn.query('select * from black where ip == ${ip}')
+				let sql = `insert into black (ip) values (${ip})`;
+				conn.query(sql);
+			}else{
+				let code = Math.floor(Math.random() * 1000000000);
+				let email = postObj.email;
+		
+				let sql = `INSERT INTO usr 
+					(name, psw, email, active_code, regist_ip)
+					VALUES (?, ?, ?, ?)`;
+				
+		
+				conn.query(sql, [postObj.name, postObj.psw, email, code, ip], function(err, result, fields){
+					if(err)
+						throw err;
+		
+					let usrId = result.insertId;
+					if(usrId){
+		
+						let info = JSON.stringify({id: usrId, isAdmin: 0});
+						req.session.put('usr', info);
+		
+						res.statusMessage = 'regist success';
+						res.end('success');
+		
+						if(email){
+							let activeCode = JSON.stringify({
+								id: usrId,
+								code: code
+							});
+		
+							let crypto = require('../crypto.js');
+							let encryptedCode = crypto.aesEncrypt(activeCode, require('../constant').aesKey);
+		
+							let emailSubject = 'chantube注册确认',
+								emailContent = `你好 ${postObj.name}, 
+									<a href="http://localhost:3000?code=${encryptedCode}#/emailConfirm">点击</a>完成注册
+									<br/>
+									如无法打开，请复制以下链接
+									<br/>
+									http://localhost:3000?code=${encryptedCode}#/emailConfirm`;
+		
+							let emailer = require('../mail');
+							emailer.sendMail(email, emailSubject, emailContent);
+						}
+					}
+				});
 			}
 		});
 	},
