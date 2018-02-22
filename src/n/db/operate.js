@@ -215,8 +215,8 @@ var operations = {
 	},
 
 	regist: function(res, postObj, req){
-		let ip = require('client-ip')(req);
-		conn.query(`SELECT * from usr WHERE IP=${ip} and regist_time > DATE_SUB(CURRENT_TIMESTAMP(),INTERVAL 1 DAY) `, function(err, result){
+		let ip = `'${require('client-ip')(req)}'`;
+		conn.query(`SELECT * from usr WHERE regist_ip=${ip} and regist_time > DATE_SUB(CURRENT_TIMESTAMP(),INTERVAL 1 DAY)`, function(err, result){
 			if(err)
 				throw err;
 
@@ -232,7 +232,7 @@ var operations = {
 		
 				let sql = `INSERT INTO usr 
 					(name, psw, email, active_code, regist_ip)
-					VALUES (?, ?, ?, ?)`;
+					VALUES (?, ?, ?, ?, ?)`;
 				
 		
 				conn.query(sql, [postObj.name, postObj.psw, email, code, ip], function(err, result, fields){
@@ -270,6 +270,26 @@ var operations = {
 						}
 					}
 				});
+			}
+		});
+	},
+
+
+	resetPsw: function(res, patchObj, req){
+		let sql = `update usr set psw='${patchObj.npsw}' where psw='${patchObj.opsw}' and name='${patchObj.name}'`;
+		console.log(sql);
+		
+		conn.query(sql, function(err, result){
+			if(err)
+				throw err;
+
+			if(result.affectedRows == 1){
+				res.statusMessage = 'reset password success';
+				res.end();
+			}else{
+				res.statusCode = 401;
+				res.statusMessage = 'reset password fail';
+				res.end();
 			}
 		});
 	},

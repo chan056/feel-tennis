@@ -64,12 +64,34 @@ var temp = {
                         <el-input v-model="loginForm.name" auto-complete="on"></el-input>
                     </el-form-item>
                     <el-form-item label="密码" :label-width="loginForm.formLabelWidth">
-                        <el-input type="password" id="last-login-iput" v-model="loginForm.psw" auto-complete="off"></el-input>
+                        <el-input type="password" id="last-login-iput" v-model="loginForm.psw" auto-complete="off" clearable></el-input>
                     </el-form-item>
+                    <p>
+                        <span @click="resetPswForm.visible = true; loginForm.visible = false;">重置密码</span>
+                    </p>
+                    
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button type="primary" @click="loginForm.visible = false;">取 消</el-button>
                     <el-button type="primary" @click="loginForm.visible = true; login();">登 录</el-button>
+                </div>
+            </el-dialog>
+
+            <el-dialog title="重置密码" :visible.sync="resetPswForm.visible">
+                <el-form :model="resetPswForm">
+                    <el-form-item label="用户名" :label-width="resetPswForm.formLabelWidth">
+                        <el-input v-model="resetPswForm.name" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="旧密码" :label-width="resetPswForm.formLabelWidth">
+                        <el-input type="password" v-model="resetPswForm.opsw" auto-complete="off" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="新密码" :label-width="resetPswForm.formLabelWidth">
+                        <el-input type="password" id="last-login-iput" v-model="resetPswForm.npsw" auto-complete="off" clearable></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="resetPswForm.visible = false;">取 消</el-button>
+                    <el-button type="primary" @click="resetPsw();">确 认</el-button>
                 </div>
             </el-dialog>
 

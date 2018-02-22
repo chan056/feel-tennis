@@ -205,6 +205,10 @@ const routerConfig = {
         r.post('regist', req, res);
     },
 
+    '/resetPsw': function(req, res){
+        r.post('resetPsw', req, res);
+    },
+
     '/video': function(req, res){
         r.post('creatVedio', req, res);
     },
@@ -287,6 +291,10 @@ const routerConfig = {
     // patch update部分资源
     '/voteVideo': function(req, res){
         r.patch('voteVideo', req, res);
+    },
+
+    '/resetPsw': function(req, res){
+        r.patch('resetPsw', req, res);
     },
 
     // delete 删除资源

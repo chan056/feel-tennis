@@ -46,6 +46,13 @@ const HeaderComponent = {
 			psw: ''
 		},
 
+		resetPswForm: {
+			formLabelWidth: '100px',
+			visible: false,
+			opsw: '',
+			npsw: ''
+		},
+
 		logoutForm: {
 			visible: false
 		},
@@ -166,6 +173,34 @@ const HeaderComponent = {
 				} else {
 					console.log('error submit!!');
 					return false;
+				}
+			});
+		},
+
+		resetPsw: function(){
+			const t = this;
+			let trim = $.trim;
+			
+			this.$alert(`确认将密码重置为${t.resetPswForm.npsw}?`, '注意', {
+				confirmButtonText: '确定',
+				callback: function (action) {
+					tools.xhr('/resetPsw', function(res){
+						t.$message({
+							type: 'info',
+							message: `密码重置成功`
+						});
+
+						t.resetPswForm.visible = false; 
+					}, 'patch', {
+						name: trim(t.resetPswForm.name),
+						opsw: md5(trim(t.resetPswForm.opsw)),
+						npsw: md5(trim(t.resetPswForm.npsw))
+					}, function(){
+						t.$message({
+							type: 'warning',
+							message: `密码重置失败`
+						});
+					});
 				}
 			});
 		},

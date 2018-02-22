@@ -5,7 +5,7 @@ module.exports = function(req, fn){
     let sql = `select * from black where ip = '${clientIp}'`;
 
     conn.query(sql, function(err, result){
-        if(!result.length){
+        if(!result || !result.length){
             fn();
         }else if(result.length){
 
