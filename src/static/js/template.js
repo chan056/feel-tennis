@@ -38,7 +38,7 @@ var temp = {
             </el-row>
 
             <el-dialog title="注册" :visible.sync="registForm.visible">
-                <el-form ref="registForm" :model="registForm" :rules="registFormRule">
+                <el-form status-icon ref="registForm" :model="registForm" :rules="registFormRule">
                     <el-form-item label="用户名" :label-width="registForm.formLabelWidth" prop="name">
                         <el-input v-model="registForm.name" auto-complete="off"></el-input>
                     </el-form-item>

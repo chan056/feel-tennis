@@ -187,6 +187,10 @@ const routerConfig = {
 		}
     },
 
+    '/checkUsernameExist': function(params, res){
+        r.query('checkUsernameExist', params, res);
+    },
+
     // '/joinIndexJS': function(params, res){
     //     r.query('joinIndexJS', params, res);
     // },

@@ -25,8 +25,17 @@ const HeaderComponent = {
 
 		registFormRule: {
 			name: [
-				{ min: 5, max: 30, message: '长度在 5-30', trigger: 'blur' },
 				{ required: true, message: '请输入用户名', trigger: 'blur' },
+				{ min: 5, max: 30, message: '长度在 5-30', trigger: 'blur' },
+				{ validator: function(rule, value, callback){
+					tools.xhr('/checkUsernameExist?name=' + value, function(d){
+						if(d){
+							return callback(new Error('用户名已存在'));
+						}else{
+							return callback();
+						}
+					}, 'get');
+				}, trigger: 'blur'}
 			],
 			psw: [
 				{ required: true, message: '请输入密码', trigger: 'blur' },
@@ -180,7 +189,7 @@ const HeaderComponent = {
 		resetPsw: function(){
 			const t = this;
 			let trim = $.trim;
-			
+
 			this.$alert(`确认将密码重置为${t.resetPswForm.npsw}?`, '注意', {
 				confirmButtonText: '确定',
 				callback: function (action) {

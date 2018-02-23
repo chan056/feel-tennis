@@ -192,6 +192,18 @@ var operations = {
 		}
 	},
 
+	checkUsernameExist: function(res, qualification){
+		conn.query('SELECT * from usr' + qualification, function (err, result, fields) {
+			if (err) throw err;
+
+			if(result && result.length){
+				res.end('1');
+			}else{
+				res.end('0');
+			}
+		});
+	},
+
 	// POST
 	login: function(res, postObj, req){
 		var sql = `select * from usr where name=? and psw=?`;
