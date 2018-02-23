@@ -326,14 +326,19 @@ var temp = {
                         multiple
                         :limit="3"
                         :on-exceed="handleExceed"
+                        :before-upload="beforeAvatarUpload"
                         :file-list="fileList"
+                        drag
                         >
-                        <el-button size="" type="primary">上传截图</el-button>
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M</div>
+                        <!-- <el-button size="" type="primary">上传截图</el-button> -->
                     </el-upload>
                 </el-form-item>
                 
                 <el-form-item>
-                    <el-button class="fr" type="primary" @click="submitForm('form')">发送</el-button>
+                    <el-button class="fr" type="primary" @click="submitForm('feedback-form')">发送</el-button>
                     <el-button class="fr" style="margin-right: 10px;" @click="resetForm('feedback-form')">重置</el-button>
                 </el-form-item>
             </el-form>

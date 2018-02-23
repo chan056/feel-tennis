@@ -243,6 +243,7 @@ const HeaderComponent = {
 		fetchUsrLoginInfo(){
 			// 首次打开时 获取用户信息
 			tools.xhr('/loginInfo', function(loginUsrInfo){
+				// 登陆状态在各组件共享 todo
 				this.loginUsrInfo = loginUsrInfo || {};
 
 				let name = loginUsrInfo.name;
@@ -439,7 +440,7 @@ const Video = {
 			
 			if(dayViewLeft > -1){
 				if(dayViewLeft > 5){
-					this.$message(`当天剩余播放次数 ${resData.dayViewLeft}次`);
+					// this.$message(`当天剩余播放次数 ${resData.dayViewLeft}次`);
 				}else{
 					this.$message({message: `当天剩余播放次数 ${resData.dayViewLeft || 0}次`, type: 'warning'});
 				}
@@ -459,13 +460,11 @@ const Video = {
 			}else{
 				this.$message({
 					dangerouslyUseHTMLString: true,
-					message: `当天剩余播放次数 0次，<br/>请点击右上角注册或登录查看更多视频`, 
+					message: `当天剩余播放次数 0次，<br/>点击右上角注册或登录查看更多视频`, 
 					type: 'error'
 				});
 			}
 
-			// var like = resData.like;
-			// console.log(like);
 		}.bind(this));
 
 		tools.xhr('/navInfo/3/' + videoId, function(resData){
@@ -477,13 +476,10 @@ const Video = {
 		});
 		
 		tools.xhr('/srt/' + videoId, function(resData){
-			// console.log(resData);
 			let v = $('#video');
 			let playerWrapper = $('#palyer-wrapper')
 
 			tools.attachSubtile(v[0], resData, 500, function(subtitle){
-				// console.log(subtite);
-
 				playerWrapper.find('.subtitle').text(subtitle).css({
 
 				});
@@ -584,22 +580,12 @@ const Video = {
 			}
 
 			let t = this;
-			// let thumbUpBtn = $('.fa-thumbs-o-up'),
-			// 	thumbDownBtn = $('.fa-thumbs-o-down');
-
-			// if(type == 1){
-			// 	thumbUpBtn.toggleClass('fa-thumbs-up');
-			// }else if(type == -1){
-			// 	thumbDownBtn.toggleClass('fa-thumbs-down')
-			// }
 
 			// 投票状态 0 -1 1
 			var voteStatus;
 			var needClearOther = 0;
 
 			collectVoteStatus();
-			// return console.log({voteStatus: voteStatus, type: type, vId: this.videoId, needClearOther: needClearOther});
-			// alert(needClearOther)
 			tools.xhr('/voteVideo', function(res){
 				t.queryVoteComment();
 
@@ -610,11 +596,6 @@ const Video = {
 			}, 'patch', {voteStatus: voteStatus, type: type, vId: this.videoId, needClearOther: needClearOther}, function(res){
 				if(res.status == 401){
 					this.$message.error('请登录后再操作');// todo 在公共部分处理
-					// if(type == 1){
-					// 	thumbUpBtn.toggleClass('fa-thumbs-up');
-					// }else if(type == -1){
-					// 	thumbDownBtn.toggleClass('fa-thumbs-down')
-					// }
 				}
 				t.likeLocking = false;
 			}.bind(this));
@@ -754,7 +735,29 @@ const Feedback = {
 		},
 		handleSuccess: function(res, file){
 			this.files.push(res.relPath);
-			d.filePath = res.relPath;
+			// d.filePath = res.relPath;
+		},
+
+		// handleAvatarSuccess(res, file) {
+		// 	this.imageUrl = URL.createObjectURL(file.raw);
+		// },
+
+		beforeAvatarUpload: function(file){
+			console.log(file.type);
+
+			const isJPG = file.type === 'image/jpeg';
+			const isPNG = file.type === 'image/png';
+			const isLt2M = file.size / 1024 / 1024 < 2;
+
+			if (!isJPG && !isPNG) {
+				this.$message.error('上传头像图片只能是jpg或png格式!');
+				return false;
+			}
+			if (!isLt2M) {
+				this.$message.error('上传头像图片大小不能超过 2MB!');
+				return false;
+			}
+			return true;
 		},
 
 		goback: function(){

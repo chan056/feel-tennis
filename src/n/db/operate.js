@@ -358,7 +358,7 @@ var operations = {
 			postObj.wechat, 
 			postObj.email, 
 			postObj.files,
-			global.usrInfo.usrId || ''
+			global.usrInfo.usrId || 0
 		], function(err, result, fields){
 			if(err)
 				console.log(err.sql, err.sqlMessage) ;
