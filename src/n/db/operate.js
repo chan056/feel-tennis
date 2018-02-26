@@ -13,6 +13,28 @@ var operations = {
 
 	},
 
+	querySkills: function (res, qualification) {
+
+		conn.query('SELECT * from skill' + qualification, function (err, result, fields) {
+			if (err) throw err;
+
+			result = JSON.stringify(result);
+			res.end(result)
+		});
+
+	},
+
+	queryAthletes: function (res, qualification) {
+
+		conn.query('SELECT * from athlete' + qualification, function (err, result, fields) {
+			if (err) throw err;
+
+			result = JSON.stringify(result);
+			res.end(result)
+		});
+
+	},
+
 	querySport: function (res, qualification) {
 		
 		conn.query('SELECT * from sport' + qualification, function (err, result, fields) {
@@ -359,6 +381,23 @@ var operations = {
 			postObj.email, 
 			postObj.files,
 			global.usrInfo.usrId || 0
+		], function(err, result, fields){
+			if(err)
+				console.log(err.sql, err.sqlMessage) ;
+			
+			res.end('success');
+		});
+	},
+
+	voteNextVideo: function(res, postObj, req){
+		var sql = `INSERT INTO next_video 
+			(sport_id, skill_id, athlete_id)
+			VALUES (?, ?, ?)`;
+
+		conn.query(sql, [
+			postObj.sport, 
+			postObj.skill, 
+			postObj.athlete, 
 		], function(err, result, fields){
 			if(err)
 				console.log(err.sql, err.sqlMessage) ;

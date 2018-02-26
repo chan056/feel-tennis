@@ -11,6 +11,14 @@ const routerConfig = {
         r.query('querySports', params, res);
     },
 
+    '/skills/:sport_id': function(params, res){
+        r.query('querySkills', params, res);
+    },
+    
+    '/athletes/:sport_id': function(params, res){
+        r.query('queryAthletes', params, res);
+    },
+
     '/sports/:id': function(params, res){
         r.query('querySport', params, res);
     },
@@ -288,6 +296,10 @@ const routerConfig = {
 
     '/feedback': function(req, res){
         r.post('creatFeedback', req, res);
+    },
+
+    '/voteNext': function(req, res){
+        r.post('voteNextVideo', req, res);
     },
 
     // ============put update完整资源=============

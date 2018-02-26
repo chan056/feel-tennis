@@ -266,9 +266,6 @@ const Upload = {
 		return d;
 	},
 	methods: {
-		alert: function(){
-			console.log(arguments);
-		},
 		handleRemove(file, fileList) {
 			console.log(file, fileList);
 		},

@@ -19,7 +19,7 @@ let tagCreatorConstructor = Vue.extend({
 
 Vue.component('tagCreator', tagCreatorConstructor);
 
-// 2周之前
+// 时间的转换 如 2周之前 1天之前
 Vue.component('UpdateTime', {
     template: '<em>{{timeSlot}}</em>',
     props: ['timestamp'],

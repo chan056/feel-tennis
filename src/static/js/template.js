@@ -112,6 +112,12 @@ var temp = {
     aside: `
         <div id="aside">
             <div class="guide-section">
+                <div v-if="1  || (loginUsrInfo && loginUsrInfo.name)" class="guide-entry" id="feedback-entry">
+                    <a href="#/voteNext" class="guide-entry-renderer">
+                        <i class="el-icon-service icon"></i>
+                        <span class="text">投票</span>
+                    </a>
+                </div>
                 <div class="guide-entry" id="feedback-entry">
                     <a href="#/feedback" class="guide-entry-renderer">
                         <i class="el-icon-service icon"></i>
@@ -295,8 +301,65 @@ var temp = {
         </div>
     `,
 
+    voteNext: `
+        <div style="width: 300px; margin: auto; padding: 10px 20px;">
+            <el-form ref="vote-next-form" :rules="voteNextFormRules" :model="voteNextForm" label-width="80px" >
+                <el-form-item label="运动">
+                    <el-select 
+                    v-model="voteNextForm.sport"
+                    allow-create
+                    filterable
+                    placeholder="请选择运动项目">
+                        <el-option
+                            v-for="item in sports"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="技术">
+                    <el-select 
+                    v-model="voteNextForm.skill" 
+                    allow-create
+                    filterable
+                    placeholder="请选择技术">
+                        <el-option
+                            v-for="item in skills"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id" class="">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="运动员">
+                    <el-select 
+                    v-model="voteNextForm.athlete" 
+                    placeholder="请选择运动员"
+                    allow-create
+                    filterable
+                    >
+                        <el-option
+                            v-for="item in athletes"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button class="fr" type="primary" @click="submitForm('vote-next-form')">发送</el-button>
+                    <el-button class="fr" style="margin-right: 10px;" @click="resetForm('vote-next-form')">重置</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+    `,
+
     feedback: `
-        <div style="width: 600px; margin: auto; border: 1px solid #999; padding: 10px 20px;">
+        <div style="width: 600px; margin: auto; padding: 10px 20px;">
             <h2 class="ovh" style="border-bottom: 1px solid;">
                 <span class="fl">发生了什么</span>
                 <i class="fr el-icon-back" @click="goback()" style="cursor: pointer;"></i>

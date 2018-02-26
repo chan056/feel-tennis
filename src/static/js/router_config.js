@@ -45,7 +45,8 @@ const routeConfig = [
 		}
 	},
 
-	{ path: '/feedback', component: Feedback,},                                                                                                                                                                                                                                                                                                                                                                          
+	{ path: '/voteNext', component: VoteNext},
+	{ path: '/feedback', component: Feedback,},                                                                                                                                                               
 	{ path: '/about', component: About,},
 	{ path: '/emailConfirm', component: EmailConfirm},
 ];

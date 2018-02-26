@@ -683,6 +683,101 @@ const videos = {
 	}
 };
 
+const VoteNext = {
+	data: function () {
+		var d = {
+			sports: [],
+			skills: [],
+			athletes: []
+		};
+		d.voteNextForm = {
+			sport: '',
+			skill: '',
+			athlete: ''
+		};
+
+		this.querySports();
+
+		let voteNextFormRules = {
+			sport: [
+				{ required: true, message: '请选择运动项目',  },
+			],
+			skill: [
+				{ required: true, message: '请选择技能',  },
+			],
+			athlete: [
+				{ required: true, message: '请选择运动员',  },
+			],
+		}
+
+		d.voteNextFormRules = voteNextFormRules;
+
+		return d;
+	},
+
+	methods:{
+		querySports(){
+			tools.xhr('/sports', function(resData){
+				this.sports = resData;
+				this.voteNextForm.sport = this.sports[0].id
+			}.bind(this));
+		},
+
+		querySKills(){
+			tools.xhr('/skills/'+this.voteNextForm.sport, function(resData){
+				this.skills = resData;
+			}.bind(this));
+		},
+
+		queryAthletes(){
+			tools.xhr('/athletes/'+this.voteNextForm.sport, function(resData){
+				this.athletes = resData;
+			}.bind(this));
+		},
+
+		submitForm: function(formName) {
+			this.$refs[formName].validate((valid) => {
+				if (valid) {
+					tools.xhr('/voteNext', function(resData){
+						// this.resetForm('form');
+						this.$message({
+							message: '感谢您的投票',
+							type: 'success'
+						});
+					}.bind(this), 'post', this.voteNextForm);
+				} else {
+					return false;
+				}
+			});
+		},
+		resetForm: function(formName) {
+			this.$refs[formName].resetFields();
+			this.voteNextForm = {
+				sport: '',
+				skill: '',
+				athlete: ''
+			};
+		},
+	},
+
+	watch: {
+		// 运动更新后 更新技术、运动员
+		'voteNextForm.sport': function(n, o){
+			let sportId = n;
+			let type = typeof sportId;
+
+			if(sportId){
+				if(type == 'number'){// 选择运动
+					this.querySKills(sportId);
+					this.queryAthletes(sportId);
+				}
+			}
+		}
+	},
+
+	template: temp.voteNext,
+};
+
 const Feedback = {
 	data: function () {
 		var d = {files: [], fileList: []};
