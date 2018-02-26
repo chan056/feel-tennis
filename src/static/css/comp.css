@@ -171,6 +171,15 @@ app {
 #usr-operation-desk .block-list li:not(:last-child) {
   margin-right: 20px;
 }
+#kick-off-ball {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.1);
+  opacity: 1;
+  background-color: transparent;
+  transition: .7s ease 0s;
+}
 .time {
   font-size: 13px;
   color: #999;

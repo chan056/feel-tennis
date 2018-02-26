@@ -24,7 +24,7 @@ var temp = {
 
                 <el-col :span="6" :offset="5" class="masthead">
                     <el-dropdown id="usr-btns" class="fr" @command="handleUsrBtns">
-                        <i class="el-icon-view" title="" @click=""></i>
+                        <i v-bind:class="loginUsrInfo.name? 'el-icon-setting': 'el-icon-view'" title="" @click=""></i>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item v-if="!loginUsrInfo.name" command="login">登录</el-dropdown-item>
                             <el-dropdown-item v-if="!loginUsrInfo.name" command="regist">注册</el-dropdown-item>
@@ -119,7 +119,7 @@ var temp = {
                     </a>
                 </div>
 
-                <div class="guide-entry hidden" id="upload-entry">
+                <div v-if="loginUsrInfo && loginUsrInfo.is_admin == 1" class="guide-entry" id="upload-entry" >
                     <a href="#/upload" class="guide-entry-renderer">
                         <i class="el-icon-upload icon"></i>
                         <span class="text">上传</span>
@@ -129,7 +129,6 @@ var temp = {
             
             <div id="footer">
                 <a class="guide-links-primary" href="#/about">关于</a>
-                
             </div>
             <div id="llc">
                 <span class="">2018 ChanTube</span>
@@ -265,6 +264,8 @@ var temp = {
                     <el-button type="primary" @click="previewerVisible = false">确 定</el-button>
                 </span>
             </el-dialog>
+
+            <img id="kick-off-ball" src="/img/tennis_ball.png" @load="opening($event)"/>
         </div>
     `,
 

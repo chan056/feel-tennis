@@ -249,12 +249,8 @@ const HeaderComponent = {
 				let name = loginUsrInfo.name;
 				$('#header .el-icon-view').attr('title', name).addClass('usr');
 
-				if(this.loginUsrInfo.is_admin == 1){
-					// location.reload();
-					$('#upload-entry').show();
-				}else{
-					$('#upload-entry').hide();
-				}
+				this.$bus.emit('update-login-info', this.loginUsrInfo);
+
 			}.bind(this));
 		}
 	},
@@ -331,12 +327,22 @@ const AsideComponent = {
 	template: temp.aside,
 
 	data: {
-		
+		loginUsrInfo: {}
+	},
+
+	created: function(){
+		this.$bus.on('update-login-info', function(info){
+			this.loginUsrInfo = info;
+		}.bind(this));
+	},
+
+	beforeDestroy() {
+		this.$bus.off('update-login-info', this.addTodo);
 	},
 
 	methods: {
 		
-	}
+	},
 };
 
 const Sports = {
@@ -631,8 +637,15 @@ const Video = {
 				// console.log(like);
 				this.like = like;
 			}.bind(this));
-		}
+		},
 		
+		opening: function(e){
+			var t = $(e.target);
+			t.css({opacity: 0, transform: 'translate(-50%, -50%) scale(5)'});
+			setTimeout(function(){
+				t.hide()
+			}, 700)
+		}
 	}
 };
 
