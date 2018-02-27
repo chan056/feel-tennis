@@ -322,8 +322,6 @@ var temp = {
                 <el-form-item label="技术">
                     <el-select 
                     v-model="voteNextForm.skill" 
-                    allow-create
-                    filterable
                     placeholder="请选择技术">
                         <el-option
                             v-for="item in skills"
@@ -338,8 +336,6 @@ var temp = {
                     <el-select 
                     v-model="voteNextForm.athlete" 
                     placeholder="请选择运动员"
-                    allow-create
-                    filterable
                     >
                         <el-option
                             v-for="item in athletes"
