@@ -735,6 +735,15 @@ const VoteNext = {
 			}.bind(this));
 		},
 
+		// voteVideo: function(){
+		// 	tools.xhr('/voteNext', function(resData){
+		// 		this.$message({
+		// 			message: '感谢您的投票',
+		// 			type: 'success'
+		// 		});
+		// 	}.bind(this), 'post', this.voteNextForm);
+		// },
+
 		submitForm: function(formName) {
 			this.$refs[formName].validate((valid) => {
 				if (valid) {

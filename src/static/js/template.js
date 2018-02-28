@@ -305,10 +305,8 @@ var temp = {
         <div style="width: 300px; margin: auto; padding: 10px 20px;">
             <el-form ref="vote-next-form" :rules="voteNextFormRules" :model="voteNextForm" label-width="80px" >
                 <el-form-item label="运动">
-                    <el-select 
+                    <el-select
                     v-model="voteNextForm.sport"
-                    allow-create
-                    filterable
                     placeholder="请选择运动项目">
                         <el-option
                             v-for="item in sports"
@@ -321,6 +319,8 @@ var temp = {
 
                 <el-form-item label="技术">
                     <el-select 
+                    filterable
+                    clearable
                     v-model="voteNextForm.skill" 
                     placeholder="请选择技术">
                         <el-option
@@ -333,7 +333,9 @@ var temp = {
                 </el-form-item>
 
                 <el-form-item label="运动员">
-                    <el-select 
+                    <el-select
+                    filterable
+                    clearable
                     v-model="voteNextForm.athlete" 
                     placeholder="请选择运动员"
                     >
