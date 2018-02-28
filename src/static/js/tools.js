@@ -1,4 +1,5 @@
 let tools = {
+    // POST 才有 params
     xhr: function xhr(api, sfn, type, params, errorHandle){
         type = type || 'get';
     

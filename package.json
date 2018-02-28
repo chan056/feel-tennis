@@ -5,6 +5,7 @@
   "main": "mine.js",
   "dependencies": {
     "bluebird": "3.5.0",
+    "cheerio": "^1.0.0-rc.2",
     "client-ip": "^1.0.0",
     "concat-files": "^0.1.1",
     "del": "2.2.2",
