@@ -113,7 +113,7 @@ var temp = {
         <div id="aside">
             <div class="guide-section">
                 <div v-if="1  || (loginUsrInfo && loginUsrInfo.name)" class="guide-entry" id="feedback-entry">
-                    <a href="#/voteNext" class="guide-entry-renderer">
+                    <a href="#/ftp://ygdy8:ygdy8@yg45.dydytt.net:6072/%E9%98%B3%E5%85%89%E7%94%B5%E5%BD%B1www.ygdy8.com.%E9%9B%B7%E7%A5%9E3%EF%BC%9A%E8%AF%B8%E7%A5%9E%E9%BB%84%E6%98%8F.BD.720p.%E5%9B%BD%E8%8B%B1%E5%8F%8C%E8%AF%AD%E5%8F%8C%E5%AD%97.mkv" class="guide-entry-renderer">
                         <i class="el-icon-service icon"></i>
                         <span class="text">投票</span>
                     </a>
@@ -302,57 +302,66 @@ var temp = {
     `,
 
     voteNext: `
-        <div style="width: 300px; margin: auto; padding: 10px 20px;">
-            <el-form ref="vote-next-form" :rules="voteNextFormRules" :model="voteNextForm" label-width="80px" >
-                <el-form-item label="运动">
-                    <el-select
-                    v-model="voteNextForm.sport"
-                    placeholder="请选择运动项目">
-                        <el-option
-                            v-for="item in sports"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+        <div>
+            <div style="width: 300px; margin: auto; padding: 10px 20px;">
+                <el-form ref="vote-next-form" :rules="voteNextFormRules" :model="voteNextForm" label-width="80px" >
+                    <el-form-item label="运动">
+                        <el-select
+                        v-model="voteNextForm.sport"
+                        placeholder="请选择运动项目">
+                            <el-option
+                                v-for="item in sports"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
 
-                <el-form-item label="技术">
-                    <el-select 
-                    filterable
-                    clearable
-                    v-model="voteNextForm.skill" 
-                    placeholder="请选择技术">
-                        <el-option
-                            v-for="item in skills"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id" class="">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+                    <el-form-item label="技术">
+                        <el-select 
+                        filterable
+                        clearable
+                        v-model="voteNextForm.skill" 
+                        placeholder="请选择技术">
+                            <el-option
+                                v-for="item in skills"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id" class="">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
 
-                <el-form-item label="运动员">
-                    <el-select
-                    filterable
-                    clearable
-                    v-model="voteNextForm.athlete" 
-                    placeholder="请选择运动员"
-                    >
-                        <el-option
-                            v-for="item in athletes"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
+                    <el-form-item label="运动员">
+                        <el-select
+                        filterable
+                        clearable
+                        v-model="voteNextForm.athlete" 
+                        placeholder="请选择运动员"
+                        >
+                            <el-option
+                                v-for="item in athletes"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
 
-                <el-form-item>
-                    <el-button class="fr" type="primary" @click="submitForm('vote-next-form')">发送</el-button>
-                    <el-button class="fr" style="margin-right: 10px;" @click="resetForm('vote-next-form')">重置</el-button>
-                </el-form-item>
-            </el-form>
+                    <el-form-item>
+                        <el-button class="fr" type="primary" @click="submitForm('vote-next-form')">发送</el-button>
+                        <el-button class="fr" style="margin-right: 10px;" @click="resetForm('vote-next-form')">重置</el-button>
+                    </el-form-item>
+
+                    <el-form-item>
+                        <el-button class="fr" style="margin-right: 10px;" @click="checkVoteResult()">重置</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <div style="width:75%;">
+                <canvas id="myChart"></canvas>
+            </div>
         </div>
     `,
 

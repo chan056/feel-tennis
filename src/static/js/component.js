@@ -759,6 +759,13 @@ const VoteNext = {
 				athlete: ''
 			};
 		},
+
+		checkVoteResult: function(){
+				tools.insertScriptTag(1, "../lib/Chart.js", {onload: function(){
+					tools.insertScriptTag(1, "../js/next_video_chart.js", {onload: function(){
+					}.bind(this), id: 'nextVideoChart'});
+				}.bind(this), id: 'chartjs'});
+		}
 	},
 
 	watch: {
