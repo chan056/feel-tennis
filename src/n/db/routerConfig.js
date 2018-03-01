@@ -199,6 +199,10 @@ const routerConfig = {
         r.query('checkUsernameExist', params, res);
     },
 
+    '/videoVoteResult': function(params, res){
+        r.query('videoVoteResult', params, res);
+    },
+
     // '/joinIndexJS': function(params, res){
     //     r.query('joinIndexJS', params, res);
     // },
@@ -237,7 +241,6 @@ const routerConfig = {
         r.post('createMaker', req, res);
     },
 
-    // POST 上传文件
     '/upload': function(req, res){
         var formidable = require('formidable');
         var path = require('path');

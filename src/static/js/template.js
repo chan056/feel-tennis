@@ -355,7 +355,7 @@ var temp = {
                     </el-form-item>
 
                     <el-form-item>
-                        <el-button class="fr" style="margin-right: 10px;" @click="checkVoteResult()">重置</el-button>
+                        <el-button class="fr" style="margin-right: 10px;" @click="fetchVoteResult()">投票结果</el-button>
                     </el-form-item>
                 </el-form>
             </div>

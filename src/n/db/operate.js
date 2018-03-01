@@ -226,6 +226,57 @@ var operations = {
 		});
 	},
 
+	videoVoteResult: function(res, qualification){
+		let sql = `SELECT
+			(
+				SELECT
+					NAME
+				FROM
+					skill
+				WHERE
+					id = skill_id
+			) as tag,
+			count(*) as count
+		FROM
+			next_video
+		GROUP BY
+			skill_id
+		ORDER BY
+			count DESC`;
+
+		let sql2 = `SELECT
+		(
+			SELECT
+				NAME
+			FROM
+				athlete
+			WHERE
+				id = athlete_id
+		) AS tag,
+			count(*) AS count
+		FROM
+			next_video
+		GROUP BY
+			athlete_id
+		ORDER BY
+			count DESC`;
+
+		let resData = {};
+		conn.query(sql, function (err, result, fields) {
+			if (err) throw err;
+
+			resData.skill = result;
+
+			conn.query(sql2, function (err, result, fields) {
+				if (err) throw err;
+				
+				resData.athlete = result;
+
+				res.end(JSON.stringify(resData));
+			});
+		});
+	},
+
 	// POST
 	login: function(res, postObj, req){
 		var sql = `select * from usr where name=? and psw=?`;

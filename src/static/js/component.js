@@ -760,12 +760,136 @@ const VoteNext = {
 			};
 		},
 
-		checkVoteResult: function(){
-				tools.insertScriptTag(1, "../lib/Chart.js", {onload: function(){
-					tools.insertScriptTag(1, "../js/next_video_chart.js", {onload: function(){
-					}.bind(this), id: 'nextVideoChart'});
-				}.bind(this), id: 'chartjs'});
+		fetchVoteResult: function(){
+			tools.xhr('/videoVoteResult', function(resData){
+				// this.resetForm('form');
+				this.updateChart(resData);
+			}.bind(this));
+		},
+
+		updateChart: function(data){
+			var $chart = $('#myChart');
+			var ctx = $chart[0].getContext('2d');
+			var chartColors = {
+				red: 'rgb(255, 99, 132)',
+				orange: 'rgb(255, 159, 64)',
+				yellow: 'rgb(255, 205, 86)',
+				green: 'rgb(75, 192, 192)',
+				blue: 'rgb(54, 162, 235)',
+				purple: 'rgb(153, 102, 255)',
+				grey: 'rgb(201, 203, 207)'
+			};
+
+			var skillData = processData(data['skill']);
+			var playerData = processData(data['athlete']);
+
+			console.log(skillData, playerData)
+
+			// [{tag: 1, count: 2}]
+			// ['skill-1', 'skill-2'] 和 [1, 2]
+			// ['athlete-1', 'athlete-2'] 和 [1, 2]
+			function processData(data){
+				var ary = [[], []];
+				data.forEach(function(item){
+					ary[0].push(item['tag']);
+					ary[1].push(item['count']);
+				});
+
+				return ary;
+			}
+
+			var config = {
+				type: 'line',
+				data: {
+					labels: ["1", "2", "3", "4", "5", "6"],
+					datasets: [
+						{
+							label: '技术',
+							data: skillData[1],
+							backgroundColor: chartColors.green,
+							borderColor: chartColors.green,
+							borderWidth: 1,
+							fill: false
+						},
+						{
+							label: '运动员',
+							data: playerData[1],
+							backgroundColor: chartColors.blue,
+							borderColor: chartColors.blue,
+							borderWidth: 1,
+							fill: false
+						}
+					],
+				},
+				options: {
+					responsive: true,
+					title:{
+						display:true,
+						text:'投票结果'
+					},
+					tooltips: {
+						mode: 'index',
+						callbacks: {
+							footer: function(tooltipItems, data) {
+								var s = '';
+		
+								tooltipItems.forEach(function(tooltipItem) {
+									var datasetIndex = tooltipItem.datasetIndex,
+										itemIndex = tooltipItem.index;
+
+									if(datasetIndex == 0){
+										s += playerData[0][itemIndex];
+									}else if(datasetIndex == 1){
+										// s += '排名:' + playerData[1][itemIndex];
+									}
+									
+									// console.log(tooltipItem.datasetIndex, tooltipItem.index, data);
+									// sum += data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+								});
+								return s;
+							},
+						},
+						footerFontStyle: 'normal'
+					},
+					hover: {
+						mode: 'index',
+						intersect: true
+					},
+					hover: {
+						mode: 'nearest',
+						intersect: true
+					},
+					scales: {
+						xAxes: [{
+							display: true,
+							scaleLabel: {
+								display: true,
+								labelString: '排名'
+							}
+						}],
+						yAxes: [{
+							display: true,
+							scaleLabel: {
+								display: true,
+								labelString: '票数'
+							}
+						}]
+					}
+				}
+			};
+
+			if($chart.data('instance')){// 更新
+				$chart.data('instance').update();// 更新
+			}else{// 绑定
+				var chartInstance = new Chart(ctx, config);
+				$chart.data('instance', chartInstance);
+			}
 		}
+	},
+
+	mounted: function(){
+		tools.insertScriptTag(1, "../lib/Chart.js", {onload: function(){
+		}.bind(this), id: 'chartjs'});
 	},
 
 	watch: {

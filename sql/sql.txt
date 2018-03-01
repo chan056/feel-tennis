@@ -1,0 +1,21 @@
+DELETE
+FROM
+	athlete;
+
+INSERT INTO `n`.`athlete` (
+	`id`,
+	`sport_id`,
+	`name`,
+	`en_name`
+)
+VALUES
+	(
+		'1',
+		'1',
+		'诺瓦克·德约科维奇',
+		'Novak Djokovic'
+	);
+
+TRUNCATE athlete;
+
+SELECT skill_id,count(*)  from next_video GROUP BY skill_id
