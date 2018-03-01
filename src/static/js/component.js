@@ -711,6 +711,7 @@ const VoteNext = {
 		}
 
 		d.voteNextFormRules = voteNextFormRules;
+		d.chartInstance = null;
 
 		return d;
 	},
@@ -739,7 +740,7 @@ const VoteNext = {
 			this.$refs[formName].validate((valid) => {
 				if (valid) {
 					tools.xhr('/voteNext', function(resData){
-						// this.resetForm('form');
+						this.fetchVoteResult();
 						this.$message({
 							message: '感谢您的投票',
 							type: 'success'
@@ -768,6 +769,8 @@ const VoteNext = {
 		},
 
 		updateChart: function(data){
+
+			// 重新new chart，替换canvas
 			var $chart = $('#myChart');
 			var ctx = $chart[0].getContext('2d');
 			var chartColors = {
@@ -801,7 +804,7 @@ const VoteNext = {
 			var config = {
 				type: 'line',
 				data: {
-					labels: ["1", "2", "3", "4", "5", "6"],
+					labels: ["1", "2", "3", "4", "5", "6"],// 前6名
 					datasets: [
 						{
 							label: '技术',
@@ -825,11 +828,14 @@ const VoteNext = {
 					responsive: true,
 					title:{
 						display:true,
-						text:'投票结果'
+						text:'网球投票结果'
 					},
 					tooltips: {
-						mode: 'index',
+						mode: 'nearest',
+						intersect: false,
 						callbacks: {
+							title: function(){},
+							label: function(){return ''},
 							footer: function(tooltipItems, data) {
 								var s = '';
 		
@@ -837,28 +843,22 @@ const VoteNext = {
 									var datasetIndex = tooltipItem.datasetIndex,
 										itemIndex = tooltipItem.index;
 
-									if(datasetIndex == 0){
+									if(datasetIndex == 1){
 										s += playerData[0][itemIndex];
-									}else if(datasetIndex == 1){
-										// s += '排名:' + playerData[1][itemIndex];
+									}else if(datasetIndex == 0){
+										s += skillData[0][itemIndex];
 									}
-									
-									// console.log(tooltipItem.datasetIndex, tooltipItem.index, data);
-									// sum += data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
 								});
 								return s;
 							},
 						},
 						footerFontStyle: 'normal'
 					},
-					hover: {
-						mode: 'index',
-						intersect: true
-					},
-					hover: {
-						mode: 'nearest',
-						intersect: true
-					},
+
+					// hover: {
+					// 	mode: 'nearest',
+					// 	intersect: false
+					// },
 					scales: {
 						xAxes: [{
 							display: true,
@@ -878,11 +878,10 @@ const VoteNext = {
 				}
 			};
 
-			if($chart.data('instance')){// 更新
-				$chart.data('instance').update();// 更新
+			if(this.chartInstance){// 更新
+				this.chartInstance.update();// 更新
 			}else{// 绑定
-				var chartInstance = new Chart(ctx, config);
-				$chart.data('instance', chartInstance);
+				this.chartInstance = new Chart(ctx, config);
 			}
 		}
 	},
