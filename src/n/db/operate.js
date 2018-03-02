@@ -239,6 +239,8 @@ var operations = {
 			count(*) as count
 		FROM
 			next_video
+		WHERE
+			overdue = 0
 		GROUP BY
 			skill_id
 		ORDER BY
@@ -256,6 +258,8 @@ var operations = {
 			count(*) AS count
 		FROM
 			next_video
+		WHERE
+			overdue = 0
 		GROUP BY
 			athlete_id
 		ORDER BY
