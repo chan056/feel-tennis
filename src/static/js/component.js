@@ -711,7 +711,99 @@ const VoteNext = {
 		}
 
 		d.voteNextFormRules = voteNextFormRules;
+
+		// 表单
 		d.chartInstance = null;
+		d.skillData = [[], []];
+		d.playerData = [[], []];
+		d.chartColors = {
+			red: 'rgb(255, 99, 132)',
+			orange: 'rgb(255, 159, 64)',
+			yellow: 'rgb(255, 205, 86)',
+			green: 'rgb(75, 192, 192)',
+			blue: 'rgb(54, 162, 235)',
+			purple: 'rgb(153, 102, 255)',
+			grey: 'rgb(201, 203, 207)'
+		};
+		d.config = {
+			type: 'line',
+			data: {
+				labels: ["1", "2", "3", "4", "5", "6"],// 前6名
+				datasets: [
+					{
+						label: '技术',
+						data: {},
+						backgroundColor: d.chartColors.green,
+						borderColor: d.chartColors.green,
+						borderWidth: 1,
+						fill: false
+					},
+					{
+						label: '运动员',
+						data: {},
+						backgroundColor: d.chartColors.blue,
+						borderColor: d.chartColors.blue,
+						borderWidth: 1,
+						fill: false
+					}
+				],
+			},
+			options: {
+				responsive: true,
+				title:{
+					display:true,
+					text:'网球投票结果'
+				},
+				tooltips: {
+					mode: 'nearest',
+					intersect: false,
+					callbacks: {
+						title: function(tooltipItems, data){// point, line
+							var poll = tooltipItems[0].yLabel;
+							return '票数：'+poll;
+						},
+						label: function(){return ''},
+						footer: function(tooltipItems, data) {
+							var s = '';
+	
+							tooltipItem = tooltipItems[0];
+							var datasetIndex = tooltipItem.datasetIndex,
+								itemIndex = tooltipItem.index;
+
+							if(datasetIndex == 1){
+								s += this.playerData[0][itemIndex];
+							}else if(datasetIndex == 0){
+								s += this.skillData[0][itemIndex];
+							}
+
+							return s;
+						}.bind(this),
+					},
+					footerFontStyle: 'normal'
+				},
+
+				// hover: {
+				// 	mode: 'nearest',
+				// 	intersect: false
+				// },
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: '排名'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: '票数'
+						}
+					}]
+				}
+			}
+		};
 
 		return d;
 	},
@@ -769,24 +861,27 @@ const VoteNext = {
 		},
 
 		updateChart: function(data){
+			// $('#chart-container').html('<canvas id="myChart"></canvas>');
 
 			// 重新new chart，替换canvas
 			var $chart = $('#myChart');
 			var ctx = $chart[0].getContext('2d');
-			var chartColors = {
-				red: 'rgb(255, 99, 132)',
-				orange: 'rgb(255, 159, 64)',
-				yellow: 'rgb(255, 205, 86)',
-				green: 'rgb(75, 192, 192)',
-				blue: 'rgb(54, 162, 235)',
-				purple: 'rgb(153, 102, 255)',
-				grey: 'rgb(201, 203, 207)'
-			};
 
-			var skillData = processData(data['skill']);
-			var playerData = processData(data['athlete']);
+			var skillData = this.skillData = processData(data['skill']);
+			var playerData = this.playerData = processData(data['athlete']);
 
-			console.log(skillData, playerData)
+			// console.log(skillData, playerData)
+			console.log(this.config)
+			this.config.data.datasets[0].data = skillData[1];
+			this.config.data.datasets[1].data = playerData[1];
+
+			console.log(this.config)
+
+			if(!this.chartInstance){
+				this.chartInstance = new Chart(ctx, this.config);
+			}else{
+				this.chartInstance.update();
+			}
 
 			// [{tag: 1, count: 2}]
 			// ['skill-1', 'skill-2'] 和 [1, 2]
@@ -794,94 +889,12 @@ const VoteNext = {
 			function processData(data){
 				var ary = [[], []];
 				data.forEach(function(item){
-					ary[0].push(item['tag']);
+					if(item['tag'])
+						ary[0].push(item['tag']);
 					ary[1].push(item['count']);
 				});
 
 				return ary;
-			}
-
-			var config = {
-				type: 'line',
-				data: {
-					labels: ["1", "2", "3", "4", "5", "6"],// 前6名
-					datasets: [
-						{
-							label: '技术',
-							data: skillData[1],
-							backgroundColor: chartColors.green,
-							borderColor: chartColors.green,
-							borderWidth: 1,
-							fill: false
-						},
-						{
-							label: '运动员',
-							data: playerData[1],
-							backgroundColor: chartColors.blue,
-							borderColor: chartColors.blue,
-							borderWidth: 1,
-							fill: false
-						}
-					],
-				},
-				options: {
-					responsive: true,
-					title:{
-						display:true,
-						text:'网球投票结果'
-					},
-					tooltips: {
-						mode: 'nearest',
-						intersect: false,
-						callbacks: {
-							title: function(){},
-							label: function(){return ''},
-							footer: function(tooltipItems, data) {
-								var s = '';
-		
-								tooltipItems.forEach(function(tooltipItem) {
-									var datasetIndex = tooltipItem.datasetIndex,
-										itemIndex = tooltipItem.index;
-
-									if(datasetIndex == 1){
-										s += playerData[0][itemIndex];
-									}else if(datasetIndex == 0){
-										s += skillData[0][itemIndex];
-									}
-								});
-								return s;
-							},
-						},
-						footerFontStyle: 'normal'
-					},
-
-					// hover: {
-					// 	mode: 'nearest',
-					// 	intersect: false
-					// },
-					scales: {
-						xAxes: [{
-							display: true,
-							scaleLabel: {
-								display: true,
-								labelString: '排名'
-							}
-						}],
-						yAxes: [{
-							display: true,
-							scaleLabel: {
-								display: true,
-								labelString: '票数'
-							}
-						}]
-					}
-				}
-			};
-
-			if(this.chartInstance){// 更新
-				this.chartInstance.update();// 更新
-			}else{// 绑定
-				this.chartInstance = new Chart(ctx, config);
 			}
 		}
 	},

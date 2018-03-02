@@ -361,7 +361,7 @@ var temp = {
                     
                 </el-form>
             </div>
-            <div style="width:75%;">
+            <div style="width:75%;" id="chart-container">
                 <canvas id="myChart"></canvas>
             </div>
         </div>
