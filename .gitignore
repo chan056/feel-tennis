@@ -1,5 +1,6 @@
 
 sessions/
+.git-credentials
 
 # Logs
 logs
