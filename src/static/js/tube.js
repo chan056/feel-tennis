@@ -1,10 +1,10 @@
 $(function(){
 
-	const navInstance = new Vue(HeaderComponent);
+	var navInstance = new Vue(COMPONENTS.HeaderComponent);
 
-	const asideInstance = new Vue(AsideComponent);
+	var asideInstance = new Vue(COMPONENTS.AsideComponent);
 
-	const mainRouter = new VueRouter({
+	var mainRouter = new VueRouter({
 		routes: routeConfig
 	});
 	
@@ -13,7 +13,7 @@ $(function(){
 		next();
 	});
 	
-	const mainInstance = new Vue({
+	var mainInstance = new Vue({
 		router: mainRouter,
 	}).$mount('#main-router-view');
 

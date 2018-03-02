@@ -224,7 +224,7 @@ temp.upload =  `
     </div>
 `;
 
-const Upload = {
+COMPONENTS.Upload = {
 	props: [''],
 	data: function () {
 		let tagConfig = {
@@ -392,15 +392,15 @@ const Upload = {
 };
 
 routeConfig.push(
-    { path: '/upload', component: Upload, props: true, },
+    { path: '/upload', component: COMPONENTS.Upload, props: true, },
 );
     $(function(){
 
-	const navInstance = new Vue(HeaderComponent);
+	var navInstance = new Vue(COMPONENTS.HeaderComponent);
 
-	const asideInstance = new Vue(AsideComponent);
+	var asideInstance = new Vue(COMPONENTS.AsideComponent);
 
-	const mainRouter = new VueRouter({
+	var mainRouter = new VueRouter({
 		routes: routeConfig
 	});
 	
@@ -409,7 +409,7 @@ routeConfig.push(
 		next();
 	});
 	
-	const mainInstance = new Vue({
+	var mainInstance = new Vue({
 		router: mainRouter,
 	}).$mount('#main-router-view');
 

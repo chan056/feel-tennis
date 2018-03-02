@@ -8,8 +8,23 @@ let tools = {
            sfn && sfn(response.data)
         })
         .catch(function (error) {
-            // console.log(error);
-            errorHandle && errorHandle(error.response);
+            let response = error.response;
+            // console.log(response);
+
+            if(errorHandle){
+                errorHandle(response)
+            }
+
+            let statusCode = response.status;
+
+            Vue.prototype.$notify({
+                title: response.statusText,
+                message: CONSTANT.erroMsg[statusCode] || '',
+                type: 'warning',
+                onClose: function(){
+                    console.log('close')
+                }
+            });
         });
     },
     
@@ -99,11 +114,11 @@ let tools = {
         let timeSlot = now - timestamp;
 
         // 1天 1周 1月 1年
-        const hourMS = 60 * 60 * 1000;
-        const dayMS = 24 * hourMS;
-        const weekMS = dayMS * 7;
-        const monthMS = dayMS * 30;
-        const yearMS = dayMS * 365;
+        let hourMS = 60 * 60 * 1000;
+        let dayMS = 24 * hourMS;
+        let weekMS = dayMS * 7;
+        let monthMS = dayMS * 30;
+        let yearMS = dayMS * 365;
         
         let s = '';
 

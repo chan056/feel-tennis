@@ -1,52 +1,56 @@
 const routeConfig = [
-	{ path: '/', redirect: '/sports' },
-	// 获取所有‘运动’项目
+	{ 
+		path: '/', 
+		redirect: '/sports' 
+	},
 	{ 
 		path: '/sports', 
-		component: Sports, 
-		/* alias: '/', */
+		component: COMPONENTS.Sports, 
 		meta: {title: '首页'}
 	},
-	// 获取‘某运动项目’下的‘专辑列表’
 	{ 
 		path: '/sports/:sportId', 
-		component: AlbumList,
+		component: COMPONENTS.AlbumList,
 		meta: {title: '专辑列表'},
-		// props: true, 
 		props: function(route){
 			return {sportId: route.params.sportId}
 		},
 	},
-	// 获取‘某专辑’下的‘视频列表’
 	{ 
 		path: '/albums/:albumId', 
-		component: Album, 
+		component: COMPONENTS.Album, 
 		props: true, 
 		meta: {title: '视频列表'},
 	},
-	// 获取‘某视频’的信息
 	{ 
 		path: '/video/:videoId', 
-		component: Video, 
+		component: COMPONENTS.Video, 
 		meta: {title: '视频'},
 		props: true,
 	},
-
-	// 根据标签列出视频
 	{ 
 		path: '/videos', 
-		component: videos, 
+		component: COMPONENTS.videos, 
 		meta: {title: '视频列表'},
 		beforeRouteUpdate(to, from, next) {
-			// react to route changes...
-			// don't forget to call next()
 			console.log(to, from)
 			next();
 		}
 	},
-
-	{ path: '/voteNext', component: VoteNext},
-	{ path: '/feedback', component: Feedback,},                                                                                                                                                               
-	{ path: '/about', component: About,},
-	{ path: '/emailConfirm', component: EmailConfirm},
+	{ 
+		path: '/voteNext', 
+		component: COMPONENTS.VoteNext
+	},
+	{ 
+		path: '/feedback', 
+		component: COMPONENTS.Feedback,
+	},                                                                                                                                                               
+	{ 
+		path: '/about',
+		component: COMPONENTS.About,
+	},
+	{ 
+		path: '/emailConfirm', 
+		component: COMPONENTS.EmailConfirm
+	},
 ];

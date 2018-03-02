@@ -224,7 +224,7 @@ temp.upload =  `
     </div>
 `;
 
-const Upload = {
+COMPONENTS.Upload = {
 	props: [''],
 	data: function () {
 		let tagConfig = {
@@ -392,6 +392,6 @@ const Upload = {
 };
 
 routeConfig.push(
-    { path: '/upload', component: Upload, props: true, },
+    { path: '/upload', component: COMPONENTS.Upload, props: true, },
 );
     

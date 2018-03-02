@@ -6,6 +6,8 @@
 module.exports = {
     config: {
         '/logout': 10,
+
+        '/voteNext': 10,
         
         '/makers': 100,
 

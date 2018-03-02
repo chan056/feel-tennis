@@ -1,4 +1,6 @@
-const HeaderComponent = {
+var COMPONENTS = {};
+
+COMPONENTS.HeaderComponent = {
 	el: 'app-header',
 
 	template: temp.header,
@@ -109,7 +111,7 @@ const HeaderComponent = {
 				},
 				'regist': function(){
 					t.registForm.visible = true;
-					// 验证码
+
 					tools.insertScriptTag(1, "../lib/captcha.js", {onload: function(){
 						tools.insertScriptTag(2, FRAGMENTS.captcha, {id: 'captcha-frag'});
 					}.bind(this), id: 'captcha'});
@@ -321,7 +323,7 @@ const HeaderComponent = {
 	// }
 };
 
-const AsideComponent = {
+COMPONENTS.AsideComponent = {
 	el: 'app-aside',
 
 	template: temp.aside,
@@ -345,7 +347,7 @@ const AsideComponent = {
 	},
 };
 
-const Sports = {
+COMPONENTS.Sports = {
 	data: function () {
 		var d = {sports: []};
 
@@ -359,7 +361,7 @@ const Sports = {
 	template: temp.sports,
 };
 
-const AlbumList = {
+COMPONENTS.AlbumList = {
 	props: ['sportId'],
 	data: function () {
 		var propsData = this.$options.propsData;
@@ -388,7 +390,7 @@ const AlbumList = {
 	}
 };
 
-const Album = {
+COMPONENTS.Album = {
 	props: ['albumId'],
 	data: function () {
 		let d = {albumVideoList: [], crumb: {}, tags:[]};
@@ -430,7 +432,7 @@ const Album = {
 	}
 };
 
-const Video = {
+COMPONENTS.Video = {
 	props: ['videoId'],
 	data: function () {
 		let d = {video: [], crumb: {}, tags: [], captureParams: {}, previewerVisible: false, gifLink: '', like: 0, likeLocking: false};
@@ -649,7 +651,7 @@ const Video = {
 	}
 };
 
-const videos = {
+COMPONENTS.videos = {
 	data: function () {
 		var d = {videos: []};
 		this.refreshVlist();
@@ -683,7 +685,7 @@ const videos = {
 	}
 };
 
-const VoteNext = {
+COMPONENTS.VoteNext = {
 	data: function () {
 		var d = {
 			sports: [],
@@ -712,7 +714,7 @@ const VoteNext = {
 
 		d.voteNextFormRules = voteNextFormRules;
 
-		// 表单
+		// 图标配置
 		d.chartInstance = null;
 		d.skillData = [[], []];
 		d.playerData = [[], []];
@@ -771,12 +773,25 @@ const VoteNext = {
 								itemIndex = tooltipItem.index;
 
 							if(datasetIndex == 1){
-								s += this.playerData[0][itemIndex];
+								s = this.playerData[0][itemIndex];
 							}else if(datasetIndex == 0){
-								s += this.skillData[0][itemIndex];
+								s = this.skillData[0][itemIndex];
 							}
 
 							return s;
+						}.bind(this),
+
+						afterFooter: function(tooltipItems, data) {
+							var s = '';
+	
+							tooltipItem = tooltipItems[0];
+							var datasetIndex = tooltipItem.datasetIndex,
+								itemIndex = tooltipItem.index;
+
+							if(this.playerData[1][itemIndex] == this.skillData[1][itemIndex]){
+								s = this.playerData[0][itemIndex];
+								return s;
+							}
 						}.bind(this),
 					},
 					footerFontStyle: 'normal'
@@ -870,12 +885,9 @@ const VoteNext = {
 			var skillData = this.skillData = processData(data['skill']);
 			var playerData = this.playerData = processData(data['athlete']);
 
-			// console.log(skillData, playerData)
-			console.log(this.config)
 			this.config.data.datasets[0].data = skillData[1];
 			this.config.data.datasets[1].data = playerData[1];
 
-			console.log(this.config)
 
 			if(!this.chartInstance){
 				this.chartInstance = new Chart(ctx, this.config);
@@ -889,9 +901,10 @@ const VoteNext = {
 			function processData(data){
 				var ary = [[], []];
 				data.forEach(function(item){
-					if(item['tag'])
+					if(item['tag']){
 						ary[0].push(item['tag']);
-					ary[1].push(item['count']);
+						ary[1].push(item['count']);
+					}
 				});
 
 				return ary;
@@ -922,7 +935,7 @@ const VoteNext = {
 	template: temp.voteNext,
 };
 
-const Feedback = {
+COMPONENTS.Feedback = {
 	data: function () {
 		var d = {files: [], fileList: []};
 		d.form = {
@@ -1020,7 +1033,7 @@ const Feedback = {
 	template: temp.feedback,
 };
 
-const About = {
+COMPONENTS.About = {
 	data: function () {
 		var d = {};
 		return d;
@@ -1033,7 +1046,7 @@ const About = {
 	template: temp.about,
 };
 
-const EmailConfirm = {
+COMPONENTS.EmailConfirm = {
 	data: function () {
 		var d = {};
 

@@ -195,7 +195,7 @@ var temp = {
                 <el-breadcrumb-item :to="{ path: '/albums/' + crumb.aId }">{{crumb.aName}}</el-breadcrumb-item>
             </el-breadcrumb>
             <div class="tags">
-                <el-tag type="info" v-for="tag in tags" >
+                <el-tag type="info" v-for="tag in tags" :key="tag.id">
                     <router-link :to="{path: '/videos?tagId=' + tag.id}">{{tag.name}}</router-link>
                 </el-tag>
             </div>
@@ -227,7 +227,7 @@ var temp = {
                 <el-breadcrumb-item :to="{ path: '/video/' + crumb.vId }">{{crumb.vHeadline}}</el-breadcrumb-item>
             </el-breadcrumb>
             <div class="tags">
-                <el-tag type="info" v-for="tag in tags" >
+                <el-tag type="info" v-for="tag in tags" :key="tag.id">
                     <router-link :to="{path: '/videos?tagId=' + tag.id}">{{tag.name}}</router-link>
                 </el-tag>
             </div>
