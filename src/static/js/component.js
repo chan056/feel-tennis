@@ -439,41 +439,36 @@ COMPONENTS.Album = {
 COMPONENTS.Video = {
 	props: ['videoId'],
 	data: function () {
-		let d = {video: [], crumb: {}, tags: [], captureParams: {}, previewerVisible: false, gifLink: '', like: 0, likeLocking: false};
+		let d = {video: null, crumb: {}, tags: [], captureParams: {}, previewerVisible: false, gifLink: '', like: 0, likeLocking: false};
 		let propsData = this.$options.propsData;
 		let videoId = propsData.videoId;
 
 		d.captureParams.vId = videoId;
 		tools.xhr('/videos/' + videoId, function(resData){
-			d.video = resData;
-			d.captureParams.ext = d.video.video_ext;
-			
-			let dayViewLeft = resData.dayViewLeft;
-			
-			if(dayViewLeft > -1){
-				if(dayViewLeft > 5){
-					// this.$message(`当天剩余播放次数 ${resData.dayViewLeft}次`);
-				}else{
-					this.$message({message: `当天剩余播放次数 ${resData.dayViewLeft || 0}次`, type: 'warning'});
+			console.log(resData)
+			if(resData){
+				d.video = resData;
+				d.captureParams.ext = d.video.video_ext;
+				
+				let dayViewLeft = resData.dayViewLeft;
+				if(dayViewLeft){
+					if(dayViewLeft <= 5){
+						this.$message({message: `当天剩余播放次数 ${resData.dayViewLeft || 0}次`, type: 'warning'});
+					}
+
+					tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
+						tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
+
+						$('#video').onended = function(){
+							$('.subtitle').text('');
+						}
+					}.bind(this), id: 'hls'});
 				}
-
-				tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
-					tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
-					$('#video').onpause = function(){
-						console.log('pause');
-						// 停止匹配字幕 todo
-					}
-
-					$('#video').onended = function(){
-						// console.log('ended');
-						$('.subtitle').text('');
-					}
-				}.bind(this), id: 'hls'});
 			}else{
 				this.$message({
 					dangerouslyUseHTMLString: true,
 					message: `当天剩余播放次数 0次，<br/>点击右上角注册或登录查看更多视频`, 
-					type: 'error'
+					type: 'warning'
 				});
 			}
 
@@ -562,12 +557,19 @@ COMPONENTS.Video = {
 			}
 			
 			tools.xhr('/gifLink?' + $.param(this.captureParams), function(resData){
-				console.log(resData);
 				this.captureParams = {id: this.captureParams.id};
 
 				var gifLink = resData;
 				this.gifLink = gifLink;
 				
+			}.bind(this), null, null, function(ret){
+				console.log(ret)
+				let status = ret.status;
+				if(status == 402){
+					this.$message.warning({
+						message: '截图超出限制'
+					});
+				}
 			}.bind(this));
 		},
 

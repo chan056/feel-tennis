@@ -236,7 +236,7 @@ var temp = {
                 <video id="video" controls="controls" height="400">Not support this browser, please use Chrome.</video>
                 <p class="subtitle"></p>
             </div>
-            <div id="usr-operation-desk">
+            <div v-if="video" id="usr-operation-desk">
                 <div class="fl">{{video.impression}}次观看</div>
                 <ul class="fr block-list">
                     <li id="support-btn" @click="vote(1)">
@@ -252,8 +252,8 @@ var temp = {
                 </ul>
                 <br class="clr">
             </div>
-            <div>
-                <input type="button" value="开始截图" @click="captureCountdown()" id="capture-btn" class=""/>
+            <div v-if="video">
+                <input type="button" value="开始截图" @click="captureCountdown()" id="capture-btn" class="el-button el-button--default"/>
                 <!--<el-button @click="captureCountdown()">开始截图</el-button>-->
                 <!--<el-button @click="capture()">暂停截图</el-button>-->
                 <el-button v-if="gifLink" @click="preview()">预览</el-button>

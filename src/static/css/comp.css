@@ -17,6 +17,8 @@ app {
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: 300px;
+  border: 1px solid #dcdfe6;
+  border-width: 0 1px 1px 0;
 }
 #aside .guide-entry {
   line-height: 40px;
@@ -48,6 +50,8 @@ app {
   flex-shrink: 0;
   flex-basis: 300px;
   padding: 20px 0;
+  border: 1px solid #dcdfe6;
+  border-width: 0 0 1px 1px;
 }
 #main-router-view {
   width: 1000px;
@@ -74,6 +78,9 @@ app {
   text-decoration: none;
   max-height: 52px;
   overflow: hidden;
+}
+#header {
+  border-bottom: 1px solid #dcdfe6;
 }
 #header .el-form-item.is-success .el-input__inner {
   border-color: #dcdfe6;
@@ -179,6 +186,9 @@ app {
   opacity: 1;
   background-color: transparent;
   transition: .7s ease 0s;
+}
+#capture-btn {
+  width: 120px;
 }
 .time {
   font-size: 13px;

@@ -12,11 +12,6 @@ h6 {
   margin: 0;
   padding: 0;
 }
-div,
-li,
-img {
-  box-shadow: 0 0 1px #dfeceb;
-}
 img {
   background-color: #cde;
 }

@@ -7,6 +7,8 @@ let config = {
     // '/logout': {level: 10},
 
     '/voteNext': {level: 10, visits: 1},
+
+    '/gifLink': {level: 10, visits: 3},
     
     '/makers': {level: 100},
 

@@ -108,7 +108,7 @@ var operations = {
 						dayViewLeft = constants.maxDayView - dayView - 1;
 						queryVinfo(dayView);
 					}else{
-						res.end('exceed dayView');
+						res.end();
 					}
 				});
 			}else if(usrType == 2){// 临时
@@ -131,7 +131,7 @@ var operations = {
 							// res.writeHead(302, {
 							// 	'Location': '/?#/albums/1'
 							// });
-							res.end('exceed dayView');
+							res.end();
 						}
 					}else{
 						conn.query(`INSERT INTO tmp_usr (ip, day_view) VALUES ('${usrIP}', 1)`);

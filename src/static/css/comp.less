@@ -1,5 +1,6 @@
 @img-dir-path: '/img/';
 @list-item-width: 210px;
+@border-color: #dcdfe6;
 
 html {
   font-size: 10px;
@@ -21,6 +22,8 @@ app{font-size: 14px;}
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: 300px;
+  border: 1px solid @border-color;
+  border-width: 0 1px 1px 0;
 
   .guide-section:not(:last-child){
     // border-bottom: 1px solid #666;
@@ -54,6 +57,8 @@ app{font-size: 14px;}
   flex-shrink: 0;
   flex-basis: 300px;
   padding: 20px 0;
+  border: 1px solid @border-color;
+  border-width: 0 0 1px 1px;
 }
 
 #main-router-view{
@@ -80,6 +85,7 @@ app{font-size: 14px;}
 
 // #header
 #header{
+  border-bottom: 1px solid @border-color;
   .el-form-item.is-success .el-input__inner{border-color: #dcdfe6;}
   .el-form-item.is-error .el-input__inner{border-color: #dcdfe6;}
 
@@ -145,6 +151,8 @@ app{font-size: 14px;}
 }
 
 #kick-off-ball{position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(.1); opacity: 1; background-color: transparent; transition: .7s ease 0s;}
+
+#capture-btn{width: 120px;}
 
 // #videos
 // #video-container{width: 210px;}
