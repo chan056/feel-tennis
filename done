@@ -94,3 +94,7 @@ nodesession 独立
 视频投票统计表
 统一错误提示
 定时清理next_video
+
+^180303
+女运动员数据
+某些API单天访问次数限制 如 voteVideo 一天投票一次

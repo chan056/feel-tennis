@@ -7,7 +7,7 @@ module.exports.m3u = function(vId, videoStorePath, subtitleAbsPath){
     const exec = require('child_process').exec;
     const path = require('path');
     const fs = require('fs');
-    const tool = require('../tool');
+    const tool = require('../tools');
 
     let coveSize = '210x118';// 视频截图尺寸
 

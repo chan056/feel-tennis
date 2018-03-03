@@ -60,9 +60,24 @@ function formatTime(seconds){
 	}
 }
 
+function usrAuthority(){
+	let authority = 1;
+
+	let usr = global.usrInfo;
+	if(usr.type == 1){
+		authority = 10;
+		if(usr.isAdmin == 1){
+			authority = 100;
+		}
+	}
+
+	return authority;
+}
+
 module.exports = {
     response404: response404,
     isEmpty: isEmpty,
 	newClause: newQueryClause,
 	formatTime: formatTime,
+	usrAuthority: usrAuthority
 }

@@ -1,5 +1,5 @@
 let r =  require('./operate');
-let tools = require('../tool');
+let tools = require('../tools');
 
 const routerConfig = {
     '/tube': function(params, res){

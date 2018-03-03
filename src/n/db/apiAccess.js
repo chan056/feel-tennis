@@ -3,44 +3,79 @@
 //  10 注册用户
 //  1 临时用户
 
+let config = {
+    // '/logout': {level: 10},
+
+    '/voteNext': {level: 10, visits: 1},
+    
+    '/makers': {level: 100},
+
+    '/maker/:id': {level: 100},
+
+    '/video': {level: 100},
+
+    '/tag': {level: 100},
+
+    '/album': {level: 100},
+
+    '/maker': {level: 100},
+};
+
 module.exports = {
-    config: {
-        '/logout': 10,
-
-        '/voteNext': 10,
-        
-        '/makers': 100,
-
-        '/maker/:id': 100,
-
-        '/video': 100,
-
-        '/tag': 100,
-
-        '/album': 100,
-
-        '/maker': 100,
-    },
     check: function(path){
-        let config = this.config;
-        let apiAccessLevel = config[path];
+        let apiAccessConfig = config[path];
+
+        if(apiAccessConfig){
+            let apiAccessLevel = apiAccessConfig.level;
         
-        if(apiAccessLevel){
-            let authority = 1;
-
-            let usr = global.usrInfo;
-            if(usr.type == 1){
-                authority = 10;
-                if(usr.isAdmin == 1){
-                    authority = 100;
+            if(apiAccessLevel){
+                let authority = require('../tools').usrAuthority();
+                this.authority = authority;
+    
+                if(authority < apiAccessLevel){
+                    return false;
+                }else{
+                    if (authority == 10 && apiAccessConfig.visits){// 普通用户
+                        return this.checkAccessLimit;
+                    }else{
+                        return true;
+                    }
                 }
+            }else{
+                return true;
             }
-
-            if(authority < apiAccessLevel){
-                return false;
-            }
+        }else{
+            return true;
         }
+    },
 
-        return true;
+    // 普通用户, 特定接口访问次数限制
+    checkAccessLimit: function(path, scb, ecb){
+        let apiAccessConfig = config[path];
+            // 查询是否超过限制
+            let accessLimit = apiAccessConfig.visits;
+            let conn = require('./connect').conn;
+            let sql = `select * 
+                from usr_api_access_log 
+                where uid=${global.usrInfo.usrId} 
+                and api='${path}' 
+                and TO_DAYS( NOW() ) - TO_DAYS( timestamp ) <= 1`;
+            
+            conn.query(sql, function(err, result){
+                if(err)
+                    console.log(err);
+
+                if(result.length){
+                    let accessCount = result.length;
+
+                    if(accessCount < accessLimit){
+                        scb();
+                    }else{
+                        ecb();
+                    }
+                }else{
+                    scb();
+                }
+            });
     }
 }

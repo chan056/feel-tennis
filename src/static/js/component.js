@@ -92,41 +92,45 @@ COMPONENTS.HeaderComponent = {
 		},
 
 		handleUsrBtns(index){
-			let t = this;
 			let o = {
-				'login': function(){
-					t.loginForm.visible = true;
-					// 回车提交事件
-					// console.log($('#last-login-iput'))
-					setTimeout(function(){
-						$('#last-login-iput').off('keyup.login').on('keyup.login', function(e){
-							var keyCode = e.keyCode;
-							if(keyCode == 13){
-								t.login();
-							}
-						});
-					}, 500)
-
-					tools.insertScriptTag(1, '../lib/md5.js', 'md5');
-				},
-				'regist': function(){
-					t.registForm.visible = true;
-
-					tools.insertScriptTag(1, "../lib/captcha.js", {onload: function(){
-						tools.insertScriptTag(2, FRAGMENTS.captcha, {id: 'captcha-frag'});
-					}.bind(this), id: 'captcha'});
-
-					tools.insertScriptTag(1, '../lib/md5.js', 'md5');
-				},
+				'login': this.handlerLogin,
+				'regist': this.handlerRegist,
 				'datum': function(){
-					// t.logoutForm.visible=true;
 				},
-				'logout': function(){
-					t.logoutForm.visible=true;
-				}
+				'logout': this.handlerLogout
 			};
 
 			o[index] && o[index]();
+		},
+
+		handlerLogin(){
+			this.loginForm.visible = true;
+			// 回车提交事件
+			// console.log($('#last-login-iput'))
+			setTimeout(function(){
+				$('#last-login-iput').off('keyup.login').on('keyup.login', function(e){
+					var keyCode = e.keyCode;
+					if(keyCode == 13){
+						this.login();
+					}
+				}.bind(this));
+			}.bind(this), 500)
+
+			tools.insertScriptTag(1, '../lib/md5.js', 'md5');
+		},
+
+		handlerRegist(){
+			this.registForm.visible = true;
+
+			tools.insertScriptTag(1, "../lib/captcha.js", {onload: function(){
+				tools.insertScriptTag(2, FRAGMENTS.captcha, {id: 'captcha-frag'});
+			}.bind(this), id: 'captcha'});
+
+			tools.insertScriptTag(1, '../lib/md5.js', 'md5');
+		},
+
+		handlerLogout(){
+			this.logoutForm.visible=true;
 		},
 
 		login(){
@@ -852,7 +856,17 @@ COMPONENTS.VoteNext = {
 							message: '感谢您的投票',
 							type: 'success'
 						});
-					}.bind(this), 'post', this.voteNextForm);
+					}.bind(this), 'post', this.voteNextForm, function(res){
+						let statusCode = res.status;
+						if(statusCode == 401){
+							$('#header-btn-login').trigger('click')
+						}else if(statusCode == 402){
+							this.$message({
+								message: '投票太频繁了',
+								type: 'warning'
+							});
+						}
+					}.bind(this));
 				} else {
 					return false;
 				}

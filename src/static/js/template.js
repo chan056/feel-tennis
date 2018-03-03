@@ -26,10 +26,10 @@ var temp = {
                     <el-dropdown id="usr-btns" class="fr" @command="handleUsrBtns">
                         <i v-bind:class="loginUsrInfo.name? 'el-icon-setting': 'el-icon-view'" title="" @click=""></i>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-if="!loginUsrInfo.name" command="login">登录</el-dropdown-item>
-                            <el-dropdown-item v-if="!loginUsrInfo.name" command="regist">注册</el-dropdown-item>
-                            <el-dropdown-item v-if="loginUsrInfo.name" command="datum">资料</el-dropdown-item>
-                            <el-dropdown-item v-if="loginUsrInfo.name"command="logout">登出</el-dropdown-item>
+                            <el-dropdown-item v-if="!loginUsrInfo.name" command="login" id="header-btn-login">登录</el-dropdown-item>
+                            <el-dropdown-item v-if="!loginUsrInfo.name" command="regist" id="header-btn-regist">注册</el-dropdown-item>
+                            <el-dropdown-item v-if="loginUsrInfo.name" command="datum" id="header-btn-profile">资料</el-dropdown-item>
+                            <el-dropdown-item v-if="loginUsrInfo.name"command="logout" id="header-btn-logout">登出</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
 
@@ -68,6 +68,7 @@ var temp = {
                     </el-form-item>
                     <p>
                         <span @click="resetPswForm.visible = true; loginForm.visible = false;">重置密码</span>
+                        <span @click="handlerRegist(); loginForm.visible = false;">注册</span>
                     </p>
                     
                 </el-form>

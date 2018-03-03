@@ -4,7 +4,8 @@ let dbConfig = {
 	host: 'localhost',
 	user: 'root',
 	password: '62191056',
-	database: 'n'
+	database: 'n',
+	// multipleStatements: true // 执行多条语句
 };
 
 var connection;

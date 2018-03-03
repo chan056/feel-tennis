@@ -5,7 +5,7 @@ module.exports.config = function(req, res) {
 		const fs = require('fs');
 		const path = require('path');
 		const mime = require('./mime').types;
-		const tools = require('../tool');
+		const tools = require('../tools');
 		const constants = require('../constant');
 
 		let urlObj = url.parse(req.url, true);

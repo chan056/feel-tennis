@@ -9,22 +9,23 @@ let tools = {
         })
         .catch(function (error) {
             let response = error.response;
-            // console.log(response);
-
-            if(errorHandle){
-                errorHandle(response)
-            }
-
             let statusCode = response.status;
+            
+            // 自定义错误处理
+            errorHandle && errorHandle(response)
 
-            Vue.prototype.$notify({
-                title: response.statusText,
-                message: CONSTANT.erroMsg[statusCode] || '',
-                type: 'warning',
-                onClose: function(){
-                    console.log('close')
-                }
-            });
+            // 统一错误处理
+            setTimeout(function(){
+                Vue.prototype.$notify({
+                    title: response.statusText,
+                    message: CONSTANT.erroMsg[statusCode] || '',
+                    type: 'warning',
+                    onClose: function(){
+                        console.log('close');
+                    }
+                });
+                // Vue.prototype.$message.warning(CONSTANT.erroMsg[statusCode]);
+            }, 100)
         });
     },
     

@@ -1,5 +1,5 @@
 let conn = require('./connect.js').conn;
-let tools = require('../tool');
+let tools = require('../tools');
 
 var operations = {
 	querySports: function (res, qualification) {
