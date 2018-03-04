@@ -45,14 +45,13 @@ module.exports.config = function(req, res) {
 								'Content-Type': contentType
 							});
 	
+							// 所有的静态资源添加同域限制 todo
 							if(ext == 'm3u8'){
 								let referer = req.headers.referer;
 	
 								if(referer != constants.whiteList + '?' && referer != constants.whiteList){
 									return res.end();
 								}else{
-									// let conn = require('./connect').conn;
-									// conn.query('select * f')
 									res.write(file, "binary");
 									return res.end();
 								}

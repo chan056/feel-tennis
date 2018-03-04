@@ -4,7 +4,10 @@ var temp = {
             <el-row>
                 <el-col :span="4">
                     <i class="el-icon-menu aside-menu-btn"></i>
-                    <a href="#/sports" id="logo"></a>
+                    <a href="#/sports" id="logo">
+                        <img src="../img/logo.png" width="60px"/>
+                    </a>
+                    
                 </el-col>
 
                 <el-col :span="9">
@@ -113,7 +116,15 @@ var temp = {
     aside: `
         <div id="aside">
             <div class="guide-section">
-                <div v-if="1  || (loginUsrInfo && loginUsrInfo.name)" class="guide-entry" id="feedback-entry">
+                <div v-if="1" class="guide-entry" id="feedback-entry">
+                    <a href="#/sports" class="guide-entry-renderer">
+                        <i class="el-icon-service icon"></i>
+                        <span class="text">首页</span>
+                    </a>
+                </div>
+            </div>
+            <div class="guide-section">
+                <div v-if="(loginUsrInfo && loginUsrInfo.name)" class="guide-entry" id="feedback-entry">
                     <a href="#/voteNext" class="guide-entry-renderer">
                         <i class="el-icon-service icon"></i>
                         <span class="text">投票</span>
