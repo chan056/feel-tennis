@@ -214,3 +214,11 @@ app {
 #regist-btn {
   display: none;
 }
+.feedback {
+  width: 600px!important;
+  padding: 10px 20px;
+}
+.feedback h2,
+.feedback h3 {
+  margin-bottom: 20px;
+}

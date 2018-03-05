@@ -118,15 +118,21 @@ var temp = {
             <div class="guide-section">
                 <div v-if="1" class="guide-entry" id="feedback-entry">
                     <a href="#/sports" class="guide-entry-renderer">
-                        <i class="el-icon-service icon"></i>
+                        <i class="icon fa fa-home"></i>
                         <span class="text">首页</span>
+                    </a>
+                </div>
+                <div v-if="1" class="guide-entry" id="feedback-entry">
+                    <a href="#/star" class="guide-entry-renderer">
+                        <i class="icon fa fa-star"></i>
+                        <span class="text">收藏</span>
                     </a>
                 </div>
             </div>
             <div class="guide-section">
                 <div v-if="(loginUsrInfo && loginUsrInfo.name)" class="guide-entry" id="feedback-entry">
                     <a href="#/voteNext" class="guide-entry-renderer">
-                        <i class="el-icon-service icon"></i>
+                        <i class="fa fa-hand-paper-o icon"></i>
                         <span class="text">投票</span>
                     </a>
                 </div>
@@ -380,8 +386,8 @@ var temp = {
     `,
 
     feedback: `
-        <div style="width: 600px; margin: auto; padding: 10px 20px;">
-            <h2 class="ovh" style="border-bottom: 1px solid;">
+        <div class="feedback">
+            <h2 class="ovh">
                 <span class="fl">发生了什么</span>
                 <i class="fr el-icon-back" @click="goback()" style="cursor: pointer;"></i>
             </h2>
