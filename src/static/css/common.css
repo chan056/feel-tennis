@@ -35,10 +35,13 @@ em {
   clear: both;
 }
 .ovh {
-  overflow: hidden;
+  overflow: hidden !important;
+}
+.ovv {
+  overflow: visible !important;
 }
 .hidden {
-  display: none;
+  display: none !important;
 }
 .clearfix:after {
   display: table;

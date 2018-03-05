@@ -84,12 +84,20 @@ function resolveApiPath(res, req) {
                 
                 fnMatched(queryParams, res);
             } else {
+                for (let i = 0, l = keys.length; i < l; i++) {
+                    let key = keys[i];
+                    let keyName = key.name;
+                    if (pathMatch[i + 1] != undefined)
+                        paramsMathed[keyName] = pathMatch[i + 1]
+                }
+                paramsMathed && console.log(paramsMathed);
+
                 if (reqMethod == 'POST') {
-                    fnMatched(req, res);
+                    fnMatched(req, res, paramsMathed);
                 }
 
                 if (reqMethod == 'PATCH') {
-                    fnMatched(req, res);
+                    fnMatched(req, res, paramsMathed);
                 }
             }
         }

@@ -9,6 +9,10 @@ let config = {
     '/voteNext': {level: 10, visits: 1},
 
     '/gifLink': {level: 10, visits: 3},
+
+    '/star': {level: 10},
+
+    '/star/:starId': {level: 10},
     
     '/makers': {level: 100},
 
@@ -37,7 +41,8 @@ module.exports = {
                 if(authority < apiAccessLevel){
                     return false;
                 }else{
-                    if (authority == 10 && apiAccessConfig.visits){// 普通用户
+                    // 是普通用户 并且 访问次数有限制
+                    if (authority == 10 && apiAccessConfig.visits){
                         return this.checkAccessLimit;
                     }else{
                         return true;

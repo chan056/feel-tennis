@@ -32,9 +32,11 @@ app{font-size: 14px;}
   .guide-entry{line-height: 40px;}
 
   .guide-entry-renderer{
+    display: block;
     text-decoration: none;
     .icon{margin-left: 20px;}
     .text{margin-left: 20px;}
+    &:hover{background-color: #eee;}
   }
 
   #llc{
@@ -156,6 +158,26 @@ app{font-size: 14px;}
 
 #capture-btn{width: 120px;}
 
+#enshrine-btn{
+  position: relative;
+}
+
+#star-section{
+  position: absolute;
+  bottom: 0;
+  left: 15px;
+  width: 140px;
+  box-shadow: 0 0 20px #999;
+
+  >*{padding: 10px;}
+
+  h5{border-bottom: 1px solid @border-color;}
+}
+
+#stared-list{
+  li{width: 100%;}
+}
+
 // #videos
 // #video-container{width: 210px;}
 
@@ -194,3 +216,4 @@ app{font-size: 14px;}
   width: 600px!important; padding: 10px 20px;
   h2, h3{margin-bottom: 20px;}
 }
+

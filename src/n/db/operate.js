@@ -281,6 +281,15 @@ var operations = {
 		});
 	},
 
+	queryStars: function(res, qualification){
+		conn.query('SELECT * from star where usr_id=' + global.usrInfo.usrId, function (err, result, fields) {
+			if (err) throw err;
+
+			result = JSON.stringify(result);
+			res.end(result);
+		});
+	},
+
 	// POST
 	login: function(res, postObj, req){
 		var sql = `select * from usr where name=? and psw=?`;
@@ -359,26 +368,6 @@ var operations = {
 						}
 					}
 				});
-			}
-		});
-	},
-
-
-	resetPsw: function(res, patchObj, req){
-		let sql = `update usr set psw='${patchObj.npsw}' where psw='${patchObj.opsw}' and name='${patchObj.name}'`;
-		console.log(sql);
-		
-		conn.query(sql, function(err, result){
-			if(err)
-				throw err;
-
-			if(result.affectedRows == 1){
-				res.statusMessage = 'reset password success';
-				res.end();
-			}else{
-				res.statusCode = 401;
-				res.statusMessage = 'reset password fail';
-				res.end();
 			}
 		});
 	},
@@ -513,6 +502,32 @@ var operations = {
 		});
 	},
 
+	creatStar: function(res, postObj){
+		var sql = `INSERT INTO star 
+			(usr_id, name)
+			VALUES (?, ?)`;
+
+			conn.query(sql, [global.usrInfo.usrId, postObj.name], function(err, result, fields){
+			if(err)
+				throw err;
+			// console.log(result);
+			res.end(`${result.insertId}`);
+		});
+	},
+
+	starVideo: function(res, postObj){
+		var sql = `INSERT INTO usr_star 
+			(star_id, v_id, add_time)
+			VALUES (?, ?, now())`;
+
+		conn.query(sql, [postObj.starId, postObj.vId], function(err, result, fields){
+			if(err)
+				throw err;
+			
+			res.end();
+		});
+	},
+
 	// ===============PATCH================
 	// 投票
 	voteVideo: function(res, patchObj){
@@ -592,6 +607,25 @@ var operations = {
 			res.end();
 		}
 	},
+
+	resetPsw: function(res, patchObj, req){
+		let sql = `update usr set psw='${patchObj.npsw}' where psw='${patchObj.opsw}' and name='${patchObj.name}'`;
+		console.log(sql);
+		
+		conn.query(sql, function(err, result){
+			if(err)
+				throw err;
+
+			if(result.affectedRows == 1){
+				res.statusMessage = 'reset password success';
+				res.end();
+			}else{
+				res.statusCode = 401;
+				res.statusMessage = 'reset password fail';
+				res.end();
+			}
+		});
+	},
 }
 
 // 执行SQL
@@ -620,22 +654,24 @@ module.exports.query = function (operation, params, response) {
 	operations[operation](response, clause, params);
 }
 
-module.exports.post = function (operation, request, response) {
+module.exports.post = function (operation, request, response, pathParams) {
 	// console.log(arguments[0], arguments[1])
 	var formidable = require('formidable');
 	var form = new formidable.IncomingForm();
 
 	form.parse(request, function(err, fields, files){
+		pathParams && Object.assign(fields, pathParams);
 		operations[operation](response, fields, request);
 	});
 }
 
-module.exports.patch = function (operation, request, response) {
+module.exports.patch = function (operation, request, response, pathParams) {
 	// console.log(arguments[0], arguments[1])
 	var formidable = require('formidable');
 	var form = new formidable.IncomingForm();
 
 	form.parse(request, function(err, fields, files){
+		pathParams && Object.assign(fields, pathParams);
 		operations[operation](response, fields, request);
 	});
 }

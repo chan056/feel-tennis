@@ -203,9 +203,9 @@ const routerConfig = {
         r.query('videoVoteResult', params, res);
     },
 
-    // '/joinIndexJS': function(params, res){
-    //     r.query('joinIndexJS', params, res);
-    // },
+    '/stars': function(params, res){
+        r.query('queryStars', params, res);
+    },
 
     // ============POST 新建资源=============
     '/login': function(req, res){
@@ -303,6 +303,14 @@ const routerConfig = {
 
     '/voteNext': function(req, res){
         r.post('voteNextVideo', req, res);
+    },
+
+    '/star': function(req, res){
+        r.post('creatStar', req, res);
+    },
+
+    '/star/:starId': function(req, res, pathParams){
+        r.post('starVideo', req, res, pathParams);
     },
 
     // ============put update完整资源=============

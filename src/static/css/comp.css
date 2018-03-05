@@ -24,6 +24,7 @@ app {
   line-height: 40px;
 }
 #aside .guide-entry-renderer {
+  display: block;
   text-decoration: none;
 }
 #aside .guide-entry-renderer .icon {
@@ -31,6 +32,9 @@ app {
 }
 #aside .guide-entry-renderer .text {
   margin-left: 20px;
+}
+#aside .guide-entry-renderer:hover {
+  background-color: #eee;
 }
 #aside #llc {
   padding-left: 20px;
@@ -187,6 +191,25 @@ app {
 }
 #capture-btn {
   width: 120px;
+}
+#enshrine-btn {
+  position: relative;
+}
+#star-section {
+  position: absolute;
+  bottom: 0;
+  left: 15px;
+  width: 140px;
+  box-shadow: 0 0 20px #999;
+}
+#star-section > * {
+  padding: 10px;
+}
+#star-section h5 {
+  border-bottom: 1px solid #dcdfe6;
+}
+#stared-list li {
+  width: 100%;
 }
 .time {
   font-size: 13px;

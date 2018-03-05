@@ -142,7 +142,8 @@ var temp = {
                         <span class="text">发送反馈</span>
                     </a>
                 </div>
-
+            </div>
+            <div class="guide-section">
                 <div v-if="loginUsrInfo && loginUsrInfo.is_admin == 1" class="guide-entry" id="upload-entry" >
                     <a href="#/upload" class="guide-entry-renderer">
                         <i class="el-icon-upload icon"></i>
@@ -255,7 +256,7 @@ var temp = {
             </div>
             <div v-if="video" id="usr-operation-desk">
                 <div class="fl">{{video.impression}}次观看</div>
-                <ul class="fr block-list">
+                <ul class="fr block-list ovv">
                     <li id="support-btn" @click="vote(1)">
                         <i v-bind:class="{ 'fa-thumbs-up': like==1, 'fa': 1, 'fa-thumbs-o-up': 1}"></i>
                         <em>{{video.support_time}}</em>
@@ -265,7 +266,33 @@ var temp = {
                         <em>{{video.degrade_time}}</em>
                     </li>
                     <li id="share-btn"><i class="fa fa-share"></i>分享</li>
-                    <li id="enshrine-btn"><i class="fa fa-plus"></i></li>
+                    <li id="enshrine-btn">
+                        <i class="fa fa-plus"></i>
+                        <div id="star-section">
+                            <h5>添加到</h5>
+                            <ul id="stared-list" class="ovh">
+                                <li v-for="star in stars">
+                                    <el-checkbox v-model="checkList">{{star.name}}</el-checkbox>
+                                    <i class="icon fa fa-star hidden">共有还是私有</i>
+                                </li>
+                            </ul>
+                            <h5 @click="newStarForm.visible = true;">新建收藏夹</h5>
+                            <el-form v-show="newStarForm.visible" :model="newStarForm" ref="newStarForm" label-width="0" class="demo-ruleForm">
+                                <el-form-item
+                                    label=""
+                                    prop="starName"
+                                    :rules="[
+                                        { required: true, message: '名称不能为空'},
+                                    ]"
+                                >
+                                    <el-input type="starName" v-model="newStarForm.starName" auto-complete="off"></el-input>
+                                </el-form-item>
+                                <el-form-item>
+                                    <el-button type="primary" @click="submitNewStarForm('newStarForm')">提交</el-button>
+                                </el-form-item>
+                            </el-form>
+                        </div>
+                    </li>
                 </ul>
                 <br class="clr">
             </div>

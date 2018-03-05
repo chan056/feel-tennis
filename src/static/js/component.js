@@ -493,6 +493,10 @@ COMPONENTS.Video = {
 			});
 		});
 
+		d.newStarForm = {starName: '', visible: false};
+		d.stars = [];
+		d.checkList = [];
+
 		return d;
 	},
 	template: temp.video,
@@ -511,6 +515,7 @@ COMPONENTS.Video = {
 		// }.bind(this), id: 'hls'});
 
 		this.queryVoteComment();
+		this.queryStars();
 	},
 	methods: {
 		captureCountdown: function(){
@@ -647,12 +652,51 @@ COMPONENTS.Video = {
 			}.bind(this));
 		},
 		
+		// 开场动画
 		opening: function(e){
 			var t = $(e.target);
 			t.css({opacity: 0, transform: 'translate(-50%, -50%) scale(5)'});
 			setTimeout(function(){
 				t.hide()
 			}, 700)
+		},
+
+		submitNewStarForm: function(formName){
+			this.$refs[formName].validate(function(valid){
+				if (valid) {
+					this.newStar();
+				} else {
+					console.log('error submit!!');
+					return false;
+				}
+			}.bind(this));
+		},
+
+		queryStars: function(){
+			tools.xhr('/stars', function(res){
+				this.stars = res;
+			}.bind(this));
+		},
+
+		newStar: function(){
+			tools.xhr('/star', function(res){
+				this.$message({
+					message: '收藏夹新建成功',
+					type: 'success'
+				});
+				// 创建之后 添加视频到收藏夹
+				this.starVideo(res);
+				this.queryStars();
+			}.bind(this), 'post', {name: this.newStarForm.starName});
+		},
+
+		starVideo: function(starId){
+			tools.xhr('/star/' + starId, function(res){
+				this.$message({
+					message: '视频收藏成功',
+					type: 'success'
+				});
+			}.bind(this), 'post', {vId: this.video.id});
 		}
 	}
 };
