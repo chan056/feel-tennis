@@ -41,7 +41,7 @@ em {
   overflow: visible !important;
 }
 .hidden {
-  display: none !important;
+  display: none;
 }
 .clearfix:after {
   display: table;

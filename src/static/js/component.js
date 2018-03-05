@@ -445,7 +445,7 @@ COMPONENTS.Video = {
 
 		d.captureParams.vId = videoId;
 		tools.xhr('/videos/' + videoId, function(resData){
-			console.log(resData)
+			// console.log(resData)
 			if(resData){
 				d.video = resData;
 				d.captureParams.ext = d.video.video_ext;
@@ -496,27 +496,28 @@ COMPONENTS.Video = {
 		d.newStarForm = {starName: '', visible: false};
 		d.stars = [];
 		d.checkList = [];
+		d.selectedStars = [];
+		d.starSectionVisible = false;
+
+		d.loginUsrInfo = {};
 
 		return d;
 	},
 	template: temp.video,
 	created() {
-		// tools.insertScriptTag(1, "https://cdn.jsdelivr.net/npm/hls.js@latest", {onload: function(){
-		// 	tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
-		// 	video.onpause = function(){
-		// 		// console.log('pause');
-		// 		// 停止匹配字幕 todo
-		// 	}
-
-		// 	video.onended = function(){
-		// 		// console.log('ended');
-		// 		$('.subtitle').text('');
-		// 	}
-		// }.bind(this), id: 'hls'});
-
-		this.queryVoteComment();
-		this.queryStars();
+		this.$bus.on('update-login-info', function(info){
+			this.loginUsrInfo = info;
+			if(info.name){
+				this.queryVoteComment();
+				this.queryStars();
+				this.queryUsrVideoStars();
+			}
+		}.bind(this));
 	},
+	beforeDestroy() {
+		this.$bus.off('update-login-info', this.addTodo);
+	},
+
 	methods: {
 		captureCountdown: function(){
 			let _this = this;
@@ -665,6 +666,7 @@ COMPONENTS.Video = {
 			this.$refs[formName].validate(function(valid){
 				if (valid) {
 					this.newStar();
+					this.newStarForm.visible = false;
 				} else {
 					console.log('error submit!!');
 					return false;
@@ -678,25 +680,57 @@ COMPONENTS.Video = {
 			}.bind(this));
 		},
 
+		queryUsrVideoStars: function(){
+			tools.xhr('/queryUsrVideoStars/' + this.videoId, function(res){
+				let selectedStars = [];
+				
+				res.forEach(function(item){
+					selectedStars.push(item.name);
+				});
+
+				this.selectedStars = selectedStars;
+			}.bind(this));
+		},
+
 		newStar: function(){
 			tools.xhr('/star', function(res){
 				this.$message({
 					message: '收藏夹新建成功',
 					type: 'success'
 				});
-				// 创建之后 添加视频到收藏夹
-				this.starVideo(res);
+				
 				this.queryStars();
+
+				// 创建之后 添加视频到收藏夹
+				// todo 执行顺序也许有问题，必须在queryStars之后
+				this.starVideo(res, this.queryUsrVideoStars);
 			}.bind(this), 'post', {name: this.newStarForm.starName});
 		},
 
-		starVideo: function(starId){
+		starVideo: function(starId, fn){
+			if(!starId)
+				return;
+
 			tools.xhr('/star/' + starId, function(res){
-				this.$message({
-					message: '视频收藏成功',
-					type: 'success'
-				});
+				if(!res)
+					this.$message({
+						message: '视频收藏成功',
+						type: 'success'
+					});
+
+				fn && fn();
 			}.bind(this), 'post', {vId: this.video.id});
+		},
+
+		toggleStar: function(e){
+			// console.log(arguments);
+			let sid = arguments[1];
+
+			this.starVideo(sid);
+		},
+
+		diplayStarSection: function(){
+			$('#star-section').show();
 		}
 	}
 };

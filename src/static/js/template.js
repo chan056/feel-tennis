@@ -267,14 +267,18 @@ var temp = {
                     </li>
                     <li id="share-btn"><i class="fa fa-share"></i>分享</li>
                     <li id="enshrine-btn">
-                        <i class="fa fa-plus"></i>
-                        <div id="star-section">
+                        <i class="fa fa-plus" @click.stop="diplayStarSection();"></i>
+                        <div id="star-section" class="hidden" @click.stop>
                             <h5>添加到</h5>
                             <ul id="stared-list" class="ovh">
-                                <li v-for="star in stars">
-                                    <el-checkbox v-model="checkList">{{star.name}}</el-checkbox>
-                                    <i class="icon fa fa-star hidden">共有还是私有</i>
-                                </li>
+                                <el-checkbox-group 
+                                    v-model="selectedStars">
+                                    <li v-for="star in stars">
+                                        <el-checkbox :label="star.name" v-bind:sid="star.id" @change="toggleStar($event, star.id)"></el-checkbox>
+                                        <i class="icon fa fa-star hidden">共有还是私有</i>
+                                    </li>
+                                </el-checkbox-group>
+                                
                             </ul>
                             <h5 @click="newStarForm.visible = true;">新建收藏夹</h5>
                             <el-form v-show="newStarForm.visible" :model="newStarForm" ref="newStarForm" label-width="0" class="demo-ruleForm">
@@ -288,7 +292,7 @@ var temp = {
                                     <el-input type="starName" v-model="newStarForm.starName" auto-complete="off"></el-input>
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-button type="primary" @click="submitNewStarForm('newStarForm')">提交</el-button>
+                                    <el-button type="primary" @click.stop="submitNewStarForm('newStarForm')">提交</el-button>
                                 </el-form-item>
                             </el-form>
                         </div>

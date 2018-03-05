@@ -290,6 +290,26 @@ var operations = {
 		});
 	},
 
+	queryUsrVideoStars: function(res, qualification, params){
+		let sql = `SELECT
+			us.star_id as id,
+			s.NAME as name
+		FROM
+			usr_star AS us
+		JOIN star AS s
+		WHERE
+			us.v_id = ${params.v_id}
+		AND us.star_id = s.id
+		AND s.usr_id=${global.usrInfo.usrId}`;
+
+		conn.query(sql, function (err, result, fields) {
+			if (err) throw err;
+
+			result = JSON.stringify(result);
+			res.end(result);
+		});
+	},
+
 	// POST
 	login: function(res, postObj, req){
 		var sql = `select * from usr where name=? and psw=?`;
@@ -516,16 +536,31 @@ var operations = {
 	},
 
 	starVideo: function(res, postObj){
-		var sql = `INSERT INTO usr_star 
-			(star_id, v_id, add_time)
-			VALUES (?, ?, now())`;
 
-		conn.query(sql, [postObj.starId, postObj.vId], function(err, result, fields){
+		let qSql = `select * from usr_star where star_id=${postObj.starId} and v_id=${postObj.vId}`;
+		conn.query(qSql, function(err, result){
 			if(err)
-				throw err;
-			
-			res.end();
+				console.log(err);
+
+			if(result && result.length){
+				let dSql = `delete from usr_star where star_id=${postObj.starId} and v_id=${postObj.vId}`;
+				conn.query(dSql, function(){
+					res.end('1');
+				});
+			}else{
+				let iSql = `INSERT INTO usr_star 
+					(star_id, v_id, add_time)
+					VALUES (?, ?, now())`;
+
+				conn.query(iSql, [postObj.starId, postObj.vId], function(err, result, fields){
+					if(err)
+						throw err;
+					
+					res.end();
+				});
+			}
 		});
+		
 	},
 
 	// ===============PATCH================

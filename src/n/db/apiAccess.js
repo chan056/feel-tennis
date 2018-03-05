@@ -10,9 +10,13 @@ let config = {
 
     '/gifLink': {level: 10, visits: 3},
 
-    '/star': {level: 10},
+    '/stars': {level: 10},
 
     '/star/:starId': {level: 10},
+
+    '/queryVoteComment/:vId': {level: 10},
+
+    '/queryUsrVideoStars/:v_id': {level: 10},
     
     '/makers': {level: 100},
 
