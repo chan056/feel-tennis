@@ -1168,10 +1168,17 @@ COMPONENTS.EmailConfirm = {
 
 COMPONENTS.Stars = {
 	data: function () {
-		var d = {sports: []};
+		var d = {
+			vStars: [],
+			screenshotStars: []
+		};
 
-		tools.xhr('/allstars', function(resData){
-			d.sports = resData;
+		tools.xhr('/stars', function(resData){
+			d.vStars = resData;
+		});
+
+		tools.xhr('/screenshots', function(resData){
+			d.screenshotStars = resData;
 		});
 
 		return d;

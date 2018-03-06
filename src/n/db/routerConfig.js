@@ -207,6 +207,10 @@ const routerConfig = {
         r.query('queryUsrVideoStars', params, res, req);
     },
 
+    '/screenshots': function(params, res, req){
+        r.query('queryUsrScreenshots', params, res, req);
+    },
+
     // allstars
 
     // ============POST 新建资源=============

@@ -351,8 +351,8 @@ var temp = {
     stars: `
         <div id="star-list">
             <ul class="block-list spt-list">
-                <li class="" v-for="sport in sports">
-                    <router-link :to="{path: '/sports/'+ sport.id }" :title="sport.name">
+                <li class="" v-for="vStar in vStars">
+                    <router-link :to="{path: '/sports/'+ vStar.id }" :title="vStar.name">
                         <img :src="'/img/cover/sport/' + sport.id + '.jpg'" class="block-thumb spt-thumb"/>
                         <p class="clearfix block-info">
                             <span class="play-count">{{sport.impression}}次观看</span>
