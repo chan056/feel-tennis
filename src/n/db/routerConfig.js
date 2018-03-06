@@ -2,53 +2,53 @@ let r =  require('./operate');
 let tools = require('../tools');
 
 const routerConfig = {
-    '/tube': function(params, res){
+    '/tube': function(params, res, req){
 	    const tumour = require('../tumour');
-		tumour.joinIndexJS(res);
+        tumour.joinIndexJS(res, req.usrInfo);
     },
 
-    '/sports': function(params, res){
-        r.query('querySports', params, res);
+    '/sports': function(params, res, req){
+        r.query('querySports', params, res, req);
     },
 
-    '/skills/:sport_id': function(params, res){
-        r.query('querySkills', params, res);
+    '/skills/:sport_id': function(params, res, req){
+        r.query('querySkills', params, res, req);
     },
     
-    '/athletes/:sport_id': function(params, res){
-        r.query('queryAthletes', params, res);
+    '/athletes/:sport_id': function(params, res, req){
+        r.query('queryAthletes', params, res, req);
     },
 
-    '/sports/:id': function(params, res){
-        r.query('querySport', params, res);
+    '/sports/:id': function(params, res, req){
+        r.query('querySport', params, res, req);
     },
 
-    '/albums': function(params, res){
-        r.query('queryAlbumList', params, res);
+    '/albums': function(params, res, req){
+        r.query('queryAlbumList', params, res, req);
     },
 
-    '/sports/:sport_id/albums': function(params, res){
-        r.query('queryAlbumList', params, res);
+    '/sports/:sport_id/albums': function(params, res, req){
+        r.query('queryAlbumList', params, res, req);
     },
     
-    '/albums/:album_id/videos': function(params, res){
-        r.query('queryAlbum', params, res);
+    '/albums/:album_id/videos': function(params, res, req){
+        r.query('queryAlbum', params, res, req);
     },
     
     // 根据video id 查询某个视频
-    '/videos/:id': function(params, res){
-        r.query('queryVideo', params, res);
+    '/videos/:id': function(params, res, req){
+        r.query('queryVideo', params, res, req);
     },
 
-    '/makers': function(params, res){
-        r.query('queryMakers', params, res);
+    '/makers': function(params, res, req){
+        r.query('queryMakers', params, res, req);
     },
 
-    '/maker/:id': function(params, res){
-        r.query('queryMaker', params, res);
+    '/maker/:id': function(params, res, req){
+        r.query('queryMaker', params, res, req);
     },
 
-    '/emailConfirm': function(params, res){
+    '/emailConfirm': function(params, res, req){
         let code = params.code;
 
         let crypto = require('../crypto.js');
@@ -65,7 +65,7 @@ const routerConfig = {
     },
 
     // 根据关键字搜索视频
-    '/videos': function(params, res){
+    '/videos': function(params, res, req){
         let sql = `select * from video`;
 
         if(params && !tools.isEmpty(params)){
@@ -95,11 +95,11 @@ const routerConfig = {
         r.excuteSQL(sql, res);
     },
 
-    '/tags(/:sport_id)?': function(params, res){
-        r.query('queryTag', params, res);
+    '/tags(/:sport_id)?': function(params, res, req){
+        r.query('queryTag', params, res, req);
     },
 
-    '/albumTags/:albumId': function(params, res){
+    '/albumTags/:albumId': function(params, res, req){
         let sql = `select tag from album where id=` + params.albumId;
         r.excuteSQL(sql, res, function(data){
             // data = JSON.stringify(data);
@@ -111,7 +111,7 @@ const routerConfig = {
         });
     },
 
-    '/videoTags/:videoId': function(params, res){
+    '/videoTags/:videoId': function(params, res, req){
         let sql = `select tag from video where id=` + params.videoId;
         // console.log(sql);
         
@@ -127,9 +127,9 @@ const routerConfig = {
 
     // 收集所有和导航有关信息
     // 根据 sportId albumId videoId
-    '/navInfo/:depth/:id': function(params, res){
+    '/navInfo/:depth/:id': function(params, res, req){
         if(params.depth == 1){
-            r.query('querySport', {id: params.id}, res);
+            r.query('querySport', {id: params.id}, res, req);
         }else if(params.depth == 2){
             let sql = `SELECT
                     a.id AS aId ,
@@ -168,44 +168,46 @@ const routerConfig = {
         // console.log(params);
     },
 
-    '/gifLink': function(params, res){
+    '/gifLink': function(params, res, req){
         let createDynamicPreview = require('../ffmpeg/gif.js').createDynamicPreview;
-        createDynamicPreview(params, res);
+        createDynamicPreview(params, res, req);
     },
 
-    '/srt/:vId': function(params, res){
+    '/srt/:vId': function(params, res, req){
         let parseSrt = require('../srtParser.js').parseSrt;
         parseSrt(params.vId, res);
     },
 
-    '/loginInfo': function(params, res){
-        r.query('loginInfo', params, res);
+    '/loginInfo': function(params, res, req){
+        r.query('loginInfo', params, res, req);
     },
 
 	// 查询当前用户是否点赞当前视频
-    '/queryVoteComment/:vId': function(params, res){
-        let sql = `select comment from usr_comment where video_id=${params.vId} and comment_type='1' and usr_id=${global.usrInfo.usrId}`;
+    '/queryVoteComment/:vId': function(params, res, req){
+        let sql = `select comment from usr_comment where video_id=${params.vId} and comment_type='1' and usr_id=${req.usrInfo.usrId}`;
 
         r.excuteSQL(sql, res, function(result){
             res.end(JSON.stringify(result[0]));
         });
     },
 
-    '/checkUsernameExist': function(params, res){
-        r.query('checkUsernameExist', params, res);
+    '/checkUsernameExist': function(params, res, req){
+        r.query('checkUsernameExist', params, res, req);
     },
 
-    '/videoVoteResult': function(params, res){
-        r.query('videoVoteResult', params, res);
+    '/videoVoteResult': function(params, res, req){
+        r.query('videoVoteResult', params, res, req);
     },
 
-    '/stars': function(params, res){
-        r.query('queryStars', params, res);
+    '/stars': function(params, res, req){
+        r.query('queryUsrStars', params, res, req);
     },
 
-    '/queryUsrVideoStars/:v_id': function(params, res){
-        r.query('queryUsrVideoStars', params, res);
+    '/queryUsrVideoStars/:v_id': function(params, res, req){
+        r.query('queryUsrVideoStars', params, res, req);
     },
+
+    // allstars
 
     // ============POST 新建资源=============
     '/login': function(req, res){

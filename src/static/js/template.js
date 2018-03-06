@@ -122,7 +122,7 @@ var temp = {
                         <span class="text">首页</span>
                     </a>
                 </div>
-                <div v-if="1" class="guide-entry" id="feedback-entry">
+                <div v-if="(loginUsrInfo && loginUsrInfo.name)"  class="guide-entry" id="feedback-entry">
                     <a href="#/stars" class="guide-entry-renderer">
                         <i class="icon fa fa-star"></i>
                         <span class="text">收藏</span>

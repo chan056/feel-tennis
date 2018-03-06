@@ -1,5 +1,6 @@
 let conn = require('./connect.js').conn;
 let tools = require('../tools');
+let usrInfo = {};
 
 var operations = {
 	querySports: function (res, qualification) {
@@ -91,9 +92,9 @@ var operations = {
 	*/
 	queryVideo: function (res, qualification) {
 		const constants = require('../constant');
-		usrInfo = global.usrInfo;
 		let dayView = 0;
 		let dayViewLeft = 0;
+		let usrInfo = this.usrInfo;
 
 		if(usrInfo){
 			let usrType = usrInfo.type;
@@ -198,7 +199,7 @@ var operations = {
 	},
 
 	loginInfo: function(res){
-		let usrInfo = global.usrInfo;
+		let usrInfo = this.usrInfo;
 		
 		if(usrInfo.type == 1){
 			conn.query('select name, day_view, is_admin from usr where id = ' + usrInfo.usrId, function(err, result){
@@ -279,8 +280,8 @@ var operations = {
 		});
 	},
 
-	queryStars: function(res, qualification){
-		conn.query('SELECT * from star where usr_id=' + global.usrInfo.usrId, function (err, result, fields) {
+	queryUsrStars: function(res, qualification){
+		conn.query('SELECT * from star where usr_id=' + this.usrInfo.usrId, function (err, result, fields) {
 			if (err) throw err;
 
 			result = JSON.stringify(result);
@@ -298,9 +299,18 @@ var operations = {
 		WHERE
 			us.v_id = ${params.v_id}
 		AND us.star_id = s.id
-		AND s.usr_id=${global.usrInfo.usrId}`;
+		AND s.usr_id=${this.usrInfo.usrId}`;
 
 		conn.query(sql, function (err, result, fields) {
+			if (err) throw err;
+
+			result = JSON.stringify(result);
+			res.end(result);
+		});
+	},
+
+	queryUsrScreenshots: function(res, qualification){
+		conn.query('SELECT * from usr_screenshot_star where usr_id=' + this.usrInfo.usrId, function (err, result, fields) {
 			if (err) throw err;
 
 			result = JSON.stringify(result);
@@ -324,7 +334,8 @@ var operations = {
 				res.end();
 			}else{
 				res.statusCode = 401;
-				res.end(JSON.stringify({isLogin: false}));
+				res.statusMessage = 'login fail';
+				res.end();
 			}
 			// console.log(result, fields);
 		});
@@ -442,7 +453,7 @@ var operations = {
 			postObj.wechat, 
 			postObj.email, 
 			postObj.files,
-			global.usrInfo.usrId || 0
+			this.usrInfo.usrId || 0
 		], function(err, result, fields){
 			if(err)
 				console.log(err.sql, err.sqlMessage) ;
@@ -525,7 +536,7 @@ var operations = {
 			(usr_id, name)
 			VALUES (?, ?)`;
 
-			conn.query(sql, [global.usrInfo.usrId, postObj.name], function(err, result, fields){
+			conn.query(sql, [this.usrInfo.usrId, postObj.name], function(err, result, fields){
 			if(err)
 				throw err;
 			// console.log(result);
@@ -574,8 +585,10 @@ var operations = {
 
 		let usrId;
 
-		if(global.usrInfo && global.usrInfo.type == 1){
-			usrId = global.usrInfo.usrId;
+		let usrInfo = this.usrInfo;
+
+		if(usrInfo && usrInfo.type == 1){
+			usrId = usrInfo.usrId;
 
 			if(voteType == 1){
 				if(voteStatus == 1){
@@ -677,35 +690,34 @@ module.exports.excuteSQL = function (sql, res, fn) {
 }
 
 // 基础查询 a=1&b=2
-module.exports.query = function (operation, params, response) {
-	// console.log(arguments[0], arguments[1])
+module.exports.query = function (operation, params, response, request) {
+	operations.usrInfo = request.usrInfo;
 	clause = tools.newClause(params);
 	if(clause){
 		clause = ' where ' + clause;
 	}
-	// console.log(params, clause)
-	operations[operation](response, clause, params);
+	operations[operation] && operations[operation](response, clause, params, request);
 }
 
 module.exports.post = function (operation, request, response, pathParams) {
-	// console.log(arguments[0], arguments[1])
+	operations.usrInfo = request.usrInfo;
 	var formidable = require('formidable');
 	var form = new formidable.IncomingForm();
 
 	form.parse(request, function(err, fields, files){
 		pathParams && Object.assign(fields, pathParams);
-		operations[operation](response, fields, request);
+		operations[operation] && operations[operation](response, fields, request);
 	});
 }
 
 module.exports.patch = function (operation, request, response, pathParams) {
-	// console.log(arguments[0], arguments[1])
+	operations.usrInfo = request.usrInfo;
 	var formidable = require('formidable');
 	var form = new formidable.IncomingForm();
 
 	form.parse(request, function(err, fields, files){
 		pathParams && Object.assign(fields, pathParams);
-		operations[operation](response, fields, request);
+		operations[operation] && operations[operation](response, fields, request);
 	});
 }
 

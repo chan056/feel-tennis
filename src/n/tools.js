@@ -60,13 +60,12 @@ function formatTime(seconds){
 	}
 }
 
-function usrAuthority(){
+function usrAuthority(usrInfo){
 	let authority = 1;
 
-	let usr = global.usrInfo;
-	if(usr.type == 1){
+	if(usrInfo.type == 1){
 		authority = 10;
-		if(usr.isAdmin == 1){
+		if(usrInfo.isAdmin == 1){
 			authority = 100;
 		}
 	}

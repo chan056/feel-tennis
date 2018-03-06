@@ -1,14 +1,13 @@
 module.exports = {
-    joinIndexJS: function(res){
+    joinIndexJS: function(res, usrInfo){
         const path = require('path');
         const fs = require('fs');
-        let usr = global.usrInfo;
 
         let dir = path.resolve(__dirname, '../static');
         let f1 = dir + '/js/admin.js';
         let f2 = dir + '/js/tube.js';
 
-        if(usr && usr.isAdmin == 1){
+        if(usrInfo && usrInfo.isAdmin == 1){
             const concat = require('concat-files');
             
             let tmp = dir + '/js/tmp.js'

@@ -1,4 +1,4 @@
-module.exports.createDynamicPreview = function(captureParams, res){
+module.exports.createDynamicPreview = function(captureParams, res, req){
     let videoName = captureParams.vId,
         st = captureParams.st,
         et = captureParams.et,
@@ -6,19 +6,18 @@ module.exports.createDynamicPreview = function(captureParams, res){
         scale = captureParams.scale || 400;
         now = Date.now();
 
-    let isCover = 0;// 区分 gif 的用途 0 用户截图 1 视频封面
     let output = captureParams.output;
-    if(output){
-        isCover = 1;
+    if(req){// 用户截图
+        output = dir + `/multimedia/gif/${videoName}-${now}.gif`;
     }
 
     captureParams.ext = captureParams.ext || '.mp4';
 
-    if(duration > require('../constant').gifMaxDuration){
+    if(res && duration > require('../constant').gifMaxDuration){
         return res.end('fail');
     }
 
-    if(videoName === undefined || st === undefined || et === undefined)
+    if(res && (videoName === undefined || st === undefined || et === undefined))
         return res.end('fail');
 
     let path = require('path');
@@ -27,9 +26,7 @@ module.exports.createDynamicPreview = function(captureParams, res){
     let dir = path.resolve(__dirname, '../../static')
     let vSouce = dir + `/multimedia/pristine_v/${videoName}${captureParams.ext}`;
     let outputPallete = dir + `/multimedia/gif/palette-${now}.png`;
-    if(!isCover){// 用户截图
-        output = dir + `/multimedia/gif/${videoName}-${now}.gif`;
-    }
+   
 
     let paletteCmd = `ffmpeg -ss ${st} -t ${duration} -i ${vSouce} -vf fps=15,scale=${scale}:-1:flags=lanczos,palettegen ${outputPallete}`;
     let gifShotCmd = `ffmpeg -ss ${st} -t ${duration} -i ${vSouce} -i ${outputPallete} -filter_complex "fps=15,scale=${scale}:-1:flags=lanczos[x];[x][1:v] paletteuse" ${output}`;
@@ -42,11 +39,11 @@ module.exports.createDynamicPreview = function(captureParams, res){
             if(err)
                 return console.log(err);
             
-            if(!isCover){// 用户截图
+            if(req){// 用户截图
                 let gifFilename = `${videoName}-${now}`;
                 output = output.match(/\/multimedia\S+$/);
                 let conn = require('../db/connect.js').conn;
-                let sql = `insert into usr_screenshot_star (usr_id, screenshot) values (${global.usrInfo.usrId}, '${gifFilename}')`;
+                let sql = `insert into usr_screenshot_star (usr_id, screenshot) values (${req.usrInfo.usrId}, '${gifFilename}')`;
                 console.log(sql);
                 conn.query(sql, function(err, result){
                     if(err)

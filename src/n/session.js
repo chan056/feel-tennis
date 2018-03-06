@@ -4,7 +4,7 @@ function newSession(){
     
 	let session = new NodeSession({
 		secret: constants.sessionSecret,
-		'lifetime': 3 * 60 * 60 * 1000, // 1 hour
+		'lifetime': 3 * 60 * 60 * 1000, // 3 hour
 		'expireOnClose': false,
 		'cookie': 'yi_tube',
 	});
