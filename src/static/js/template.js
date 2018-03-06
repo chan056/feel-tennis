@@ -269,17 +269,15 @@ var temp = {
                     <li id="enshrine-btn">
                         <i class="fa fa-plus" @click.stop="diplayStarSection();"></i>
                         <div id="star-section" class="hidden" @click.stop>
-                            <h5>添加到</h5>
-                            <ul id="stared-list" class="ovh">
-                                <el-checkbox-group 
-                                    v-model="selectedStars">
-                                    <li v-for="star in stars">
-                                        <el-checkbox :label="star.name" v-bind:sid="star.id" @change="toggleStar($event, star.id)"></el-checkbox>
-                                        <i class="icon fa fa-star hidden">共有还是私有</i>
-                                    </li>
-                                </el-checkbox-group>
-                                
-                            </ul>
+                            <h5>添加到...</h5>
+                            <el-checkbox-group
+                                id="stared-list"
+                                v-model="selectedStars">
+                                <div v-for="star in stars" class="star">
+                                    <el-checkbox :label="star.name" v-bind:sid="star.id" @change="toggleStar($event, star.id)"></el-checkbox>
+                                    <i class="icon fa fa-star hidden">共有还是私有</i>
+                                </div>
+                            </el-checkbox-group>
                             <h5 @click="newStarForm.visible = true;">新建收藏夹</h5>
                             <el-form v-show="newStarForm.visible" :model="newStarForm" ref="newStarForm" label-width="0" class="demo-ruleForm">
                                 <el-form-item

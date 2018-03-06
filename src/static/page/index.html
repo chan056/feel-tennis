@@ -30,7 +30,6 @@
 	<script src="../lib/zepto.js"></script>
 	<script src="../lib/js.cookie.min.js"></script>
 	<script src="../lib/element/index.js"></script>
-	<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
 
 	<script src="../js/constant.js"></script>
 	<script src="../js/tools.js"></script>
@@ -52,8 +51,10 @@
 
 			var coord = {latitude: data.latitude, longitude: data.longitude};
 		}); */
+
+		// 绑定全局隐藏组件事件
 		$('body').on('click', function(){
 			$('#star-section').hide();
-		})
+		});
 	</script>
 </html>

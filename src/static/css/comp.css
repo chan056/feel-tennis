@@ -208,8 +208,13 @@ app {
 #star-section h5 {
   border-bottom: 1px solid #dcdfe6;
 }
-#stared-list li {
-  width: 100%;
+#stared-list {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+#stared-list .star {
+  padding-bottom: 10px;
 }
 .time {
   font-size: 13px;
