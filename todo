@@ -43,9 +43,8 @@
 
 缓存
 
-APIACCESS 偶尔401 无法读取global.usrInfo
-
 ==================待优化==================
+APIACCESS 偶尔401 无法及时读取global.usrInfo
 整理表关系
 样式兼容性
 不同用户同时访问 global

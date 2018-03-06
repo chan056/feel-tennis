@@ -207,9 +207,7 @@ var operations = {
 				result = JSON.stringify(result[0]);
 				res.end(result);
 			});
-			// res.end()
 		}else if(usrInfo.type == 2){
-			// console.log(usrInfo);
 			res.end('')
 		}
 	},
@@ -295,7 +293,7 @@ var operations = {
 			us.star_id as id,
 			s.NAME as name
 		FROM
-			usr_star AS us
+			usr_video_star AS us
 		JOIN star AS s
 		WHERE
 			us.v_id = ${params.v_id}
@@ -537,18 +535,18 @@ var operations = {
 
 	starVideo: function(res, postObj){
 
-		let qSql = `select * from usr_star where star_id=${postObj.starId} and v_id=${postObj.vId}`;
+		let qSql = `select * from usr_video_star where star_id=${postObj.starId} and v_id=${postObj.vId}`;
 		conn.query(qSql, function(err, result){
 			if(err)
 				console.log(err);
 
 			if(result && result.length){
-				let dSql = `delete from usr_star where star_id=${postObj.starId} and v_id=${postObj.vId}`;
+				let dSql = `delete from usr_video_star where star_id=${postObj.starId} and v_id=${postObj.vId}`;
 				conn.query(dSql, function(){
 					res.end('1');
 				});
 			}else{
-				let iSql = `INSERT INTO usr_star 
+				let iSql = `INSERT INTO usr_video_star 
 					(star_id, v_id, add_time)
 					VALUES (?, ?, now())`;
 

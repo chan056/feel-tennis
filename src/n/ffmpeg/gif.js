@@ -27,8 +27,9 @@ module.exports.createDynamicPreview = function(captureParams, res){
     let dir = path.resolve(__dirname, '../../static')
     let vSouce = dir + `/multimedia/pristine_v/${videoName}${captureParams.ext}`;
     let outputPallete = dir + `/multimedia/gif/palette-${now}.png`;
-    if(!isCover)
+    if(!isCover){// 用户截图
         output = dir + `/multimedia/gif/${videoName}-${now}.gif`;
+    }
 
     let paletteCmd = `ffmpeg -ss ${st} -t ${duration} -i ${vSouce} -vf fps=15,scale=${scale}:-1:flags=lanczos,palettegen ${outputPallete}`;
     let gifShotCmd = `ffmpeg -ss ${st} -t ${duration} -i ${vSouce} -i ${outputPallete} -filter_complex "fps=15,scale=${scale}:-1:flags=lanczos[x];[x][1:v] paletteuse" ${output}`;
@@ -41,9 +42,18 @@ module.exports.createDynamicPreview = function(captureParams, res){
             if(err)
                 return console.log(err);
             
-            if(!isCover){
+            if(!isCover){// 用户截图
+                let gifFilename = `${videoName}-${now}`;
                 output = output.match(/\/multimedia\S+$/);
-                return res.end(output[0]);    
+                let conn = require('../db/connect.js').conn;
+                let sql = `insert into usr_screenshot_star (usr_id, screenshot) values (${global.usrInfo.usrId}, '${gifFilename}')`;
+                console.log(sql);
+                conn.query(sql, function(err, result){
+                    if(err)
+                        console.log(err);
+                });
+                // 存储到
+                return res.end(output[0]);
             }
             
         });
