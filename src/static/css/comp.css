@@ -173,6 +173,7 @@ app {
 }
 #usr-operation-desk {
   margin: 30px 0px;
+  width: 712px;
 }
 #usr-operation-desk .block-list li {
   cursor: pointer;

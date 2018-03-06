@@ -509,8 +509,7 @@ COMPONENTS.Video = {
 			this.loginUsrInfo = info;
 			if(info.name){
 				this.queryVoteComment();
-				this.queryStars();
-				this.queryUsrVideoStars();
+				this.queryStars(this.queryUsrVideoStars);
 			}
 		}.bind(this));
 	},
@@ -674,9 +673,10 @@ COMPONENTS.Video = {
 			}.bind(this));
 		},
 
-		queryStars: function(){
+		queryStars: function(fn){
 			tools.xhr('/stars', function(res){
 				this.stars = res;
+				fn && fn();
 			}.bind(this));
 		},
 
