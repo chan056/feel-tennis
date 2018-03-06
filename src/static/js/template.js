@@ -123,7 +123,7 @@ var temp = {
                     </a>
                 </div>
                 <div v-if="1" class="guide-entry" id="feedback-entry">
-                    <a href="#/star" class="guide-entry-renderer">
+                    <a href="#/stars" class="guide-entry-renderer">
                         <i class="icon fa fa-star"></i>
                         <span class="text">收藏</span>
                     </a>
@@ -160,7 +160,7 @@ var temp = {
             </div>
         </div>
     `,
-    // VISITOR
+
     sports: `
         <div id="album-list">
             <ul class="block-list spt-list">
@@ -340,6 +340,24 @@ var temp = {
                             <span class="play-count">{{video.impression}}次观看</span>
                             <span class="update-time">
                                 <UpdateTime :timestamp="video.update_time"></UpdateTime>
+                            </span>
+                        </p>
+                    </router-link>
+                </li>
+            </ul>
+        </div>
+    `,
+
+    stars: `
+        <div id="star-list">
+            <ul class="block-list spt-list">
+                <li class="" v-for="sport in sports">
+                    <router-link :to="{path: '/sports/'+ sport.id }" :title="sport.name">
+                        <img :src="'/img/cover/sport/' + sport.id + '.jpg'" class="block-thumb spt-thumb"/>
+                        <p class="clearfix block-info">
+                            <span class="play-count">{{sport.impression}}次观看</span>
+                            <span class="update-time">
+                                <UpdateTime :timestamp="sport.update_time"></UpdateTime>
                             </span>
                         </p>
                     </router-link>

@@ -1165,3 +1165,17 @@ COMPONENTS.EmailConfirm = {
 
 	template: temp.emailConfirm
 }
+
+COMPONENTS.Stars = {
+	data: function () {
+		var d = {sports: []};
+
+		tools.xhr('/allstars', function(resData){
+			d.sports = resData;
+		});
+
+		return d;
+	},
+
+	template: temp.stars,
+};

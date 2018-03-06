@@ -53,4 +53,8 @@ const routeConfig = [
 		path: '/emailConfirm', 
 		component: COMPONENTS.EmailConfirm
 	},
+	{ 
+		path: '/stars', 
+		component: COMPONENTS.Stars
+	},
 ];
