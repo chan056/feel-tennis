@@ -504,7 +504,7 @@ COMPONENTS.Video = {
 		return d;
 	},
 	template: temp.video,
-	created() {
+	mounted() {
 		this.$bus.on('update-login-info', function(info){
 			this.loginUsrInfo = info;
 			if(info.name){
