@@ -1188,3 +1188,39 @@ COMPONENTS.Stars = {
 
 	template: temp.stars,
 };
+
+COMPONENTS.Vstar = {
+	props: ['vStarId'],
+	data: function () {
+		console.log(this.vStarId);
+		var d = {
+			starVideos: [],
+		};
+
+		tools.xhr('/queryStarVideo/' + this.vStarId, function(resData){
+			d.starVideos = resData;
+		});
+
+		return d;
+	},
+
+	template: temp.vStar,
+};
+
+COMPONENTS.UsrVshoots = {
+	props: ['vStarId'],
+	data: function () {
+		console.log(this.vStarId);
+		var d = {
+			shoots: [],
+		};
+
+		tools.xhr('/queryUsrVshoot/' + this.vStarId, function(resData){
+			d.shoots = resData;
+		});
+
+		return d;
+	},
+
+	template: temp.usrVshoots,
+} 

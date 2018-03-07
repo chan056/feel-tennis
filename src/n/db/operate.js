@@ -318,6 +318,24 @@ var operations = {
 		});
 	},
 
+	queryStarVideo: function(res, qualification){
+		conn.query('SELECT * from usr_video_star' + qualification, function (err, result, fields) {
+			if (err) throw err;
+
+			result = JSON.stringify(result);
+			res.end(result);
+		});
+	},
+
+	queryUsrVshoot: function(res, qualification){
+		conn.query('SELECT * from usr_screenshot_star' + qualification + ' and usr_id=' + this.usrInfo.usrId, function (err, result, fields) {
+			if (err) throw err;
+
+			result = JSON.stringify(result);
+			res.end(result);
+		});
+	},
+
 	// POST
 	login: function(res, postObj, req){
 		var sql = `select * from usr where name=? and psw=?`;

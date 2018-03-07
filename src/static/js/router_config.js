@@ -57,4 +57,15 @@ const routeConfig = [
 		path: '/stars', 
 		component: COMPONENTS.Stars
 	},
+	{ 
+		path: '/vStar/:vStarId', 
+		component: COMPONENTS.Vstar,
+		props: true,
+	},
+
+	{ 
+		path: '/usrVshoots/:vId', 
+		component: COMPONENTS.UsrVshoots,
+		props: true,
+	},
 ];

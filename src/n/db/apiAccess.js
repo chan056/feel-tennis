@@ -4,7 +4,7 @@
 //  1 临时用户
 
 let config = {
-    // '/logout': {level: 10},
+    '/logout': {level: 10},
 
     '/voteNext': {level: 10, visits: 1},
 
@@ -19,6 +19,10 @@ let config = {
     '/queryVoteComment/:vId': {level: 10},
 
     '/queryUsrVideoStars/:v_id': {level: 10},
+
+    '/queryStarVideo/:star_id': {level: 10},
+
+    '/queryUsrVshoot/:v_id': {level: 10},
     
     '/makers': {level: 100},
 
@@ -43,11 +47,8 @@ module.exports = {
             if(apiAccessLevel){
                 
                 let authority = usrAuthority(usrInfo);
-                // console.log(path)
-                if(path == '/stars'){
-                    console.log(usrInfo, authority)
-                }
-                this.authority = authority;
+                
+                // this.authority = authority;
     
                 if(authority < apiAccessLevel){
                     return false;

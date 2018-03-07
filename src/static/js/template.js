@@ -361,13 +361,35 @@ var temp = {
             <h2>截图</h2>
             <ul class="block-list spt-list">
                 <li class="" v-for="screenshot in screenshotStars">
-                    <router-link :to="{path: '/video/'+ screenshot.v_id }" :title="screenshot.vId">
+                    <router-link :to="{path: '/usrVshoots/'+ screenshot.v_id }">
                         <img :src="'/multimedia/ts/'+screenshot.v_id+'/cover.jpg'" class="block-thumb spt-thumb"/>
                     </router-link>
                 </li>
             </ul>
         </div>
     `,
+
+    vStar: `
+        <div id="video-list">
+            <h2>视频列表</h2>
+            <ul class="block-list spt-list">
+                <li class="" v-for="video in starVideos">
+                                    {{video.v_id}}
+                </li>
+            </ul>
+        </div>
+    `,
+
+    usrVshoots: `
+    <div id="video-list">
+        <h2>视频列表</h2>
+        <ul class="block-list spt-list">
+            <li class="" v-for="shoot in shoots">
+                {{shoot.screenshoot}}
+            </li>
+        </ul>
+    </div>
+`,
 
     voteNext: `
         <div>

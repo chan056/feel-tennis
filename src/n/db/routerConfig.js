@@ -103,7 +103,7 @@ const routerConfig = {
         let sql = `select tag from album where id=` + params.albumId;
         r.excuteSQL(sql, res, function(data){
             let tagObj = data[0];
-            
+
             if(tagObj && tagObj.tag){
                 sql = 'select * from tag where id in (' + tagObj.tag + ')';
                 r.excuteSQL(sql, res);
@@ -207,8 +207,16 @@ const routerConfig = {
         r.query('queryUsrVideoStars', params, res, req);
     },
 
+    '/queryStarVideo/:star_id': function(params, res, req){
+        r.query('queryStarVideo', params, res, req);
+    },
+
     '/screenshots': function(params, res, req){
         r.query('queryUsrScreenshots', params, res, req);
+    },
+
+    '/queryUsrVshoot/:v_id': function(params, res, req){
+        r.query('queryUsrVshoot', params, res, req);
     },
 
     // allstars

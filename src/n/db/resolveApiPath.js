@@ -84,9 +84,9 @@ function resolveApiPath(req, res) {
                     if (pathMatched[i + 1] != undefined)
                         paramsMathed[keyName] = pathMatched[i + 1]
                 }
-                (paramsMathed != {})
-                && 
-                console.log(paramsMathed);
+                // (paramsMathed != {})
+                // && 
+                // console.log(paramsMathed);
 
                 if (reqMethod == 'POST') {
                     fnMatched(req, res, paramsMathed);
