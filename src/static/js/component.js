@@ -505,17 +505,19 @@ COMPONENTS.Video = {
 	},
 	template: temp.video,
 	mounted() {
-		this.$bus.on('update-login-info', function(info){
-			this.loginUsrInfo = info;
-			if(info.name){
-				this.queryVoteComment();
-				this.queryStars(this.queryUsrVideoStars);
-			}
-		}.bind(this));
+		// this.$bus.on('update-login-info', function(info){
+		// 	this.loginUsrInfo = info;
+		// 	if(info.name){
+				
+		// 	}
+		// }.bind(this));
+
+		this.queryVoteComment();
+		this.queryStars(this.queryUsrVideoStars);
 	},
-	beforeDestroy() {
-		this.$bus.off('update-login-info', this.addTodo);
-	},
+	// beforeDestroy() {
+	// 	this.$bus.off('update-login-info', this.addTodo);
+	// },
 
 	methods: {
 		captureCountdown: function(){

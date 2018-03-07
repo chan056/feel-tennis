@@ -350,14 +350,29 @@ var temp = {
 
     stars: `
         <div id="star-list">
+            <h2>视频</h2>
             <ul class="block-list spt-list">
                 <li class="" v-for="vStar in vStars">
                     <router-link :to="{path: '/sports/'+ vStar.id }" :title="vStar.name">
-                        <img :src="'/img/cover/sport/' + sport.id + '.jpg'" class="block-thumb spt-thumb"/>
+                        <img :src="'/img/cover/sport/' + vStar.id + '.jpg'" class="block-thumb spt-thumb"/>
                         <p class="clearfix block-info">
-                            <span class="play-count">{{sport.impression}}次观看</span>
+                            <span class="play-count">{{vStar.impression}}次观看</span>
                             <span class="update-time">
-                                <UpdateTime :timestamp="sport.update_time"></UpdateTime>
+                                <UpdateTime :timestamp="vStar.update_time"></UpdateTime>
+                            </span>
+                        </p>
+                    </router-link>
+                </li>
+            </ul>
+            <h2>截图</h2>
+            <ul class="block-list spt-list">
+                <li class="" v-for="screenshot in screenshotStars">
+                    <router-link :to="{path: '/sports/'+ screenshot.id }" :title="screenshot.name">
+                        <img :src="'/img/cover/sport/' + screenshot.id + '.jpg'" class="block-thumb spt-thumb"/>
+                        <p class="clearfix block-info">
+                            <span class="play-count">{{screenshot.impression}}次观看</span>
+                            <span class="update-time">
+                                <UpdateTime :timestamp="screenshot.update_time"></UpdateTime>
                             </span>
                         </p>
                     </router-link>
