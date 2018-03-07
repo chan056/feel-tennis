@@ -4,18 +4,18 @@ var tools = require('../tools');
 
 // 从路径中抽取参数
 function resolveApiPath(req, res) {
-    var paramsMathed = {};
-    var pathMatched;
+    var path;
     var pathReg;
+    var pathMatched;
     var fnMatched;
     var keys;
     var urlObj = require('url').parse(req.url, true);
 
-    for (pathReg in routerConfig) {
-        var f = routerConfig[pathReg];
+    for (path in routerConfig) {
+        var f = routerConfig[path];
         keys = [];
 
-        var pathReg = pathToRegexp(pathReg, keys);
+        pathReg = pathToRegexp(path, keys);
         pathMatched = pathReg.exec(urlObj.pathname);
 
         if (pathMatched) {
@@ -24,9 +24,11 @@ function resolveApiPath(req, res) {
         }
     }
 
+    console.log(path)
+
     if (fnMatched) {
         // 临时用户 注册用户 admin
-        let impowered = require('./apiAccess').check(pathReg, req.usrInfo);
+        let impowered = require('./apiAccess').check(path, req.usrInfo);
 
         if(!impowered){
             res.statusCode = 401;
@@ -34,7 +36,7 @@ function resolveApiPath(req, res) {
         }else{
             if(typeof impowered == 'function'){
                 let checkAccessLimit = impowered;
-                checkAccessLimit(pathReg, function(){
+                checkAccessLimit(path, function(){
                     // 新增api acess log
                     let usrId = req.usrInfo.usrId || 0;
 
@@ -44,7 +46,7 @@ function resolveApiPath(req, res) {
                         
                         // 记录
                         let iSql = `insert into usr_api_access_log (api, uid, is_admin, timestamp)
-                         values ('${pathReg}', ${usrId}, '${isAdmin}', now())`;
+                         values ('${path}', ${usrId}, '${isAdmin}', now())`;
                         conn.query(iSql);
                     }
 
@@ -60,6 +62,8 @@ function resolveApiPath(req, res) {
         }
         
         function shunt(){
+            var paramsMathed = {};
+
             let reqMethod = req.method;
 
             if (reqMethod == 'GET') {
@@ -80,7 +84,9 @@ function resolveApiPath(req, res) {
                     if (pathMatched[i + 1] != undefined)
                         paramsMathed[keyName] = pathMatched[i + 1]
                 }
-                paramsMathed && console.log(paramsMathed);
+                (paramsMathed != {})
+                && 
+                console.log(paramsMathed);
 
                 if (reqMethod == 'POST') {
                     fnMatched(req, res, paramsMathed);
