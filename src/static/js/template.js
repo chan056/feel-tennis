@@ -353,28 +353,16 @@ var temp = {
             <h2>视频</h2>
             <ul class="block-list spt-list">
                 <li class="" v-for="vStar in vStars">
-                    <router-link :to="{path: '/sports/'+ vStar.id }" :title="vStar.name">
-                        <img :src="'/img/cover/sport/' + vStar.id + '.jpg'" class="block-thumb spt-thumb"/>
-                        <p class="clearfix block-info">
-                            <span class="play-count">{{vStar.impression}}次观看</span>
-                            <span class="update-time">
-                                <UpdateTime :timestamp="vStar.update_time"></UpdateTime>
-                            </span>
-                        </p>
+                    <router-link :to="{path: '/vStar/'+ vStar.id }" :title="vStar.name">
+                        {{vStar.name}}
                     </router-link>
                 </li>
             </ul>
             <h2>截图</h2>
             <ul class="block-list spt-list">
                 <li class="" v-for="screenshot in screenshotStars">
-                    <router-link :to="{path: '/sports/'+ screenshot.id }" :title="screenshot.name">
-                        <img :src="'/img/cover/sport/' + screenshot.id + '.jpg'" class="block-thumb spt-thumb"/>
-                        <p class="clearfix block-info">
-                            <span class="play-count">{{screenshot.impression}}次观看</span>
-                            <span class="update-time">
-                                <UpdateTime :timestamp="screenshot.update_time"></UpdateTime>
-                            </span>
-                        </p>
+                    <router-link :to="{path: '/video/'+ screenshot.v_id }" :title="screenshot.vId">
+                        <img :src="'/multimedia/ts/'+screenshot.v_id+'/cover.jpg'" class="block-thumb spt-thumb"/>
                     </router-link>
                 </li>
             </ul>

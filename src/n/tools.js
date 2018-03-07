@@ -60,23 +60,9 @@ function formatTime(seconds){
 	}
 }
 
-function usrAuthority(usrInfo){
-	let authority = 1;
-
-	if(usrInfo.type == 1){
-		authority = 10;
-		if(usrInfo.isAdmin == 1){
-			authority = 100;
-		}
-	}
-
-	return authority;
-}
-
 module.exports = {
     response404: response404,
     isEmpty: isEmpty,
 	newClause: newQueryClause,
 	formatTime: formatTime,
-	usrAuthority: usrAuthority
 }

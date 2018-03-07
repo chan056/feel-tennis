@@ -42,7 +42,7 @@ module.exports.createDynamicPreview = function(captureParams, res, req){
 
             if(req){// 用户截图
                 let conn = require('../db/connect.js').conn;
-                let sql = `insert into usr_screenshot_star (usr_id, screenshot) values (${req.usrInfo.usrId}, '${gifFilename}')`;
+                let sql = `insert into usr_screenshot_star (usr_id, screenshot, v_id) values (${req.usrInfo.usrId}, '${gifFilename}', ${videoName})`;
                 conn.query(sql, function(err, result){
                     if(err)
                         console.log(err);

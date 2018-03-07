@@ -12,6 +12,8 @@ let config = {
 
     '/stars': {level: 10},
 
+    '/screenshots': {level: 10},
+
     '/star/:starId': {level: 10},
 
     '/queryVoteComment/:vId': {level: 10},
@@ -39,7 +41,11 @@ module.exports = {
             let apiAccessLevel = apiAccessConfig.level;
         
             if(apiAccessLevel){
-                let authority = require('../tools').usrAuthority(usrInfo);
+                
+                let authority = usrAuthority(usrInfo);
+                if(path == '/stars'){
+                    console.log(usrInfo, authority)
+                }
                 this.authority = authority;
     
                 if(authority < apiAccessLevel){
@@ -57,6 +63,19 @@ module.exports = {
             }
         }else{
             return true;
+        }
+
+        function usrAuthority(usrInfo){
+            let authority = 1;
+        
+            if(usrInfo.type == 1){
+                authority = 10;
+                if(usrInfo.isAdmin == 1){
+                    authority = 100;
+                }
+            }
+        
+            return authority;
         }
     },
 

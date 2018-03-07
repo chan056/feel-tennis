@@ -102,8 +102,8 @@ const routerConfig = {
     '/albumTags/:albumId': function(params, res, req){
         let sql = `select tag from album where id=` + params.albumId;
         r.excuteSQL(sql, res, function(data){
-            // data = JSON.stringify(data);
             let tagObj = data[0];
+            
             if(tagObj && tagObj.tag){
                 sql = 'select * from tag where id in (' + tagObj.tag + ')';
                 r.excuteSQL(sql, res);
