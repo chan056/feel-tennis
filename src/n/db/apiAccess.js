@@ -36,14 +36,14 @@ let config = {
 module.exports = {
     check: function(path, usrInfo){
         let apiAccessConfig = config[path];
-// console.log(path)
+        // console.log(path)
         if(apiAccessConfig){
             let apiAccessLevel = apiAccessConfig.level;
         
             if(apiAccessLevel){
                 
                 let authority = usrAuthority(usrInfo);
-                console.log(path)
+                // console.log(path)
                 if(path == '/stars'){
                     console.log(usrInfo, authority)
                 }

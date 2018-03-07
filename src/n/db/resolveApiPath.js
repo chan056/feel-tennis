@@ -24,7 +24,7 @@ function resolveApiPath(req, res) {
         }
     }
 
-    console.log(path)
+    // console.log(path)
 
     if (fnMatched) {
         // 临时用户 注册用户 admin
