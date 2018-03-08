@@ -64,8 +64,7 @@ const routeConfig = [
 	},
 
 	{ 
-		path: '/usrVshoots/:vId', 
+		path: '/usrVshoots', 
 		component: COMPONENTS.UsrVshoots,
-		props: true,
 	},
 ];

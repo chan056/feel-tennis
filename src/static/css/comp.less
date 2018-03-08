@@ -1,9 +1,13 @@
-@img-dir-path: '/img/';
-@list-item-width: 210px;
-@border-color: #dcdfe6;
+@import "common.less";
 
+@img-dir-path: '/img/';
+@border-color: #dcdfe6;
+@list-item-width: 210px;
+@list-item-height: 118px;;
+@font-color: #2b2a2a;
 html {
-  font-size: 10px;
+	font-size: 10px;
+	color: @font-color;
 }
 
 app{font-size: 14px;}
@@ -71,16 +75,8 @@ app{font-size: 14px;}
   .el-row{margin-top: 20px;}
 }
 
-// .spt-list{
-//   .spt-thumb{display: block; width: 100%; height: 118px;}
-//   .spt-title{
-//     margin: 8px auto; font-weight: normal; font-size: inherit;
-//     a{text-decoration: none; max-height: 52px; overflow: hidden;}
-//   }
-// }
-
 .block-list{
-  .block-thumb{display: block; width: 100%; height: 118px; min-width: @list-item-width;}
+  .block-thumb{display: block; width: 100%; height: @list-item-height; min-width: @list-item-width;}
   .block-title{
     margin: 8px auto; font-weight: normal; font-size: inherit;
     a{text-decoration: none; max-height: 52px; overflow: hidden;}
@@ -181,8 +177,6 @@ app{font-size: 14px;}
 }
 
 // #videos
-// #video-container{width: 210px;}
-
 .time {
   font-size: 13px;
   color: #999;
@@ -219,3 +213,16 @@ app{font-size: 14px;}
   h2, h3{margin-bottom: 20px;}
 }
 
+.star-list{
+	h2{margin-bottom: 20px;}
+	.block-list{margin-bottom: 20px;}
+	.v-star-list{
+		li{
+			width: @list-item-width; height: @list-item-height; text-align: center; line-height: @list-item-height; box-sizing: border-box; border: 1px solid @border-color;
+			a{display: block; height: 100%; .nowrap;}
+		}
+	}
+	.shoot-v-list{
+
+	}
+}

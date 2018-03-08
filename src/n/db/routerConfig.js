@@ -220,11 +220,9 @@ const routerConfig = {
     },
 
     // 根据视频查询截图
-    '/queryUsrVshoot/:v_id': function(params, res, req){
+    '/queryUsrVshoot': function(params, res, req){
         r.query('queryUsrVshoot', params, res, req);
     },
-
-    // allstars
 
     // ============POST 新建资源=============
     '/login': function(req, res){

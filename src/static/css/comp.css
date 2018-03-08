@@ -1,5 +1,97 @@
+/* reset */
+body,
+p,
+ul,
+ol,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+img {
+  background-color: #cde;
+}
+ul,
+ol {
+  list-style-type: none;
+}
+a {
+  color: inherit;
+}
+em {
+  font-style: normal;
+}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.clr {
+  clear: both;
+}
+.ovh {
+  overflow: hidden !important;
+}
+.ovv {
+  overflow: visible !important;
+}
+.hidden {
+  display: none;
+}
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both;
+}
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.text-cnt {
+  text-align: center;
+}
+.block-list {
+  overflow: hidden;
+}
+.block-list li {
+  float: left;
+  /*min-height: 100px; width: 210px;*/
+  margin: 0 4px 0px 0;
+}
+.block-list a {
+  text-decoration: none;
+}
+.block-list .block-info {
+  padding: 8px 0;
+}
+.el-dialog {
+  width: 500px;
+}
+.el-form-item__content {
+  margin-left: 100px;
+}
+.update-time:before {
+  content: '• ';
+}
+.el-form-item {
+  margin-bottom: 20px;
+}
+.nowrap {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
 html {
   font-size: 10px;
+  color: #2b2a2a;
 }
 app {
   font-size: 14px;
@@ -250,4 +342,25 @@ app {
 .feedback h2,
 .feedback h3 {
   margin-bottom: 20px;
+}
+.star-list h2 {
+  margin-bottom: 20px;
+}
+.star-list .block-list {
+  margin-bottom: 20px;
+}
+.star-list .v-star-list li {
+  width: 210px;
+  height: 118px;
+  text-align: center;
+  line-height: 118px;
+  box-sizing: border-box;
+  border: 1px solid #dcdfe6;
+}
+.star-list .v-star-list li a {
+  display: block;
+  height: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }

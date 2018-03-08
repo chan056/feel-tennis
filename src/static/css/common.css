@@ -84,3 +84,8 @@ em {
 .el-form-item {
   margin-bottom: 20px;
 }
+.nowrap {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

@@ -6,10 +6,9 @@ module.exports = function(req, fn, res){
     // 读取文件的过程 异步
     session.startSession(req, res, function(){
         let usr = req.session.get('usr');
-        
+
         if(usr){// 已经登陆的用户
             // 延长session时间
-            // req.session.regenerate();
             // req.session.put('usr', usr);
 
             usr = JSON.parse(usr);

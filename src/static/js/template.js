@@ -163,7 +163,7 @@ var temp = {
 
     sports: `
         <div id="album-list">
-            <ul class="block-list spt-list">
+            <ul class="block-list">
                 <li class="" v-for="sport in sports">
                     <router-link :to="{path: '/sports/'+ sport.id }" :title="sport.name">
                         <img :src="'/img/cover/sport/' + sport.id + '.jpg'" class="block-thumb spt-thumb"/>
@@ -349,9 +349,9 @@ var temp = {
     `,
 
     stars: `
-        <div id="star-list">
+        <div class="star-list">
             <h2>视频</h2>
-            <ul class="block-list spt-list">
+            <ul class="block-list v-star-list">
                 <li class="" v-for="vStar in vStars">
                     <router-link :to="{path: '/vStar/'+ vStar.id }" :title="vStar.name">
                         {{vStar.name}}
@@ -359,9 +359,9 @@ var temp = {
                 </li>
             </ul>
             <h2>截图</h2>
-            <ul class="block-list spt-list">
+            <ul class="block-list v-list">
                 <li class="" v-for="screenshot in screenshotStars">
-                    <router-link :to="{path: '/usrVshoots/'+ screenshot.v_id }">
+                    <router-link :to="{path: '/usrVshoots?vId='+ screenshot.v_id }">
                         <img :src="'/multimedia/ts/'+screenshot.v_id+'/cover.jpg'" class="block-thumb spt-thumb"/>
                     </router-link>
                 </li>
@@ -372,7 +372,7 @@ var temp = {
     vStar: `
         <div id="video-list">
             <h2>视频列表</h2>
-            <ul class="block-list spt-list">
+            <ul class="block-list">
                 <li class="" v-for="video in starVideos">
                     {{video}}
                 </li>
@@ -381,15 +381,15 @@ var temp = {
     `,
 
     usrVshoots: `
-    <div id="video-list">
-        <h2>截图列表</h2>
-        <ul class="block-list spt-list">
-            <li class="" v-for="shoot in shoots">
-                {{shoot}}
-            </li>
-        </ul>
-    </div>
-`,
+        <div id="video-list">
+            <h2>截图列表</h2>
+            <ul class="block-list">
+                <li class="" v-for="shoot in shoots">
+                    {{shoot}}
+                </li>
+            </ul>
+        </div>
+    `,
 
     voteNext: `
         <div>

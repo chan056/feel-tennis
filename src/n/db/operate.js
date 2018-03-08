@@ -327,8 +327,8 @@ var operations = {
 		});
 	},
 
-	queryUsrVshoot: function(res, qualification){
-		conn.query('SELECT * from usr_screenshot_star' + qualification + ' and usr_id=' + this.usrInfo.usrId, function (err, result, fields) {
+	queryUsrVshoot: function(res, qualification, params){
+		conn.query(`SELECT * from usr_screenshot_star where v_id=${params.vId} and usr_id=` + this.usrInfo.usrId, function (err, result, fields) {
 			if (err) throw err;
 
 			result = JSON.stringify(result);

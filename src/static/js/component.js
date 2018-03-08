@@ -1208,13 +1208,13 @@ COMPONENTS.Vstar = {
 };
 
 COMPONENTS.UsrVshoots = {
-	props: ['vId'],
 	data: function () {
+		console.log(this.$route.query.vId)
 		var d = {
 			shoots: [],
 		};
 
-		tools.xhr('/queryUsrVshoot/' + this.vId, function(resData){
+		tools.xhr('/queryUsrVshoot?vId=' + this.$route.query.vId, function(resData){
 			d.shoots = resData;
 		});
 
