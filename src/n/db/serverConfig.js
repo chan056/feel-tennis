@@ -1,7 +1,7 @@
 module.exports.config = function(req, res) {
 	
 	// 检查用户知否在黑名单
-	require('../guard')(req, function(){
+	require('../guard')(req, res, function(){
 		const url = require('url');
 		const fs = require('fs');
 		const path = require('path');

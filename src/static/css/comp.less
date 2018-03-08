@@ -5,6 +5,12 @@
 @list-item-width: 210px;
 @list-item-height: 118px;;
 @font-color: #2b2a2a;
+
+// 主模块
+.main-model{
+  h2{margin-bottom: 20px;}
+}
+
 html {
 	font-size: 10px;
 	color: @font-color;
@@ -76,7 +82,7 @@ app{font-size: 14px;}
 }
 
 .block-list{
-  .block-thumb{display: block; width: 100%; height: @list-item-height; min-width: @list-item-width;}
+  .block-thumb{display: block; width: @list-item-width; height: @list-item-height;}
   .block-title{
     margin: 8px auto; font-weight: normal; font-size: inherit;
     a{text-decoration: none; max-height: 52px; overflow: hidden;}

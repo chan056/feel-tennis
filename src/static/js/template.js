@@ -350,7 +350,7 @@ var temp = {
 
     stars: `
         <div class="star-list">
-            <h2>视频</h2>
+            <h2>视频收藏夹</h2>
             <ul class="block-list v-star-list">
                 <li class="" v-for="vStar in vStars">
                     <router-link :to="{path: '/vStar/'+ vStar.id }" :title="vStar.name">
@@ -358,11 +358,14 @@ var temp = {
                     </router-link>
                 </li>
             </ul>
-            <h2>截图</h2>
+            <h2>截图过的视频</h2>
             <ul class="block-list v-list">
-                <li class="" v-for="screenshot in screenshotStars">
-                    <router-link :to="{path: '/usrVshoots?vId='+ screenshot.v_id }">
-                        <img :src="'/multimedia/ts/'+screenshot.v_id+'/cover.jpg'" class="block-thumb spt-thumb"/>
+                <li class="" v-for="video in shotVideos">
+                    <router-link :to="{path: '/usrVshoots?vId='+ video.id }">
+                        <img :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb spt-thumb"/>
+                        <h3 class="block-title video-title ellipsis">
+                            <a href="javascript:;" :title="video.headline">{{ video.headline || 123 }}</a>
+                        </h3>
                     </router-link>
                 </li>
             </ul>
@@ -372,20 +375,25 @@ var temp = {
     vStar: `
         <div id="video-list">
             <h2>视频列表</h2>
-            <ul class="block-list">
-                <li class="" v-for="video in starVideos">
-                    {{video}}
+            <ul class="block-list video-list">
+                <li v-for="video in starVideos">
+                    <router-link :to="{path: '/video/'+ video.id }">
+                        <img @mouseover="dynamivePreview($event);" @mouseout="staticPreview($event);" :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb"/>
+                        <h3 class="block-title video-title ellipsis">
+                            <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
+                        </h3>
+                    </router-link>
                 </li>
             </ul>
         </div>
     `,
 
     usrVshoots: `
-        <div id="video-list">
+        <div id="" class="main-model">
             <h2>截图列表</h2>
             <ul class="block-list">
                 <li class="" v-for="shoot in shoots">
-                    {{shoot}}
+                    <img :src="'/multimedia/gif/'+shoot.screenshot + '.gif'" class="block-thumb video-thumb"/>
                 </li>
             </ul>
         </div>

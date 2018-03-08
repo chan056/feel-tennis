@@ -210,7 +210,7 @@ const routerConfig = {
     },
 
     // 收藏夹内的视频
-    '/queryStarVideo/:star_id': function(params, res, req){
+    '/starVideo/:star_id': function(params, res, req){
         r.query('queryStarVideo', params, res, req);
     },
 

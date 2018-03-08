@@ -1,4 +1,4 @@
-module.exports = function(req, fn){
+module.exports = function(req, res, fn){
     let conn = require('./db/connect').conn;
     
     let clientIp = require('client-ip')(req);
@@ -8,7 +8,8 @@ module.exports = function(req, fn){
         if(!result || !result.length){
             fn();
         }else if(result.length){
-
+            res.end();
+            console.log(`${clientIp}在黑名单`);
         }
     })
 }

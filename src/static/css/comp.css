@@ -89,6 +89,9 @@ em {
   white-space: nowrap;
   overflow: hidden;
 }
+.main-model h2 {
+  margin-bottom: 20px;
+}
 html {
   font-size: 10px;
   color: #2b2a2a;
@@ -164,9 +167,8 @@ app {
 }
 .block-list .block-thumb {
   display: block;
-  width: 100%;
+  width: 210px;
   height: 118px;
-  min-width: 210px;
 }
 .block-list .block-title {
   margin: 8px auto;

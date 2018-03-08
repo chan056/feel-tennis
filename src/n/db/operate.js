@@ -310,7 +310,19 @@ var operations = {
 	},
 
 	queryUsrScreenshots: function(res, qualification){
-		conn.query('SELECT * from usr_screenshot_star where usr_id=' + this.usrInfo.usrId, function (err, result, fields) {
+		let sql = `SELECT
+			usv.screenshot,
+			v.headline,
+			v.id
+		FROM
+			usr_screenshot_star as usv
+			JOIN
+			video as v
+		WHERE
+			usr_id = ${this.usrInfo.usrId}
+			and
+			usv.v_id=v.id`
+		conn.query(sql, function (err, result, fields) {
 			if (err) throw err;
 
 			result = JSON.stringify(result);
@@ -318,8 +330,20 @@ var operations = {
 		});
 	},
 
-	queryStarVideo: function(res, qualification){
-		conn.query('SELECT * from usr_video_star' + qualification, function (err, result, fields) {
+	queryStarVideo: function(res, qualification, params){
+		let sql = `SELECT
+			v.*,
+			uvs.v_id
+			FROM
+				usr_video_star as uvs
+			join
+				video as v
+			WHERE
+				uvs.star_id = ${params.star_id}
+				and
+				uvs.v_id = v.id`;
+		
+		conn.query(sql, function (err, result, fields) {
 			if (err) throw err;
 
 			result = JSON.stringify(result);

@@ -16,11 +16,13 @@ let config = {
 
     '/star/:starId': {level: 10},
 
+    '/queryStarVideo': {level: 10},
+
+    '/starVideo/:star_id': {level: 10},
+
     '/queryVoteComment/:vId': {level: 10},
 
     '/queryUsrVideoStars/:v_id': {level: 10},
-
-    '/queryStarVideo/:star_id': {level: 10},
 
     '/queryUsrVshoot/:v_id': {level: 10},
     

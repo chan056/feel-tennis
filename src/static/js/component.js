@@ -251,6 +251,7 @@ COMPONENTS.HeaderComponent = {
 			tools.xhr('/loginInfo', function(loginUsrInfo){
 				// 登陆状态在各组件共享 todo
 				this.loginUsrInfo = loginUsrInfo || {};
+				window.loginUsrInfo = loginUsrInfo;
 
 				let name = loginUsrInfo.name;
 				$('#header .el-icon-view').attr('title', name).addClass('usr');
@@ -505,19 +506,23 @@ COMPONENTS.Video = {
 	},
 	template: temp.video,
 	mounted() {
-		// this.$bus.on('update-login-info', function(info){
-		// 	this.loginUsrInfo = info;
-		// 	if(info.name){
-				
-		// 	}
-		// }.bind(this));
-
-		this.queryVoteComment();
-		this.queryStars(this.queryUsrVideoStars);
+		if(window.loginUsrInfo){
+			this.loginUsrInfo = window.loginUsrInfo;
+			this.queryVoteComment();
+			this.queryStars(this.queryUsrVideoStars);
+		}else{
+			this.$bus.on('update-login-info', function(info){
+				this.loginUsrInfo = info;
+				if(info.name){
+					this.queryVoteComment();
+					this.queryStars(this.queryUsrVideoStars);
+				}
+			}.bind(this));
+		}
 	},
-	// beforeDestroy() {
-	// 	this.$bus.off('update-login-info', this.addTodo);
-	// },
+	beforeDestroy() {
+		this.$bus.off('update-login-info', this.addTodo);
+	},
 
 	methods: {
 		captureCountdown: function(){
@@ -1172,7 +1177,7 @@ COMPONENTS.Stars = {
 	data: function () {
 		var d = {
 			vStars: [],
-			screenshotStars: []
+			shotVideos: []
 		};
 
 		tools.xhr('/vStars', function(resData){
@@ -1180,7 +1185,7 @@ COMPONENTS.Stars = {
 		});
 
 		tools.xhr('/screenshots', function(resData){
-			d.screenshotStars = resData;
+			d.shotVideos = resData;
 		});
 
 		return d;
@@ -1197,7 +1202,7 @@ COMPONENTS.Vstar = {
 			starVideos: [],
 		};
 
-		tools.xhr('/queryStarVideo/' + this.vStarId, function(resData){
+		tools.xhr('/starVideo/' + this.vStarId, function(resData){
 			d.starVideos = resData;
 		});
 
@@ -1205,6 +1210,25 @@ COMPONENTS.Vstar = {
 	},
 
 	template: temp.vStar,
+
+	methods: {
+		dynamivePreview: function(e){
+
+			$(e.target).attr('src', function(){
+				// console.log(arguments);
+				return arguments[1].replace('cover.jpg', 'd_cover.gif');
+			});
+			
+		},
+
+		staticPreview: function(e){
+
+			$(e.target).attr('src', function(){
+				return arguments[1].replace('d_cover.gif', 'cover.jpg');
+			});
+			
+		},
+	}
 };
 
 COMPONENTS.UsrVshoots = {
