@@ -1,14 +1,7 @@
-var mysql = require('mysql');
+const mysql = require('mysql');
+let dbConfig = require('../constant').dbConfig;
 
-let dbConfig = {
-	host: 'localhost',
-	user: 'root',
-	password: '62191056',
-	database: 'n',
-	// multipleStatements: true // 执行多条语句
-};
-
-var connection;
+let connection;
 
 function handleDisconnect() {
 	connection = mysql.createConnection(dbConfig); // Recreate the connection, since

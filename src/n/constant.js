@@ -16,5 +16,12 @@ module.exports = {
         service: 'QQ',
         user: '374029208@qq.com',
         pass: 'btwnqqiqgvjybiid',
+    },
+
+    dbConfig: {
+        host: 'localhost',
+        user: 'root',
+        password: '62191056',
+        database: 'n',
     }
 }

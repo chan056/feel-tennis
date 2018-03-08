@@ -199,22 +199,27 @@ const routerConfig = {
         r.query('videoVoteResult', params, res, req);
     },
 
-    '/stars': function(params, res, req){
+    // 视频收藏夹
+    '/vStars': function(params, res, req){
         r.query('queryUsrStars', params, res, req);
     },
 
+    // 当前用户当前视频的收藏的文件夹
     '/queryUsrVideoStars/:v_id': function(params, res, req){
         r.query('queryUsrVideoStars', params, res, req);
     },
 
+    // 收藏夹内的视频
     '/queryStarVideo/:star_id': function(params, res, req){
         r.query('queryStarVideo', params, res, req);
     },
 
+    // 收藏的截图
     '/screenshots': function(params, res, req){
         r.query('queryUsrScreenshots', params, res, req);
     },
 
+    // 根据视频查询截图
     '/queryUsrVshoot/:v_id': function(params, res, req){
         r.query('queryUsrVshoot', params, res, req);
     },

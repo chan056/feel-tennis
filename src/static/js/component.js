@@ -53,8 +53,8 @@ COMPONENTS.HeaderComponent = {
 		loginForm: {
 			formLabelWidth: '100px',
 			visible: false,
-			name: '',
-			psw: ''
+			name: 'chenyi',
+			psw: '62191056'
 		},
 
 		resetPswForm: {
@@ -676,7 +676,7 @@ COMPONENTS.Video = {
 		},
 
 		queryStars: function(fn){
-			tools.xhr('/stars', function(res){
+			tools.xhr('/vStars', function(res){
 				this.stars = res;
 				fn && fn();
 			}.bind(this));
@@ -1175,7 +1175,7 @@ COMPONENTS.Stars = {
 			screenshotStars: []
 		};
 
-		tools.xhr('/stars', function(resData){
+		tools.xhr('/vStars', function(resData){
 			d.vStars = resData;
 		});
 
@@ -1208,14 +1208,13 @@ COMPONENTS.Vstar = {
 };
 
 COMPONENTS.UsrVshoots = {
-	props: ['vStarId'],
+	props: ['vId'],
 	data: function () {
-		console.log(this.vStarId);
 		var d = {
 			shoots: [],
 		};
 
-		tools.xhr('/queryUsrVshoot/' + this.vStarId, function(resData){
+		tools.xhr('/queryUsrVshoot/' + this.vId, function(resData){
 			d.shoots = resData;
 		});
 

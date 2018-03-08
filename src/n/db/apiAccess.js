@@ -10,7 +10,7 @@ let config = {
 
     '/gifLink': {level: 10, visits: 3},
 
-    '/stars': {level: 10},
+    '/vStars': {level: 10},
 
     '/screenshots': {level: 10},
 
@@ -45,10 +45,13 @@ module.exports = {
             let apiAccessLevel = apiAccessConfig.level;
         
             if(apiAccessLevel){
-                
                 let authority = usrAuthority(usrInfo);
-                
-                // this.authority = authority;
+                // console.log(path, authority + ' > ' + apiAccessLevel)
+                // if(authority < apiAccessLevel){
+                //     console.log('==========S==========');
+                //     console.log(usrInfo)
+                //     console.log('==========E==========');
+                // }
     
                 if(authority < apiAccessLevel){
                     return false;

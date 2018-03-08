@@ -1,13 +1,12 @@
 module.exports = function(req, fn, res){
-    let session = require('../session.js').newSession();
+    let session = require('../session').newSession();
     let constants = require('../constant');
-
     let usrInfo;
 	
     // 读取文件的过程 异步
     session.startSession(req, res, function(){
         let usr = req.session.get('usr');
-
+        
         if(usr){// 已经登陆的用户
             // 延长session时间
             // req.session.regenerate();
@@ -53,6 +52,8 @@ module.exports = function(req, fn, res){
                 }
             }
         }
+
+        req.usrInfo = usrInfo;
 
         fn && fn(usrInfo);
     });

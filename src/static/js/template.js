@@ -374,7 +374,7 @@ var temp = {
             <h2>视频列表</h2>
             <ul class="block-list spt-list">
                 <li class="" v-for="video in starVideos">
-                                    {{video.v_id}}
+                    {{video}}
                 </li>
             </ul>
         </div>
@@ -382,10 +382,10 @@ var temp = {
 
     usrVshoots: `
     <div id="video-list">
-        <h2>视频列表</h2>
+        <h2>截图列表</h2>
         <ul class="block-list spt-list">
             <li class="" v-for="shoot in shoots">
-                {{shoot.screenshoot}}
+                {{shoot}}
             </li>
         </ul>
     </div>
