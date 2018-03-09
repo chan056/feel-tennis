@@ -224,6 +224,15 @@ const routerConfig = {
         r.query('queryUsrVshoot', params, res, req);
     },
 
+    // 查询某视频
+    '/video/:v_id/remarks': function(params, res, req){
+        if(params.type == 1){
+            r.query('queryVideoRemarks', params, res, req);
+        }else if(params.type == 2){
+            r.query('queryUsrVideoRemarks', params, res, req);
+        }
+    },
+
     // ============POST 新建资源=============
     '/login': function(req, res){
         r.post('login', req, res);

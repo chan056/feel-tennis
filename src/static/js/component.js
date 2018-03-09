@@ -502,23 +502,37 @@ COMPONENTS.Video = {
 
 		d.loginUsrInfo = {};
 
+		d.rmks = [];
+
 		return d;
 	},
 	template: temp.video,
 	mounted() {
+		let t = this;
+
 		if(window.loginUsrInfo){
-			this.loginUsrInfo = window.loginUsrInfo;
-			this.queryVoteComment();
-			this.queryStars(this.queryUsrVideoStars);
+			t.loginUsrInfo = window.loginUsrInfo;
+			afterLogin();
 		}else{
-			this.$bus.on('update-login-info', function(info){
-				this.loginUsrInfo = info;
+			t.$bus.on('update-login-info', function(info){
+				t.loginUsrInfo = info;
 				if(info.name){
-					this.queryVoteComment();
-					this.queryStars(this.queryUsrVideoStars);
+					afterLogin();
 				}
-			}.bind(this));
+			});
 		}
+
+		function afterLogin (){
+			t.queryVoteComment();
+			t.queryStar(t.queryUsrVideoStars);
+			/* t.queryRemark(1, function(resData){
+				// let playerWrapper = $('#remark-wrapper')
+				
+				tools.attachRemark($('#video')[0], resData, 500, function(rmks){
+					t.rmks = rmks;
+				});
+			}); */
+		};
 	},
 	beforeDestroy() {
 		this.$bus.off('update-login-info', this.addTodo);
@@ -680,7 +694,7 @@ COMPONENTS.Video = {
 			}.bind(this));
 		},
 
-		queryStars: function(fn){
+		queryStar: function(fn){
 			tools.xhr('/vStars', function(res){
 				this.stars = res;
 				fn && fn();
@@ -706,10 +720,10 @@ COMPONENTS.Video = {
 					type: 'success'
 				});
 				
-				this.queryStars();
+				this.queryStar();
 
 				// 创建之后 添加视频到收藏夹
-				// todo 执行顺序也许有问题，必须在queryStars之后
+				// todo 执行顺序也许有问题，必须在queryStar之后
 				this.starVideo(res, this.queryUsrVideoStars);
 			}.bind(this), 'post', {name: this.newStarForm.starName});
 		},
@@ -738,6 +752,22 @@ COMPONENTS.Video = {
 
 		diplayStarSection: function(){
 			$('#star-section').show();
+		},
+
+		// 查询视频的“用户笔记”
+		// type 1 所有用户 2 自己
+		queryRemark: function(type, fn){
+			type || (type = 1);
+
+			tools.xhr(`/video/${this.videoId}/remarks?type=${type}`, function(res){
+				if(type == 1){
+					this.allRemarks = res;
+				}else if(type == 2){
+					this.remarks = res;
+				}
+
+				fn && fn(res);
+			}.bind(this));
 		}
 	}
 };

@@ -54,8 +54,6 @@ let tools = {
             script.innerHTML = str;
         }
 
-        // console.log(script);
-
         document.body.appendChild(script);
     },
 
@@ -106,6 +104,28 @@ let tools = {
                 }
             }
 
+        }, interval)
+    },
+
+    // 给视频绑定用户备注
+    attachRemark: function(video, rmks, interval, fn){
+        interval = interval || 500;
+
+        let len = rmks.length;
+
+        setInterval(function(){
+            let curVtime = video.currentTime;
+            let rmkMoment;
+            let curRmks = [];
+
+            for( let i = 0; i < len; i ++){
+                rmkMoment = rmks[i].moment;
+                if(Math.abs(curVtime - rmkMoment) < 2){
+                    curRmks.push(rmks[i]);
+                }
+            }
+
+            fn(curRmks);
         }, interval)
     },
 

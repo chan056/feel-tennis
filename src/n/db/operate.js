@@ -360,6 +360,25 @@ var operations = {
 		});
 	},
 
+	// SELECT * FROM `video_remark` where v_id=26;
+	queryVideoRemarks: function(res, qualification, params){
+		conn.query(`SELECT * FROM video_remark where v_id='${params.v_id}'`, function (err, result, fields) {
+			if (err) throw err;
+
+			result = JSON.stringify(result);
+			res.end(result);
+		});
+	},
+
+	queryUsrVideoRemarks: function(res, qualification, params){
+		conn.query(`SELECT * FROM video_remark ${qualification} and usr_id=${this.usrInfo.usrId}`, function (err, result, fields) {
+			if (err) throw err;
+
+			result = JSON.stringify(result);
+			res.end(result);
+		});
+	},
+
 	// POST
 	login: function(res, postObj, req){
 		var sql = `select * from usr where name=? and psw=?`;

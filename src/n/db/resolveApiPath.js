@@ -24,8 +24,6 @@ function resolveApiPath(req, res) {
         }
     }
 
-    // console.log(path)
-
     if (fnMatched) {
         // 临时用户 注册用户 admin
         let impowered = require('./apiAccess').check(path, req.usrInfo);

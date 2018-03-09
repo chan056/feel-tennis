@@ -311,6 +311,9 @@ app {
 #stared-list .star {
   padding-bottom: 10px;
 }
+.rmk {
+  padding: 15px 30px;
+}
 .time {
   font-size: 13px;
   color: #999;

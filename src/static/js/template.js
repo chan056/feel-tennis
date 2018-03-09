@@ -305,6 +305,12 @@ var temp = {
                 <el-button v-if="gifLink" @click="preview()">预览</el-button>
             </div>
 
+            <div id="remark-wrapper">
+                <p v-for="rmk in rmks" class="rmk">
+                    {{rmk.remark}}
+                </p>
+            </div>
+
             <el-dialog
                 title="动态截图预览"
                 :visible.sync="previewerVisible"
@@ -373,7 +379,7 @@ var temp = {
     `,
 
     vStar: `
-        <div id="video-list">
+        <div id="video-list" class="main-model">
             <h2>视频列表</h2>
             <ul class="block-list video-list">
                 <li v-for="video in starVideos">
