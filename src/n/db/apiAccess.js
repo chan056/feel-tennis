@@ -4,7 +4,6 @@
 //  1 临时用户
 
 let config = {
-    '/logout': {level: 10},
 
     '/voteNext': {level: 10, visits: 1},
 

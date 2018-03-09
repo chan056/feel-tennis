@@ -311,6 +311,12 @@ app {
 #stared-list .star {
   padding-bottom: 10px;
 }
+#remark-wrapper {
+  height: 200px;
+  overflow-y: auto;
+  border: 1px solid #dcdfe6;
+  margin-top: 20px;
+}
 .rmk {
   padding: 15px 30px;
 }

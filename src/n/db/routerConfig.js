@@ -339,6 +339,10 @@ const routerConfig = {
         r.post('starVideo', req, res, pathParams);
     },
 
+    '/video/:vId/remark': function(req, res, pathParams){
+        r.post('createVideoRemarks', req, res, pathParams);
+    },
+
     // ============put update完整资源=============
 
     // patch update部分资源

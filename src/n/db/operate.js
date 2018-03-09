@@ -360,7 +360,6 @@ var operations = {
 		});
 	},
 
-	// SELECT * FROM `video_remark` where v_id=26;
 	queryVideoRemarks: function(res, qualification, params){
 		conn.query(`SELECT * FROM video_remark where v_id='${params.v_id}'`, function (err, result, fields) {
 			if (err) throw err;
@@ -633,6 +632,16 @@ var operations = {
 		
 	},
 
+	createVideoRemarks: function(res, postObj){
+		let sql =  `INSERT INTO video_remark (v_id, usr_id, remark, moment) VALUES (?, ?, ?, ?)`;
+
+		conn.query(sql, [postObj.vId, this.usrInfo.usrId, postObj.remark, postObj.moment], function (err, result, fields) {
+			if (err) throw err;
+
+			res.end();
+		});
+	},
+
 	// ===============PATCH================
 	// 投票
 	voteVideo: function(res, patchObj){
@@ -691,7 +700,7 @@ var operations = {
 					});
 				}else{
 					sql = `insert into usr_comment (usr_id, video_id, comment_type, comment) values (?,?,?,?)`;
-					console.log(sql);
+					// console.log(sql);
 					conn.query(sql, [usrId, vId, '1', voteStatus], function(err, result){
 						if(err)
 							throw err;

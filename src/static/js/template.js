@@ -300,9 +300,8 @@ var temp = {
             </div>
             <div v-if="video">
                 <input type="button" value="开始截图" @click="captureCountdown()" id="capture-btn" class="el-button el-button--default"/>
-                <!--<el-button @click="captureCountdown()">开始截图</el-button>-->
-                <!--<el-button @click="capture()">暂停截图</el-button>-->
                 <el-button v-if="gifLink" @click="preview()">预览</el-button>
+                <el-button @click="remarker.visible = true">添加标注</el-button>
             </div>
 
             <div id="remark-wrapper">
@@ -322,6 +321,25 @@ var temp = {
                 <span slot="footer" class="dialog-footer">
                     <el-button type="primary" @click="previewerVisible = false">确 定</el-button>
                 </span>
+            </el-dialog>
+
+            <el-dialog
+                title="标注"
+                :visible.sync="remarker.visible"
+                width="30%">
+                <el-form 
+                    ref="remarkerForm"
+                    :inline="true" 
+                    :model="remarker"
+                    :rules="remarker.rules"
+                >
+                    <el-form-item label="标注" prop="remark">
+                        <el-input autosize type="textarea" v-model="remarker.content"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="submitRemarkForm();">确定</el-button>
+                    </el-form-item>
+                </el-form>
             </el-dialog>
 
             <img id="kick-off-ball" src="/img/tennis_ball.png" @load="opening($event)"/>

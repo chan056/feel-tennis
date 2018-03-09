@@ -503,6 +503,15 @@ COMPONENTS.Video = {
 		d.loginUsrInfo = {};
 
 		d.rmks = [];
+		d.remarker = {
+			visible: false,
+			content: '',
+			rules: {
+				remark: [
+					{ required: true, message: '内容不能为空'},
+				]
+			}
+		}
 
 		return d;
 	},
@@ -525,13 +534,13 @@ COMPONENTS.Video = {
 		function afterLogin (){
 			t.queryVoteComment();
 			t.queryStar(t.queryUsrVideoStars);
-			/* t.queryRemark(1, function(resData){
+			t.queryRemark(1, function(resData){
 				// let playerWrapper = $('#remark-wrapper')
 				
 				tools.attachRemark($('#video')[0], resData, 500, function(rmks){
 					t.rmks = rmks;
 				});
-			}); */
+			});
 		};
 	},
 	beforeDestroy() {
@@ -595,6 +604,27 @@ COMPONENTS.Video = {
 					this.$message.warning({
 						message: '截图超出限制'
 					});
+				}
+			}.bind(this));
+		},
+
+		remark: function(){
+			let vEle = $('video')[0];
+			tools.xhr(`/video/${this.videoId}/remark`, function(resData){
+				this.$message({
+					message: '标注成功',
+					type: 'success'
+				});			
+			}.bind(this), 'post', {remark: 1, moment: vEle.currentTime});
+		},
+
+		submitRemarkForm:function(){
+			this.$refs['remarkerForm'].validate(function(valid){
+				if (valid) {
+					this.remarker.visible = false;
+					this.remark();
+				} else {
+					return false;
 				}
 			}.bind(this));
 		},
