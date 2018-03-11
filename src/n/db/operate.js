@@ -370,7 +370,7 @@ var operations = {
 	},
 
 	queryUsrVideoRemarks: function(res, qualification, params){
-		conn.query(`SELECT * FROM video_remark ${qualification} and usr_id=${this.usrInfo.usrId}`, function (err, result, fields) {
+		conn.query(`SELECT * FROM video_remark where v_id='${params.v_id}' and usr_id=${this.usrInfo.usrId}`, function (err, result, fields) {
 			if (err) throw err;
 
 			result = JSON.stringify(result);

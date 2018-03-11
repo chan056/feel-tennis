@@ -113,7 +113,7 @@ let tools = {
 
         let len = rmks.length;
 
-        setInterval(function(){
+        window.remarkIntervalId = setInterval(function(){
             let curVtime = video.currentTime;
             let rmkMoment;
             let curRmks = [];

@@ -460,7 +460,7 @@ COMPONENTS.Video = {
 					tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
 						tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
 
-						$('#video').onended = function(){
+						vEle.onended = function(){
 							$('.subtitle').text('');
 						}
 					}.bind(this), id: 'hls'});
@@ -484,10 +484,9 @@ COMPONENTS.Video = {
 		});
 		
 		tools.xhr('/srt/' + videoId, function(resData){
-			let v = $('#video');
 			let playerWrapper = $('#palyer-wrapper')
 
-			tools.attachSubtile(v[0], resData, 500, function(subtitle){
+			tools.attachSubtile(window.vEle, resData, 500, function(subtitle){
 				playerWrapper.find('.subtitle').text(subtitle).css({
 
 				});
@@ -507,17 +506,24 @@ COMPONENTS.Video = {
 			visible: false,
 			content: '',
 			rules: {
-				remark: [
+				content: [
 					{ required: true, message: '内容不能为空'},
 				]
 			}
-		}
+		};
+
+		d.remarkPlaySetting = {
+			enable: true,
+			all: true
+		};
 
 		return d;
 	},
 	template: temp.video,
 	mounted() {
 		let t = this;
+
+		window.vEle = document.querySelector('#video');
 
 		if(window.loginUsrInfo){
 			t.loginUsrInfo = window.loginUsrInfo;
@@ -534,13 +540,7 @@ COMPONENTS.Video = {
 		function afterLogin (){
 			t.queryVoteComment();
 			t.queryStar(t.queryUsrVideoStars);
-			t.queryRemark(1, function(resData){
-				// let playerWrapper = $('#remark-wrapper')
-				
-				tools.attachRemark($('#video')[0], resData, 500, function(rmks){
-					t.rmks = rmks;
-				});
-			});
+			t.queryRemark(1);
 		};
 	},
 	beforeDestroy() {
@@ -609,13 +609,14 @@ COMPONENTS.Video = {
 		},
 
 		remark: function(){
-			let vEle = $('video')[0];
 			tools.xhr(`/video/${this.videoId}/remark`, function(resData){
 				this.$message({
 					message: '标注成功',
 					type: 'success'
-				});			
-			}.bind(this), 'post', {remark: 1, moment: vEle.currentTime});
+				});
+				
+				window.vEle.play();
+			}.bind(this), 'post', {remark: this.remarker.content, moment: this.getVideoTime()});
 		},
 
 		submitRemarkForm:function(){
@@ -630,7 +631,7 @@ COMPONENTS.Video = {
 		},
 
 		getVideoTime: function(){
-			return $('#video')[0].currentTime;
+			return window.vEle.currentTime;
 		},
 
 		preview: function(){
@@ -784,20 +785,69 @@ COMPONENTS.Video = {
 			$('#star-section').show();
 		},
 
-		// 查询视频的“用户笔记”
+		// 查询视频的“用户标记”
 		// type 1 所有用户 2 自己
-		queryRemark: function(type, fn){
+		queryRemark: function(type){
+			let t =this;
 			type || (type = 1);
+
+			if(type == 1){
+				if(this.allRemarks){
+					return attachRemark(this.allRemarks);
+				}
+			}else if(type == 2){
+				if(this.selfRemarks){
+					return attachRemark(this.selfRemarks);
+				}
+			}
 
 			tools.xhr(`/video/${this.videoId}/remarks?type=${type}`, function(res){
 				if(type == 1){
-					this.allRemarks = res;
+					t.allRemarks = res;
 				}else if(type == 2){
-					this.remarks = res;
+					t.selfRemarks = res;
 				}
 
-				fn && fn(res);
-			}.bind(this));
+				attachRemark(res)
+			});
+
+			function attachRemark(data){
+				tools.attachRemark(window.vEle, data, 500, function(rmks){
+					t.rmks = rmks;
+				});
+			}
+		},
+
+		handleRemarkListBtns(cmd){
+			let t = this;
+			let o = {
+				'close': function(){
+					t.rmks = [];
+					t.remarkPlaySetting.enable = false;
+					clearInterval(window.remarkIntervalId);
+				},
+				'open': function(){
+					let rmkType = t.remarkPlaySetting.all? 1: 2;
+					t.queryRemark(rmkType);
+					t.remarkPlaySetting.enable = true;
+				},
+				'showSelf': function(){
+					clearInterval(window.remarkIntervalId);
+					t.rmks = [];
+					t.remarkPlaySetting.all = false;
+					
+					t.queryRemark(2);
+				},
+				'showAll': function(){
+					clearInterval(window.remarkIntervalId);
+					t.rmks = [];
+					t.remarkPlaySetting.all = true;
+					
+					t.queryRemark(1);
+				}
+			};
+
+			o[cmd] && o[cmd]();
 		}
 	}
 };

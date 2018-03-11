@@ -139,7 +139,7 @@ var temp = {
                 <div class="guide-entry" id="feedback-entry">
                     <a href="#/feedback" class="guide-entry-renderer">
                         <i class="el-icon-service icon"></i>
-                        <span class="text">发送反馈</span>
+                        <span class="text">反馈</span>
                     </a>
                 </div>
             </div>
@@ -300,11 +300,22 @@ var temp = {
             </div>
             <div v-if="video">
                 <input type="button" value="开始截图" @click="captureCountdown()" id="capture-btn" class="el-button el-button--default"/>
-                <el-button v-if="gifLink" @click="preview()">预览</el-button>
-                <el-button @click="remarker.visible = true">添加标注</el-button>
+                <el-button v-if="gifLink" @click="preview()">预览截图</el-button>
+                <el-button @click="remarker.visible = true; this.vEle.pause();">添加标注</el-button>
             </div>
 
-            <div id="remark-wrapper">
+            <div id="remark-wrapper" v-if="video">
+                <h3>
+					<el-dropdown id="usr-btns" class="fr" @command="handleRemarkListBtns" trigger="click" :hide-on-click="false">
+                        <i class="el-icon-more-outline" title="标注显示设置"></i>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item v-if="remarkPlaySetting.enable" command="close" id="header-btn-login">关闭</el-dropdown-item>
+                            <el-dropdown-item v-if="!remarkPlaySetting.enable" command="open" id="header-btn-regist">开启</el-dropdown-item>
+                            <el-dropdown-item v-if="remarkPlaySetting.all" command="showSelf" id="header-btn-profile">显示自己</el-dropdown-item>
+                            <el-dropdown-item v-if="!remarkPlaySetting.all"command="showAll" id="header-btn-logout">显示所有</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </h3>
                 <p v-for="rmk in rmks" class="rmk">
                     {{rmk.remark}}
                 </p>
@@ -323,21 +334,17 @@ var temp = {
                 </span>
             </el-dialog>
 
-            <el-dialog
+            <el-dialog 
                 title="标注"
                 :visible.sync="remarker.visible"
                 width="30%">
-                <el-form 
-                    ref="remarkerForm"
-                    :inline="true" 
-                    :model="remarker"
-                    :rules="remarker.rules"
-                >
-                    <el-form-item label="标注" prop="remark">
-                        <el-input autosize type="textarea" v-model="remarker.content"></el-input>
+                <el-form ref="remarkerForm" :rules="remarker.rules" label-width="80px" :model="remarker">
+                    <el-form-item label="内容" prop="content">
+                        <el-input type="textarea" autosize v-model="remarker.content"></el-input>
                     </el-form-item>
+
                     <el-form-item>
-                        <el-button type="primary" @click="submitRemarkForm();">确定</el-button>
+                        <el-button class="fr" type="primary" @click="submitRemarkForm()">发送</el-button>
                     </el-form-item>
                 </el-form>
             </el-dialog>

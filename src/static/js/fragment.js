@@ -4,6 +4,8 @@ FRAGMENTS = {
         return `{
             if(Hls.isSupported()) {
                 var video = $('video')[0];
+                // window.vEle = video;
+                
                 var hls = new Hls();
 
                 hls.loadSource('/multimedia/ts/`+ vId + `/_.m3u8');
