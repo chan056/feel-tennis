@@ -47,7 +47,7 @@ module.exports.m3u = function(vId, videoStorePath, subtitleAbsPath){
         fs.readFile(sourcePlaylist, (err, data) => {
             fs.writeFile(targetPlaylist, data, (err) => {
                 if (err) throw err;
-                console.log('The file has been saved!');
+                // console.log('The file has been saved!');
             });
         });
 

@@ -1,3 +1,5 @@
+// res req 只有在用户视频功能中才有
+// 视频上传生成视频预览时没有
 module.exports.createDynamicPreview = function(captureParams, res, req){
     let videoName = captureParams.vId,
         st = captureParams.st,
@@ -52,13 +54,17 @@ module.exports.createDynamicPreview = function(captureParams, res, req){
             }
 
             // 存储到
-            return res.end(output[0]);
+            if(res){
+                return res.end(output[0]);
+            }
             
         });
     });
 
     function responseError(){
-        res.statusCode = 402;
-        res.end();
+        if(res){
+            res.statusCode = 402;
+            res.end();
+        }
     }
 }
