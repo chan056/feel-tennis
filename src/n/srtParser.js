@@ -12,11 +12,34 @@ module.exports = {
                 var srtStream = fs.readFileSync(srt,'utf8');
                 var data = parser.fromSrt(srtStream, true);
                 // console.log(data);
+                data = trimSrt(data);
                 res.end(JSON.stringify(data));
             }else{
                 res.statusCode = 404;
                 res.end('srt 404');
             }
-        });
-    }
+        }.bind(this));
+
+        function trimSrt(data){
+            let item;
+            for(let i=0; i<data.length; i++){
+                item=data[i];
+                if(!item){
+                    break;
+                }
+    
+                if(!item.text){
+                    if(i > 0){
+                        data[i-1]['endTime'] = item.endTime;
+                        data.splice(i, 1);
+                        i--;
+                    }
+                }
+            }
+    
+            return data;
+        }
+    },
+
+    
 }
