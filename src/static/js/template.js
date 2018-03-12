@@ -300,8 +300,9 @@ var temp = {
             </div>
             <div v-if="video">
                 <input type="button" value="开始截图" @click="captureCountdown()" id="capture-btn" class="el-button el-button--default"/>
-                <el-button v-if="gifLink" @click="preview()">预览截图</el-button>
-                <el-button @click="remarker.visible = true; this.vEle.pause();">添加标注</el-button>
+                <el-button v-if="gifLink && !shooting" @click="preview()">预览截图</el-button>
+                <el-button v-if="shooting" :loading="true">预览截图</el-button>
+                <el-button @click="remarker.visible = true; this.vEle.pause();">标注</el-button>
             </div>
 
             <div id="remark-wrapper" v-if="video">
@@ -320,17 +321,37 @@ var temp = {
                     {{rmk.remark}}
                 </p>
             </div>
-
             <el-dialog
                 title="动态截图预览"
                 :visible.sync="previewerVisible"
                 width="30%"
                 >
-                <p v-if="gifLink" style="text-align: center;">
+                <p v-if="gifLink" id="shoot-container">
                     <img v-bind:src="gifLink" />
                 </p>
                 <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="previewerVisible = false">确 定</el-button>
+                    <el-popover
+                        ref="qrcodePop"
+                        placement="top"
+                        title="标题"
+                        width="200"
+                        trigger="click"
+                        >
+                        <div id="qrcode-shoot"></div>
+                        <button type="button"
+                            class="el-button el-button--default"
+                            v-clipboard:copy="gifFullLink"
+                            v-clipboard:success="copySuccess"
+                            v-clipboard:error="">复制链接</button>
+                        </button>
+                    </el-popover>
+                    <el-button v-popover:qrcodePop @click="popShow()">分享</el-button>
+
+                    <a :href="gifLink" download="视频截图.gif">
+                        <el-button type="primary" @click="">下载</el-button>
+                    </a>
+                    
+                    <el-button type="primary" @click="previewerVisible = false;">确 定</el-button>
                 </span>
             </el-dialog>
 
@@ -395,7 +416,7 @@ var temp = {
                     <router-link :to="{path: '/usrVshoots?vId='+ video.id }">
                         <img :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb spt-thumb"/>
                         <h3 class="block-title video-title ellipsis">
-                            <a href="javascript:;" :title="video.headline">{{ video.headline || 123 }}</a>
+                            <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
                         </h3>
                     </router-link>
                 </li>

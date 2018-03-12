@@ -323,6 +323,15 @@ app {
 .rmk {
   padding: 15px 30px;
 }
+#qrcode-shoot {
+  margin-bottom: 20px;
+}
+#shoot-container {
+  text-align: center;
+}
+#shoot-container > img {
+  max-height: 300px;
+}
 .time {
   font-size: 13px;
   color: #999;

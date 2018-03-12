@@ -37,7 +37,7 @@ let tools = {
         let id = attrs.id;
         if(id && $('script#' + id).length){// ? return
             if(type == 1){
-                return attrs.onload();
+                return attrs.onload && attrs.onload();
             }
             
             $('script#' + id).remove();

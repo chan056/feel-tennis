@@ -8,12 +8,14 @@ module.exports.createDynamicPreview = function(captureParams, res, req){
 
     captureParams.ext = captureParams.ext || '.mp4';
 
-    if(duration > require('../constant').gifMaxDuration){
-        return res.end('fail');
-    }
-
     if(videoName === undefined || st === undefined || et === undefined)
-        return res.end('fail');
+        responseError();
+
+    if(et <= st)
+        responseError();
+
+    if(duration > require('../constant').gifMaxDuration)
+        responseError();
 
     let path = require('path');
     const exec = require('child_process').exec;
@@ -54,4 +56,9 @@ module.exports.createDynamicPreview = function(captureParams, res, req){
             
         });
     });
+
+    function responseError(){
+        res.statusCode = 402;
+        res.end();
+    }
 }

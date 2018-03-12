@@ -219,6 +219,11 @@ const routerConfig = {
         r.query('queryUsrScreenshots', params, res, req);
     },
 
+    // 用户截图所属的视频列表
+    '/usrShotVideos': function(params, res, req){
+        r.query('queryUsrShotVideos', params, res, req);
+    },
+
     // 根据视频查询截图
     '/queryUsrVshoot': function(params, res, req){
         r.query('queryUsrVshoot', params, res, req);

@@ -440,7 +440,18 @@ COMPONENTS.Album = {
 COMPONENTS.Video = {
 	props: ['videoId'],
 	data: function () {
-		let d = {video: null, crumb: {}, tags: [], captureParams: {}, previewerVisible: false, gifLink: '', like: 0, likeLocking: false};
+		let d = {
+			video: null, 
+			crumb: {}, 
+			tags: [], 
+			captureParams: {}, 
+			previewerVisible: false,
+			gifLink: '', 
+			gifFullLink: '', 
+			shooting: false,
+			like: 0, 
+			likeLocking: false
+		};
 		let propsData = this.$options.propsData;
 		let videoId = propsData.videoId;
 
@@ -586,26 +597,55 @@ COMPONENTS.Video = {
 
 		capture: function(){
 			this.captureParams.et = this.getVideoTime();
+			this.shooting = true;
 
-			if(!this.captureParams === undefined){
+			if(this.captureParams.et <= this.captureParams.st){
 				return;
 			}
 			
 			tools.xhr('/gifLink?' + $.param(this.captureParams), function(resData){
-				this.captureParams = {id: this.captureParams.id};
-
-				var gifLink = resData;
-				this.gifLink = gifLink;
+				this.gifLink = resData;
+				this.shooting = false;
+			}.bind(this), null, null, function(ret){ 
+				this.$message.warning({
+					message: '视频截图出错'
+				});
 				
-			}.bind(this), null, null, function(ret){
-				console.log(ret)
-				let status = ret.status;
-				if(status == 402){
-					this.$message.warning({
-						message: '截图超出限制'
+				this.shooting = false;
+			}.bind(this));
+
+			vEle.pause();
+		},
+
+		// 点击分享时
+		popShow: function(){
+			tools.insertScriptTag(1, "../lib/qrcode.js", {onload: function(){
+				if(this.gifLink){
+					this.gifFullLink = location.origin + this.gifLink;
+					var qrcode = new QRCode($('#qrcode-shoot').empty()[0], {
+						text: this.gifFullLink,
+						width: 128,
+						height: 128,
+						colorDark : "#000000",
+						colorLight : "#ffffff",
+						correctLevel : QRCode.CorrectLevel.H
 					});
 				}
-			}.bind(this));
+
+				// qrcode.clear(); // clear the code.
+				// qrcode.makeCode("http://naver.com"); // make another code.
+			}.bind(this), id: 'qrcode'});
+			// tools.insertScriptTag(1, "../lib/clipboard.min.js", {onload: function(){
+				// console.log(ClipboardJS, $('#copy-shoot-link-btn').length)
+				// new ClipboardJS('#copy-shoot-link-btn');
+			// }.bind(this), id: 'clipboard'});
+		},
+
+		copySuccess: function (){
+			this.$message({
+				message: '复制成功',
+				type: 'success'
+			});
 		},
 
 		remark: function(){
@@ -848,7 +888,7 @@ COMPONENTS.Video = {
 			};
 
 			o[cmd] && o[cmd]();
-		}
+		},
 	}
 };
 
@@ -1294,7 +1334,7 @@ COMPONENTS.Stars = {
 			d.vStars = resData;
 		});
 
-		tools.xhr('/screenshots', function(resData){
+		tools.xhr('/usrShotVideos', function(resData){
 			d.shotVideos = resData;
 		});
 

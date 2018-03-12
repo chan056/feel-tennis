@@ -24,6 +24,8 @@ let config = {
     '/queryUsrVideoStars/:v_id': {level: 10},
 
     '/queryUsrVshoot/:v_id': {level: 10},
+    
+    '/usrShotVideos':{level: 10},
 
     '/video/:v_id/remarks': {level: 10},
     

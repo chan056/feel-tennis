@@ -330,6 +330,29 @@ var operations = {
 		});
 	},
 
+	
+	queryUsrShotVideos: function(res, qualification){
+		let sql = `SELECT
+			*
+			FROM
+				video
+			WHERE
+			id IN (
+				SELECT DISTINCT
+					v_id
+				FROM
+					usr_screenshot_star AS uss
+				WHERE usr_id=${this.usrInfo.usrId}
+			)`;
+		
+		conn.query(sql, function (err, result, fields) {
+			if (err) throw err;
+
+			result = JSON.stringify(result);
+			res.end(result);
+		});
+	},
+
 	queryStarVideo: function(res, qualification, params){
 		let sql = `SELECT
 			v.*,
