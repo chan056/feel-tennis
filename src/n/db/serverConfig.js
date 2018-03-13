@@ -1,4 +1,4 @@
-module.exports.config = function(req, res) {
+module.exports = function(req, res) {
 	
 	// 检查用户知否在黑名单
 	require('../guard')(req, res, function(){

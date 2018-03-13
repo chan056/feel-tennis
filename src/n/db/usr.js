@@ -7,7 +7,7 @@ module.exports = function(req, fn, res){
     session.startSession(req, res, function(){
         let usr = req.session.get('usr');// 一定几率获取不成功
         // let usr = req.session.data.user;
-console.log(usr)
+
         if(usr){// 已经登陆的用户
             // usr = JSON.parse(usr);
             usrInfo = {
