@@ -61,7 +61,7 @@ var temp = {
                 </div>
             </el-dialog>
 
-            <el-dialog title="登录" :visible.sync="loginForm.visible">
+            <el-dialog title="登录" :visible.sync="loginForm.visible" id="login-dialog">
                 <el-form :model="loginForm">
                     <el-form-item label="用户名" :label-width="loginForm.formLabelWidth">
                         <el-input v-model="loginForm.name" auto-complete="on"></el-input>
@@ -69,11 +69,10 @@ var temp = {
                     <el-form-item label="密码" :label-width="loginForm.formLabelWidth">
                         <el-input type="password" id="last-login-iput" v-model="loginForm.psw" auto-complete="off" clearable></el-input>
                     </el-form-item>
-                    <p>
-                        <span @click="resetPswForm.visible = true; loginForm.visible = false;">重置密码</span>
-                        <span @click="handlerRegist(); loginForm.visible = false;">注册</span>
+                    <p class="btns">
+                        <el-button @click="resetPswForm.visible = true; loginForm.visible = false;" class="rst-psw-btn">重置密码</el-button>
+                        <el-button @click="handlerRegist(); loginForm.visible = false;" class="rgst-btn">注册</el-button>
                     </p>
-                    
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button type="primary" @click="loginForm.visible = false;">取 消</el-button>
@@ -163,6 +162,9 @@ var temp = {
 
     sports: `
         <div id="album-list">
+            <div class="el-breadcrumb">
+                <span>运动</span>
+            </div>
             <ul class="block-list">
                 <li class="" v-for="sport in sports">
                     <router-link :to="{path: '/sports/'+ sport.id }" :title="sport.name">
@@ -176,6 +178,12 @@ var temp = {
                     </router-link>
                 </li>
             </ul>
+            <el-pagination
+                layout="prev, pager, next"
+                :total="total"
+                :page-size="pageSize"
+                @current-change="handlePageChange">
+            </el-pagination>
         </div>
     `,
     

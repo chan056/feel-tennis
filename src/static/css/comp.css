@@ -89,6 +89,12 @@ em {
   white-space: nowrap;
   overflow: hidden;
 }
+.el-breadcrumb span {
+  font-size: 2.4rem;
+}
+.el-pagination {
+  margin-top: 30px;
+}
 #main {
   min-height: 500px;
 }
@@ -234,9 +240,6 @@ app {
 #header .masthead .el-menu-item {
   min-width: 70px !important;
 }
-.el-breadcrumb span {
-  font-size: 2.4rem;
-}
 .tags {
   margin-bottom: 30px;
 }
@@ -253,6 +256,9 @@ app {
 .new-album-btn,
 .new-tag-btn {
   margin-left: 20px;
+}
+#login-dialog .btns {
+  padding-left: 100px;
 }
 #palyer-wrapper {
   display: inline-block;

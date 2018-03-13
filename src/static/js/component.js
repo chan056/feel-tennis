@@ -36,14 +36,23 @@ COMPONENTS.HeaderComponent = {
 						}else{
 							return callback();
 						}
-					}, 'get');
+					});
 				}, trigger: 'blur'}
 			],
 			psw: [
 				{ required: true, message: '请输入密码', trigger: 'blur' },
 			],
 			email: [
-				{ type: 'email', required: true, message: '请输入正确格式邮箱', trigger: 'change' }
+				{ type: 'email', required: true, message: '请输入正确格式邮箱', trigger: 'change' },
+				{ validator: function(rule, value, callback){
+					tools.xhr('/checkEmailExist?email=' + value, function(d){
+						if(d){
+							return callback(new Error('邮箱已存在'));
+						}else{
+							return callback();
+						}
+					});
+				}, trigger: 'blur'}
 			],
 			captcha: [
 				{ required: true, message: '请输入计算结果', trigger: 'blur' },
@@ -354,16 +363,36 @@ COMPONENTS.AsideComponent = {
 
 COMPONENTS.Sports = {
 	data: function () {
-		var d = {sports: []};
-
-		tools.xhr('/sports', function(resData){
-			d.sports = resData;
-		});
+		var d = {
+			pageSize: 10,
+			total: 0,
+			sports: []
+		};
 
 		return d;
 	},
 
 	template: temp.sports,
+
+	mounted: function(){
+		this.requestSports(0);
+	},
+
+	methods: {
+		requestSports: function(pageNum){
+			tools.xhr('/sports', function(resData){
+				this.sports = resData;
+				this.total = this.sports.length;
+			}.bind(this),'get',{
+				pageNum: pageNum,
+				pageSize: this.pageSize
+			});
+		},
+
+		handlePageChange: function(i){
+			this.requestSports(i-1);
+		}
+	}
 };
 
 COMPONENTS.AlbumList = {

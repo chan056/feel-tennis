@@ -25,12 +25,14 @@ function newQueryClause(params) {
 
 		// i = mysql.escape(i);
 		k = mysql.escape(k);
-		
-		n == 0?
-			qualification += i + '=' + k:
-			qualification += ' and ' + i + '=' + k;
 
-		n ++;
+		if(i != 'pageNum' && i != 'pageSize'){
+			n == 0?
+				qualification += i + '=' + k:
+				qualification += ' and ' + i + '=' + k;
+
+			n ++;
+		}
 	}
 
 	return qualification;

@@ -195,6 +195,10 @@ const routerConfig = {
         r.query('checkUsernameExist', params, res, req);
     },
 
+    '/checkEmailExist': function(params, res, req){
+        r.query('checkEmailExist', params, res, req);
+    },
+
     '/videoVoteResult': function(params, res, req){
         r.query('videoVoteResult', params, res, req);
     },

@@ -1,4 +1,5 @@
 @import "common.less";
+@import "el-rst.less";
 
 @img-dir-path: '/img/';
 @border-color: #dcdfe6;
@@ -121,11 +122,6 @@ app{font-size: 14px;}
   #usr-btns{}
 }
 
-// 层级导航
-.el-breadcrumb{
-  span{font-size: 2.4rem;}
-}
-
 // 标签
 .tags{
   margin-bottom: 30px;
@@ -141,6 +137,11 @@ app{font-size: 14px;}
 .new-video-btn{}
 
 .new-album-btn, .new-tag-btn{margin-left: 20px;}
+
+// 登录对话框
+#login-dialog{
+  .btns{padding-left: 100px;}
+}
 
 
 // video

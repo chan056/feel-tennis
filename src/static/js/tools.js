@@ -2,6 +2,9 @@ let tools = {
     // POST 才有 params
     xhr: function xhr(api, sfn, type, params, errorHandle){
         type = type || 'get';
+        if(type == 'get'){
+            params = {params: params};
+        }
     
         axios[type](api, params)
         .then(function (response) {
@@ -11,7 +14,7 @@ let tools = {
             let response = error.response;
             if(!response)
                 return;
-                
+
             let statusCode = response.status;
             
             // 自定义错误处理

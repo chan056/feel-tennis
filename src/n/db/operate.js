@@ -2,10 +2,13 @@ let conn = require('./connect.js').conn;
 let tools = require('../tools');
 let usrInfo = {};
 
-var operations = {
-	querySports: function (res, qualification) {
+let operations = {
+	querySports: function (res, qualification, params) {
+		
+		let sql = 'SELECT * from sport' + qualification;
+		sql = disposePageSql(sql, params);
 
-		conn.query('SELECT * from sport' + qualification, function (err, result, fields) {
+		conn.query(sql, function (err, result, fields) {
 			if (err) throw err;
 
 			result = JSON.stringify(result);
@@ -14,7 +17,7 @@ var operations = {
 
 	},
 
-	querySkills: function (res, qualification) {
+	querySkills: function (res, qualification, params) {
 
 		conn.query('SELECT * from skill' + qualification, function (err, result, fields) {
 			if (err) throw err;
@@ -25,7 +28,7 @@ var operations = {
 
 	},
 
-	queryAthletes: function (res, qualification) {
+	queryAthletes: function (res, qualification, params) {
 
 		conn.query('SELECT * from athlete' + qualification, function (err, result, fields) {
 			if (err) throw err;
@@ -36,7 +39,7 @@ var operations = {
 
 	},
 
-	querySport: function (res, qualification) {
+	querySport: function (res, qualification, params) {
 		
 		conn.query('SELECT * from sport' + qualification, function (err, result, fields) {
 			if (err) throw err;
@@ -78,19 +81,7 @@ var operations = {
 
 	},
 
-	/* 
-		查询是否存在临时用户
-			没有
-				新建
-			有
-				更新
-		超过当天视频播放量
-			是
-				重定向到所属专辑视频列表
-			否
-				返回视频信息
-	*/
-	queryVideo: function (res, qualification) {
+	queryVideo: function (res, qualification, params) {
 		const constants = require('../constant');
 		let dayView = 0;
 		let dayViewLeft = 0;
@@ -167,7 +158,7 @@ var operations = {
 		}
 	},
 
-	queryMakers: function(res, qualification) {
+	queryMakers: function(res, qualification, params) {
 		conn.query('SELECT * from maker' + qualification, function (err, result, fields) {
 			if (err) throw err;
 
@@ -177,7 +168,7 @@ var operations = {
 		});
 	},
 
-	queryMaker: function(res, qualification) {
+	queryMaker: function(res, qualification, params) {
 		conn.query('SELECT * from maker' + qualification, function (err, result, fields) {
 			if (err) throw err;
 
@@ -187,7 +178,7 @@ var operations = {
 		});
 	},
 
-	queryTag: function (res, qualification) {
+	queryTag: function (res, qualification, params) {
 
 		conn.query('SELECT * from tag' + qualification, function (err, result, fields) {
 			if (err) throw err;
@@ -198,7 +189,7 @@ var operations = {
 
 	},
 
-	loginInfo: function(res){
+	loginInfo: function(res, qualification, params){
 		let usrInfo = this.usrInfo;
 		
 		if(usrInfo.type == 1){
@@ -213,7 +204,7 @@ var operations = {
 		}
 	},
 
-	checkUsernameExist: function(res, qualification){
+	checkUsernameExist: function(res, qualification, params){
 		conn.query('SELECT * from usr' + qualification, function (err, result, fields) {
 			if (err) throw err;
 
@@ -225,7 +216,19 @@ var operations = {
 		});
 	},
 
-	videoVoteResult: function(res, qualification){
+	checkEmailExist: function(res, qualification, params){
+		conn.query('SELECT * from usr' + qualification, function (err, result, fields) {
+			if (err) throw err;
+
+			if(result && result.length){
+				res.end('1');
+			}else{
+				res.end('0');
+			}
+		});
+	},
+
+	videoVoteResult: function(res, qualification, params){
 		let sql = `SELECT
 			(
 				SELECT
@@ -280,7 +283,7 @@ var operations = {
 		});
 	},
 
-	queryUsrStars: function(res, qualification){
+	queryUsrStars: function(res, qualification, params){
 		conn.query('SELECT * from star where usr_id=' + this.usrInfo.usrId, function (err, result, fields) {
 			if (err) throw err;
 
@@ -309,7 +312,7 @@ var operations = {
 		});
 	},
 
-	queryUsrScreenshots: function(res, qualification){
+	queryUsrScreenshots: function(res, qualification, params){
 		let sql = `SELECT
 			usv.screenshot,
 			v.headline,
@@ -331,7 +334,7 @@ var operations = {
 	},
 
 	
-	queryUsrShotVideos: function(res, qualification){
+	queryUsrShotVideos: function(res, qualification, params){
 		let sql = `SELECT
 			*
 			FROM
@@ -789,7 +792,7 @@ module.exports.query = function (operation, params, response, request) {
 	if(clause){
 		clause = ' where ' + clause;
 	}
-	operations[operation] && operations[operation](response, clause, params, request);
+	operations[operation] && operations[operation](response, clause, params);
 }
 
 module.exports.post = function (operation, request, response, pathParams) {
@@ -814,3 +817,14 @@ module.exports.patch = function (operation, request, response, pathParams) {
 	});
 }
 
+function disposePageSql(sql, params){
+	let pageNum = Number(params.pageNum),
+		pageSize = Number(params.pageSize);
+
+	if(pageNum || pageSize){
+		let firstPage = pageNum * pageSize;
+		sql += ` limit ${firstPage}, ${firstPage + pageSize}`;
+	}
+
+	return sql;
+}
