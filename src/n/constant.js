@@ -23,5 +23,7 @@ module.exports = {
         user: 'root',
         password: '62191056',
         database: 'n',
-    }
+    },
+
+    videoCoverSize: '210x118'
 }

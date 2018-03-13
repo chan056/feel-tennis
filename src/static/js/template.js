@@ -443,9 +443,11 @@ var temp = {
     usrVshoots: `
         <div id="" class="main-model">
             <h2>截图列表</h2>
-            <ul class="block-list">
+            <ul class="block-list" id="video-shoot-list">
                 <li class="" v-for="shoot in shoots">
-                    <img :src="'/multimedia/gif/'+shoot.screenshot + '.gif'" class="block-thumb video-thumb"/>
+                    <img :data-src="'/multimedia/gif/'+shoot.screenshot" 
+                    :src="'/multimedia/gif/'+shoot.screenshot + '.jpg'" 
+                    class="block-thumb video-thumb"/>
                 </li>
             </ul>
         </div>

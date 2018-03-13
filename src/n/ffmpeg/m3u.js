@@ -9,8 +9,6 @@ module.exports.m3u = function(vId, videoStorePath, subtitleAbsPath){
     const fs = require('fs');
     const tool = require('../tools');
 
-    let coveSize = '210x118';// 视频截图尺寸
-
     let multiResolution = {
         360: {scaleW: 640, scaleH: 360, bv: 800, maxrate: 856, bufsize: 1200, ba: 96},
         480: {scaleW: 842, scaleH: 480, bv: 1400, maxrate: 1498, bufsize: 2100, ba: 128},
@@ -108,6 +106,8 @@ module.exports.m3u = function(vId, videoStorePath, subtitleAbsPath){
             if(error){
                 console.log(error);
             }
+
+            let coveSize = require('../constant').videoCoverSize;
     
             let coverPath = path.resolve(tsDir, './cover.jpg');
             let screenshotCmd = `ffmpeg -ss ${tool.formatTime(duration/2)} -i ${videoStorePath} -y -f image2 -vframes 1 -s ${coveSize} ${coverPath}`;

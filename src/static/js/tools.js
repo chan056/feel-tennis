@@ -9,6 +9,9 @@ let tools = {
         })
         .catch(function (error) {
             let response = error.response;
+            if(!response)
+                return;
+                
             let statusCode = response.status;
             
             // 自定义错误处理

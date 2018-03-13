@@ -44,22 +44,36 @@ module.exports.createDynamicPreview = function(captureParams, res, req){
             let gifFilename = `${videoName}-${now}`;
             output = output.match(/\/multimedia\S+$/);
 
-            if(req){// 用户截图
+            if(req && res){// 用户截图
                 let conn = require('../db/connect.js').conn;
                 let sql = `insert into usr_screenshot_star (usr_id, screenshot, v_id) values (${req.usrInfo.usrId}, '${gifFilename}', ${videoName})`;
                 conn.query(sql, function(err, result){
                     if(err)
                         console.log(err);
                 });
-            }
 
-            // 存储到
-            if(res){
+                screenshot();
+
                 return res.end(output[0]);
             }
-            
         });
     });
+
+    // 保存gif第一帧
+    // ffmpeg -ss 00:10:00 -i "t.mp4" -y -f image2 -vframes 1 -s 200x100 test.jpg
+    function screenshot(){
+        let filename = dir + `/multimedia/gif/${videoName}-${now}.jpg`;
+        let fileSize = require('../constant').videoCoverSize;
+        let screenshotCmd = `ffmpeg -ss ${st} -i ${vSouce} -y -f image2 -vframes 1 -s ${fileSize} ${filename}`;
+
+        console.log(screenshotCmd);
+        exec(screenshotCmd, function(err){
+            if(err){
+                console.log(err);
+            }
+        });
+    }
+
 
     function responseError(){
         if(res){

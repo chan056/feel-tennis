@@ -54,9 +54,9 @@ const routerConfig = {
         let crypto = require('../crypto.js');
         let decryptedCode = crypto.aesDecrypt(code, require('../constant').aesKey);
         
-        console.log(decryptedCode);
+        // console.log(decryptedCode);
         decryptedCode = JSON.parse(decryptedCode);
-        let sql = `update usr set is_active = 1 where id = ${decryptedCode.id} and active_code = ${decryptedCode.code}`;
+        let sql = `update usr set is_active = '1', active_code = '' where id = ${decryptedCode.id} and active_code = ${decryptedCode.code}`;
         r.excuteSQL(sql, res, function(result){
             if(result.affectedRows){
                 res.end();
@@ -225,7 +225,7 @@ const routerConfig = {
     },
 
     // 根据视频查询截图
-    '/queryUsrVshoot': function(params, res, req){
+    '/usrVshoot': function(params, res, req){
         r.query('queryUsrVshoot', params, res, req);
     },
 

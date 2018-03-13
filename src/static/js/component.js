@@ -1388,7 +1388,7 @@ COMPONENTS.UsrVshoots = {
 			shoots: [],
 		};
 
-		tools.xhr('/queryUsrVshoot?vId=' + this.$route.query.vId, function(resData){
+		tools.xhr('/usrVshoot?vId=' + this.$route.query.vId, function(resData){
 			d.shoots = resData;
 		});
 
@@ -1396,4 +1396,14 @@ COMPONENTS.UsrVshoots = {
 	},
 
 	template: temp.usrVshoots,
+
+	mounted: function(){
+		$('#video-shoot-list').on('mouseover click', '.video-thumb', function(){
+			let src = $(this).data('src');
+			this.src = src + '.gif';
+		}).on('mouseout', function(){
+			// console.log(this)
+			// this.src = src + '.jpg';
+		});
+	}
 } 
