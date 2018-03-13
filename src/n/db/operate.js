@@ -413,8 +413,9 @@ let operations = {
 				throw err;
 			
 			if(result[0] && result[0].id){
-				let info = JSON.stringify({id: result[0].id, isAdmin: result[0].is_admin});
+				let info = {id: result[0].id, isAdmin: result[0].is_admin};
 				req.session.put('usr', info);
+				// req.session.data.user = info;
 
 				res.statusMessage = 'login success';
 				res.end();
@@ -428,7 +429,11 @@ let operations = {
 	},
 
 	regist: function(res, postObj, req){
-		let ip = `'${require('client-ip')(req)}'`;
+		let ip = require('client-ip')(req);
+		if(ip == '::1'){
+			ip = '::ffff:127.0.0.1';
+		}
+
 		conn.query(`SELECT * from usr WHERE regist_ip=${ip} and regist_time > DATE_SUB(CURRENT_TIMESTAMP(),INTERVAL 1 DAY)`, function(err, result){
 			if(err)
 				throw err;

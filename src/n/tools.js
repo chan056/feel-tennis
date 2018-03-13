@@ -3,7 +3,6 @@ function response404(response){
         'Content-Type': 'text/plain'
     });
 
-    response.write("This request URL " + global.pathname + " was not found on this server.");
     response.end();
 }
 

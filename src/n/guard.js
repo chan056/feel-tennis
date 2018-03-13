@@ -2,6 +2,9 @@ module.exports = function(req, res, fn){
     let conn = require('./db/connect').conn;
     
     let clientIp = require('client-ip')(req);
+    if(clientIp == '::1'){
+        clientIp = '::ffff:127.0.0.1';
+    }
     let sql = `select * from black where ip = '${clientIp}'`;
 
     conn.query(sql, function(err, result){

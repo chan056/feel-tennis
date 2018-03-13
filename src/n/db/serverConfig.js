@@ -67,9 +67,7 @@ module.exports.config = function(req, res) {
 		}
 	
 		function disposeApi(){
-			require('./usr')(req, function(usrInfo){
-				// console.log(pathname, usrInfo)
-				
+			require('./usr')(req, function(){
 				let resolveApiPathModule = require('./resolveApiPath');
 				resolveApiPathModule.resolveApiPath(req, res);
 			}, res);

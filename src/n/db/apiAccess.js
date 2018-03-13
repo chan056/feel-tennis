@@ -58,7 +58,9 @@ module.exports = {
                 //     console.log('==========E==========');
                 // }
     
+                console.log(path, usrInfo, authority, apiAccessLevel)
                 if(authority < apiAccessLevel){
+                    
                     return false;
                 }else{
                     // 是普通用户 并且 访问次数有限制

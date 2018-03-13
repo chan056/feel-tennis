@@ -19,6 +19,7 @@
     "nodemailer": "^4.4.2",
     "nodemailer-smtp-transport": "^2.7.4",
     "path-to-regexp": "^2.1.0",
+    "sesh": "^0.1.0",
     "subtitles-parser": "0.0.2",
     "webpack": "^3.8.1"
   },

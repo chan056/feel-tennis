@@ -364,7 +364,7 @@ COMPONENTS.AsideComponent = {
 COMPONENTS.Sports = {
 	data: function () {
 		var d = {
-			pageSize: 10,
+			pageSize: CONSTANT.PAGESIZE,
 			total: 0,
 			sports: []
 		};
@@ -375,14 +375,14 @@ COMPONENTS.Sports = {
 	template: temp.sports,
 
 	mounted: function(){
-		this.requestSports(0);
+		this.fetchSports(0);
 	},
 
 	methods: {
-		requestSports: function(pageNum){
+		fetchSports: function(pageNum){
 			tools.xhr('/sports', function(resData){
 				this.sports = resData;
-				this.total = this.sports.length;
+				this.total = resData.length;
 			}.bind(this),'get',{
 				pageNum: pageNum,
 				pageSize: this.pageSize
@@ -390,7 +390,7 @@ COMPONENTS.Sports = {
 		},
 
 		handlePageChange: function(i){
-			this.requestSports(i-1);
+			this.fetchSports(i-1);
 		}
 	}
 };
@@ -398,13 +398,14 @@ COMPONENTS.Sports = {
 COMPONENTS.AlbumList = {
 	props: ['sportId'],
 	data: function () {
-		var propsData = this.$options.propsData;
-		var d = {albumList: [], crumb: {}};
-		tools.xhr('/sports/' + propsData.sportId + '/albums', function(resData){
-			d.albumList = resData;
-		});
-
-		tools.xhr('/navInfo/1/' + propsData.sportId, function(resData){
+		var d = {
+			albumList: [], 
+			crumb: {}, 
+			pageSize: CONSTANT.PAGESIZE,
+			total: 0,
+		};
+		
+		tools.xhr('/navInfo/1/' + this.sportId, function(resData){
 			d.crumb = resData[0];
 		});
 
@@ -414,32 +415,42 @@ COMPONENTS.AlbumList = {
 	template: temp.albumList,
 
 	methods: {
-		
+		fetchAlbumList: function(pageNum){
+			tools.xhr('/sports/' + this.sportId + '/albums', function(resData){
+				this.albumList = resData;
+				this.total = resData.length;
+			}.bind(this),'get',{
+				pageNum: pageNum,
+				pageSize: this.pageSize
+			});
+		},
+
+		handlePageChange: function(i){
+			this.fetchAlbumList(i-1);
+		}
 	},
 
-	computed: {
-		// albumList: function(){
-			
-		// }
-	}
+	mounted: function(){
+		this.fetchAlbumList(0);
+	},
 };
 
 COMPONENTS.Album = {
 	props: ['albumId'],
 	data: function () {
-		let d = {albumVideoList: [], crumb: {}, tags:[]};
-		let propsData = this.$options.propsData;
-		let albumId = propsData.albumId;
+		let d = {
+			albumVideoList: [], 
+			crumb: {}, 
+			tags:[],
+			total: 0,
+			pageSize: CONSTANT.PAGESIZE
+		};
 
-		tools.xhr('/albums/' + albumId + '/videos', function(resData){
-			d.albumVideoList = resData;
-		});
-
-		tools.xhr('/navInfo/2/' + albumId, function(resData){
+		tools.xhr('/navInfo/2/' + this.albumId, function(resData){
 			d.crumb = resData[0];
 		});
 
-		tools.xhr('/albumTags/' + albumId, function(resData){
+		tools.xhr('/albumTags/' + this.albumId, function(resData){
 			d.tags = resData;
 		});
 
@@ -447,23 +458,37 @@ COMPONENTS.Album = {
 	},
 	template: temp.album,
 	methods: {
-		dynamivePreview: function(e){
+		fetchAlbumVideo: function(pageNum){
+			tools.xhr('/albums/' + this.albumId + '/videos', function(resData){
+				this.albumVideoList = resData;
+				this.total = resData.length;
+			}.bind(this),'get',{
+				pageNum: pageNum,
+				pageSize: this.pageSize
+			});
+		},
 
+		handlePageChange: function(i){
+			this.fetchAlbumVideo(i-1);
+		},
+
+		dynamivePreview: function(e){
 			$(e.target).attr('src', function(){
 				// console.log(arguments);
 				return arguments[1].replace('cover.jpg', 'd_cover.gif');
 			});
-			
 		},
 
 		staticPreview: function(e){
-
 			$(e.target).attr('src', function(){
 				return arguments[1].replace('d_cover.gif', 'cover.jpg');
 			});
-			
 		},
-	}
+	},
+
+	mounted: function(){
+		this.fetchAlbumVideo(0);
+	},
 };
 
 COMPONENTS.Video = {
@@ -923,8 +948,11 @@ COMPONENTS.Video = {
 
 COMPONENTS.videos = {
 	data: function () {
-		var d = {videos: []};
-		this.refreshVlist();
+		var d = {
+			videos: [],
+			total: 0,
+			pageSize: CONSTANT.PAGESIZE
+		};
 
 		return d;
 	},
@@ -932,26 +960,26 @@ COMPONENTS.videos = {
 	created() {
 		
 	},
-	beforeRouteUpdate(to, from, next) {
-		console.log('update ........', to, this.$route)
-		setTimeout(this.refreshVlist, 20);// ? 触发时， $route还未更新
-		next();
+
+	mounted(to, from, next) {
+		this.fetchVideolist(0);
 	},
 
 	methods: {
-		refreshVlist: function(){
-			var route = this.$route;
-			
-			// {a:1, b:2} 转化成 ?a=1&b=2
-			let q = $.param(route.query);
-			q = q? ('?' + q): '';
+		fetchVideolist: function(pageNum){
+			let params = this.$route.query || {};
+			params.pageSize = this.pageSize;
+			params.pageNum = pageNum;
 
-			_t = this;
+			tools.xhr('/videos', function(resData){
+				this.videos = resData;
+				this.total = resData.length;
+			}.bind(this), 'get', params);
+		},
 
-			tools.xhr('/videos' + q, function(resData){
-				_t.videos = resData;
-			});
-		} 
+		handlePageChange: function(index){
+			this.fetchVideolist(index);
+		}
 	}
 };
 
@@ -1356,7 +1384,10 @@ COMPONENTS.Stars = {
 	data: function () {
 		var d = {
 			vStars: [],
-			shotVideos: []
+			shotVideos: [],
+			starTotal: 0,
+			videoTotal: 0,
+			pageSize: CONSTANT.PAGESIZE
 		};
 
 		tools.xhr('/vStars', function(resData){
@@ -1371,6 +1402,41 @@ COMPONENTS.Stars = {
 	},
 
 	template: temp.stars,
+
+	mounted: function(){
+		this.fetchVideoStar(0);
+		this.fetchShootVideo(0);
+	},
+
+	methods: {
+		fetchVideoStar: function(pageNum){
+			tools.xhr('/vStars', function(resData){
+				this.vStars = resData;
+				this.starTotal = resData.length;
+			}.bind(this),'get',{
+				pageNum: pageNum,
+				pageSize: this.pageSize
+			});
+		},
+
+		fetchShootVideo: function(pageNum){
+			tools.xhr('/usrShotVideos', function(resData){
+				this.shotVideos = resData;
+				this.videoTotal = resData.length;
+			}.bind(this),'get',{
+				pageNum: pageNum,
+				pageSize: this.pageSize
+			});
+		},
+
+		handleVideoStarPageChange: function(i){
+			this.fetchVideoStar(i-1);
+		},
+
+		handleShootVideoPageChange: function(i){
+			this.fetchShootVideo(i-1);
+		},
+	},
 };
 
 COMPONENTS.Vstar = {
@@ -1379,6 +1445,8 @@ COMPONENTS.Vstar = {
 		console.log(this.vStarId);
 		var d = {
 			starVideos: [],
+			total: 0,
+			pageSize: CONSTANT.PAGESIZE
 		};
 
 		tools.xhr('/starVideo/' + this.vStarId, function(resData){
@@ -1390,7 +1458,25 @@ COMPONENTS.Vstar = {
 
 	template: temp.vStar,
 
+	mounted: function(){
+		this.fetchStarVideo(0);
+	},
+
 	methods: {
+		fetchStarVideo: function(pageNum){
+			tools.xhr('/starVideo/' + this.vStarId, function(resData){
+				this.starVideos = resData;
+				this.total = resData.length;
+			}.bind(this),'get',{
+				pageNum: pageNum,
+				pageSize: this.pageSize
+			});
+		},
+
+		handlePageChange: function(i){
+			this.fetchStarVideo(i-1);
+		},
+
 		dynamivePreview: function(e){
 
 			$(e.target).attr('src', function(){
@@ -1415,18 +1501,34 @@ COMPONENTS.UsrVshoots = {
 		console.log(this.$route.query.vId)
 		var d = {
 			shoots: [],
+			total: 0,
+			pageSize: CONSTANT.PAGESIZE
 		};
-
-		tools.xhr('/usrVshoot?vId=' + this.$route.query.vId, function(resData){
-			d.shoots = resData;
-		});
 
 		return d;
 	},
 
 	template: temp.usrVshoots,
 
+	methods: {
+		fetchVideoShoot: function(pageNum){
+			tools.xhr('/usrVshoot?vId=' + this.$route.query.vId, function(resData){
+				this.shoots = resData;
+				this.total = resData.length;
+			}.bind(this),'get',{
+				pageNum: pageNum,
+				pageSize: this.pageSize
+			});
+		},
+
+		handlePageChange: function(i){
+			this.fetchVideoShoot(i-1);
+		},
+	},
+
 	mounted: function(){
+		this.fetchVideoShoot(0);
+
 		$('#video-shoot-list').on('mouseover click', '.video-thumb', function(){
 			let src = $(this).data('src');
 			this.src = src + '.gif';

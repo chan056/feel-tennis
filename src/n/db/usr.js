@@ -1,17 +1,15 @@
 module.exports = function(req, fn, res){
     let session = require('../session').newSession();
     let constants = require('../constant');
-    let usrInfo;
+    let usrInfo = {};
 	
     // 读取文件的过程 异步
     session.startSession(req, res, function(){
-        let usr = req.session.get('usr');
-
+        let usr = req.session.get('usr');// 一定几率获取不成功
+        // let usr = req.session.data.user;
+console.log(usr)
         if(usr){// 已经登陆的用户
-            // 延长session时间
-            // req.session.put('usr', usr);
-
-            usr = JSON.parse(usr);
+            // usr = JSON.parse(usr);
             usrInfo = {
                 type: 1,
                 usrId: usr.id,
@@ -21,39 +19,26 @@ module.exports = function(req, fn, res){
             const nodeCookie = require('node-cookie');
             let crypto = require('../crypto.js');
             
-            let clientIp = require('client-ip');
-            let ip = clientIp(req);
+            let ip = require('client-ip')(req);
+            if(ip == '::1'){
+                ip = '::ffff:127.0.0.1';
+            }
             
             var tmpUsrInCookie = nodeCookie.get(req, 'tmpUsr');
             
-            if(!tmpUsrInCookie){
-                if(res){
-                    let ipEncrypted = crypto.aesEncrypt(ip, constants.aesKey);
-                    nodeCookie.create(res, 'tmpUsr', ipEncrypted);
-                }
+            if(res){
+                let ipEncrypted = crypto.aesEncrypt(ip, constants.aesKey);
+                nodeCookie.create(res, 'tmpUsr', ipEncrypted);
+            }
 
-                usrInfo = {
-                    type: 2,
-                    ip: ip
-                }
-            }else{
-                let ipDecrepted = crypto.aesDecrypt(tmpUsrInCookie, constants.aesKey);
-
-                // ip相当于用户名 存储在浏览器的IP相当于密码
-                if(ipDecrepted == ip){
-                    usrInfo = {
-                        type: 2,
-                        ip: ipDecrepted
-                    }
-                }else{
-                    usrInfo = {};
-                    console.log('user type error ！');
-                }
+            usrInfo = {
+                type: 2,
+                ip: ip
             }
         }
 
         req.usrInfo = usrInfo;
 
-        fn && fn(usrInfo);
+        fn && fn();
     });
 };

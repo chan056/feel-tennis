@@ -178,6 +178,7 @@ var temp = {
                     </router-link>
                 </li>
             </ul>
+            <p class="hidden"> v-if="total >= pageSize"</p>
             <el-pagination
                 layout="prev, pager, next"
                 :total="total"
@@ -212,6 +213,12 @@ var temp = {
                     </p>
                 </li>
             </ul>
+            <el-pagination
+                layout="prev, pager, next"
+                :total="total"
+                :page-size="pageSize"
+                @current-change="handlePageChange">
+            </el-pagination>
         </div>
     `,
 
@@ -243,6 +250,13 @@ var temp = {
                     </router-link>
                 </li>
             </ul>
+
+            <el-pagination
+                layout="prev, pager, next"
+                :total="total"
+                :page-size="pageSize"
+                @current-change="handlePageChange">
+            </el-pagination>
         </div>
     `,
 
@@ -405,6 +419,13 @@ var temp = {
                     </router-link>
                 </li>
             </ul>
+
+            <el-pagination
+                layout="prev, pager, next"
+                :total="total"
+                :page-size="pageSize"
+                @current-change="handlePageChange">
+            </el-pagination>
         </div>
     `,
 
@@ -418,6 +439,13 @@ var temp = {
                     </router-link>
                 </li>
             </ul>
+            <el-pagination
+                layout="prev, pager, next"
+                :total="starTotal"
+                :page-size="pageSize"
+                @current-change="handleVideoStarPageChange">
+            </el-pagination>
+
             <h2>截图过的视频</h2>
             <ul class="block-list v-list">
                 <li class="" v-for="video in shotVideos">
@@ -429,6 +457,13 @@ var temp = {
                     </router-link>
                 </li>
             </ul>
+
+            <el-pagination
+                layout="prev, pager, next"
+                :total="videoTotal"
+                :page-size="pageSize"
+                @current-change="handleShootVideoPageChange">
+            </el-pagination>
         </div>
     `,
 
@@ -445,6 +480,13 @@ var temp = {
                     </router-link>
                 </li>
             </ul>
+
+            <el-pagination
+                layout="prev, pager, next"
+                :total="total"
+                :page-size="pageSize"
+                @current-change="handlePageChange">
+            </el-pagination>
         </div>
     `,
 
@@ -458,6 +500,13 @@ var temp = {
                     class="block-thumb video-thumb"/>
                 </li>
             </ul>
+
+            <el-pagination
+                layout="prev, pager, next"
+                :total="total"
+                :page-size="pageSize"
+                @current-change="handlePageChange">
+            </el-pagination>
         </div>
     `,
 
