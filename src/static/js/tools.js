@@ -26,11 +26,11 @@ let tools = {
                     title: response.statusText,
                     message: CONSTANT.erroMsg[statusCode] || '',
                     type: 'warning',
+                    position: 'bottom-right',
                     onClose: function(){
                         console.log('close');
                     }
                 });
-                // Vue.prototype.$message.warning(CONSTANT.erroMsg[statusCode]);
             }, 100)
         });
     },

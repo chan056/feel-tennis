@@ -1,21 +1,14 @@
 function newSession(){
     const NodeSession = require('node-session');
-    const constants = require('./constant');
+    const CONSTANT = require('./constant');
     
 	return new NodeSession({
-		secret: constants.sessionSecret,
+		secret: CONSTANT.sessionSecret,
 		'lifetime': 3 * 60 * 60 * 1000, // 3 hour
 		'expireOnClose': false,
 		'cookie': 'tube',
-		// 'connection': {
-		// 	'adapter': 'sails-mysql',
-		// 	'port': 3306,
-		// 	host: 'localhost',
-		// 	user: 'root',
-		// 	password: '62191056',
-		// 	database: 'n',
-		// },
-		// 'table': 'sessions',
+		'secure': true,
+		// 'encrypt': true
 		// 'lottery': [2, 100],
 	});
 }

@@ -412,10 +412,16 @@ let operations = {
 			if(err)
 				throw err;
 			
-			if(result[0] && result[0].id){
-				let info = {id: result[0].id, isAdmin: result[0].is_admin};
-				req.session.put('usr', info);
-				// req.session.data.user = info;
+			let usr = result[0];
+			if(usr && usr.id){
+				let id = usr.id,
+					isAdmin = usr.is_admin;
+
+				// let info = {id: id, isAdmin: isAdmin};
+				// info = JSON.stringify(info);
+				// req.session.put('usr', info);
+				req.session.put('usr.id', id);
+				req.session.put('usr.isAdmin', isAdmin);
 
 				res.statusMessage = 'login success';
 				res.end();

@@ -1,21 +1,20 @@
 module.exports = function(req, fn, res){
-    let session = require('../session').newSession();
+    let sessionInstance = require('../session').newSession();
     let constants = require('../constant');
     let usrInfo = {};
 	
-    // 读取文件的过程 异步
-    session.startSession(req, res, function(){
+    // 如果没有cookie teube， starSession 多次 会新建多个session文件？ ！！
+    sessionInstance.startSession(req, res, function(){
         let usr = req.session.get('usr');// 一定几率获取不成功
-        // let usr = req.session.data.user;
 
-        if(usr){// 已经登陆的用户
+        if(usr){
             // usr = JSON.parse(usr);
             usrInfo = {
                 type: 1,
                 usrId: usr.id,
                 isAdmin: usr.isAdmin
             }
-        }else{//未登录的用户 设置cookie
+        }else{
             const nodeCookie = require('node-cookie');
             let crypto = require('../crypto.js');
             

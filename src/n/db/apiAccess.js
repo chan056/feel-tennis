@@ -52,13 +52,12 @@ module.exports = {
             if(apiAccessLevel){
                 let authority = usrAuthority(usrInfo);
                 // console.log(path, authority + ' > ' + apiAccessLevel)
-                // if(authority < apiAccessLevel){
-                //     console.log('==========S==========');
-                //     console.log(usrInfo)
-                //     console.log('==========E==========');
-                // }
+                if(authority < apiAccessLevel){
+                    console.log('==========S==========');
+                    console.log(path, usrInfo, authority, apiAccessLevel)
+                    console.log('==========E==========');
+                }
     
-                console.log(path, usrInfo, authority, apiAccessLevel)
                 if(authority < apiAccessLevel){
                     
                     return false;
