@@ -1,8 +1,9 @@
 module.exports = function(req, fn, res){
-    let sessionInstance = require('../session').newSession();
+    var NodeSession = require('node-session');
+    var sessionInstance = new NodeSession({secret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD'});
     let constants = require('../constant');
     let usrInfo = {};
-	
+    
     // 如果没有cookie teube， starSession 多次 会新建多个session文件？ ！！
     sessionInstance.startSession(req, res, function(){
         let usr = req.session.get('usr');// 一定几率获取不成功

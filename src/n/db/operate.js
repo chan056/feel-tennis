@@ -106,8 +106,8 @@ let operations = {
 			}else if(usrType == 2){// 临时
 				usrIP = usrInfo.ip;
 				conn.query(`select * from tmp_usr where ip = '${usrIP}'`, function(err, result){
-					let tmpUsrRecord = result[0];
-					if(tmpUsrRecord){
+					if(result && result[0]){
+						let tmpUsrRecord = result[0];
 						// update dayView
 						// 假如同个局域网的不同人访问 !! todo
 						// 同个局域网用户提交的IP信息是相同的
@@ -411,17 +411,15 @@ let operations = {
 		conn.query(sql, [postObj.name, postObj.psw], function(err, result, fields){
 			if(err)
 				throw err;
-			
+
 			let usr = result[0];
 			if(usr && usr.id){
 				let id = usr.id,
 					isAdmin = usr.is_admin;
 
-				// let info = {id: id, isAdmin: isAdmin};
+				let info = {id: id, isAdmin: isAdmin};
 				// info = JSON.stringify(info);
-				// req.session.put('usr', info);
-				req.session.put('usr.id', id);
-				req.session.put('usr.isAdmin', isAdmin);
+				req.session.put('usr', info);
 
 				res.statusMessage = 'login success';
 				res.end();
