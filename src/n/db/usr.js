@@ -1,6 +1,6 @@
 module.exports = function(req, fn, res){
     var NodeSession = require('node-session');
-    var sessionInstance = new NodeSession({secret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD'});
+    var sessionInstance = new NodeSession({secret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD', lifetime: 1 * 60 * 60 * 1000});
     let constants = require('../constant');
     let usrInfo = {};
     

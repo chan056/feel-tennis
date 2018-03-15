@@ -19,6 +19,14 @@
 				</div>
 			</div>
 		</app>
+
+		<!-- <iframe
+		width="600"
+		height="450"
+		frameborder="0" style="border:0"
+		src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD_CHaJX7rwhKQMj21-Zfb54LX8HJ-MR1I
+			&q=Space+Needle,Seattle+WA" allowfullscreen>
+		</iframe> -->
 	</body>
 
 	<script src="../lib/v.js"></script>
@@ -43,14 +51,14 @@
 
 	<script>
 		// 获取坐标
-		/* $.getJSON('//freegeoip.net/json/?callback=?', function(data) {
-			console.log(JSON.stringify(data, null, 2));
-			var data = JSON.stringify(data);
-
+		$.getJSON('//freegeoip.net/json/?callback=?', function(data) {
+			
+			var data = JSON.stringify(data, null, 2);
+			console.log(data);
 			var id = data.ip;
 
 			var coord = {latitude: data.latitude, longitude: data.longitude};
-		}); */
+		});
 
 		// 绑定全局隐藏组件事件
 		$('body').on('click', function(){
