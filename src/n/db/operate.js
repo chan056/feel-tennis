@@ -418,8 +418,13 @@ let operations = {
 					isAdmin = usr.is_admin;
 
 				let info = {id: id, isAdmin: isAdmin};
-				// info = JSON.stringify(info);
-				req.session.put('usr', info);
+				info = JSON.stringify(info);
+
+				require('../cookie').setCookie(res, {
+					name: `sid`,
+					value: info,
+					HttpOnly: true
+				});
 
 				res.statusMessage = 'login success';
 				res.end();
@@ -464,9 +469,6 @@ let operations = {
 					let usrId = result.insertId;
 					if(usrId){
 		
-						let info = JSON.stringify({id: usrId, isAdmin: 0});
-						req.session.put('usr', info);
-		
 						res.statusMessage = 'regist success';
 						res.end('success');
 		
@@ -490,6 +492,14 @@ let operations = {
 							let emailer = require('../mail');
 							emailer.sendMail(email, emailSubject, emailContent);
 						}
+
+						let info = {id: usrId, isAdmin: 0};
+						info = JSON.stringify(info);
+						require('../cookie').setCookie(res, {
+							name: `sid`,
+							value: info,
+							HttpOnly: true
+						});
 					}
 				});
 			}

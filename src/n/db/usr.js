@@ -1,44 +1,43 @@
 module.exports = function(req, fn, res){
-    var NodeSession = require('node-session');
-    var sessionInstance = new NodeSession({secret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD', lifetime: 1 * 60 * 60 * 1000});
     let constants = require('../constant');
     let usrInfo = {};
+
+    let cookies = require('cookie').parse(req.headers.cookie || '');
+    let sid;
+
+    if(cookies.sid){
+        let crypto = require('../crypto.js');
+        let CONSTANT = require('../constant');
+        sid = crypto.aesDecrypt(cookies.sid, CONSTANT.sessionSecret);
+    }
     
-    // 如果没有cookie teube， starSession 多次 会新建多个session文件？ ！！
-    sessionInstance.startSession(req, res, function(){
-        let usr = req.session.get('usr');// 一定几率获取不成功
-
-        if(usr){
-            // usr = JSON.parse(usr);
-            usrInfo = {
-                type: 1,
-                usrId: usr.id,
-                isAdmin: usr.isAdmin
-            }
-        }else{
-            const nodeCookie = require('node-cookie');
-            let crypto = require('../crypto.js');
-            
-            let ip = require('client-ip')(req);
-            if(ip == '::1'){
-                ip = '::ffff:127.0.0.1';
-            }
-            
-            var tmpUsrInCookie = nodeCookie.get(req, 'tmpUsr');
-            
-            if(res){
-                let ipEncrypted = crypto.aesEncrypt(ip, constants.aesKey);
-                nodeCookie.create(res, 'tmpUsr', ipEncrypted);
-            }
-
-            usrInfo = {
-                type: 2,
-                ip: ip
-            }
+    if(sid){
+        let usr = JSON.parse(sid);
+        usrInfo = {
+            type: 1,
+            usrId: usr.id,
+            isAdmin: usr.isAdmin
+        }
+    }else{
+        let crypto = require('../crypto.js');
+        
+        let ip = require('client-ip')(req);
+        if(ip == '::1'){
+            ip = '::ffff:127.0.0.1';
         }
 
-        req.usrInfo = usrInfo;
+        usrInfo = {
+            type: 2,
+            ip: ip
+        }
 
-        fn && fn();
-    });
+        if(res && req.url=="/tube"){
+            let ipEncrypted = crypto.aesEncrypt(ip, constants.aesKey);
+            res.setHeader('Set-Cookie', [`tmpUsr=${ipEncrypted}`]); 
+        }
+    }
+
+    req.usrInfo = usrInfo;
+
+    fn && fn();
 };

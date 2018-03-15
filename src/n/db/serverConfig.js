@@ -26,6 +26,7 @@ module.exports = function(req, res) {
 			disposeApi();
 		}
 
+		// 提取todo
 		function disposeStaticResource(){
 			var realPath;
 	

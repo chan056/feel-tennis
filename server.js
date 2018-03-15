@@ -7,11 +7,9 @@ global.rootDir = __dirname;
 // require('sesh').magicSession();
 // let session = require('sesh').session;
 
-var server = http.createServer(function(req, res){
-	// session(req, res, function(req, res){
-		require('./src/n/db/serverConfig')(req, res);
-	// })
-});
+var serverConfig = require('./src/n/db/serverConfig');
+
+var server = http.createServer(serverConfig);
 
 server.listen(PORT, function(){
 });

@@ -248,7 +248,11 @@ const routerConfig = {
     },
 
     '/logout': function(req, res){
-        req.session.forget('usr');
+        require('../cookie').setCookie(res, {
+            name: `sid`,
+            value: '',
+            HttpOnly: true
+        });
         res.end();
     },
     
