@@ -404,6 +404,18 @@ let operations = {
 		});
 	},
 
+	fetchUsrDatum: function(res, qualification, params){
+		let sql = `SELECT * FROM usr where id=${this.usrInfo.usrId}`;
+		conn.query(sql, function (err, result, fields) {
+			if (err) throw err;
+
+			if(result && result[0]){
+				result = JSON.stringify(result[0]);
+				res.end(result);
+			}
+		});
+	},
+
 	// POST
 	login: function(res, postObj, req){
 		var sql = `select * from usr where name=? and psw=?`;
@@ -771,7 +783,7 @@ let operations = {
 
 	resetPsw: function(res, patchObj, req){
 		let sql = `update usr set psw='${patchObj.npsw}' where psw='${patchObj.opsw}' and name='${patchObj.name}'`;
-		console.log(sql);
+		// console.log(sql);
 		
 		conn.query(sql, function(err, result){
 			if(err)
@@ -787,6 +799,20 @@ let operations = {
 			}
 		});
 	},
+
+	updateUsrDatum: function(res, patchObj, req){
+		let sql = `update usr set nickname='${patchObj.nickname}', level='${patchObj.level}', status='${patchObj.status}' where id=${this.usrInfo.usrId}`;
+		
+		conn.query(sql, function(err, result){
+			if(err)
+				throw err;
+
+			if(result.affectedRows == 1){
+				res.statusMessage = 'update usrinfo success';
+				res.end();
+			}
+		});
+	}
 }
 
 // 执行SQL

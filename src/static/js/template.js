@@ -115,13 +115,13 @@ var temp = {
     aside: `
         <div id="aside">
             <div class="guide-section">
-                <div v-if="1" class="guide-entry" id="feedback-entry">
+                <div class="guide-entry">
                     <a href="#/sports" class="guide-entry-renderer">
                         <i class="icon fa fa-home"></i>
                         <span class="text">首页</span>
                     </a>
                 </div>
-                <div v-if="(loginUsrInfo && loginUsrInfo.name)"  class="guide-entry" id="feedback-entry">
+                <div v-if="(loginUsrInfo && loginUsrInfo.name)"  class="guide-entry">
                     <a href="#/stars" class="guide-entry-renderer">
                         <i class="icon fa fa-star"></i>
                         <span class="text">收藏</span>
@@ -137,7 +137,7 @@ var temp = {
                 </div>
             </div>
             <div class="guide-section">
-                <div v-if="(loginUsrInfo && loginUsrInfo.name)" class="guide-entry" id="feedback-entry">
+                <div v-if="(loginUsrInfo && loginUsrInfo.name)" class="guide-entry">
                     <a href="#/voteNext" class="guide-entry-renderer">
                         <i class="fa fa-hand-paper-o icon"></i>
                         <span class="text">投票</span>
@@ -164,6 +164,11 @@ var temp = {
             </div>
             <div id="llc">
                 <span class="">2018 ChanTube</span>
+            </div>
+
+            <div id="map-container">
+                <div class="close-btn">返回</div>
+                <div id="map"></div>
             </div>
         </div>
     `,
@@ -517,6 +522,52 @@ var temp = {
             </el-pagination>
         </div>
     `,
+
+    datum: `
+        <div>
+            <div style="width: 300px; margin: auto; padding: 10px 20px;">
+                <el-form ref="datum-form" :rules="datumForm.datumFormRules" :model="datumForm" label-width="80px" >
+                    <el-form-item label="昵称" prop="nickname">
+                        <el-input v-model="datumForm.nickname" v-bind:disabled="!datumForm.editable"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="等级" prop="level" @change="showLevelTip()">
+                        <el-select
+                        v-model="datumForm.level"
+                        placeholder="" 
+                        v-bind:disabled="!datumForm.editable">
+                            <el-option
+                                v-for="level in levels"
+                                :key="level"
+                                :label="level"
+                                :value="level">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+
+                    <el-form-item label="状态" prop="status">
+                        <el-select
+                        v-model="datumForm.status"
+                        placeholder="" 
+                        v-bind:disabled="!datumForm.editable">
+                            <el-option
+                                v-for="status in statuses"
+                                :key="status.id"
+                                :label="status.name"
+                                :value="status.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+
+                    <el-form-item>
+                        <el-button class="fr" type="primary" @click="datumForm.editable=true;" v-if="!datumForm.editable">编辑</el-button>
+                        <el-button class="fr" type="primary" @click="submitForm('datum-form')" v-if="datumForm.editable">确认</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </div>
+    `,
+
 
     voteNext: `
         <div>

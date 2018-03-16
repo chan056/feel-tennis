@@ -10,8 +10,6 @@
 	</head>
 
 	<body>
-		<div id="allmap" style="height: 500px; width: 500px;"></div>
-		
 		<app>
 			<app-header></app-header>
 			<div id="root-container">
@@ -51,22 +49,6 @@
 	<script src="../js/router_config.js"></script>
 	<script src="/tube"></script>
 
-	<!-- <script>
-		// 获取坐标
-		$.getJSON('//freegeoip.net/json/?callback=?', function(data) {
-			
-			var data = JSON.stringify(data, null, 2);
-			console.log(data);
-			var id = data.ip;
-
-			var coord = {latitude: data.latitude, longitude: data.longitude};
-		});
-
-		// 绑定全局隐藏组件事件
-		$('body').on('click', function(){
-			$('#star-section').hide();
-		});
-	</script> -->
+	<script src="../js/global_hide.js"></script>
 	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5XGIRhLpHgiaALCHuFfkCGcAewbkm4IP"></script>
-	<script src="../js/map.js"></script>
 </html>

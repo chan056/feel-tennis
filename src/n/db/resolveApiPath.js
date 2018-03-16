@@ -1,15 +1,21 @@
-var pathToRegexp = require('path-to-regexp');
-var routerConfig = require('./routerConfig');
-var tools = require('../tools');
+
 
 // 从路径中抽取参数
 function resolveApiPath(req, res) {
+    var pathToRegexp = require('path-to-regexp');
+    var routerConfig = require('./routerConfig');
+    var tools = require('../tools');
+
     var path;
     var pathReg;
     var pathMatched;
     var fnMatched;
     var keys;
     var urlObj = require('url').parse(req.url, true);
+
+    let reqMethod = req.method.toLowerCase();
+    routerConfig = routerConfig[reqMethod];
+    // console.log(routerConfig)
 
     for (path in routerConfig) {
         var f = routerConfig[path];
@@ -25,7 +31,6 @@ function resolveApiPath(req, res) {
     }
 
     if (fnMatched) {
-        // 临时用户 注册用户 admin
         let impowered = require('./apiAccess').check(path, req.usrInfo);
 
         if(!impowered){
@@ -62,9 +67,7 @@ function resolveApiPath(req, res) {
         function shunt(){
             var paramsMathed = {};
 
-            let reqMethod = req.method;
-
-            if (reqMethod == 'GET') {
+            if (reqMethod == 'get') {
                 for (let i = 0, l = keys.length; i < l; i++) {
                     let key = keys[i];
                     let keyName = key.name;
@@ -83,11 +86,11 @@ function resolveApiPath(req, res) {
                         paramsMathed[keyName] = pathMatched[i + 1]
                 }
 
-                if (reqMethod == 'POST') {
+                if (reqMethod == 'post') {
                     fnMatched(req, res, paramsMathed);
                 }
 
-                if (reqMethod == 'PATCH') {
+                if (reqMethod == 'patch') {
                     fnMatched(req, res, paramsMathed);
                 }
             }

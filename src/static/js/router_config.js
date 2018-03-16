@@ -38,6 +38,10 @@ const routeConfig = [
 		}
 	},
 	{ 
+		path: '/datum', 
+		component: COMPONENTS.Datum
+	},
+	{ 
 		path: '/voteNext', 
 		component: COMPONENTS.VoteNext
 	},

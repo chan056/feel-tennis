@@ -1,6 +1,5 @@
 // 百度地图API功能
-
-var map = new BMap.Map("allmap",{minZoom:4,maxZoom:15});
+var map = new BMap.Map("map"/* ,{minZoom:1,maxZoom:15} */);
 map.enableScrollWheelZoom();
 map.setDefaultCursor("url('bird.cur')");
 var point = new BMap.Point(120.21937542,30.25924446);
@@ -83,3 +82,13 @@ geolocation.getCurrentPosition(function(r){
     }
 },{enableHighAccuracy: true})
 
+function getCurPos(fn){
+    // 获取坐标
+    $.getJSON('//freegeoip.net/json/?callback=?', function(data) {
+        var data = JSON.stringify(data, null, 2);
+        console.log(data);
+        var id = data.ip;
+        var coord = {latitude: data.latitude, longitude: data.longitude};
+        fn && fn(data);
+    });
+}

@@ -105,6 +105,8 @@ COMPONENTS.HeaderComponent = {
 				'login': this.handlerLogin,
 				'regist': this.handlerRegist,
 				'datum': function(){
+					console.log(this, this.$location)
+					location.href = "#/datum";
 				},
 				'logout': this.handlerLogout
 			};
@@ -358,7 +360,13 @@ COMPONENTS.AsideComponent = {
 
 	methods: {
 		showMap: function(){
-			$('#allmap').show();
+			tools.insertScriptTag(1, '../js/map.js', {onload: function(){
+				var mapConstainer = $('#map-container').show();
+
+				mapConstainer.find('.close-btn').one('click', function(){
+					mapConstainer.hide();
+				});
+			}, id: 'map'});
 		}
 	},
 };
@@ -982,6 +990,79 @@ COMPONENTS.videos = {
 		handlePageChange: function(index){
 			this.fetchVideolist(index);
 		}
+	}
+};
+
+// 目前只考虑网球
+COMPONENTS.Datum = {
+	data: function(){
+		return {
+			datumForm:{
+				nickname: '',
+				level : '',
+				status: '1',
+				datumFormRules: {
+					nickname:[{required: true, message: '昵称不能为空'}],
+					level:[{required: true, message: '水平不能为空'}],
+					status:[{required: true, message: '状态不能为空'}],
+				},
+				editable: false
+			},
+	
+			levels: ['1.0','1.5','2.0','2.5','3.0','3.5','4.0','4.5','5.0','5.5','6.0','7.0'],
+
+			statuses: [{
+				id: '1',
+				name: '接受对战'
+			},{
+				id: '2',
+				name: '修整中'
+			}]
+		}
+	},
+
+	methods: {
+		submitForm: function(formName){
+			this.$refs[formName].validate(function(valid){
+				if (valid) {
+					this.updateUsrDatum();
+				} else {
+					console.log('error submit!!');
+					return false;
+				}
+			}.bind(this));
+		},
+
+		fetchUsrDatum: function(){
+			tools.xhr('/usrDatum', function(res){
+				console.log(res);
+				this.datumForm.nickname = res.nickname;
+				this.datumForm.level = res.level;
+				this.datumForm.status = res.status;
+			}.bind(this));
+		},
+
+		updateUsrDatum: function(){
+			tools.xhr('/usrDatum', function(res){
+				this.$message({
+					message: '更新成功',
+					type: 'success'
+				})
+			}.bind(this), 'patch', this.datumForm, function(res){
+				if(res.status == 401){
+				}
+			}.bind(this));
+		},
+
+		showLevelTip: function(){
+
+		}
+	},
+
+	template: temp.datum,
+
+	mounted: function(){
+		this.fetchUsrDatum();
 	}
 };
 
