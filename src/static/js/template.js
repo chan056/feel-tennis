@@ -129,6 +129,14 @@ var temp = {
                 </div>
             </div>
             <div class="guide-section">
+                <div v-if="loginUsrInfo && loginUsrInfo.is_admin == 1" class="guide-entry" id="upload-entry" >
+                    <div class="guide-entry-renderer" @click="showMap();">
+                        <i class="el-icon-upload icon"></i>
+                        <span class="text">竞赛</span>
+                    </div>
+                </div>
+            </div>
+            <div class="guide-section">
                 <div v-if="(loginUsrInfo && loginUsrInfo.name)" class="guide-entry" id="feedback-entry">
                     <a href="#/voteNext" class="guide-entry-renderer">
                         <i class="fa fa-hand-paper-o icon"></i>

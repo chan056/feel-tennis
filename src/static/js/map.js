@@ -2,8 +2,18 @@
 
 var map = new BMap.Map("allmap",{minZoom:4,maxZoom:15});
 map.enableScrollWheelZoom();
+map.setDefaultCursor("url('bird.cur')");
 var point = new BMap.Point(120.21937542,30.25924446);
 map.centerAndZoom(point,12);// level 12
+/*map.addEventListener('zoomend', function(){
+    console.log(arguments)
+})*/
+
+/*var myDis = new BMapLib.DistanceTool(map);
+map.addEventListener("load",function(){
+    myDis.open();  //开启鼠标测距
+    //myDis.close();  //关闭鼠标测距大
+});*/
 
 var geolocation = new BMap.Geolocation();
 geolocation.getCurrentPosition(function(r){
@@ -15,10 +25,11 @@ geolocation.getCurrentPosition(function(r){
 
         // 图片marker
         var mk = new BMap.Marker(r.point, {icon: myIcon});
-        map.addOverlay(mk, {
+        map.addOverlay(mk/*, {
             displayOnMinLevel: 10,
             displayOnMaxLevel: 14
-        });
+        }*/);
+        // mk.setAnimation(BMAP_ANIMATION_BOUNCE); // 跳动
 
         // marker详细信息
         let starInfo = ['萨芬', '3.0', '6胜2负'];

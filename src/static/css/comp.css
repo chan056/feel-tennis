@@ -390,3 +390,6 @@ app {
   white-space: nowrap;
   overflow: hidden;
 }
+#allmap {
+  display: none;
+}

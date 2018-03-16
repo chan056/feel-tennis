@@ -357,7 +357,9 @@ COMPONENTS.AsideComponent = {
 	},
 
 	methods: {
-		
+		showMap: function(){
+			$('#allmap').show();
+		}
 	},
 };
 
