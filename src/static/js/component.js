@@ -116,8 +116,7 @@ COMPONENTS.HeaderComponent = {
 
 		handlerLogin(){
 			this.loginForm.visible = true;
-			// 回车提交事件
-			// console.log($('#last-login-iput'))
+
 			setTimeout(function(){
 				$('#last-login-iput').off('keyup.login').on('keyup.login', function(e){
 					var keyCode = e.keyCode;
@@ -160,7 +159,10 @@ COMPONENTS.HeaderComponent = {
 				// this.loginForm.visible = false;
 			}.bind(this), 'post', {
 				name: trim(this.loginForm.name),
-				psw: md5(trim(this.loginForm.psw))
+				psw: md5(trim(this.loginForm.psw)),
+				ip: CURPOS.ip,
+				city: CURPOS.city,
+				coords: CURPOS.longitude + ',' + CURPOS.latitude
 			}, function(res){
 				let status = res.status;
 				let statusText = res.statusText;
@@ -354,11 +356,23 @@ COMPONENTS.AsideComponent = {
 		}.bind(this));
 	},
 
+	mounted: function(){
+		this.getCurPos();
+		
+	},
+
 	beforeDestroy() {
 		this.$bus.off('update-login-info', this.addTodo);
 	},
 
 	methods: {
+		getCurPos: function(fn){
+			$.getJSON('//freegeoip.net/json/?callback=?', function(data) {
+				window.CURPOS = data;
+				var coord = {lng: data.longitude, lat: data.latitude};
+				fn && fn(coord);
+			});
+		},
 		showMap: function(){
 			tools.insertScriptTag(1, '../js/map.js', {onload: function(){
 				var mapConstainer = $('#map-container').show();
@@ -401,7 +415,8 @@ COMPONENTS.Sports = {
 
 		handlePageChange: function(i){
 			this.fetchSports(i-1);
-		}
+		},
+
 	}
 };
 
@@ -1035,7 +1050,7 @@ COMPONENTS.Datum = {
 
 		fetchUsrDatum: function(){
 			tools.xhr('/usrDatum', function(res){
-				console.log(res);
+				// console.log(res);
 				this.datumForm.nickname = res.nickname;
 				this.datumForm.level = res.level;
 				this.datumForm.status = res.status;

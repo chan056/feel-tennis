@@ -246,6 +246,11 @@ const routerConfig = {
         '/usrDatum': function(params, res, req){
             r.query('fetchUsrDatum', params, res, req)
         },
+
+        
+        '/sameCityPlayer/:last_login_city': function(params, res, req){
+            r.query('fetchSameCityPlayer', params, res, req)
+        },
     },
 
     post: {

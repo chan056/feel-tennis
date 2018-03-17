@@ -416,6 +416,30 @@ let operations = {
 		});
 	},
 
+	fetchSameCityPlayer: function(res, qualification, params){
+		// 因为百度地图拾取的城市名称是中文
+		let city = decodeURI(params.last_login_city);
+		if(!city)
+			return;
+		city = city.replace('市', '');
+		const pinyin =  require('pinyin');
+		city = pinyin(city, {style: pinyin.STYLE_NORMAL, heteronym: true, segment: true });
+		city = city.join('').replace(',', '');
+
+		let sql = `select * from usr where last_login_city = '${city}'`;
+
+		conn.query(sql, function (err, result, fields) {
+			if (err) throw err;
+
+			if(result){
+				result = JSON.stringify(result);
+				res.end(result);
+			}
+		});
+	},
+
+
+
 	// POST
 	login: function(res, postObj, req){
 		var sql = `select * from usr where name=? and psw=?`;
@@ -440,6 +464,13 @@ let operations = {
 
 				res.statusMessage = 'login success';
 				res.end();
+
+				sql = `update usr set last_login_time=now(), last_login_ip='${postObj.ip}', last_login_city='${postObj.city.toLowerCase()}', last_login_coords='${postObj.coords}' where id=${id}`;
+				
+				conn.query(sql, function(err, result){
+					if(err)
+						console.log(err);
+				});
 			}else{
 				res.statusCode = 401;
 				res.statusMessage = 'login fail';
@@ -787,7 +818,7 @@ let operations = {
 		
 		conn.query(sql, function(err, result){
 			if(err)
-				throw err;
+				console.log( err );
 
 			if(result.affectedRows == 1){
 				res.statusMessage = 'reset password success';
@@ -802,6 +833,7 @@ let operations = {
 
 	updateUsrDatum: function(res, patchObj, req){
 		let sql = `update usr set nickname='${patchObj.nickname}', level='${patchObj.level}', status='${patchObj.status}' where id=${this.usrInfo.usrId}`;
+		// console.log(sql)
 		
 		conn.query(sql, function(err, result){
 			if(err)
