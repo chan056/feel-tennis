@@ -373,15 +373,6 @@ COMPONENTS.AsideComponent = {
 				fn && fn(coord);
 			});
 		},
-		showMap: function(){
-			tools.insertScriptTag(1, '../js/map.js', {onload: function(){
-				var mapConstainer = $('#map-container').show();
-
-				mapConstainer.find('.close-btn').one('click', function(){
-					mapConstainer.hide();
-				});
-			}, id: 'map'});
-		}
 	},
 };
 
@@ -1016,10 +1007,12 @@ COMPONENTS.Datum = {
 				nickname: '',
 				level : '',
 				status: '1',
+				avatar: '',
 				datumFormRules: {
 					nickname:[{required: true, message: '昵称不能为空'}],
 					level:[{required: true, message: '水平不能为空'}],
 					status:[{required: true, message: '状态不能为空'}],
+					avatar: [{required: true, message: '头像必传'}]
 				},
 				editable: false
 			},
@@ -1054,6 +1047,7 @@ COMPONENTS.Datum = {
 				this.datumForm.nickname = res.nickname;
 				this.datumForm.level = res.level;
 				this.datumForm.status = res.status;
+				this.datumForm.avatar = res.avatar;
 			}.bind(this));
 		},
 
@@ -1071,6 +1065,11 @@ COMPONENTS.Datum = {
 
 		showLevelTip: function(){
 
+		},
+
+		handleUploadSuccess: function(res){
+			// return console.log(res);
+			this.datumForm.avatar = res.relPath;
 		}
 	},
 
@@ -1635,4 +1634,36 @@ COMPONENTS.UsrVshoots = {
 			// this.src = src + '.jpg';
 		});
 	}
-} 
+}
+
+COMPONENTS.Compete = {
+	data: function () {
+		var d = {};
+
+		return d;
+	},
+
+	template: temp.compete,
+
+	methods: {
+		handlePageChange: function(i){
+			this.fetchVideoShoot(i-1);
+		},
+
+		showMap: function(){
+			
+		}
+	},
+
+	mounted: function(){
+		$('#map-script').remove();
+		tools.insertScriptTag(1, '../js/map.js', {onload: function(){
+			var mapConstainer = $('.map-container');
+
+			mapConstainer.find('.close-btn').one('click', function(){
+				// mapConstainer.hide();
+				this.$router.go(-1);
+			}.bind(this));
+		}.bind(this), id: 'map-script'});
+	}
+}

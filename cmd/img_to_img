@@ -1,0 +1,4 @@
+http://www.oodlestechnologies.com/blogs/Crop-and-scale-image-using-ffmpeg
+
+保持高宽比
+ffmpeg -i jpg.jpg -vf scale=100:ih*100/iw out.jpg

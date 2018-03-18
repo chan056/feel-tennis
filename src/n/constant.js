@@ -25,5 +25,6 @@ module.exports = {
         database: 'n',
     },
 
-    videoCoverSize: '210x118'
+    videoCoverSize: '210x118',
+    avtarThumbWidth: 100,
 }

@@ -66,9 +66,12 @@ const routeConfig = [
 		component: COMPONENTS.Vstar,
 		props: true,
 	},
-
 	{ 
 		path: '/usrVshoots', 
 		component: COMPONENTS.UsrVshoots,
+	},
+	{ 
+		path: '/compete', 
+		component: COMPONENTS.Compete,
 	},
 ];

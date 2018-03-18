@@ -486,7 +486,7 @@ let operations = {
 			ip = '::ffff:127.0.0.1';
 		}
 
-		conn.query(`SELECT * from usr WHERE regist_ip=${ip} and regist_time > DATE_SUB(CURRENT_TIMESTAMP(),INTERVAL 1 DAY)`, function(err, result){
+		conn.query(`SELECT * from usr WHERE regist_ip='${ip}' and regist_time > DATE_SUB(CURRENT_TIMESTAMP(),INTERVAL 1 DAY)`, function(err, result){
 			if(err)
 				throw err;
 
@@ -511,6 +511,13 @@ let operations = {
 		
 					let usrId = result.insertId;
 					if(usrId){
+						let info = {id: usrId, isAdmin: 0};
+						info = JSON.stringify(info);
+						require('../cookie').setCookie(res, {
+							name: `sid`,
+							value: info,
+							HttpOnly: true
+						});
 		
 						res.statusMessage = 'regist success';
 						res.end('success');
@@ -535,14 +542,6 @@ let operations = {
 							let emailer = require('../mail');
 							emailer.sendMail(email, emailSubject, emailContent);
 						}
-
-						let info = {id: usrId, isAdmin: 0};
-						info = JSON.stringify(info);
-						require('../cookie').setCookie(res, {
-							name: `sid`,
-							value: info,
-							HttpOnly: true
-						});
 					}
 				});
 			}
@@ -832,17 +831,49 @@ let operations = {
 	},
 
 	updateUsrDatum: function(res, patchObj, req){
-		let sql = `update usr set nickname='${patchObj.nickname}', level='${patchObj.level}', status='${patchObj.status}' where id=${this.usrInfo.usrId}`;
-		// console.log(sql)
-		
-		conn.query(sql, function(err, result){
-			if(err)
-				throw err;
+		// 移动头像位置
+		var path = require('path');
+		var fs = require('fs');
+		var avatar = path.parse(patchObj.avatar);
 
-			if(result.affectedRows == 1){
-				res.statusMessage = 'update usrinfo success';
-				res.end();
-			}
+		var filename = avatar.base;
+		var fileExt = avatar.ext;
+
+		var usrId = this.usrInfo.usrId;
+		var srcPath = path.join(__dirname, "../../static/upload", filename);
+		var pathStored = patchObj.avatar;
+		if(fs.existsSync(srcPath)){
+			pathStored = '/img/avatar/' + usrId+fileExt;
+			var desPath = path.join(__dirname, "../../static", pathStored);
+			fs.rename(srcPath, desPath, function(){
+				// 压缩图片
+				const exec = require('child_process').exec;
+				const avatarWidth = require('../constant').avtarThumbWidth;
+				var cmd = `ffmpeg -i ${desPath} -vf scale=${avatarWidth}:ih*${avatarWidth}/iw ${desPath} -y`;
+
+				exec(cmd, function(err){
+					if(err){
+						console.log(err);
+					}
+
+					console.log(arguments);
+				});
+			});
+		}
+
+		fs.rename(srcPath, desPath, function(){
+			let sql = `update usr set nickname='${patchObj.nickname}', level='${patchObj.level}', status='${patchObj.status}', avatar='${pathStored}' where id=${usrId}`;
+			// console.log(sql)
+			
+			conn.query(sql, function(err, result){
+				if(err)
+					throw err;
+	
+				if(result.affectedRows == 1){
+					res.statusMessage = 'update usrinfo success';
+					res.end();
+				}
+			});
 		});
 	}
 }

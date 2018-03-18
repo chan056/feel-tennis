@@ -36,7 +36,7 @@ var temp = {
                         </el-dropdown-menu>
                     </el-dropdown>
 
-                    <i class="el-icon-news" title="消息"></i>
+                    <i class="fa fa-bell-o" title="消息"></i>
                 </el-col>
             </el-row>
 
@@ -130,9 +130,11 @@ var temp = {
             </div>
             <div class="guide-section">
                 <div v-if="loginUsrInfo && loginUsrInfo.is_admin == 1" class="guide-entry" id="upload-entry" >
-                    <div class="guide-entry-renderer" @click="showMap();">
-                        <i class="el-icon-upload icon"></i>
-                        <span class="text">竞赛</span>
+                    <div class="guide-entry-renderer">
+                        <a href="#/compete" class="guide-entry-renderer">
+                            <i class="fa fa-paw icon"></i>
+                            <span class="text">竞赛</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -164,11 +166,6 @@ var temp = {
             </div>
             <div id="llc">
                 <span class="">2018 ChanTube</span>
-            </div>
-
-            <div id="map-container">
-                <div class="close-btn">返回</div>
-                <div id="map"></div>
             </div>
         </div>
     `,
@@ -359,7 +356,6 @@ var temp = {
             <el-dialog
                 title="动态截图预览"
                 :visible.sync="previewerVisible"
-                width="30%"
                 >
                 <p v-if="gifLink" id="shoot-container">
                     <img v-bind:src="gifLink" />
@@ -559,6 +555,24 @@ var temp = {
                         </el-select>
                     </el-form-item>
 
+                    <el-form-item label="头像" prop="avatar">
+                        <img v-if="!datumForm.editable" :src="datumForm.avatar"></img>
+                        <el-upload
+                            v-if="datumForm.editable"
+                            drag
+                            class=""
+                            action="/upload"
+                            :data="{type:'img'}"
+                            :on-success="handleUploadSuccess"
+                            v-model="datumForm.avatar"
+                            >
+                            <i class="el-icon-upload"></i>
+                            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M</div>
+                            <!-- <el-button size="" type="primary">上传截图</el-button> -->
+                        </el-upload>
+                    </el-form-item>
+
                     <el-form-item>
                         <el-button class="fr" type="primary" @click="datumForm.editable=true;" v-if="!datumForm.editable">编辑</el-button>
                         <el-button class="fr" type="primary" @click="submitForm('datum-form')" v-if="datumForm.editable">确认</el-button>
@@ -711,4 +725,10 @@ var temp = {
 
     aboutMake: '',
     emailConfirm: '<div></div>',
+
+    compete: `<div class="map-container">
+        <div class="close-btn">返回</div>
+        <div id="baidu-map"></div>
+        <div id="img-loader"></div>
+    </div>`,
 }
