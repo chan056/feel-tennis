@@ -399,7 +399,7 @@ app {
   top: 0%!important;
   width: 100%!important;
   height: 100%!important;
-  z-index: 10000!important;
+  z-index: 1000!important;
 }
 .map-container .close-btn {
   position: absolute;
@@ -418,4 +418,15 @@ app {
 #baidu-map {
   width: 100%;
   height: 100%;
+  background-color: #fff;
+}
+#match-panel {
+  position: absolute;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  border: 1px solid #dcdfe6;
+}
+#match-panel .match-item {
+  padding: 10px;
 }

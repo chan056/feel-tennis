@@ -1638,7 +1638,17 @@ COMPONENTS.UsrVshoots = {
 
 COMPONENTS.Compete = {
 	data: function () {
-		var d = {};
+		var d = {
+			MAPINDEX: 1000,
+			options: [
+				{label: '输', value: 1},
+				{label: '赢', value: 2},
+				{label: '胜负未分', value: 3},
+			],
+			matchResult: 3,
+			panelVisible: false,
+			dialogVisible: false
+		};
 
 		return d;
 	},
@@ -1646,12 +1656,26 @@ COMPONENTS.Compete = {
 	template: temp.compete,
 
 	methods: {
-		handlePageChange: function(i){
-			this.fetchVideoShoot(i-1);
+		showPanelDetail: function(){
+			this.panelVisible = true;
 		},
 
-		showMap: function(){
-			
+		hidePanelDetail: function(){
+			this.panelVisible = false;
+		},
+
+		showConfirmDialog: function(){
+			this.dialogVisible = true;
+		},
+
+		confirmMathcResult: function(){
+			this.dialogVisible = false;
+
+			tools.xhr('/match', function(resData){
+				
+			}.bind(this),'patch',{
+				vd: 1 //victory or defeat
+			});
 		}
 	},
 

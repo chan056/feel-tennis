@@ -704,7 +704,6 @@ var temp = {
 
     about: `<div>
         <div id="about">
-        <!--不知道为什么外面要套两层-->
             <pre>
             为什么做这网站？
 
@@ -728,6 +727,41 @@ var temp = {
 
     compete: `<div class="map-container">
         <div class="close-btn">返回</div>
+
+        <div id="match-panel">
+            <p class="match-item" @click="showPanelDetail()">比赛中...</p>
+            <div class="match-detail" v-if="panelVisible">
+                <p class="match-item">2018/01/01</p>
+                <p class="match-item">对手：小强</p>
+                <el-select v-model="matchResult" placeholder="请选择" class="match-item">
+                    <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                    </el-option>
+                </el-select>
+                <div class="match-item">
+                    <el-button type="primary" @click="showConfirmDialog()">确定</el-button>
+                    <el-button @click="hidePanelDetail()">取消</el-button>
+                </div>
+            </div>
+
+            
+            <el-dialog
+            title="提示"
+            :visible.sync="dialogVisible"
+            :append-to-body="true"
+            width="30%"
+            >
+                <span>确认无误？</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                </span>
+            </el-dialog>
+        </div>
+
         <div id="baidu-map"></div>
         <div id="img-loader"></div>
     </div>`,
