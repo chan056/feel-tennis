@@ -1,4 +1,4 @@
-(function(){return;
+(function(){
     // 百度地图API功能
     var map = new BMap.Map("baidu-map"/* ,{minZoom:1,maxZoom:15} */);
     getCurPos( function(){
