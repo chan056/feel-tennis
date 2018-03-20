@@ -405,7 +405,7 @@ let operations = {
 	},
 
 	fetchUsrDatum: function(res, qualification, params){
-		let sql = `SELECT * FROM usr where id=${this.usrInfo.usrId}`;
+		let sql = `SELECT * FROM usr_datum where usr_id=${this.usrInfo.usrId}`;
 		conn.query(sql, function (err, result, fields) {
 			if (err) throw err;
 
@@ -426,7 +426,14 @@ let operations = {
 		city = pinyin(city, {style: pinyin.STYLE_NORMAL, heteronym: true, segment: true });
 		city = city.join('').replace(',', '');
 
-		let sql = `select * from usr where last_login_city = '${city}'`;
+		let sql = `SELECT
+				ud.*, ull.last_login_coords AS last_login_coords
+			FROM
+				usr_datum AS ud
+			JOIN usr_login_log AS ull
+			WHERE
+				ull.last_login_city = '${city}'
+			AND ud.usr_id = ull.usr_id`;
 
 		conn.query(sql, function (err, result, fields) {
 			if (err) throw err;
@@ -462,14 +469,21 @@ let operations = {
 					HttpOnly: true
 				});
 
-				res.statusMessage = 'login success';
-				res.end();
+				
 
-				sql = `update usr set last_login_time=now(), last_login_ip='${postObj.ip}', last_login_city='${postObj.city.toLowerCase()}', last_login_coords='${postObj.coords}' where id=${id}`;
+				sql = `INSERT INTO usr_login_log VALUES (${id}, now(), '${postObj.ip}', '${postObj.city.toLowerCase()}', '${postObj.coords}') 
+					ON DUPLICATE KEY 
+					UPDATE last_login_time=now(), last_login_ip='${postObj.ip}', last_login_city='${postObj.city.toLowerCase()}', last_login_coords='${postObj.coords}';`
+				// sql = `update usr set last_login_time=now(), last_login_ip='${postObj.ip}', last_login_city='${postObj.city.toLowerCase()}', last_login_coords='${postObj.coords}' where id=${id}`;
 				
 				conn.query(sql, function(err, result){
 					if(err)
 						console.log(err);
+
+					if(result.affectedRows > 0){
+						res.statusMessage = 'login success';
+						res.end();
+					}
 				});
 			}else{
 				res.statusCode = 401;
@@ -842,9 +856,11 @@ let operations = {
 		var usrId = this.usrInfo.usrId;
 		var srcPath = path.join(__dirname, "../../static/upload", filename);
 		var pathStored = patchObj.avatar;
+		
 		if(fs.existsSync(srcPath)){
 			pathStored = '/img/avatar/' + usrId+fileExt;
 			var desPath = path.join(__dirname, "../../static", pathStored);
+
 			fs.rename(srcPath, desPath, function(){
 				// 压缩图片
 				const exec = require('child_process').exec;
@@ -856,25 +872,30 @@ let operations = {
 						console.log(err);
 					}
 
-					console.log(arguments);
+					updateData();
 				});
 			});
+		}else{
+			updateData();
 		}
 
-		fs.rename(srcPath, desPath, function(){
-			let sql = `update usr set nickname='${patchObj.nickname}', level='${patchObj.level}', status='${patchObj.status}', avatar='${pathStored}' where id=${usrId}`;
-			// console.log(sql)
+		function updateData(){
+			let sql = `
+				insert into usr_datum values(${usrId}, '${patchObj.nickname}', '${patchObj.level}', '${patchObj.status}', '${pathStored}', 0, 0) 
+				ON DUPLICATE KEY 
+				update nickname='${patchObj.nickname}', level='${patchObj.level}', status='${patchObj.status}', avatar='${pathStored}'`;
+				// console.log(sql);
 			
 			conn.query(sql, function(err, result){
 				if(err)
 					throw err;
 	
-				if(result.affectedRows == 1){
+				if(result.affectedRows > 0){
 					res.statusMessage = 'update usrinfo success';
 					res.end();
 				}
 			});
-		});
+		}
 	}
 }
 

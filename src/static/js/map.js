@@ -72,9 +72,8 @@ function fetchSameCityPlayer(city){
     city = city || CURPOS.city;
 
     tools.xhr('/sameCityPlayer/' + city, function(res){
-
         res.forEach(function(usr){
-            var star = [usr.nickname, usr.level, '6胜2负'];
+            var star = [usr.nickname, usr.level, `${usr.win}胜${usr.lose}负`];
             var avatar = usr.avatar || '/img/star/safin.jpg';
 
             var randomId = usr.level + Math.random();
