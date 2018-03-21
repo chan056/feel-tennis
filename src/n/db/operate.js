@@ -450,19 +450,43 @@ let operations = {
 		let usrId = this.usrInfo.usrId;
 
 		let sql = `SELECT
-				*
+				*,
+				(select nickname from usr_datum where usr_id = offense)  as offense_nickname,
+				(select nickname from usr_datum where usr_id = defense)  as defense_nickname,
+				(select 1 where offense=18) as offensive,
+				(select 1 where defense=18) as defensive
 			FROM
 				competition
 			WHERE
 				(offense = ${usrId} OR defense = ${usrId})
 			AND stage < 3`;
+		
+		conn.query(sql, function (err, result, fields) {
+			if (err) throw err;
+	
+			if(result){
+				// 过滤
+				let proceededResult = [];
+				result.forEach(function(){
+					let match = arguments[0];
 
-		responseQry(sql, res);
+					if(match.offense == usrId && match.offense_res){
+
+					}else if(match.defense == usrId && match.defense_res){
+
+					}else{
+						proceededResult.push(match);
+					}
+				});
+
+				result = JSON.stringify(proceededResult);
+				res.end(result);
+			}
+		});
 	},
 
 	// 发起比赛 post
 	foundMatch: function(res, postObj, req){
-
 		let sql = `insert into competition (offense, defense, offense_time, stage) values (${this.usrInfo.usrId}, ${postObj.defenseId}, now(), 1)`;
 
 		conn.query(sql, function(err, result){
@@ -475,13 +499,19 @@ let operations = {
 
 	// 接受比赛 patch
 	acceptChallenge: function(res, postObj, req){
-		let sql = `update competition set stage=2 where id=1`;
+		let sql = `update competition set stage=2 where id=${postObj.matchId}`;
+		conn.query(sql, function(err, result){
+			if(err)
+				console.log(err);
+
+			res.end();
+		});
 	},
 	
 	// 标记比赛结果 patch
 	markMatchResult: function(res, patchObj, req){
-		let sql = `select offense, defense, offense_res, defense_res where id=1`;
-		let usrId = this.usr.usrId;
+		let sql = `select offense, defense, offense_res, defense_res from competition where id=${patchObj.matchId}`;
+		let usrId = this.usrInfo.usrId;
 		conn.query(sql, function(err, result){
 			if(err)
 				console.log(err);
@@ -498,22 +528,23 @@ let operations = {
 				if(offenseUsrId == usrId){
 					if(defenseRes){
 						doMatchClose = true;
-						sql = `update competition set offense_res=${usrMarkedResult}, stage=3, close_time=now() where id=1`;
+						sql = `update competition set offense_res=${usrMarkedResult}, stage=3, close_time=now() where id=${patchObj.matchId}`;
 					}else
-						sql = `update competition set offense_res=${usrMarkedResult} where id=1`;
+						sql = `update competition set offense_res=${usrMarkedResult} where id=${patchObj.matchId}`;
 					
 				}else if(defenseUsrId == usrId){
 					if(offenseRes){
 						doMatchClose = true;
-						sql = `update competition set defense_res=${usrMarkedResult}, stage=3, close_time=now() where id=1`;
+						sql = `update competition set defense_res=${usrMarkedResult}, stage=3, close_time=now() where id=${patchObj.matchId}`;
 					}else
-						sql = `update competition set defense_res=${usrMarkedResult} where id=1`;
+						sql = `update competition set defense_res=${usrMarkedResult} where id=${patchObj.matchId}`;
 				}
 
 				conn.query(sql, function(err, result){
 					if(err)
 						console.log(err);
 
+					res.end();
 				});
 			}
 		})

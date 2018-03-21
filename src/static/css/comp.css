@@ -420,18 +420,19 @@ app {
   height: 100%;
   background-color: #fff;
 }
-#match-panel {
+#match-list {
   position: absolute;
   z-index: 100;
   left: 0;
   top: 0;
   border: 1px solid #dcdfe6;
+  background-color: #fff;
 }
-#match-panel .match-detail > * {
+#match-list #matchPanel > * {
   padding: 10px;
 }
-#match-panel .match {
+#match-list .match {
   padding: 10px;
-  cursor: pointer;
   border-bottom: 1px solid #dcdfe6;
+  cursor: pointer;
 }

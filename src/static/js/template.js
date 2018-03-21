@@ -728,11 +728,13 @@ var temp = {
     compete: `<div class="map-container">
         <div class="close-btn">返回</div>
 
-        <div id="match-panel">
-            <p v-for="match in matches" :key="match.id" class="match" @click="showPanelDetail(match)">VS 小强</p>
+        <div id="match-list">
+            <p v-for="(match, index) in matches" :key="match.id" class="match" @click="showMatchDetail(match, index)">
+                VS {{ match.offensive? match.defense_nickname: match.offense_nickname }}
+            </p>
 
-            <div class="match-detail" v-if="panelVisible">
-                <el-select v-model="matchResult" placeholder="请选择" class="">
+            <div id="matchPanel" v-show="matchPanelVisible">
+                <el-select v-model="matchResult" placeholder="请选择">
                     <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -741,21 +743,34 @@ var temp = {
                     </el-option>
                 </el-select>
                 <div class="">
-                    <el-button type="primary" @click="showConfirmDialog()">确定</el-button>
-                    <el-button @click="hidePanelDetail()">取消</el-button>
+                    <el-button type="primary" @click="confirmMathcResult();">确定</el-button>
+                    <el-button @click="matchPanelVisible = false;">取消</el-button>
                 </div>
             </div>
-            
+
             <el-dialog
             title="提示"
-            :visible.sync="dialogVisible"
+            :visible.sync="matchResultdialogVisible"
             :append-to-body="true"
             width="30%"
             >
                 <span>确认无误？</span>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                    <el-button @click="matchResultdialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="matchResultdialogVisible = false">确 定</el-button>
+                </span>
+            </el-dialog>
+
+            <el-dialog
+            title="提示"
+            :visible.sync="defenseDialogVisible"
+            :append-to-body="true"
+            width="30%"
+            >
+                <span>是否应战？</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="defenseDialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="defense()">确 定</el-button>
                 </span>
             </el-dialog>
         </div>

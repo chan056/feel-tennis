@@ -1641,13 +1641,14 @@ COMPONENTS.Compete = {
 		var d = {
 			MAPINDEX: 1000,
 			options: [
-				{label: '输', value: 1},
-				{label: '赢', value: 2},
+				{label: '赢', value: 1},
+				{label: '输', value: 2},
 				{label: '胜负未分', value: 3},
 			],
 			matchResult: 3,
-			panelVisible: false,
-			dialogVisible: false,
+			matchPanelVisible: false,
+			matchResultdialogVisible: false,
+			defenseDialogVisible: false,
 
 			matches: window.matches || [],
 			match: {}
@@ -1669,50 +1670,84 @@ COMPONENTS.Compete = {
 		foundMatch: function(defenseId){
 			tools.xhr('/match', function(res){
 				this.fetchRelatedMatches();
+				this.$message({
+					messgae: '比赛发起成功',
+					type: 'success'
+				})
 			}.bind(this), 'post', {
-				defenseId: defenseId,
+				matchId: this.match.id,
 			});
 		},
 
 		// 接受比赛
 		acceptChallenge: function(){
 			tools.xhr('/match', function(res){
-				this.matches = res;
+				this.fetchRelatedMatches();
+
+				this.$message({
+					messgae: '应战成功',
+					type: 'success'
+				});
 			}.bind(this), 'patch', {
-				id: 1,
-				defenseId: 1,
+				matchId: this.match.id,
 			});
+		},
+
+		// 接收比赛
+		defense: function(){
+			this.defenseDialogVisible = false;
+			this.acceptChallenge();
+		},
+
+		// 确认比赛结果
+		confirmMathcResult: function(){
+			this.matchResultdialogVisible = false;
+			this.markMatchResult();
 		},
 
 		// 记录比赛结果
 		markMatchResult: function(){
 			tools.xhr('/matchResult', function(res){
-				this.matches = res;
+				this.fetchRelatedMatches();
+			
+				this.$message({
+					message: '记录成功',
+					type: 'success'
+				});
+
+				this.matchPanelVisible = false;
+				this.matchResult = 3;
 			}.bind(this), 'patch', {
-				id: 1,
-				result: 1,
+				matchId: this.match.id,
+				result: this.matchResult,
 			});
 		},
 
-		showPanelDetail: function(match){
-			this.panelVisible = true;
-			console.log(match);
+		showMatchDetail: function(match, index){
 			this.match = match;
-		},
-
-		hidePanelDetail: function(){
-			this.panelVisible = false;
-		},
-
-		showConfirmDialog: function(){
-			this.dialogVisible = true;
-		},
-
-		confirmMathcResult: function(){
-			this.dialogVisible = false;
-
 			
+			if(match.stage == 1){
+				if(match.defensive){
+					// 是否接收
+					this.defenseDialogVisible = true;
+				}else{
+					// 提示 “等待应答”
+					this.$message({
+						message: '等待对手应答',
+						type: 'info'
+					});
+				}
+
+				this.matchPanelVisible = false;
+				this.matchResult = 3;
+			}else if(match.stage == 2){
+				// 标记“胜负”
+				this.matchPanelVisible = true;
+			}
 		},
+
+		
+
 	},
 
 	mounted: function(){
