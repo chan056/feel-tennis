@@ -394,4 +394,3 @@ COMPONENTS.Upload = {
 routeConfig.push(
     { path: '/upload', component: COMPONENTS.Upload, props: true, },
 );
-    
