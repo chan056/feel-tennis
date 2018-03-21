@@ -452,7 +452,7 @@ let operations = {
 		let sql = `SELECT
 				*
 			FROM
-				\`match\`
+				competition
 			WHERE
 				(offense = ${usrId} OR defense = ${usrId})
 			AND stage < 3`;
@@ -462,7 +462,8 @@ let operations = {
 
 	// 发起比赛 post
 	foundMatch: function(res, postObj, req){
-		let sql = `insert into match (offense, defense, attack_time) values (1, 1, now())`;
+
+		let sql = `insert into competition (offense, defense, offense_time, stage) values (${this.usrInfo.usrId}, ${postObj.defenseId}, now(), 1)`;
 
 		conn.query(sql, function(err, result){
 			if(err)
@@ -474,7 +475,7 @@ let operations = {
 
 	// 接受比赛 patch
 	acceptChallenge: function(res, postObj, req){
-		let sql = `update match set stage=2 where id=1`;
+		let sql = `update competition set stage=2 where id=1`;
 	},
 	
 	// 标记比赛结果 patch
@@ -497,16 +498,16 @@ let operations = {
 				if(offenseUsrId == usrId){
 					if(defenseRes){
 						doMatchClose = true;
-						sql = `update match set offense_res=${usrMarkedResult}, stage=3, close_time=now() where id=1`;
+						sql = `update competition set offense_res=${usrMarkedResult}, stage=3, close_time=now() where id=1`;
 					}else
-						sql = `update match set offense_res=${usrMarkedResult} where id=1`;
+						sql = `update competition set offense_res=${usrMarkedResult} where id=1`;
 					
 				}else if(defenseUsrId == usrId){
 					if(offenseRes){
 						doMatchClose = true;
-						sql = `update match set defense_res=${usrMarkedResult}, stage=3, close_time=now() where id=1`;
+						sql = `update competition set defense_res=${usrMarkedResult}, stage=3, close_time=now() where id=1`;
 					}else
-						sql = `update match set defense_res=${usrMarkedResult} where id=1`;
+						sql = `update competition set defense_res=${usrMarkedResult} where id=1`;
 				}
 
 				conn.query(sql, function(err, result){

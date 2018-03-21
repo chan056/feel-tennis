@@ -394,7 +394,7 @@ COMPONENTS.Upload = {
 routeConfig.push(
     { path: '/upload', component: COMPONENTS.Upload, props: true, },
 );
-    $(function(){
+$(function(){
 
 	var navInstance = new Vue(COMPONENTS.HeaderComponent);
 

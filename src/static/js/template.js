@@ -729,24 +729,22 @@ var temp = {
         <div class="close-btn">返回</div>
 
         <div id="match-panel">
-            <p class="match-item" @click="showPanelDetail()">比赛中...</p>
+            <p v-for="match in matches" :key="match.id" class="match" @click="showPanelDetail(match)">VS 小强</p>
+
             <div class="match-detail" v-if="panelVisible">
-                <p class="match-item">2018/01/01</p>
-                <p class="match-item">对手：小强</p>
-                <el-select v-model="matchResult" placeholder="请选择" class="match-item">
+                <el-select v-model="matchResult" placeholder="请选择" class="">
                     <el-option
                     v-for="item in options"
                     :key="item.value"
                     :label="item.label"
-                    :value="item.value">
+                    :value="item.value"> 
                     </el-option>
                 </el-select>
-                <div class="match-item">
+                <div class="">
                     <el-button type="primary" @click="showConfirmDialog()">确定</el-button>
                     <el-button @click="hidePanelDetail()">取消</el-button>
                 </div>
             </div>
-
             
             <el-dialog
             title="提示"

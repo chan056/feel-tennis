@@ -1,4 +1,4 @@
-(function(){return;
+(function(){
     // 百度地图API功能
     var map = new BMap.Map("baidu-map"/* ,{minZoom:1,maxZoom:15} */);
     getCurPos( function(){
@@ -82,7 +82,7 @@
                 $('#img-loader').append('<img src='+avatar+' id='+randomId+' onload="console.log(this)"/>');
                 
                 $('#'+ randomId)[0].onload = function(){
-                    console.log(this.width, this.height);
+                    // console.log(this.width, this.height);
                     var avatarIcon = new BMap.Icon(avatar, new BMap.Size(this.width,this.height));
 
                     var lastLoginCoords = usr.last_login_coords;
@@ -128,6 +128,7 @@
                     var markerMenu = new BMap.ContextMenu();
                     markerMenu.addItem(new BMap.MenuItem('交战',function(e,ee,marker){
                         map.removeOverlay(marker);
+                        window.foundMatch(usr.usr_id);
                     }.bind(mk)));
             
                     mk.addContextMenu(markerMenu);
@@ -135,15 +136,6 @@
             });
         });
     }
-
-    // 查找进行中的比赛
-    function fetchRelatedMatches(){
-        tools.xhr('/relatedMatches', function(res){
-
-        });
-    }
-
-    fetchRelatedMatches();
 
     /*map.addEventListener('zoomend', function(){
         console.log(arguments)

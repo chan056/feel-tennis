@@ -427,6 +427,11 @@ app {
   top: 0;
   border: 1px solid #dcdfe6;
 }
-#match-panel .match-item {
+#match-panel .match-detail > * {
   padding: 10px;
+}
+#match-panel .match {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #dcdfe6;
 }

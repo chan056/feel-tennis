@@ -1647,7 +1647,10 @@ COMPONENTS.Compete = {
 			],
 			matchResult: 3,
 			panelVisible: false,
-			dialogVisible: false
+			dialogVisible: false,
+
+			matches: window.matches || [],
+			match: {}
 		};
 
 		return d;
@@ -1656,8 +1659,45 @@ COMPONENTS.Compete = {
 	template: temp.compete,
 
 	methods: {
-		showPanelDetail: function(){
+		fetchRelatedMatches: function (){
+			tools.xhr('/relatedMatches', function(res){
+				this.matches = res;
+			}.bind(this));
+		},
+
+		// 发起比赛
+		foundMatch: function(defenseId){
+			tools.xhr('/match', function(res){
+				this.fetchRelatedMatches();
+			}.bind(this), 'post', {
+				defenseId: defenseId,
+			});
+		},
+
+		// 接受比赛
+		acceptChallenge: function(){
+			tools.xhr('/match', function(res){
+				this.matches = res;
+			}.bind(this), 'patch', {
+				id: 1,
+				defenseId: 1,
+			});
+		},
+
+		// 记录比赛结果
+		markMatchResult: function(){
+			tools.xhr('/matchResult', function(res){
+				this.matches = res;
+			}.bind(this), 'patch', {
+				id: 1,
+				result: 1,
+			});
+		},
+
+		showPanelDetail: function(match){
 			this.panelVisible = true;
+			console.log(match);
+			this.match = match;
 		},
 
 		hidePanelDetail: function(){
@@ -1671,12 +1711,8 @@ COMPONENTS.Compete = {
 		confirmMathcResult: function(){
 			this.dialogVisible = false;
 
-			tools.xhr('/match', function(resData){
-				
-			}.bind(this),'patch',{
-				vd: 1 //victory or defeat
-			});
-		}
+			
+		},
 	},
 
 	mounted: function(){
@@ -1689,5 +1725,9 @@ COMPONENTS.Compete = {
 				this.$router.go(-1);
 			}.bind(this));
 		}.bind(this), id: 'map-script'});
+
+		this.fetchRelatedMatches();
+
+		window.foundMatch = this.foundMatch;
 	}
 }
