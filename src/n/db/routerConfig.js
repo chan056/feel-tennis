@@ -251,6 +251,10 @@ const routerConfig = {
         '/sameCityPlayer/:last_login_city': function(params, res, req){
             r.query('fetchSameCityPlayer', params, res, req)
         },
+
+        '/relatedMatches': function(params, res, req){
+            r.query('fetchRelatedMatches', params, res, req)
+        }
     },
 
     post: {
@@ -366,6 +370,10 @@ const routerConfig = {
         '/video/:vId/remark': function(req, res, pathParams){
             r.post('createVideoRemarks', req, res, pathParams);
         },
+
+        '/match': function(req, res, pathParams){
+            r.post('foundMatch', req, res, pathParams);
+        },
     },
     // ============put update完整资源=============
 
@@ -381,7 +389,15 @@ const routerConfig = {
     
         '/usrDatum': function(req, res){
             r.patch('updateUsrDatum', req, res);
-        }
+        },
+
+        '/match': function(req, res){
+            r.patch('acceptChallenge', req, res);
+        },
+        
+        '/matchResult': function(req, res){
+            r.patch('markMatchResult', req, res);
+        },
     },
 
     // delete 删除资源

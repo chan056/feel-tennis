@@ -10,7 +10,7 @@ module.exports = {
         if(usrInfo && usrInfo.isAdmin == 1){
             const concat = require('concat-files');
             
-            let tmp = dir + '/js/tmp.js'
+            let tmp = dir + '/js/admin.js'
 
             concat([
                 f1,

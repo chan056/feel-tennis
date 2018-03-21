@@ -1,4 +1,4 @@
-(function(){
+(function(){return;
     // 百度地图API功能
     var map = new BMap.Map("baidu-map"/* ,{minZoom:1,maxZoom:15} */);
     getCurPos( function(){
@@ -136,6 +136,14 @@
         });
     }
 
+    // 查找进行中的比赛
+    function fetchRelatedMatches(){
+        tools.xhr('/relatedMatches', function(res){
+
+        });
+    }
+
+    fetchRelatedMatches();
 
     /*map.addEventListener('zoomend', function(){
         console.log(arguments)

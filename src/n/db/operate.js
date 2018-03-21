@@ -446,16 +446,18 @@ let operations = {
 	},
 
 	// 查询进行中的比赛
-	fetchRelatedMatch: function(res, qualification, params){
+	fetchRelatedMatches: function(res, qualification, params){
+		let usrId = this.usrInfo.usrId;
+
 		let sql = `SELECT
 				*
 			FROM
-				match
+				\`match\`
 			WHERE
-				(offense = 1 OR defense = 1)
+				(offense = ${usrId} OR defense = ${usrId})
 			AND stage < 3`;
 
-		responseQry(sql);
+		responseQry(sql, res);
 	},
 
 	// 发起比赛 post
@@ -476,7 +478,7 @@ let operations = {
 	},
 	
 	// 标记比赛结果 patch
-	acceptChallenge: function(res, patchObj, req){
+	markMatchResult: function(res, patchObj, req){
 		let sql = `select offense, defense, offense_res, defense_res where id=1`;
 		let usrId = this.usr.usrId;
 		conn.query(sql, function(err, result){
@@ -968,7 +970,7 @@ let operations = {
 	}
 }
 
-function responseQry(sql, single){
+function responseQry(sql, res, single){
 	conn.query(sql, function (err, result, fields) {
 		if (err) throw err;
 
@@ -984,7 +986,7 @@ function responseQry(sql, single){
 			}
 		}
 	});
-},
+}
 
 // 执行SQL
 module.exports.excuteSQL = function (sql, res, fn) {
