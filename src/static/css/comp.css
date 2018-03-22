@@ -40,6 +40,9 @@ em {
 .hidden {
   display: none;
 }
+.nodec {
+  text-decoration: none;
+}
 .clearfix:after {
   display: table;
   content: "";
@@ -435,4 +438,10 @@ app {
   padding: 10px;
   border-bottom: 1px solid #dcdfe6;
   cursor: pointer;
+}
+.default-avatar-list img {
+  margin-right: 10px;
+}
+.default-avatar-list img.selected {
+  box-shadow: 0 0 6px #333;
 }

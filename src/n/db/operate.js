@@ -419,12 +419,12 @@ let operations = {
 	fetchSameCityPlayer: function(res, qualification, params){
 		// 因为百度地图拾取的城市名称是中文
 		let city = decodeURI(params.last_login_city);
-		if(!city)
-			return;
-		city = city.replace('市', '');
-		const pinyin =  require('pinyin');
-		city = pinyin(city, {style: pinyin.STYLE_NORMAL, heteronym: true, segment: true });
-		city = city.join('').replace(',', '');
+		// if(!city)
+		// 	return;
+		// city = city.replace('市', '');
+		// const pinyin =  require('pinyin');
+		// city = pinyin(city, {style: pinyin.STYLE_NORMAL, heteronym: true, segment: true });
+		// city = city.join('').replace(',', '');
 
 		let sql = `SELECT
 				ud.*,
@@ -437,8 +437,6 @@ let operations = {
 				ull.last_login_city = '${city}'
 			AND ud.usr_id = ull.usr_id`;
 
-		console.log(sql);
-
 		conn.query(sql, function (err, result, fields) {
 			if (err) throw err;
 
@@ -447,6 +445,12 @@ let operations = {
 				res.end(result);
 			}
 		});
+	},
+
+	fetchCityPlayer: function(res, qualification, params){
+		let sql = `SELECT count(*) as player_amount, last_login_city as city from usr_login_log GROUP BY last_login_city`;
+
+		responseQry(sql, res)
 	},
 
 	// 查询进行中的比赛
@@ -568,6 +572,7 @@ let operations = {
 						res.statusMessage = 'match result error';
 						return res.end();
 					}
+					// 修改 usr 胜负
 				}
 
 				conn.query(sql, function(err, result){
@@ -607,7 +612,6 @@ let operations = {
 				sql = `INSERT INTO usr_login_log VALUES (${id}, now(), '${postObj.ip}', '${postObj.city.toLowerCase()}', '${postObj.coords}') 
 					ON DUPLICATE KEY 
 					UPDATE last_login_time=now(), last_login_ip='${postObj.ip}', last_login_city='${postObj.city.toLowerCase()}', last_login_coords='${postObj.coords}';`
-				// sql = `update usr set last_login_time=now(), last_login_ip='${postObj.ip}', last_login_city='${postObj.city.toLowerCase()}', last_login_coords='${postObj.coords}' where id=${id}`;
 				
 				conn.query(sql, function(err, result){
 					if(err)
@@ -1014,10 +1018,10 @@ let operations = {
 
 		function updateData(){
 			let sql = `
-				insert into usr_datum values(${usrId}, '${patchObj.nickname}', '${patchObj.level}', '${patchObj.status}', '${pathStored}', 0, 0) 
+				insert into usr_datum values(${usrId}, '${patchObj.nickname}', '${patchObj.level}', '${patchObj.status}', '${pathStored}', 0, 0, 1) 
 				ON DUPLICATE KEY 
-				update nickname='${patchObj.nickname}', level='${patchObj.level}', status='${patchObj.status}', avatar='${pathStored}'`;
-				// console.log(sql);
+				update nickname='${patchObj.nickname}', level='${patchObj.level}', status='${patchObj.status}', avatar='${pathStored}', sex=1`;
+				console.log(sql);
 			
 			conn.query(sql, function(err, result){
 				if(err)

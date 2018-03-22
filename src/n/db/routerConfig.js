@@ -252,6 +252,10 @@ const routerConfig = {
             r.query('fetchSameCityPlayer', params, res, req)
         },
 
+        '/cityPlayer': function(params, res, req){
+            r.query('fetchCityPlayer', params, res, req)
+        },
+
         '/relatedMatches': function(params, res, req){
             r.query('fetchRelatedMatches', params, res, req)
         }

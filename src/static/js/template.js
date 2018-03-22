@@ -559,23 +559,25 @@ var temp = {
                         <img v-if="!datumForm.editable" :src="datumForm.avatar"></img>
                         <el-upload
                             v-if="datumForm.editable"
-                            drag
                             class=""
                             action="/upload"
                             :data="{type:'img'}"
                             :on-success="handleUploadSuccess"
                             v-model="datumForm.avatar"
                             >
-                            <i class="el-icon-upload"></i>
-                            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M</div>
-                            <!-- <el-button size="" type="primary">上传截图</el-button> -->
+                            <el-button size="small" type="primary">点击上传</el-button>
+                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                         </el-upload>
+                        <div v-if="datumForm.editable" class="default-avatar-list">
+                            <img @click="selectDefaultAvatar(1, $event)" src="/img/avatar/m.png"/>
+                            <img @click="selectDefaultAvatar(2, $event)" src="/img/avatar/f.png"/>
+                        </div>
                     </el-form-item>
 
                     <el-form-item>
-                        <el-button class="fr" type="primary" @click="datumForm.editable=true;" v-if="!datumForm.editable">编辑</el-button>
-                        <el-button class="fr" type="primary" @click="submitForm('datum-form')" v-if="datumForm.editable">确认</el-button>
+                        <el-button  type="primary" @click="datumForm.editable=true;" v-if="!datumForm.editable">编辑</el-button>
+                        <el-button  type="primary" @click="submitForm('datum-form')" v-if="datumForm.editable">确认</el-button>
+                        <el-button  type="primary" @click="datumForm.editable=false; cancelUpdateUsrDatum()" v-if="datumForm.editable">取消</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -730,7 +732,9 @@ var temp = {
 
         <div id="match-list">
             <p v-for="(match, index) in matches" :key="match.id" class="match" @click="showMatchDetail(match, index)">
-                VS {{ match.offensive? match.defense_nickname: match.offense_nickname }}
+                <a href="javascript: return false;" class="nodec" :title="'对手编号：' + (match.offensive? match.defense: match.offense)">
+                    VS {{ match.offensive? match.defense_nickname: match.offense_nickname }}
+                </a>
             </p>
 
             <div id="matchPanel" v-show="matchPanelVisible">

@@ -161,7 +161,7 @@ COMPONENTS.HeaderComponent = {
 				name: trim(this.loginForm.name),
 				psw: md5(trim(this.loginForm.psw)),
 				ip: CURPOS.ip,
-				city: CURPOS.city,
+				city: this.cityZH,
 				coords: CURPOS.longitude + ',' + CURPOS.latitude
 			}, function(res){
 				let status = res.status;
@@ -284,6 +284,12 @@ COMPONENTS.HeaderComponent = {
 		}
 
 		this.fetchUsrLoginInfo();
+	},
+
+	created: function(){
+		(new BMap.LocalCity()).get(function(city){
+			this.cityZH = city.name;
+		}.bind(this))
 	},
 	// beforeCreate: function () {
 	// 	console.group('beforeCreate 创建前状态===============》');
@@ -1016,6 +1022,8 @@ COMPONENTS.Datum = {
 				},
 				editable: false
 			},
+
+			usrDtum: {},// 真实信息
 	
 			levels: ['1.0','1.5','2.0','2.5','3.0','3.5','4.0','4.5','5.0','5.5','6.0','7.0'],
 
@@ -1024,7 +1032,7 @@ COMPONENTS.Datum = {
 				name: '接受对战'
 			},{
 				id: '2',
-				name: '修整中'
+				name: '修整中',
 			}]
 		}
 	},
@@ -1043,24 +1051,35 @@ COMPONENTS.Datum = {
 
 		fetchUsrDatum: function(){
 			tools.xhr('/usrDatum', function(res){
-				// console.log(res);
-				this.datumForm.nickname = res.nickname;
-				this.datumForm.level = res.level;
-				this.datumForm.status = res.status;
-				this.datumForm.avatar = res.avatar;
+				this.usrDtum.nickname = this.datumForm.nickname = res.nickname;
+				this.usrDtum.level = this.datumForm.level = res.level;
+				this.usrDtum.status = this.datumForm.status = res.status;
+				this.usrDtum.avatar = this.datumForm.avatar = res.avatar;
 			}.bind(this));
 		},
 
 		updateUsrDatum: function(){
 			tools.xhr('/usrDatum', function(res){
 				this.$message({
-					message: '更新成功',
+					message: '资料更新成功',
 					type: 'success'
 				})
+
+				this.fetchUsrDatum();
+				this.datumForm.editable = false;
 			}.bind(this), 'patch', this.datumForm, function(res){
 				if(res.status == 401){
 				}
 			}.bind(this));
+		},
+
+		cancelUpdateUsrDatum: function(){
+			this.datumForm.nickname = this.usrDtum.nickname;
+			this.datumForm.level = this.usrDtum.level;
+			this.datumForm.status = this.usrDtum.status;
+			this.datumForm.avatar = this.usrDtum.avatar;
+
+			('.default-avatar-list img').removeClass('selected');
 		},
 
 		showLevelTip: function(){
@@ -1070,7 +1089,12 @@ COMPONENTS.Datum = {
 		handleUploadSuccess: function(res){
 			// return console.log(res);
 			this.datumForm.avatar = res.relPath;
-		}
+		},
+
+		selectDefaultAvatar: function(sex, e){
+			this.datumForm.avatar = ['/img/avatar/m.png', '/img/avatar/f.png'][sex-1];
+			$(e.target).addClass('selected').siblings().removeClass('selected')
+		},
 	},
 
 	template: temp.datum,
@@ -1663,6 +1687,7 @@ COMPONENTS.Compete = {
 		fetchRelatedMatches: function (){
 			tools.xhr('/relatedMatches', function(res){
 				this.matches = res;
+				window.matches = Object.assign([], res);
 			}.bind(this));
 		},
 
@@ -1747,7 +1772,7 @@ COMPONENTS.Compete = {
 				}else{
 					// 提示 “等待应答”
 					this.$message({
-						message: '等待对手应答',
+						message: '等待对方应答',
 						type: 'info'
 					});
 				}
@@ -1759,8 +1784,6 @@ COMPONENTS.Compete = {
 				this.matchPanelVisible = true;
 			}
 		},
-
-		
 
 	},
 

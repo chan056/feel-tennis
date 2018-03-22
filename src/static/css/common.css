@@ -40,6 +40,9 @@ em {
 .hidden {
   display: none;
 }
+.nodec {
+  text-decoration: none;
+}
 .clearfix:after {
   display: table;
   content: "";
