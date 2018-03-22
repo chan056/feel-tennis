@@ -1,16 +1,6 @@
 (function(){
     // 百度地图API功能
     var map = new BMap.Map("baidu-map"/* ,{minZoom:1,maxZoom:15} */);
-    getCurPos( function(){
-        var pos = {lng: CURPOS.longitude, lat: CURPOS.latitude};
-        var point = new BMap.Point(CURPOS.longitude, CURPOS.latitude);
-        map.centerAndZoom(point,12);
-        map.panTo(pos);// 跳转
-
-        lastQueryCity = CURPOS.city;
-        fetchSameCityPlayer();
-    });
-
     map.enableScrollWheelZoom();
     map.setDefaultCursor("url('bird.cur')");
 
@@ -24,26 +14,40 @@
     stCtrl.setOffset(new BMap.Size(20, 20));
     map.addControl(stCtrl);
 
-    var geoc = new BMap.Geocoder();
     var lastQueryCity = '';
+
+    (new BMap.LocalCity({
+        renderOptions: {map: map}
+    })).get(function(city){
+        fetchSameCityPlayer(city.name);
+    });
+    
+    // ==========EVENT============
+    /*var myDis = new BMapLib.DistanceTool(map);
+    map.addEventListener("load",function(){
+        myDis.open();  //开启鼠标测距
+        //myDis.close();  //关闭鼠标测距大
+    });*/
+    /*map.addEventListener('zoomend', function(){
+        console.log(arguments)
+    })*/
+
+    var geoc = new BMap.Geocoder();
+    
     map.addEventListener("click", function(e){        
         var pt = e.point;
-        console.log(pt);
+        // console.log(pt);
 
         geoc.getLocation(pt, function(rs){
             var addComp = rs.addressComponents;
-            var city = addComp.city;
+            var city = addComp.city;// 中文
             if(city != lastQueryCity){
                 fetchSameCityPlayer(city);
-
-                lastQueryCity = city;
             }
         });        
     });
 
-    function afterLocation(){
-        
-    }
+
 
     /*function getCurPos(fn){
         var geolocation = new BMap.Geolocation();
@@ -57,24 +61,37 @@
         },{enableHighAccuracy: true})
     }*/
 
-    function getCurPos(fn){
-        // 获取坐标
-        var CURPOS = window.CURPOS;
-        if(CURPOS){
-            fn && fn();
-        }else{
-            setTimeout(function(){
-                getCurPos(fn);
-            }, 2000);
-        }
-    }
+
+    // function getCurPos(fn){
+    //     // 获取坐标
+    //     var CURPOS = window.CURPOS;
+    //     if(CURPOS){
+    //         fn && fn();
+    //     }else{
+    //         setTimeout(function(){
+    //             getCurPos(fn);
+    //         }, 2000);
+    //     }
+    // }
+
+    
+    /*getCurPos( function(){
+        var pos = {lng: CURPOS.longitude, lat: CURPOS.latitude};
+        var point = new BMap.Point(CURPOS.longitude, CURPOS.latitude);
+        map.centerAndZoom(point,12);
+        map.panTo(pos);// 跳转
+
+        fetchSameCityPlayer();
+        lastQueryCity = CURPOS.city;
+    });*/
 
     function fetchSameCityPlayer(city){
-        city = city || CURPOS.city;
 
         tools.xhr('/sameCityPlayer/' + city, function(res){
+            lastQueryCity = city;
+
             res.forEach(function(usr){
-                var star = [usr.nickname, usr.level, `${usr.win}胜${usr.lose}负`];
+                var player = [usr.nickname, usr.level, `${usr.win}胜${usr.lose}负`];
                 var avatar = usr.avatar || '/img/star/safin.jpg';
 
                 var randomId = usr.level + Math.random();
@@ -97,7 +114,7 @@
                     map.addOverlay(mk);
                     // mk.setAnimation(BMAP_ANIMATION_BOUNCE); // 跳动
             
-                    var label = new BMap.Label(star.join('<br/>'), {
+                    var label = new BMap.Label(player.join('<br/>'), {
                         position : coords,
                         offset   : new BMap.Size(0, 0)
                     });
@@ -127,7 +144,7 @@
                     // marker创建右键菜单
                     var markerMenu = new BMap.ContextMenu();
                     markerMenu.addItem(new BMap.MenuItem('交战',function(e,ee,marker){
-                        map.removeOverlay(marker);
+                        // map.removeOverlay(marker);
                         window.foundMatch(usr.usr_id);
                     }.bind(mk)));
             
@@ -137,14 +154,4 @@
         });
     }
 
-    /*map.addEventListener('zoomend', function(){
-        console.log(arguments)
-    })*/
-
-    // ==EVENT==
-    /*var myDis = new BMapLib.DistanceTool(map);
-    map.addEventListener("load",function(){
-        myDis.open();  //开启鼠标测距
-        //myDis.close();  //关闭鼠标测距大
-    });*/
 })();

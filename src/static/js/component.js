@@ -1668,15 +1668,22 @@ COMPONENTS.Compete = {
 
 		// 发起比赛
 		foundMatch: function(defenseId){
-			tools.xhr('/match', function(res){
-				this.fetchRelatedMatches();
+			if(this.matches.length >= 1){
 				this.$message({
-					messgae: '比赛发起成功',
-					type: 'success'
-				})
-			}.bind(this), 'post', {
-				matchId: this.match.id,
-			});
+					message: '请先关闭之前的比赛',
+					type: 'warning'
+				});
+			}else{
+				tools.xhr('/match', function(res){
+					this.fetchRelatedMatches();
+					this.$message({
+						messgae: '比赛发起成功',
+						type: 'success'
+					})
+				}.bind(this), 'post', {
+					matchId: this.match.id,
+				});
+			}
 		},
 
 		// 接受比赛
@@ -1720,7 +1727,14 @@ COMPONENTS.Compete = {
 			}.bind(this), 'patch', {
 				matchId: this.match.id,
 				result: this.matchResult,
-			});
+			}, function(res){
+				if(res.status == 400){
+					this.$message({
+						message: '一天后才可以提交比赛结果',
+						type: 'warning'
+					});
+				}
+			}.bind(this));
 		},
 
 		showMatchDetail: function(match, index){

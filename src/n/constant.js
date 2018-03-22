@@ -26,5 +26,5 @@ module.exports = {
     },
 
     videoCoverSize: '210x118',
-    avtarThumbWidth: 100,
+    avtarThumbWidth: 50,
 }

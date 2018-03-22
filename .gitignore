@@ -1,6 +1,7 @@
 
 sessions/
 .git-credentials
+src/n/package-lock.json
 
 # Logs
 logs
