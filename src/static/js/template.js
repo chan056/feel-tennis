@@ -522,14 +522,14 @@ var temp = {
     datum: `
         <div>
             <div style="width: 300px; margin: auto; padding: 10px 20px;">
-                <el-form ref="datum-form" :rules="datumForm.datumFormRules" :model="datumForm" label-width="80px" >
+                <el-form ref="datum-form" :rules="datumForm.datumFormRules" :model="datumForm.unstableDatum" label-width="80px" >
                     <el-form-item label="昵称" prop="nickname">
-                        <el-input v-model="datumForm.nickname" v-bind:disabled="!datumForm.editable"></el-input>
+                        <el-input v-model="datumForm.unstableDatum.nickname" v-bind:disabled="!datumForm.editable"></el-input>
                     </el-form-item>
 
                     <el-form-item label="等级" prop="level" @change="showLevelTip()">
                         <el-select
-                        v-model="datumForm.level"
+                        v-model="datumForm.unstableDatum.level"
                         placeholder="" 
                         v-bind:disabled="!datumForm.editable">
                             <el-option
@@ -543,7 +543,7 @@ var temp = {
 
                     <el-form-item label="状态" prop="status">
                         <el-select
-                        v-model="datumForm.status"
+                        v-model="datumForm.unstableDatum.status"
                         placeholder="" 
                         v-bind:disabled="!datumForm.editable">
                             <el-option
@@ -555,15 +555,29 @@ var temp = {
                         </el-select>
                     </el-form-item>
 
+                    <el-form-item label="性别" prop="sex">
+                        <el-select
+                        v-model="datumForm.unstableDatum.sex"
+                        placeholder="" 
+                        v-bind:disabled="!datumForm.editable">
+                            <el-option
+                                v-for="sex in sexes"
+                                :key="sex.id"
+                                :label="sex.name"
+                                :value="sex.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+
                     <el-form-item label="头像" prop="avatar">
-                        <img v-if="!datumForm.editable" :src="datumForm.avatar"></img>
+                        <img v-if="!datumForm.editable" :src="usrDtum.avatar"></img>
                         <el-upload
                             v-if="datumForm.editable"
                             class=""
                             action="/upload"
                             :data="{type:'img'}"
                             :on-success="handleUploadSuccess"
-                            v-model="datumForm.avatar"
+                            v-model="datumForm.unstableDatum.avatar"
                             >
                             <el-button size="small" type="primary">点击上传</el-button>
                             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>

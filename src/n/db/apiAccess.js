@@ -4,7 +4,6 @@
 //  1 临时用户
 
 let config = {
-
     '/voteNext': {level: 10, visits: 1},
 
     '/gifLink': {level: 10, visits: 3},
@@ -28,7 +27,15 @@ let config = {
     '/usrShotVideos':{level: 10},
 
     '/video/:v_id/remarks': {level: 10},
-    
+
+    '/usrDatum': {level: 10},
+
+    '/relatedMatches': {level: 10},
+
+    '/match': {level: 10},
+
+    '/matchResult': {level: 10},
+
     '/makers': {level: 100},
 
     '/maker/:id': {level: 100},

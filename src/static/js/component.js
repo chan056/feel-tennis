@@ -1010,15 +1010,19 @@ COMPONENTS.Datum = {
 	data: function(){
 		return {
 			datumForm:{
-				nickname: '',
-				level : '',
-				status: '1',
-				avatar: '',
+				unstableDatum: {
+					nickname: '',
+					level : '',
+					status: '1',
+					avatar: '',
+					sex: ''
+				},
 				datumFormRules: {
 					nickname:[{required: true, message: '昵称不能为空'}],
 					level:[{required: true, message: '水平不能为空'}],
 					status:[{required: true, message: '状态不能为空'}],
-					avatar: [{required: true, message: '头像必传'}]
+					avatar: [{required: true, message: '头像必填'}],
+					sex: [{required: true, message: '性别必填'}]
 				},
 				editable: false
 			},
@@ -1026,6 +1030,14 @@ COMPONENTS.Datum = {
 			usrDtum: {},// 真实信息
 	
 			levels: ['1.0','1.5','2.0','2.5','3.0','3.5','4.0','4.5','5.0','5.5','6.0','7.0'],
+
+			sexes: [{
+				id: 1,
+				name: '男'
+			}, {
+				id: 2,
+				name: '女'
+			}],
 
 			statuses: [{
 				id: '1',
@@ -1038,6 +1050,16 @@ COMPONENTS.Datum = {
 	},
 
 	methods: {
+		fetchUsrDatum: function(){
+			tools.xhr('/usrDatum', function(res){
+				this.usrDtum.nickname = this.datumForm.unstableDatum.nickname = res.nickname;
+				this.usrDtum.level = this.datumForm.unstableDatum.level = res.level;
+				this.usrDtum.status = this.datumForm.unstableDatum.status = res.status;
+				this.usrDtum.avatar = this.datumForm.unstableDatum.avatar = res.avatar;
+				this.usrDtum.sex = this.datumForm.unstableDatum.sex = res.sex;
+			}.bind(this));
+		},
+
 		submitForm: function(formName){
 			this.$refs[formName].validate(function(valid){
 				if (valid) {
@@ -1046,15 +1068,6 @@ COMPONENTS.Datum = {
 					console.log('error submit!!');
 					return false;
 				}
-			}.bind(this));
-		},
-
-		fetchUsrDatum: function(){
-			tools.xhr('/usrDatum', function(res){
-				this.usrDtum.nickname = this.datumForm.nickname = res.nickname;
-				this.usrDtum.level = this.datumForm.level = res.level;
-				this.usrDtum.status = this.datumForm.status = res.status;
-				this.usrDtum.avatar = this.datumForm.avatar = res.avatar;
 			}.bind(this));
 		},
 
@@ -1067,7 +1080,7 @@ COMPONENTS.Datum = {
 
 				this.fetchUsrDatum();
 				this.datumForm.editable = false;
-			}.bind(this), 'patch', this.datumForm, function(res){
+			}.bind(this), 'patch', this.datumForm.unstableDatum, function(res){
 				if(res.status == 401){
 				}
 			}.bind(this));

@@ -1018,9 +1018,9 @@ let operations = {
 
 		function updateData(){
 			let sql = `
-				insert into usr_datum values(${usrId}, '${patchObj.nickname}', '${patchObj.level}', '${patchObj.status}', '${pathStored}', 0, 0, 1) 
+				insert into usr_datum values(${usrId}, '${patchObj.nickname}', '${patchObj.level}', '${patchObj.status}', '${pathStored}', 0, 0, ${patchObj.sex}) 
 				ON DUPLICATE KEY 
-				update nickname='${patchObj.nickname}', level='${patchObj.level}', status='${patchObj.status}', avatar='${pathStored}', sex=1`;
+				update nickname='${patchObj.nickname}', level='${patchObj.level}', status='${patchObj.status}', avatar='${pathStored}', sex=${patchObj.sex}`;
 				// console.log(sql);
 			
 			conn.query(sql, function(err, result){
