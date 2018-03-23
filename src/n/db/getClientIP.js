@@ -1,6 +1,5 @@
 module.exports = {
     getClientIp: function (req) { 
-        // request-ip
         var ipAddress;  
         var forwardedIpsStr = req.headers['x-forwarded-for'];   
         if (forwardedIpsStr) {  
