@@ -1291,7 +1291,7 @@ COMPONENTS.VoteNext = {
 							$('#header-btn-login').trigger('click')
 						}else if(statusCode == 402){
 							this.$message({
-								message: '投票太频繁了',
+								message: '请隔天再投',
 								type: 'warning'
 							});
 						}

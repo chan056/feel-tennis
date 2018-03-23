@@ -41,12 +41,18 @@ const routerConfig = {
             r.query('queryVideo', params, res, req);
         },
     
-        '/makers': function(params, res, req){
-            r.query('queryMakers', params, res, req);
+        '/makers': {
+            fn: function(params, res, req){
+                r.query('queryMakers', params, res, req);
+            },
+            limit: {level: 100}
         },
     
-        '/maker/:id': function(params, res, req){
-            r.query('queryMaker', params, res, req);
+        '/maker/:id': {
+            fn: function(params, res, req){
+                r.query('queryMaker', params, res, req);
+            },
+            limit: {level: 100}
         },
     
         '/emailConfirm': function(params, res, req){
@@ -169,9 +175,12 @@ const routerConfig = {
             // console.log(params);
         },
     
-        '/gifLink': function(params, res, req){
-            let createDynamicPreview = require('../ffmpeg/gif.js').createDynamicPreview;
-            createDynamicPreview(params, res, req);
+        '/gifLink': {
+            fn: function(params, res, req){
+                let createDynamicPreview = require('../ffmpeg/gif.js').createDynamicPreview;
+                createDynamicPreview(params, res, req);
+            },
+            limit: {level: 10, visits: 3}
         },
     
         '/srt/:vId': function(params, res, req){
@@ -183,13 +192,15 @@ const routerConfig = {
             r.query('loginInfo', params, res, req);
         },
     
-        // 查询当前用户是否点赞当前视频
-        '/queryVoteComment/:vId': function(params, res, req){
-            let sql = `select comment from usr_comment where video_id=${params.vId} and comment_type='1' and usr_id=${req.usrInfo.usrId}`;
-    
-            r.excuteSQL(sql, res, function(result){
-                res.end(JSON.stringify(result[0]));
-            });
+        '/queryVoteComment/:vId': {
+            fn: function(params, res, req){
+                let sql = `select comment from usr_comment where video_id=${params.vId} and comment_type='1' and usr_id=${req.usrInfo.usrId}`;
+        
+                r.excuteSQL(sql, res, function(result){
+                    res.end(JSON.stringify(result[0]));
+                });
+            },
+            limit: {level: 10}
         },
     
         '/checkUsernameExist': function(params, res, req){
@@ -205,46 +216,70 @@ const routerConfig = {
         },
     
         // 视频收藏夹
-        '/vStars': function(params, res, req){
-            r.query('queryUsrStars', params, res, req);
+        '/vStars': {
+            fn: function(params, res, req){
+                r.query('queryUsrStars', params, res, req);
+            },
+            limit: {level: 10}
         },
     
         // 当前用户当前视频的收藏的文件夹
-        '/queryUsrVideoStars/:v_id': function(params, res, req){
-            r.query('queryUsrVideoStars', params, res, req);
+        '/queryUsrVideoStars/:v_id': {
+            fn: function(params, res, req){
+                r.query('queryUsrVideoStars', params, res, req);
+            },
+            limit: {level: 10}
         },
     
         // 收藏夹内的视频
-        '/starVideo/:star_id': function(params, res, req){
-            r.query('queryStarVideo', params, res, req);
+        '/starVideo/:star_id': {
+            fn: function(params, res, req){
+                r.query('queryStarVideo', params, res, req);
+            },
+            limit: {level: 10}
         },
     
         // 收藏的截图
-        '/screenshots': function(params, res, req){
-            r.query('queryUsrScreenshots', params, res, req);
+        '/screenshots': {
+            fn: function(params, res, req){
+                r.query('queryUsrScreenshots', params, res, req);
+            },
+            limit: {level: 10}
         },
     
         // 用户截图所属的视频列表
-        '/usrShotVideos': function(params, res, req){
-            r.query('queryUsrShotVideos', params, res, req);
+        '/usrShotVideos': {
+            fn: function(params, res, req){
+                r.query('queryUsrShotVideos', params, res, req);
+            },
+            limit: {level: 10}
         },
     
         // 根据视频查询截图
-        '/usrVshoot': function(params, res, req){
-            r.query('queryUsrVshoot', params, res, req);
+        '/usrVshoot': {
+            fn: function(params, res, req){
+                r.query('queryUsrVshoot', params, res, req);
+            },
+            limit: {level: 10}
         },
     
         // 查询某视频
-        '/video/:v_id/remarks': function(params, res, req){
-            if(params.type == 1){
-                r.query('queryVideoRemarks', params, res, req);
-            }else if(params.type == 2){
-                r.query('queryUsrVideoRemarks', params, res, req);
-            }
+        '/video/:v_id/remarks': {
+            fn: function(params, res, req){
+                if(params.type == 1){
+                    r.query('queryVideoRemarks', params, res, req);
+                }else if(params.type == 2){
+                    r.query('queryUsrVideoRemarks', params, res, req);
+                }
+            },
+            limit: {level: 10}
         },
     
-        '/usrDatum': function(params, res, req){
-            r.query('fetchUsrDatum', params, res, req)
+        '/usrDatum': {
+            fn: function(params, res, req){
+                r.query('fetchUsrDatum', params, res, req)
+            },
+            limit: {level: 10}
         },
 
         
@@ -256,8 +291,11 @@ const routerConfig = {
             r.query('fetchCityPlayer', params, res, req)
         },
 
-        '/relatedMatches': function(params, res, req){
-            r.query('fetchRelatedMatches', params, res, req)
+        '/relatedMatches': {
+            fn: function(params, res, req){
+                r.query('fetchRelatedMatches', params, res, req)
+            },
+            limit: {level: 10}
         }
     },
 
@@ -283,20 +321,32 @@ const routerConfig = {
             r.post('resetPsw', req, res);
         },
     
-        '/video': function(req, res){
-            r.post('creatVedio', req, res);
+        '/video': {
+            fn: function(req, res){
+                r.post('creatVedio', req, res);
+            },
+            limit: {level: 100}
         },
     
-        '/tag': function(req, res){
-            r.post('creatTag', req, res);
+        '/tag': {
+            fn: function(req, res){
+                r.post('creatTag', req, res);
+            },
+            limit: {level: 100}
         },
     
-        '/album': function(req, res){
-            r.post('creatAlbum', req, res);
+        '/album': {
+            fn: function(req, res){
+                r.post('creatAlbum', req, res);
+            },
+            limit: {level: 100}
         },
     
-        '/maker': function(req, res){
-            r.post('createMaker', req, res);
+        '/maker': {
+            fn: function(req, res){
+                r.post('createMaker', req, res);
+            },
+            limit: {level: 100}
         },
     
         '/upload': function(req, res){
@@ -359,24 +409,33 @@ const routerConfig = {
             r.post('creatFeedback', req, res);
         },
     
-        '/voteNext': function(req, res){
-            r.post('voteNextVideo', req, res);
+        '/voteNext': {
+            fn: function(req, res){
+                r.post('voteNextVideo', req, res);
+            },
+            limit: {level: 10, visits: 1}
         },
     
         '/star': function(req, res){
             r.post('creatStar', req, res);
         },
     
-        '/star/:starId': function(req, res, pathParams){
-            r.post('starVideo', req, res, pathParams);
+        '/star/:starId': {
+            fn: function(req, res, pathParams){
+                r.post('starVideo', req, res, pathParams);
+            },
+            limit: {level: 10}
         },
     
         '/video/:vId/remark': function(req, res, pathParams){
             r.post('createVideoRemarks', req, res, pathParams);
         },
 
-        '/match': function(req, res, pathParams){
-            r.post('foundMatch', req, res, pathParams);
+        '/match': {
+            fn: function(req, res, pathParams){
+                r.post('foundMatch', req, res, pathParams);
+            },
+            limit: {level: 10}
         },
     },
     // ============put update完整资源=============
@@ -395,12 +454,18 @@ const routerConfig = {
             r.patch('updateUsrDatum', req, res);
         },
 
-        '/match': function(req, res){
-            r.patch('acceptChallenge', req, res);
+        '/match': {
+            fn: function(req, res){
+                r.patch('acceptChallenge', req, res);
+            },
+            limit: {level: 10}
         },
         
-        '/matchResult': function(req, res){
-            r.patch('markMatchResult', req, res);
+        '/matchResult': {
+            fn: function(req, res){
+                r.patch('markMatchResult', req, res);
+            },
+            limit: {level: 10}
         },
     },
 

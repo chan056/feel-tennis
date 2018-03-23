@@ -97,33 +97,5 @@ module.exports = {
         }
     },
 
-    // 普通用户, 特定接口访问次数限制
-    checkAccessLimit: function(path, scb, ecb, usrInfo){
-        let apiAccessConfig = config[path];
-            // 查询是否超过限制
-            let accessLimit = apiAccessConfig.visits;
-            let conn = require('./connect').conn;
-            let sql = `select * 
-                from usr_api_access_log 
-                where uid=${usrInfo.usrId} 
-                and api='${path}' 
-                and TO_DAYS( NOW() ) - TO_DAYS( timestamp ) <= 1`;
-            
-            conn.query(sql, function(err, result){
-                if(err)
-                    console.log(err);
-
-                if(result.length){
-                    let accessCount = result.length;
-
-                    if(accessCount < accessLimit){
-                        scb();
-                    }else{
-                        ecb();
-                    }
-                }else{
-                    scb();
-                }
-            });
-    }
+    
 }
