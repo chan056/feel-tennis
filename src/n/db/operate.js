@@ -493,6 +493,25 @@ let operations = {
 		});
 	},
 
+	fetchFeedbackList: function(res, postObj, req){
+		var sql = `select * from feedback order by id desc`;
+
+		conn.query(sql, [
+			postObj.desc, 
+			req.connection.remoteAddress, 
+			postObj.site, 
+			postObj.wechat, 
+			postObj.email, 
+			postObj.files,
+			this.usrInfo.usrId || 0
+		], function(err, result, fields){
+			if(err)
+				console.log(err.sql, err.sqlMessage) ;
+			
+			res.end('success');
+		});
+	},
+
 	// 发起比赛 post
 	foundMatch: function(res, postObj, req){
 		let sql = `insert into competition (offense, defense, offense_time, stage) values (${this.usrInfo.usrId}, ${postObj.defenseId}, now(), 1)`;
