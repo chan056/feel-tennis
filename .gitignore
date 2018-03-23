@@ -3,6 +3,7 @@ sessions/
 .git-credentials
 src/n/package-lock.json
 /src/static/img/avatar/*.*
+/src/static/js/tmp.js
 
 # Logs
 logs

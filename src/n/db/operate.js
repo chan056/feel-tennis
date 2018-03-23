@@ -1021,7 +1021,7 @@ let operations = {
 				insert into usr_datum values(${usrId}, '${patchObj.nickname}', '${patchObj.level}', '${patchObj.status}', '${pathStored}', 0, 0, 1) 
 				ON DUPLICATE KEY 
 				update nickname='${patchObj.nickname}', level='${patchObj.level}', status='${patchObj.status}', avatar='${pathStored}', sex=1`;
-				console.log(sql);
+				// console.log(sql);
 			
 			conn.query(sql, function(err, result){
 				if(err)
