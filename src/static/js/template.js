@@ -414,7 +414,7 @@ var temp = {
             <ul class="block-list video-list">
                 <li v-for="video in videos">
                     <router-link :to="{path: '/video/' + video.id}">
-                        <img src="/img/logo.jpg" class="block-thumb video-thumb"/>
+                        <img src="/img/logo.png" class="block-thumb video-thumb"/>
                         <h3 class="block-title video-title ellipsis">
                             <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
                         </h3>
