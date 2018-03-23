@@ -569,8 +569,8 @@ var temp = {
                             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                         </el-upload>
                         <div v-if="datumForm.editable" class="default-avatar-list">
-                            <img @click="selectDefaultAvatar(1, $event)" src="/img/avatar/m.png"/>
-                            <img @click="selectDefaultAvatar(2, $event)" src="/img/avatar/f.png"/>
+                            <img @click="selectDefaultAvatar($event)" src="/img/avatar/default/male.png"/>
+                            <img @click="selectDefaultAvatar($event)" src="/img/avatar/default/female.png"/>
                         </div>
                     </el-form-item>
 

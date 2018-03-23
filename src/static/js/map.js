@@ -117,7 +117,7 @@
                 var avatar = usr.avatar;
                 var sex = usr.sex;
                 if(!avatar){
-                    avatar = ['/img/avatar/m.png', '/img/avatar/f.png'][sex-1];
+                    avatar = ['/img/avatar/default/male.png', '/img/avatar/default/female.png'][sex-1];
                 }
 
                 var randomId = usr.level + Math.random();

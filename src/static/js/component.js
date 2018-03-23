@@ -1091,9 +1091,10 @@ COMPONENTS.Datum = {
 			this.datumForm.avatar = res.relPath;
 		},
 
-		selectDefaultAvatar: function(sex, e){
-			this.datumForm.avatar = ['/img/avatar/m.png', '/img/avatar/f.png'][sex-1];
-			$(e.target).addClass('selected').siblings().removeClass('selected')
+		selectDefaultAvatar: function(e){
+			var t = $(e.target);
+			this.datumForm.avatar = t.attr('src');
+			t.addClass('selected').siblings().removeClass('selected')
 		},
 	},
 
