@@ -429,7 +429,7 @@ let operations = {
 		let sql = `SELECT
 				ud.*,
 				ull.last_login_coords AS last_login_coords,
-				if(ud.usr_id=18, 1, 0) as is_self
+				if(ud.usr_id=${this.usrInfo.usrId}, 1, 0) as is_self
 			FROM
 				usr_datum AS ud
 				JOIN usr_login_log AS ull
@@ -461,8 +461,10 @@ let operations = {
 				*,
 				(select nickname from usr_datum where usr_id = offense)  as offense_nickname,
 				(select nickname from usr_datum where usr_id = defense)  as defense_nickname,
-				(select 1 where offense=18) as offensive,
-				(select 1 where defense=18) as defensive
+				(select wechat from usr_datum where usr_id = offense)  as offense_wechat,
+				(select wechat from usr_datum where usr_id = defense)  as defense_wechat,
+				(select 1 where offense=${usrId}) as offensive,
+				(select 1 where defense=${usrId}) as defensive
 			FROM
 				competition
 			WHERE
@@ -493,7 +495,7 @@ let operations = {
 		});
 	},
 
-	fetchFeedbackList: function(res, postObj, req){
+	fetchFeedbackList: function(res, qualification, params){
 		var sql = `select * from feedback order by id desc`;
 
 		conn.query(sql, [
@@ -509,6 +511,28 @@ let operations = {
 				console.log(err.sql, err.sqlMessage) ;
 			
 			res.end('success');
+		});
+	},
+
+	checkUsrDatumIntegrity: function(res, qualification, params){
+		let sql = 'select nickname, wechat,level, status, avatar, sex from usr_datum where usr_id=?'
+		conn.query(sql, [this.usrInfo.usrId], function(err, result, fields){
+			if(err)
+				console.log(err.sql, err.sqlMessage) ;
+			
+			let row = result[0];
+			let whole = 1;
+			if(row){
+				for(var i in row){
+					if(!row[i]){
+						whole = 0;
+					}
+				};
+			}else{
+				whole = 0;
+			}
+
+			res.end(String(whole));
 		});
 	},
 
@@ -626,7 +650,11 @@ let operations = {
 					HttpOnly: true
 				});
 
-				
+				if(!postObj.city){
+					res.statusCode = 400;
+					res.statusMessage = 'login fail';
+					return res.end();
+				}
 
 				sql = `INSERT INTO usr_login_log VALUES (${id}, now(), '${postObj.ip}', '${postObj.city.toLowerCase()}', '${postObj.coords}') 
 					ON DUPLICATE KEY 
@@ -1037,9 +1065,9 @@ let operations = {
 
 		function updateData(){
 			let sql = `
-				insert into usr_datum values(${usrId}, '${patchObj.nickname}', '${patchObj.level}', '${patchObj.status}', '${pathStored}', 0, 0, ${patchObj.sex}) 
+				insert into usr_datum values(${usrId}, '${patchObj.nickname}', '${patchObj.wechat}', '${patchObj.level}', '${patchObj.status}', '${pathStored}', 0, 0, ${patchObj.sex}) 
 				ON DUPLICATE KEY 
-				update nickname='${patchObj.nickname}', level='${patchObj.level}', status='${patchObj.status}', avatar='${pathStored}', sex=${patchObj.sex}`;
+				update nickname='${patchObj.nickname}',wechat='${patchObj.wechat}', level='${patchObj.level}', status='${patchObj.status}', avatar='${pathStored}', sex=${patchObj.sex}`;
 				// console.log(sql);
 			
 			conn.query(sql, function(err, result){

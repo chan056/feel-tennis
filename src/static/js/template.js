@@ -10,7 +10,7 @@ var temp = {
                     
                 </el-col>
 
-                <el-col :span="9">
+                <el-col :span="10" id="search-form-wrapper">
                     <el-form :model="searchForm" :rules="searchFormRules" ref="searchForm"  class="" id="searchForm">
                         <el-row>
                             <el-col :span=20>
@@ -18,14 +18,14 @@ var temp = {
                                     <el-input v-model="searchForm.name"></el-input>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span=4>
+                            <el-col :span=4 class="header-search-btn">
                                 <el-button style="width: 100%;" icon="el-icon-search" @click="submitForm('searchForm')"></el-button>
                             </el-col>
                         </el-row>
                     </el-form>
                 </el-col>
 
-                <el-col :span="6" :offset="5" class="masthead">
+                <el-col :span="6" class="masthead fr">
                     <el-dropdown id="usr-btns" class="fr" @command="handleUsrBtns">
                         <i v-bind:class="loginUsrInfo.name? 'el-icon-setting': 'el-icon-view'" title="" @click=""></i>
                         <el-dropdown-menu slot="dropdown">
@@ -129,7 +129,7 @@ var temp = {
                 </div>
             </div>
             <div class="guide-section">
-                <div v-if="loginUsrInfo && loginUsrInfo.is_admin == 1" class="guide-entry" id="upload-entry" >
+                <div v-if="loginUsrInfo && loginUsrInfo.name" class="guide-entry" id="upload-entry" >
                     <div class="guide-entry-renderer">
                         <a href="#/compete" class="guide-entry-renderer">
                             <i class="fa fa-paw icon"></i>
@@ -527,6 +527,10 @@ var temp = {
                         <el-input v-model="datumForm.unstableDatum.nickname" v-bind:disabled="!datumForm.editable"></el-input>
                     </el-form-item>
 
+                    <el-form-item label="微信" prop="wechat">
+                        <el-input v-model="datumForm.unstableDatum.wechat" v-bind:disabled="!datumForm.editable"></el-input>
+                    </el-form-item>
+
                     <el-form-item label="等级" prop="level" @change="showLevelTip()">
                         <el-select
                         v-model="datumForm.unstableDatum.level"
@@ -570,7 +574,7 @@ var temp = {
                     </el-form-item>
 
                     <el-form-item label="头像" prop="avatar">
-                        <img v-if="!datumForm.editable" :src="usrDtum.avatar"></img>
+                        <img v-if="!datumForm.editable" :src="datumForm.unstableDatum.avatar"></img>
                         <el-upload
                             v-if="datumForm.editable"
                             class=""
@@ -746,8 +750,11 @@ var temp = {
 
         <div id="match-list">
             <p v-for="(match, index) in matches" :key="match.id" class="match" @click="showMatchDetail(match, index)">
-                <a href="javascript: return false;" class="nodec" :title="'对手编号：' + (match.offensive? match.defense: match.offense)">
-                    VS {{ match.offensive? match.defense_nickname: match.offense_nickname }}
+                <a href="javascript: ;" class="nodec" :title="'对手编号：' + (match.offensive? match.defense: match.offense)">
+                    VS {{ match.offensive
+                        ? match.defense_nickname + ' ' + (match.defense_wechat || '')
+                        : match.offense_nickname + ' ' + (match.offense_wechat || '')
+                    }}
                 </a>
             </p>
 

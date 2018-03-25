@@ -172,7 +172,6 @@
                     if(!usr.is_self){
                         var matchingUsrIds = collectMatchingUsrs();
                         if(matchingUsrIds.indexOf(usr.usr_id) == -1){// 非交战
-                            console.log(usr)
                             if(usr.status ==1 ){// 接收对战
                                 var menu = new BMap.MenuItem('交战',function(e,ee,marker){
                                     window.foundMatch(usr.usr_id);

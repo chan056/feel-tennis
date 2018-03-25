@@ -296,7 +296,11 @@ const routerConfig = {
                 r.query('fetchRelatedMatches', params, res, req)
             },
             limit: {level: 10}
-        }
+        },
+        
+        '/usrDatumIntegrity': function(params, res, req){
+            r.query('checkUsrDatumIntegrity', params, res, req)
+        },
     },
 
     post: {

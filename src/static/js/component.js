@@ -149,10 +149,10 @@ COMPONENTS.HeaderComponent = {
 			tools.xhr('/login', function(){
 				// this.fetchUsrLoginInfo();
 
-				this.$message({
-					message: '登录成功',
-					type: 'success'
-				});
+				// this.$message({
+				// 	message: '登录成功',
+				// 	type: 'success'
+				// });
 
 				location.reload();
 
@@ -284,6 +284,10 @@ COMPONENTS.HeaderComponent = {
 		}
 
 		this.fetchUsrLoginInfo();
+
+		$('.aside-menu-btn').on('click', function(){
+			$('#root-container').toggleClass('brief');
+		});
 	},
 
 	created: function(){
@@ -291,6 +295,7 @@ COMPONENTS.HeaderComponent = {
 			this.cityZH = city.name;
 		}.bind(this))
 	},
+
 	// beforeCreate: function () {
 	// 	console.group('beforeCreate 创建前状态===============》');
 	//    console.log("%c%s", "color:red" , "el     : " + this.$el); //undefined
@@ -673,11 +678,11 @@ COMPONENTS.Video = {
 
 		capture: function(){
 			this.captureParams.et = this.getVideoTime();
-			this.shooting = true;
-
 			if(this.captureParams.et <= this.captureParams.st){
 				return;
 			}
+
+			this.shooting = true;
 			
 			tools.xhr('/gifLink?' + $.param(this.captureParams), function(resData){
 				this.gifLink = resData;
@@ -1012,6 +1017,7 @@ COMPONENTS.Datum = {
 			datumForm:{
 				unstableDatum: {
 					nickname: '',
+					wechat: '',
 					level : '',
 					status: '1',
 					avatar: '',
@@ -1019,6 +1025,7 @@ COMPONENTS.Datum = {
 				},
 				datumFormRules: {
 					nickname:[{required: true, message: '昵称不能为空'}],
+					wechat:[{required: true, message: '微信不能为空'}],
 					level:[{required: true, message: '水平不能为空'}],
 					status:[{required: true, message: '状态不能为空'}],
 					avatar: [{required: true, message: '头像必填'}],
@@ -1053,6 +1060,7 @@ COMPONENTS.Datum = {
 		fetchUsrDatum: function(){
 			tools.xhr('/usrDatum', function(res){
 				this.usrDtum.nickname = this.datumForm.unstableDatum.nickname = res.nickname;
+				this.usrDtum.wechat = this.datumForm.unstableDatum.wechat = res.wechat;
 				this.usrDtum.level = this.datumForm.unstableDatum.level = res.level;
 				this.usrDtum.status = this.datumForm.unstableDatum.status = res.status;
 				this.usrDtum.avatar = this.datumForm.unstableDatum.avatar = res.avatar;
@@ -1106,7 +1114,7 @@ COMPONENTS.Datum = {
 
 		selectDefaultAvatar: function(e){
 			var t = $(e.target);
-			this.datumForm.avatar = t.attr('src');
+			this.datumForm.unstableDatum.avatar = this.datumForm.avatar = t.attr('src');
 			t.addClass('selected').siblings().removeClass('selected')
 		},
 	},
@@ -1689,7 +1697,8 @@ COMPONENTS.Compete = {
 			defenseDialogVisible: false,
 
 			matches: window.matches || [],
-			match: {}
+			match: {},
+			usrDatumIntegrity: 0
 		};
 
 		return d;
@@ -1707,6 +1716,10 @@ COMPONENTS.Compete = {
 
 		// 发起比赛
 		foundMatch: function(defenseId){
+			if(!usrDatumIntegrity){
+				return;
+			}
+
 			if(this.matches.length >= 1){
 				this.$message({
 					message: '请先关闭之前的比赛',
@@ -1727,6 +1740,10 @@ COMPONENTS.Compete = {
 
 		// 接受比赛
 		acceptChallenge: function(){
+			if(!usrDatumIntegrity){
+				return;
+			}
+
 			tools.xhr('/match', function(res){
 				this.fetchRelatedMatches();
 
@@ -1799,6 +1816,22 @@ COMPONENTS.Compete = {
 			}
 		},
 
+		checkUsrDatumIntegrity: function(){
+			tools.xhr('/usrDatumIntegrity', function(res){
+				this.usrDatumIntegrity = res;
+				if(!res){
+					this.$confirm('请完善资料', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'warning'
+					}).then(() => {
+						location.href="#/datum";
+					}).catch(() => {
+						location.href="#/datum";
+					});
+				}
+			}.bind(this));
+		}
 	},
 
 	mounted: function(){
@@ -1815,5 +1848,9 @@ COMPONENTS.Compete = {
 		this.fetchRelatedMatches();
 
 		window.foundMatch = this.foundMatch;
+	},
+
+	created: function(){
+		this.checkUsrDatumIntegrity();
 	}
 }
