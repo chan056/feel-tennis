@@ -95,6 +95,9 @@ em {
 .el-pagination {
   margin: 30px 0;
 }
+body {
+  min-width: 600px;
+}
 #main {
   min-height: 500px;
 }
@@ -115,6 +118,9 @@ app {
   justify-content: flex-start;
   align-content: flex-start;
   align-items: flex-start;
+}
+#root-container.brief #aside {
+  flex-basis: 100px;
 }
 #aside {
   width: 300px;
@@ -164,10 +170,14 @@ app {
   padding: 20px 0;
   border: 1px solid #dcdfe6;
   border-width: 0 0 1px 1px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 #main-router-view {
-  width: 1000px;
-  margin: auto;
+  padding: 0 10px;
+  flex-grow: 1;
+  max-width: 1000px;
 }
 #main-router-view .el-breadcrumb {
   margin-bottom: 20px;

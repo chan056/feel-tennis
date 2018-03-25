@@ -1,0 +1,14 @@
+@media screen and (max-width: 1000px) {
+  .aside-menu-btn {
+    display: none;
+  }
+  #aside {
+    flex-basis: 100px;
+  }
+  #searchForm .el-form-item__content {
+    margin-left: 0;
+  }
+  #search-form-wrapper {
+    width: 58%;
+  }
+}
