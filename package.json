@@ -18,11 +18,10 @@
     "nodemailer": "^4.4.2",
     "nodemailer-smtp-transport": "^2.7.4",
     "path-to-regexp": "^2.1.0",
-    "subtitles-parser": "0.0.2",
-    "webpack": "^3.8.1"
+    "subtitles-parser": "0.0.2"
   },
   "devDependencies": {
-    "open": "0.0.5"
+    "open": "0.0.5",
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
