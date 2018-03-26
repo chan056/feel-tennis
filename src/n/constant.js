@@ -1,7 +1,10 @@
 module.exports = {
     aesKey: 'key',// 密钥
 
-    whiteList: 'http://localhost:3000/',// 访问白名单
+    whiteList: [
+        'http://localhost:3000/',
+        'http://www.chantube.cn'
+    ],// 访问白名单
     bootJS: 'tube.js',// JS入口
     sessionSecret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD',// session加密字符
     maxDayView: 100,// 注册用户最大访问量

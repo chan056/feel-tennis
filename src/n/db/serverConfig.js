@@ -26,7 +26,6 @@ module.exports = function(req, res) {
 			disposeApi();
 		}
 
-		// 提取todo
 		function disposeStaticResource(){
 			var realPath;
 	
@@ -44,14 +43,15 @@ module.exports = function(req, res) {
 							res.end(err);
 						} else {
 							res.writeHead(200, {
-								'Content-Type': contentType
+								'Content-Type': contentType,
+								'Cache-Control': 'max-age=3600'
 							});
 	
 							// 所有的静态资源添加同域限制 todo
 							if(ext == 'm3u8'){
 								let referer = req.headers.referer;
-	
-								if(referer != constants.whiteList + '?' && referer != constants.whiteList){
+
+								if(constants.whiteList.indexOf(referer) == -1){
 									return res.end();
 								}else{
 									res.write(file, "binary");
