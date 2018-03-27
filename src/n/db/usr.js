@@ -7,8 +7,7 @@ module.exports = function(req, fn, res){
 
     if(cookies.sid){
         let crypto = require('../crypto.js');
-        let CONSTANT = require('../constant');
-        sid = crypto.aesDecrypt(cookies.sid, CONSTANT.sessionSecret);
+        sid = crypto.aesDecrypt(cookies.sid, constants.sessionSecret);
     }
     
     if(sid){

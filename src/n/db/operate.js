@@ -604,6 +604,15 @@ let operations = {
 				// conn.query('select * from black where ip == ${ip}')
 				let sql = `insert into black (ip) values (${ip})`;
 				conn.query(sql);
+
+				require('../cookie').setCookie(res, {
+					name: `bear`,
+					value: '1',
+					expires: new Date(new Date().getTime()+10*60*60*24*1000).toUTCString(),
+					HttpOnly: true
+				});
+
+				res.end();
 			}else{
 				let code = Math.floor(Math.random() * 1000000000);
 				let email = postObj.email;
@@ -855,6 +864,13 @@ let operations = {
 			if (err) throw err;
 
 			if(result.affectedRows){
+				require('../cookie').setCookie(res, {
+					name: `bear`,
+					value: '1',
+					expires: new Date(new Date().getTime()+10*60*60*24*1000).toUTCString(),
+					HttpOnly: true
+				});
+
 				res.end();
 			}
 		});

@@ -497,6 +497,10 @@ COMPONENTS.Feedbacks = {
 
         blockUsr: function(ip){
             tools.xhr('/blockedUsr', function(resData){
+                this.$message({
+                    message: '加黑成功',
+                    type: 'success'
+                });
 			}.bind(this), 'post', {
                 ip: ip
             });

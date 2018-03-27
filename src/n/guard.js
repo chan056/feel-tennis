@@ -8,11 +8,14 @@ module.exports = function(req, res, fn){
     let sql = `select * from black where ip = '${clientIp}'`;
 
     conn.query(sql, function(err, result){
-        if(!result || !result.length){
-            fn();
-        }else if(result.length){
-            res.end();
-            console.log(`${clientIp}在黑名单`);
+        if(result && result.length){
+            let cookies = require('cookie').parse(req.headers.cookie || '');
+            if(cookies.bear){
+                res.end();
+                return console.log(`${clientIp}在黑名单`);
+            }
         }
-    })
+
+        fn && fn();
+    });
 }
