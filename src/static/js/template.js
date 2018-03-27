@@ -152,11 +152,17 @@ var temp = {
                     </a>
                 </div>
             </div>
-            <div class="guide-section">
-                <div v-if="loginUsrInfo && loginUsrInfo.is_admin == 1" class="guide-entry" id="upload-entry" >
+            <div class="guide-section" v-if="loginUsrInfo && loginUsrInfo.is_admin == 1">
+                <div class="guide-entry" id="upload-entry" >
                     <a href="#/upload" class="guide-entry-renderer">
                         <i class="el-icon-upload icon"></i>
                         <span class="text">上传</span>
+                    </a>
+                </div>
+                <div class="guide-entry" id="upload-entry" >
+                    <a href="#/feedbacks" class="guide-entry-renderer">
+                        <i class="el-icon-upload icon"></i>
+                        <span class="text">反馈列表</span>
                     </a>
                 </div>
             </div>
@@ -188,7 +194,6 @@ var temp = {
                     </router-link>
                 </li>
             </ul>
-            <p class="hidden"> v-if="total >= pageSize"</p>
             <el-pagination
                 layout="prev, pager, next"
                 :total="total"

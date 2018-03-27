@@ -225,8 +225,9 @@ temp.upload =  `
 `;
 
 COMPONENTS.Upload = {
-	props: [''],
+	props: ['isEdit'],
 	data: function () {
+        console.log(this.isEdit);
 		let tagConfig = {
 			visibility: false,
 			title: '新建标签',
@@ -392,5 +393,135 @@ COMPONENTS.Upload = {
 };
 
 routeConfig.push(
-    { path: '/upload', component: COMPONENTS.Upload, props: true, },
+    { path: '/upload', component: COMPONENTS.Upload, props: function(route){return {isEdit: route.query.isEdit}} },
+);
+
+
+temp.feedbacks =  `
+    <div>
+        <h2>反馈列表</h2>
+
+        <el-table
+        :data="feedbacks"
+        style="width: 100%">
+            <el-table-column
+                prop="id"
+                label="编号">
+            </el-table-column>
+            <el-table-column
+                prop="ip"
+                label="ip">
+            </el-table-column>
+            <el-table-column
+                prop="description"
+                label="描述">
+            </el-table-column>
+            <el-table-column
+                prop="site"
+                label="网址">
+            </el-table-column>
+            <el-table-column
+                prop="wechat"
+                label="微信">
+            </el-table-column>
+            <el-table-column
+                prop="email"
+                label="邮件">
+            </el-table-column>
+            <el-table-column
+                prop="files"
+                label="文件">
+            </el-table-column>
+            <el-table-column
+                fixed="right"
+                label="操作"
+                width="100">
+                <template slot-scope="scope">
+                    <el-button @click="deleteFeedback(scope.row.id)" type="text" size="small">删除</el-button>
+                    <el-button @click="blockUsr(scope.row.ip)" type="text" size="small">加黑</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <el-pagination
+            layout="prev, pager, next"
+            :total="total"
+            :page-size="pageSize"
+            @current-change="fetchFeedbacks">
+        </el-pagination>
+    </div>
+`;
+
+COMPONENTS.Feedbacks = {
+	data: function () {
+
+		var d = {
+            pageSize: 10,
+            curPage: 0,
+            total: 0,
+			feedbacks: []
+		};
+
+		return d;
+	},
+	methods: {
+
+		postTag(){
+
+			tools.xhr('/tag', function(){
+				console.log(arguments)
+			}, 'post', this.newTag);
+			
+		},
+
+		fetchFeedbacks(pageNum){
+			tools.xhr('/feedbacks', function(resData){
+                this.feedbacks = resData.datalist;
+                this.total = resData.total;
+                this.curPage = pageNum;
+			}.bind(this), 'get', {
+                pageNum: pageNum - 1,
+                pageSize: this.pageSize
+            });
+        },
+        
+        deleteFeedback: function(id){
+            tools.xhr('/feedback/' + id, function(resData){
+                this.fetchFeedbacks(this.curPage);
+                this.$message({
+                    message: '删除成功',
+                    type: 'success'
+                });
+			}.bind(this), 'delete');
+        },
+
+        blockUsr: function(ip){
+            tools.xhr('/blockedUsr', function(resData){
+                this.$message({
+                    message: '加黑成功',
+                    type: 'success'
+                });
+			}.bind(this), 'post', {
+                ip: ip
+            });
+        }
+	},
+
+	// watch: {'SO.albumId': function(to, from){
+	// 	if(to){
+	// 		this.queryMaker(to)
+	// 	}else{
+	// 		this.selectedMaker = '';
+	// 	}
+	// }},
+
+    template: temp.feedbacks,
+    
+    mounted: function(){
+        this.fetchFeedbacks(1);
+    }
+};
+
+routeConfig.push(
+    { path: '/feedbacks', component: COMPONENTS.Feedbacks, props: function(route){return {isEdit: route.query.isEdit}} },
 );

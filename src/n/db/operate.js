@@ -497,20 +497,22 @@ let operations = {
 
 	fetchFeedbackList: function(res, qualification, params){
 		var sql = `select * from feedback order by id desc`;
+		sql = disposePageSql(sql, params);
 
-		conn.query(sql, [
-			postObj.desc, 
-			req.connection.remoteAddress, 
-			postObj.site, 
-			postObj.wechat, 
-			postObj.email, 
-			postObj.files,
-			this.usrInfo.usrId || 0
-		], function(err, result, fields){
+		conn.query(sql, function(err, list, fields){
 			if(err)
 				console.log(err.sql, err.sqlMessage) ;
 			
-			res.end('success');
+			conn.query('select count(*) as count from feedback', function(err, result){
+
+				let json = JSON.stringify({
+					datalist: list,
+					pageNum: params.pageNum,
+					total: result[0].count
+				});
+
+				res.end(json);
+			})
 		});
 	},
 
@@ -536,99 +538,7 @@ let operations = {
 		});
 	},
 
-	// 发起比赛 post
-	foundMatch: function(res, postObj, req){
-		let sql = `insert into competition (offense, defense, offense_time, stage) values (${this.usrInfo.usrId}, ${postObj.defenseId}, now(), 1)`;
-
-		conn.query(sql, function(err, result){
-			if(err)
-				console.log(err);
-
-			res.end();
-		});
-	},
-
-	// 接受比赛 patch
-	acceptChallenge: function(res, postObj, req){
-		let sql = `update competition set stage=2, defense_time=now() where id=${postObj.matchId}`;
-		conn.query(sql, function(err, result){
-			if(err)
-				console.log(err);
-
-			res.end();
-		});
-	},
-	
-	// 标记比赛结果 patch
-	markMatchResult: function(res, patchObj, req){
-		let sql = `select * from competition where id=${patchObj.matchId}`;
-		let usrId = this.usrInfo.usrId;
-		conn.query(sql, function(err, result){
-			if(err)
-				console.log(err);
-
-			if(result && result[0]){
-				let offenseUsrId = result[0].offense;
-				let defenseUsrId = result[0].defense;
-				let offenseRes = result[0].offense_res;
-				let defenseRes = result[0].defense_res;
-				let offenseTime = +result[0].offense_time;
-				let defenseTime = +result[0].defense_time;
-				let NOW = +new Date();
-				let ONEDAY = 1 * 24 * 60 * 60 *1000;
-
-				let usrMarkedResult = patchObj.result;
-				let doMatchClose = false;
-
-				if(offenseUsrId == usrId){
-					if(NOW - offenseTime < ONEDAY){
-						res.statusCode = 400;
-						res.statusMessage = 'should mark later';
-						return res.end();
-					}
-
-					if(defenseRes){
-						doMatchClose = true;
-						sql = `update competition set offense_res=${usrMarkedResult}, stage=3, close_time=now() where id=${patchObj.matchId}`;
-					}else
-						sql = `update competition set offense_res=${usrMarkedResult} where id=${patchObj.matchId}`;
-					
-				}else if(defenseUsrId == usrId){
-					if(NOW - defenseTime < ONEDAY){
-						res.statusCode = 400;
-						res.statusMessage = 'should mark later';
-						return res.end();
-					}
-
-					if(offenseRes){
-						doMatchClose = true;
-						sql = `update competition set defense_res=${usrMarkedResult}, stage=3, close_time=now() where id=${patchObj.matchId}`;
-					}else
-						sql = `update competition set defense_res=${usrMarkedResult} where id=${patchObj.matchId}`;
-				}
-
-				let offenseDefense = defenseRes * usrMarkedResult;
-				// 1 2 || 2 1 || 3 3
-				if(doMatchClose){
-					if(offenseDefense != 2 && offenseDefense != 9){
-						res.statusCode = 400;
-						res.statusMessage = 'match result error';
-						return res.end();
-					}
-					// 修改 usr 胜负
-				}
-
-				conn.query(sql, function(err, result){
-					if(err)
-						console.log(err);
-
-					res.end();
-				});
-			}
-		})
-	},
-
-	// POST
+	// ===============POST================
 	login: function(res, postObj, req){
 		var sql = `select * from usr where name=? and psw=?`;
 
@@ -788,8 +698,8 @@ let operations = {
 
 	creatFeedback: function(res, postObj, req){
 		var sql = `INSERT INTO feedback 
-			(description, ip, site, wechat, email, files, usr_id)
-			VALUES (?, ?, ?, ?, ?, ?, ?)`;
+			(description, ip, site, wechat, email, files, usr_id, time)
+			VALUES (?, ?, ?, ?, ?, ?, ?, now())`;
 
 		conn.query(sql, [
 			postObj.desc, 
@@ -927,8 +837,30 @@ let operations = {
 		});
 	},
 
+	foundMatch: function(res, postObj, req){
+		let sql = `insert into competition (offense, defense, offense_time, stage) values (${this.usrInfo.usrId}, ${postObj.defenseId}, now(), 1)`;
+
+		conn.query(sql, function(err, result){
+			if(err)
+				console.log(err);
+
+			res.end();
+		});
+	},
+
+	blockUsr: function(res, postObj){
+		let sql =  `INSERT INTO black (ip, time) VALUES (?, now())`;
+
+		conn.query(sql, [postObj.ip], function (err, result, fields) {
+			if (err) throw err;
+
+			if(result.affectedRows){
+				res.end();
+			}
+		});
+	},
+
 	// ===============PATCH================
-	// 投票
 	voteVideo: function(res, patchObj){
 		let voteType = patchObj.type;
 		let sql = '';
@@ -1080,25 +1012,99 @@ let operations = {
 				}
 			});
 		}
-	}
-}
+	},
 
-function responseQry(sql, res, single){
-	conn.query(sql, function (err, result, fields) {
-		if (err) throw err;
+	acceptChallenge: function(res, patchObj, req){
+		let sql = `update competition set stage=2, defense_time=now() where id=${patchObj.matchId}`;
+		conn.query(sql, function(err, result){
+			if(err)
+				console.log(err);
 
-		if(result){
-			if(single){
-				if(result[0]){
-					result = JSON.stringify(result[0]);
-					res.end(result)
+			res.end();
+		});
+	},
+	
+	markMatchResult: function(res, patchObj, req){
+		let sql = `select * from competition where id=${patchObj.matchId}`;
+		let usrId = this.usrInfo.usrId;
+		conn.query(sql, function(err, result){
+			if(err)
+				console.log(err);
+
+			if(result && result[0]){
+				let offenseUsrId = result[0].offense;
+				let defenseUsrId = result[0].defense;
+				let offenseRes = result[0].offense_res;
+				let defenseRes = result[0].defense_res;
+				let offenseTime = +result[0].offense_time;
+				let defenseTime = +result[0].defense_time;
+				let NOW = +new Date();
+				let ONEDAY = 1 * 24 * 60 * 60 *1000;
+
+				let usrMarkedResult = patchObj.result;
+				let doMatchClose = false;
+
+				if(offenseUsrId == usrId){
+					if(NOW - offenseTime < ONEDAY){
+						res.statusCode = 400;
+						res.statusMessage = 'should mark later';
+						return res.end();
+					}
+
+					if(defenseRes){
+						doMatchClose = true;
+						sql = `update competition set offense_res=${usrMarkedResult}, stage=3, close_time=now() where id=${patchObj.matchId}`;
+					}else
+						sql = `update competition set offense_res=${usrMarkedResult} where id=${patchObj.matchId}`;
+					
+				}else if(defenseUsrId == usrId){
+					if(NOW - defenseTime < ONEDAY){
+						res.statusCode = 400;
+						res.statusMessage = 'should mark later';
+						return res.end();
+					}
+
+					if(offenseRes){
+						doMatchClose = true;
+						sql = `update competition set defense_res=${usrMarkedResult}, stage=3, close_time=now() where id=${patchObj.matchId}`;
+					}else
+						sql = `update competition set defense_res=${usrMarkedResult} where id=${patchObj.matchId}`;
 				}
-			}else{
-				result = JSON.stringify(result);
-				res.end(result);
+
+				let offenseDefense = defenseRes * usrMarkedResult;
+				// 1 2 || 2 1 || 3 3
+				if(doMatchClose){
+					if(offenseDefense != 2 && offenseDefense != 9){
+						res.statusCode = 400;
+						res.statusMessage = 'match result error';
+						return res.end();
+					}
+					// 修改 usr 胜负
+				}
+
+				conn.query(sql, function(err, result){
+					if(err)
+						console.log(err);
+
+					res.end();
+				});
 			}
-		}
-	});
+		})
+	},
+
+	// ===============DELETE================
+	deleteFeedback: function (res, deleteObj, req) {
+		
+		let sql = 'delete from feedback where id=?';
+
+		conn.query(sql, [deleteObj.id], function (err, result, fields) {
+			if (err) throw err;
+
+			if(result.affectedRows == 1)
+				res.end()
+		});
+
+	},
 }
 
 // 执行SQL
@@ -1145,6 +1151,35 @@ module.exports.patch = function (operation, request, response, pathParams) {
 	form.parse(request, function(err, fields, files){
 		pathParams && Object.assign(fields, pathParams);
 		operations[operation] && operations[operation](response, fields, request);
+	});
+}
+
+module.exports.delete = function (operation, request, response, pathParams) {
+	operations.usrInfo = request.usrInfo;
+	var formidable = require('formidable');
+	var form = new formidable.IncomingForm();
+
+	form.parse(request, function(err, fields, files){
+		pathParams && Object.assign(fields, pathParams);
+		operations[operation] && operations[operation](response, fields, request);
+	});
+}
+
+function responseQry(sql, res, single){
+	conn.query(sql, function (err, result, fields) {
+		if (err) throw err;
+
+		if(result){
+			if(single){
+				if(result[0]){
+					result = JSON.stringify(result[0]);
+					res.end(result)
+				}
+			}else{
+				result = JSON.stringify(result);
+				res.end(result);
+			}
+		}
 	});
 }
 

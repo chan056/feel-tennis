@@ -301,6 +301,11 @@ const routerConfig = {
         '/usrDatumIntegrity': function(params, res, req){
             r.query('checkUsrDatumIntegrity', params, res, req)
         },
+
+        '/feedbacks': function(params, res, req){
+            r.query('fetchFeedbackList', params, res, req)
+        },
+        
     },
 
     post: {
@@ -409,8 +414,12 @@ const routerConfig = {
             form.parse(req);
         },
     
-        '/feedback': function(req, res){
-            r.post('creatFeedback', req, res);
+        '/feedback': {
+            fn: function(req, res){
+                r.post('creatFeedback', req, res);
+            },
+
+            limit: {level: 100}
         },
     
         '/voteNext': {
@@ -440,6 +449,13 @@ const routerConfig = {
                 r.post('foundMatch', req, res, pathParams);
             },
             limit: {level: 10}
+        },
+
+        '/blockedUsr': {
+            fn: function(req, res, pathParams){
+                r.post('blockUsr', req, res, pathParams);
+            },
+            limit: {level: 100}
         },
     },
     // ============put update完整资源=============
@@ -474,6 +490,14 @@ const routerConfig = {
     },
 
     // delete 删除资源
+    delete: {
+        '/feedback/:id': {
+            fn: function(req, res, pathParams){
+                r.delete('deleteFeedback', req, res, pathParams);
+            },
+            limit: {level: 100}
+        }
+    }
 }
 
 module.exports = routerConfig;

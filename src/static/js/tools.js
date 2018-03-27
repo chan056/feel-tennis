@@ -3,7 +3,7 @@ let tools = {
     xhr: function xhr(api, sfn, type, params, errorHandle){
         type = type || 'get';
         if(type == 'get'){
-            params = {params: params};
+            params = {params: params};// 加到链接后面?a=1&b=2
         }
     
         axios[type](api, params)
