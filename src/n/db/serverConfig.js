@@ -1,7 +1,7 @@
 module.exports = function(req, res) {
 	
-	// 检查用户知否在黑名单
-	require('../guard')(req, res, function(){
+	// 检查用户IP是否在黑名单
+	require('../ip_guard')(req, res, function(){
 		const url = require('url');
 		const fs = require('fs');
 		const path = require('path');

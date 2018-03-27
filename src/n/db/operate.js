@@ -496,7 +496,16 @@ let operations = {
 	},
 
 	fetchFeedbackList: function(res, qualification, params){
-		var sql = `select * from feedback order by id desc`;
+		var sql = `SELECT
+			f.*,
+			(SELECT id from black where b.usr_id = f.usr_id) as black_usr_id_record,
+			(SELECT id from black where b.ip = f.ip) as black_ip_record
+			FROM
+				black as b,
+				feedback as f
+			ORDER BY
+				f.id DESC`;
+
 		sql = disposePageSql(sql, params);
 
 		conn.query(sql, function(err, list, fields){
@@ -706,13 +715,17 @@ let operations = {
 	},
 
 	creatFeedback: function(res, postObj, req){
+		let ip = require('client-ip')(req);
+		if(ip == '::1'){
+			ip = '::ffff:127.0.0.1';
+		}
 		var sql = `INSERT INTO feedback 
 			(description, ip, site, wechat, email, files, usr_id, time)
 			VALUES (?, ?, ?, ?, ?, ?, ?, now())`;
 
 		conn.query(sql, [
 			postObj.desc, 
-			req.connection.remoteAddress, 
+			ip, 
 			postObj.site, 
 			postObj.wechat, 
 			postObj.email, 
@@ -858,22 +871,48 @@ let operations = {
 	},
 
 	blockUsr: function(res, postObj){
-		let sql =  `INSERT INTO black (ip, time) VALUES (?, now())`;
+		let sql;
+		if(postObj.usrId){
+			conn.query(`select id from black where usr_id=${postObj.usr_id}`, function(err, result){
+				
+				if(!result){
+					sql =  `INSERT INTO black (ip, usr_id, time) VALUES ('${postObj.ip}', ${postObj.usrId}, now())`;
+					addBlack(sql);
+				}else{
+					res.statusCode = 400;
+					res.statusMessage = 'record exist';
+					res.end();
+				}
+			});
+		}else if(postObj.ip){
+			conn.query(`select id from black where ip=${postObj.ip}`, function(err, result){
+				if(!result){
+					sql =  `INSERT INTO black (ip, time) VALUES ('${postObj.ip}', now())`;
+					addBlack(sql);
+				}else{
+					res.statusCode = 400;
+					res.statusMessage = 'record exist';
+					res.end();
+				}
+			});
+		}
 
-		conn.query(sql, [postObj.ip], function (err, result, fields) {
-			if (err) throw err;
-
-			if(result.affectedRows){
-				require('../cookie').setCookie(res, {
-					name: `bear`,
-					value: '1',
-					expires: new Date(new Date().getTime()+10*60*60*24*1000).toUTCString(),
-					HttpOnly: true
-				});
-
-				res.end();
-			}
-		});
+		function addBlack(sql){
+			conn.query(sql, function (err, result, fields) {
+				if (err) throw err;
+	
+				if(result.affectedRows){
+					require('../cookie').setCookie(res, {
+						name: `bear`,
+						value: '1',
+						expires: new Date(new Date().getTime()+10*60*60*24*1000).toUTCString(),
+						HttpOnly: true
+					});
+	
+					res.end();
+				}
+			});
+		}
 	},
 
 	// ===============PATCH================

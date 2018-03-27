@@ -413,6 +413,10 @@ temp.feedbacks =  `
                 label="ip">
             </el-table-column>
             <el-table-column
+                prop="usr_id"
+                label="用户id">
+            </el-table-column>
+            <el-table-column
                 prop="description"
                 label="描述">
             </el-table-column>
@@ -438,7 +442,7 @@ temp.feedbacks =  `
                 width="100">
                 <template slot-scope="scope">
                     <el-button @click="deleteFeedback(scope.row.id)" type="text" size="small">删除</el-button>
-                    <el-button @click="blockUsr(scope.row.ip)" type="text" size="small">加黑</el-button>
+                    <el-button v-if="!scope.row.black_usr_id_record && !scope.row.black_ip_record" @click="blockUsr(scope.row.ip, scope.row.usr_id, $event)" type="text" size="small">加黑</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -495,14 +499,22 @@ COMPONENTS.Feedbacks = {
 			}.bind(this), 'delete');
         },
 
-        blockUsr: function(ip){
-            tools.xhr('/blockedUsr', function(resData){
-                this.$message({
-                    message: '加黑成功',
-                    type: 'success'
+        blockUsr: function(ip, usrId, e){
+            this.$confirm('确认加黑？')
+            .then(function(){
+                tools.xhr('/blockedUsr', function(resData){
+                    this.$message({
+                        message: '加黑成功',
+                        type: 'success'
+                    });
+
+                    // $(e.target).remove();
+                }.bind(this), 'post', {
+                    ip: ip,
+                    usrId: usrId
                 });
-			}.bind(this), 'post', {
-                ip: ip
+            }.bind(this)).catch(function(){
+
             });
         }
 	},
