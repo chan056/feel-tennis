@@ -497,14 +497,26 @@ let operations = {
 
 	fetchFeedbackList: function(res, qualification, params){
 		var sql = `SELECT
-			f.*,
-			(SELECT id from black where b.usr_id = f.usr_id) as black_usr_id_record,
-			(SELECT id from black where b.ip = f.ip) as black_ip_record
-			FROM
-				black as b,
-				feedback as f
-			ORDER BY
-				f.id DESC`;
+			*,(
+				SELECT
+					count(*)
+				FROM
+					black AS b
+				WHERE
+					b.usr_id = feedback.usr_id
+			) AS black_usr_id_record ,
+			(
+				SELECT
+					count(*)
+				FROM
+					black AS b
+				WHERE
+					b.ip = feedback.ip
+			) AS black_ip_record
+		FROM
+			feedback
+		ORDER BY
+			id DESC`;
 
 		sql = disposePageSql(sql, params);
 
