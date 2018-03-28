@@ -99,7 +99,13 @@ const routerConfig = {
                 sql += ' ' + clauses.join(' and ');
             }
     
-            r.excuteSQL(sql, res);
+            r.excuteSQL(sql, res, function(resData){
+                res.end( JSON.stringify({
+                        datalist: resData,
+                        total: resData.length
+                    })
+                )
+            });
         },
     
         '/tags(/:sport_id)?': function(params, res, req){

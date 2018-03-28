@@ -407,8 +407,8 @@ COMPONENTS.Sports = {
 	methods: {
 		fetchSports: function(pageNum){
 			tools.xhr('/sports', function(resData){
-				this.sports = resData;
-				this.total = resData.length;
+				this.sports = resData.datalist;
+				this.total = resData.total;
 			}.bind(this),'get',{
 				pageNum: pageNum,
 				pageSize: this.pageSize
@@ -444,8 +444,8 @@ COMPONENTS.AlbumList = {
 	methods: {
 		fetchAlbumList: function(pageNum){
 			tools.xhr('/sports/' + this.sportId + '/albums', function(resData){
-				this.albumList = resData;
-				this.total = resData.length;
+				this.albumList = resData.datalist;
+				this.total = resData.total;
 			}.bind(this),'get',{
 				pageNum: pageNum,
 				pageSize: this.pageSize
@@ -487,8 +487,8 @@ COMPONENTS.Album = {
 	methods: {
 		fetchAlbumVideo: function(pageNum){
 			tools.xhr('/albums/' + this.albumId + '/videos', function(resData){
-				this.albumVideoList = resData;
-				this.total = resData.length;
+				this.albumVideoList = resData.datalist;
+				this.total = resData.total;
 			}.bind(this),'get',{
 				pageNum: pageNum,
 				pageSize: this.pageSize
@@ -999,8 +999,8 @@ COMPONENTS.videos = {
 			params.pageNum = pageNum;
 
 			tools.xhr('/videos', function(resData){
-				this.videos = resData;
-				this.total = resData.length;
+				this.videos = resData.datalist;
+				this.total = resData.total;
 			}.bind(this), 'get', params);
 		},
 
@@ -1533,13 +1533,14 @@ COMPONENTS.Stars = {
 			pageSize: CONSTANT.PAGESIZE
 		};
 
-		tools.xhr('/vStars', function(resData){
-			d.vStars = resData;
-		});
+		// tools.xhr('/vStars', function(resData){
+		// 	d.vStars = resData,datalist;
+		// 	d.starTotal = resData.total;
+		// });
 
-		tools.xhr('/usrShotVideos', function(resData){
-			d.shotVideos = resData;
-		});
+		// tools.xhr('/usrShotVideos', function(resData){
+		// 	d.shotVideos = resData.datalist;
+		// });
 
 		return d;
 	},
@@ -1554,8 +1555,8 @@ COMPONENTS.Stars = {
 	methods: {
 		fetchVideoStar: function(pageNum){
 			tools.xhr('/vStars', function(resData){
-				this.vStars = resData;
-				this.starTotal = resData.length;
+				this.vStars = resData.datalist;
+				this.starTotal = resData.total;
 			}.bind(this),'get',{
 				pageNum: pageNum,
 				pageSize: this.pageSize
@@ -1564,8 +1565,8 @@ COMPONENTS.Stars = {
 
 		fetchShootVideo: function(pageNum){
 			tools.xhr('/usrShotVideos', function(resData){
-				this.shotVideos = resData;
-				this.videoTotal = resData.length;
+				this.shotVideos = resData.datalist;
+				this.videoTotal = resData.total;
 			}.bind(this),'get',{
 				pageNum: pageNum,
 				pageSize: this.pageSize
@@ -1592,9 +1593,9 @@ COMPONENTS.Vstar = {
 			pageSize: CONSTANT.PAGESIZE
 		};
 
-		tools.xhr('/starVideo/' + this.vStarId, function(resData){
-			d.starVideos = resData;
-		});
+		// tools.xhr('/starVideo/' + this.vStarId, function(resData){
+		// 	d.starVideos = resData;
+		// });
 
 		return d;
 	},
@@ -1608,8 +1609,8 @@ COMPONENTS.Vstar = {
 	methods: {
 		fetchStarVideo: function(pageNum){
 			tools.xhr('/starVideo/' + this.vStarId, function(resData){
-				this.starVideos = resData;
-				this.total = resData.length;
+				this.starVideos = resData.datalist;
+				this.total = resData.total;
 			}.bind(this),'get',{
 				pageNum: pageNum,
 				pageSize: this.pageSize
@@ -1656,8 +1657,8 @@ COMPONENTS.UsrVshoots = {
 	methods: {
 		fetchVideoShoot: function(pageNum){
 			tools.xhr('/usrVshoot?vId=' + this.$route.query.vId, function(resData){
-				this.shoots = resData;
-				this.total = resData.length;
+				this.shoots = resData.datalist;
+				this.total = resData.total;
 			}.bind(this),'get',{
 				pageNum: pageNum,
 				pageSize: this.pageSize

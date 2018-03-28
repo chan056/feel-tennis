@@ -8,13 +8,24 @@ let operations = {
 		let sql = 'SELECT * from sport' + qualification;
 		sql = disposePageSql(sql, params);
 
-		conn.query(sql, function (err, result, fields) {
+		conn.query(sql, function (err, list, fields) {
 			if (err) throw err;
 
-			result = JSON.stringify(result);
-			res.end(result)
-		});
+			if(params.pageSize){
+				conn.query('select count(*) as count from sport', function(err, result){
 
+					let json = JSON.stringify({
+						datalist: list,
+						total: result[0].count
+					});
+	
+					res.end(json);
+				})
+			}else{
+				result = JSON.stringify(list);
+				res.end(result);
+			}
+		});
 	},
 
 	querySkills: function (res, qualification, params) {
@@ -59,24 +70,46 @@ let operations = {
 			m.link as author_link
 			from album as a inner join maker as m 
 			where a.author_id = m.id`;
-		if(params.sport_id)
+
+		if(params.sport_id){
 			sql += ` and a.sport_id = ${params.sport_id}`;
-
-		conn.query(sql, function (err, result, fields) {
-			if (err) throw err;
-
-			result = JSON.stringify(result);
-			res.end(result)
-		});
-
+			conn.query(sql, function (err, list, fields) {
+				if (err) throw err;
+	
+				let sql = `select count(*) as count from album where sport_id=${params.sport_id}`
+	
+				conn.query(sql, function(err, result){
+					let json = JSON.stringify({
+						datalist: list,
+						total: result[0].count
+					});
+	
+					res.end(json);
+				})
+			});
+		}else{
+			conn.query(sql, function (err, result, fields) {
+				if (err) throw err;
+	
+				result = JSON.stringify(result);
+				res.end(result);
+			});
+		}
 	},
 
 	queryAlbum: function (res, qualification, params) {
-		conn.query('SELECT * from video' + qualification, function (err, result, fields) {
+		conn.query('SELECT * from video' + qualification, function (err, list, fields) {
 			if (err) throw err;
 		
-			result = JSON.stringify(result);
-			res.end(result)
+			conn.query(`select count(*) as count from video ${qualification}`, function(err, result){
+
+				let json = JSON.stringify({
+					datalist: list,
+					total: result[0].count
+				});
+
+				res.end(json);
+			})
 		});
 
 	},
@@ -284,12 +317,22 @@ let operations = {
 	},
 
 	queryUsrStars: function(res, qualification, params){
-		conn.query('SELECT * from star where usr_id=' + this.usrInfo.usrId, function (err, result, fields) {
+		let sql = 'SELECT * from star where usr_id=' + this.usrInfo.usrId;
+		sql = disposePageSql(sql, params);
+
+		conn.query(sql, function (err, list, fields) {
 			if (err) throw err;
 
-			result = JSON.stringify(result);
-			res.end(result);
-		});
+			conn.query('select count(*) as count from star where usr_id=' + this.usrInfo.usrId, function(err, result){
+
+				let json = JSON.stringify({
+					datalist: list,
+					total: result[0].count
+				});
+
+				res.end(json);
+			})
+		}.bind(this));
 	},
 
 	queryUsrVideoStars: function(res, qualification, params){
@@ -304,11 +347,28 @@ let operations = {
 		AND us.star_id = s.id
 		AND s.usr_id=${this.usrInfo.usrId}`;
 
-		conn.query(sql, function (err, result, fields) {
+		sql = disposePageSql(sql, params);
+
+		conn.query(sql, function (err, list, fields) {
 			if (err) throw err;
 
-			result = JSON.stringify(result);
-			res.end(result);
+			conn.query(`SELECT
+				count(*) as count
+			FROM
+				usr_video_star AS us
+			JOIN star AS s
+			WHERE
+				us.v_id = ${params.v_id}
+			AND us.star_id = s.id
+			AND s.usr_id=${this.usrInfo.usrId}`, function(err, result){
+
+				let json = JSON.stringify({
+					datalist: list,
+					total: result[0].count
+				});
+
+				res.end(json);
+			})
 		});
 	},
 
@@ -347,13 +407,33 @@ let operations = {
 					usr_screenshot_star AS uss
 				WHERE usr_id=${this.usrInfo.usrId}
 			)`;
+
+		sql = disposePageSql(sql, params);
 		
-		conn.query(sql, function (err, result, fields) {
+		conn.query(sql, function (err, list, fields) {
 			if (err) throw err;
 
-			result = JSON.stringify(result);
-			res.end(result);
-		});
+			conn.query(`SELECT
+			count(*) as count
+			FROM
+				video
+			WHERE
+			id IN (
+				SELECT DISTINCT
+					v_id
+				FROM
+					usr_screenshot_star AS uss
+				WHERE usr_id=${this.usrInfo.usrId}
+			)`, function(err, result){
+
+				let json = JSON.stringify({
+					datalist: list,
+					total: result[0].count
+				});
+
+				res.end(json);
+			})
+		}.bind(this));
 	},
 
 	queryStarVideo: function(res, qualification, params){
@@ -368,22 +448,64 @@ let operations = {
 				uvs.star_id = ${params.star_id}
 				and
 				uvs.v_id = v.id`;
+			
+		sql = disposePageSql(sql, params)
 		
-		conn.query(sql, function (err, result, fields) {
+		conn.query(sql, function (err, list, fields) {
 			if (err) throw err;
 
-			result = JSON.stringify(result);
-			res.end(result);
-		});
+			conn.query(`SELECT
+				count(*) as count
+				FROM
+					usr_video_star as uvs
+				join
+					video as v
+				WHERE
+				uvs.star_id = ${params.star_id}
+				and
+				uvs.v_id = v.id`, function(err, result){
+
+				let json = JSON.stringify({
+					datalist: list,
+					total: result[0].count
+				});
+
+				res.end(json);
+			})
+		}.bind(this));
 	},
 
 	queryUsrVshoot: function(res, qualification, params){
-		conn.query(`SELECT * from usr_screenshot_star where v_id=${params.vId} and usr_id=` + this.usrInfo.usrId, function (err, result, fields) {
-			if (err) throw err;
+		let sql = `SELECT
+			*
+		FROM
+			usr_screenshot_star
+		WHERE
+			v_id = ${ params.vId }
+		AND usr_id = ${ this.usrInfo.usrId }`;
+		sql = disposePageSql(sql, params);
 
-			result = JSON.stringify(result);
-			res.end(result);
-		});
+		conn.query(sql, function (err, list, fields) {
+			if (err) throw err;
+	
+			conn.query(`SELECT
+					count(*) as count
+				FROM
+					usr_screenshot_star
+				WHERE
+					v_id = ${ params.vId }
+				AND usr_id = ${ this.usrInfo.usrId }`, 
+
+			function(err, result){
+
+				let json = JSON.stringify({
+					datalist: list,
+					total: result[0].count
+				});
+
+				res.end(json);
+			})
+		}.bind(this));
 	},
 
 	queryVideoRemarks: function(res, qualification, params){
@@ -528,7 +650,6 @@ let operations = {
 
 				let json = JSON.stringify({
 					datalist: list,
-					pageNum: params.pageNum,
 					total: result[0].count
 				});
 
