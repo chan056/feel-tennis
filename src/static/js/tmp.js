@@ -629,10 +629,11 @@ temp.videosAdmin =  `
             <el-table-column
                 fixed="right"
                 label="操作"
-                width="100">
+                width="200">
                 <template slot-scope="scope">
                     <el-button @click="patchVideo(scope.row.id)" type="text" size="small">更新</el-button>
                     <el-button @click="deleteVideo(scope.row.id)" type="text" size="small">删除</el-button>
+                    <el-button @click="redirect(scope.row.id)" type="text" size="small">查看</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -692,6 +693,9 @@ COMPONENTS.VideosAdmin = {
             });
         },
 
+        redirect: function(id){
+            location.href="#/videos/"+id;
+        }
 	},
 
     template: temp.videosAdmin,

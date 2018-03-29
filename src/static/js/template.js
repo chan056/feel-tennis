@@ -161,13 +161,13 @@ var temp = {
                 </div>
                 <div class="guide-entry" id="upload-entry" >
                     <a href="#/feedbacksAdmin" class="guide-entry-renderer">
-                        <i class="el-icon-upload icon"></i>
+                        <i class="fa fa-coffee icon"></i>
                         <span class="text">反馈列表</span>
                     </a>
                 </div>
                 <div class="guide-entry" id="upload-entry" >
                     <a href="#/videosAdmin" class="guide-entry-renderer">
-                        <i class="el-icon-upload icon"></i>
+                        <i class="fa fa-video-camera icon"></i>
                         <span class="text">视频列表</span>
                     </a>
                 </div>
@@ -256,7 +256,7 @@ var temp = {
             </div>
             <ul class="block-list video-list">
                 <li v-for="video in albumVideoList">
-                    <router-link :to="{path: '/video/'+ video.id }">
+                    <router-link :to="{path: '/videos/'+ video.id }">
                         <img @mouseover="dynamivePreview($event);" @mouseout="staticPreview($event);" :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb video-thumb"/>
                         <h3 class="block-title video-title ellipsis">
                             <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
@@ -286,7 +286,7 @@ var temp = {
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ path: '/sports/' + crumb.sId }">{{crumb.sName}}</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{ path: '/albums/' + crumb.aId }">{{crumb.aName}}</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{ path: '/video/' + crumb.vId }">{{crumb.vHeadline}}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/videos/' + crumb.vId }">{{crumb.vHeadline}}</el-breadcrumb-item>
             </el-breadcrumb>
             <div class="tags">
                 <el-tag type="info" v-for="tag in tags" :key="tag.id">
@@ -424,7 +424,7 @@ var temp = {
             
             <ul class="block-list video-list">
                 <li v-for="video in videos">
-                    <router-link :to="{path: '/video/' + video.id}">
+                    <router-link :to="{path: '/videos/' + video.id}">
                         <img src="/img/logo.png" class="block-thumb video-thumb"/>
                         <h3 class="block-title video-title ellipsis">
                             <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
@@ -492,7 +492,7 @@ var temp = {
             <h2>视频列表</h2>
             <ul class="block-list video-list">
                 <li v-for="video in starVideos">
-                    <router-link :to="{path: '/video/'+ video.id }">
+                    <router-link :to="{path: '/videos/'+ video.id }">
                         <img @mouseover="dynamivePreview($event);" @mouseout="staticPreview($event);" :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb"/>
                         <h3 class="block-title video-title ellipsis">
                             <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>

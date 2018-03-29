@@ -1533,15 +1533,6 @@ COMPONENTS.Stars = {
 			pageSize: CONSTANT.PAGESIZE
 		};
 
-		// tools.xhr('/vStars', function(resData){
-		// 	d.vStars = resData,datalist;
-		// 	d.starTotal = resData.total;
-		// });
-
-		// tools.xhr('/usrShotVideos', function(resData){
-		// 	d.shotVideos = resData.datalist;
-		// });
-
 		return d;
 	},
 

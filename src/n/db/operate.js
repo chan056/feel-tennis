@@ -330,21 +330,31 @@ let operations = {
 
 	queryUsrStars: function(res, qualification, params){
 		let sql = 'SELECT * from star where usr_id=' + this.usrInfo.usrId;
-		sql = disposePageSql(sql, params);
 
-		conn.query(sql, function (err, list, fields) {
-			if (err) throw err;
+		if(params.pageSize){
+			sql = disposePageSql(sql, params);
 
-			conn.query('select count(*) as count from star where usr_id=' + this.usrInfo.usrId, function(err, result){
-
-				let json = JSON.stringify({
-					datalist: list,
-					total: result[0].count
-				});
-
-				res.end(json);
-			})
-		}.bind(this));
+			conn.query(sql, function (err, list, fields) {
+				if (err) throw err;
+	
+				conn.query('select count(*) as count from star where usr_id=' + this.usrInfo.usrId, function(err, result){
+	
+					let json = JSON.stringify({
+						datalist: list,
+						total: result[0].count
+					});
+	
+					res.end(json);
+				})
+			}.bind(this));
+		}else{
+			conn.query(sql, function (err, list, fields) {
+				if (err) throw err;
+	
+				res.end(JSON.stringify(list));
+			});
+		}
+		
 	},
 
 	queryUsrVideoStars: function(res, qualification, params){

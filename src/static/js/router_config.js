@@ -23,7 +23,7 @@ const routeConfig = [
 		meta: {title: '视频列表'},
 	},
 	{ 
-		path: '/video/:videoId', 
+		path: '/videos/:videoId', 
 		component: COMPONENTS.Video, 
 		meta: {title: '视频'},
 		props: true,

@@ -377,7 +377,7 @@ app {
   display: none;
 }
 .feedback {
-  width: 600px!important;
+  max-width: 500px !important;
   padding: 10px 20px;
 }
 .feedback h2,
