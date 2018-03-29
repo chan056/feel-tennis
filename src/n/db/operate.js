@@ -114,6 +114,17 @@ let operations = {
 
 	},
 
+	queryVinfo: function (res, qualification, params) {
+		conn.query('SELECT * from video' + qualification, function (err, result, fields) {
+			if (err) throw err;
+			
+			let vInfo = result[0];
+			result = JSON.stringify(vInfo);
+			
+			res.end(result);
+		});
+	},
+
 	queryVideo: function (res, qualification, params) {
 		const constants = require('../constant');
 		let dayView = 0;
@@ -131,7 +142,7 @@ let operations = {
 					if(dayView < constants.maxDayView){
 						conn.query(`update usr set day_view=day_view+1 where id='${usrRecord.id}'`);
 						dayViewLeft = constants.maxDayView - dayView - 1;
-						queryVinfo(dayView);
+						queryVinfo();
 					}else{
 						res.end();
 					}
@@ -150,7 +161,7 @@ let operations = {
 						if(dayView < constants.tmpUsrDayView){
 							conn.query(`update tmp_usr set day_view=day_view+1 where ip='${usrIP}'`);
 							dayViewLeft = constants.tmpUsrDayView - dayView - 1;
-							queryVinfo(dayView);
+							queryVinfo();
 						}else{
 							// 跳转到首页？
 							// res.writeHead(302, {
@@ -170,11 +181,12 @@ let operations = {
 			res.end('user type error！');
 		}
 
-		function queryVinfo(dayView){
+		function queryVinfo(){
 			conn.query('SELECT * from video' + qualification, function (err, result, fields) {
 				if (err) throw err;
 				
 				let vInfo = result[0];
+				
 				// 更新关联的表
 				let albumId = result[0].album_id;
 	
@@ -369,7 +381,7 @@ let operations = {
 
 				res.end(json);
 			})
-		});
+		}.bind(this));
 	},
 
 	queryUsrScreenshots: function(res, qualification, params){
@@ -680,6 +692,27 @@ let operations = {
 		});
 	},
 
+	queryPageVideos: function(res, qualification, params){
+		var sql = `SELECT * from video order by update_time desc`;
+
+		sql = disposePageSql(sql, params);
+
+		conn.query(sql, function(err, list, fields){
+			if(err)
+				console.log(err.sql, err.sqlMessage) ;
+			
+			conn.query('select count(*) as count from video', function(err, result){
+
+				let json = JSON.stringify({
+					datalist: list,
+					total: result[0].count
+				});
+
+				res.end(json);
+			})
+		});
+	},
+
 	// ===============POST================
 	login: function(res, postObj, req){
 		var sql = `select * from usr where name=? and psw=?`;
@@ -779,7 +812,7 @@ let operations = {
 						});
 		
 						res.statusMessage = 'regist success';
-						res.end('success');
+						res.end();
 		
 						if(email){
 							let activeCode = JSON.stringify({
@@ -807,14 +840,64 @@ let operations = {
 		});
 	},
 
+	updateVideoInfo: function(res, postObj){
+		let vId = postObj.id;
+		var sql = `update video set album_id=?, headline=?, tag=?, update_time=? where id=${postObj.id}`;
+
+		conn.query(sql, [postObj.albumId, postObj.headline, postObj.tag, +new Date()], function(err, result, fields){
+			if(err)
+				throw err;
+
+			res.end();
+
+			// 更新album 和 sport
+			let now = +new Date();
+			let albumId = postObj.albumId;
+
+			conn.query('update album set update_time = ' + now + ' where id=' + albumId);
+			conn.query('update sport set update_time = ' + now + ' where id = (select sport_id from album where id = ' + albumId + ')');
+
+			vId && this.generateVideo(vId, postObj);
+		}.bind(this));
+	},
+
+	generateVideo: function(vId, obj){
+		let videoAbsPath = obj.videoAbsPath;
+		let subtitleAbsPath = obj.subtitleAbsPath;
+
+		let videoGenerator = require('../ffmpeg/generate_video');
+		let tsDir = global.staticRoot + `/multimedia/ts/${vId}`;
+		
+		if(videoAbsPath){
+			const del = require('del');
+			const path = require('path');
+			const fs = require('fs');
+
+			del([tsDir]).then(paths => {
+				console.log('Deleted files and folders:\n', paths.join('\n'));
+				fs.mkdirSync(tsDir, 0777);
+
+				let ext = path.extname(videoAbsPath);
+				let videoStorePath = global.staticRoot + `/multimedia/pristine_v/${vId}${ext}`;
+				let videoGenerator = require('../ffmpeg/generate_video');
+				fs.renameSync(videoAbsPath, videoStorePath,);// 用于生成gif
+
+				videoGenerator.execM3U(videoStorePath, tsDir);
+				videoGenerator.screenShot(videoStorePath, tsDir);
+				videoGenerator.dynamicPreview(videoStorePath, tsDir, vId);
+
+				subtitleAbsPath && videoGenerator.storeSubtitle(subtitleAbsPath, tsDir);
+			})
+		}else{
+			subtitleAbsPath && videoGenerator.storeSubtitle(subtitleAbsPath, tsDir);
+		}
+	},
+
 	creatVedio: function(res, postObj){
 		const path = require('path');
 
 		let videoAbsPath = postObj.videoAbsPath;
 		let ext = path.extname(videoAbsPath);
-		// if(ext){
-		// 	ext = ext.replace(/\./, '');
-		// }
 
 		var sql = `INSERT INTO video 
 			(album_id, headline, tag, video_ext, update_time)
@@ -824,19 +907,7 @@ let operations = {
 			if(err)
 				throw err;
 
-			res.end('success');
-
-			// 根据生成的videoId 储存视频
-			let insertId = result.insertId;
-			let subtitleAbsPath = postObj.subtitleAbsPath;
-
-			const fs = require('fs');
-			
-			let videoStorePath = path.resolve(__dirname, `../../static/multimedia/pristine_v/${insertId}${ext}`);
-			fs.rename(videoAbsPath, videoStorePath);// 用于生成gif
-			
-			// 生成包含视频和字幕的目录
-			require('../ffmpeg/m3u.js').m3u(insertId, videoStorePath, subtitleAbsPath);
+			res.end();
 
 			// 更新album 和 sport
 			let now = +new Date();
@@ -844,7 +915,10 @@ let operations = {
 
 			conn.query('update album set update_time = ' + now + ' where id=' + albumId);
 			conn.query('update sport set update_time = ' + now + ' where id = (select sport_id from album where id = ' + albumId + ')');
-		});
+
+			let insertId = result.insertId;
+			insertId && this.generateVideo(insertId, postObj);
+		}.bind(this));
 	},
 
 	creatFeedback: function(res, postObj, req){
@@ -868,7 +942,7 @@ let operations = {
 			if(err)
 				console.log(err.sql, err.sqlMessage) ;
 			
-			res.end('success');
+			res.end();
 		});
 	},
 
@@ -885,7 +959,7 @@ let operations = {
 			if(err)
 				console.log(err.sql, err.sqlMessage) ;
 			
-			res.end('success');
+			res.end();
 		});
 	},
 
@@ -898,7 +972,7 @@ let operations = {
 			if(err)
 				throw err;
 			
-			res.end('success');
+			res.end();
 		});
 	},
 
@@ -924,7 +998,7 @@ let operations = {
 				console.log('专辑封面移动完成');
 			});
 
-			res.end('success');
+			res.end();
 		});
 	},
 
@@ -937,7 +1011,7 @@ let operations = {
 			if(err)
 				throw err;
 			// console.log(arguments);
-			res.end('success');
+			res.end();
 		});
 	},
 
@@ -1293,6 +1367,28 @@ let operations = {
 		});
 
 	},
+
+	deleteVideo: function (res, deleteObj, req) {
+		let vId = deleteObj.id;
+		let sql = `delete from video where id=${vId}`;
+
+		conn.query(sql, function (err, result, fields) {
+			if (err) throw err;
+
+			if(result.affectedRows == 1)
+				res.end()
+
+			// 删除文件
+			let del = require('del');
+			let pristineVideoPath = global.staticRoot + '/multimedia/pristine_v/' + vId + '.mp4';
+			let tsVideoPath = global.staticRoot + '/multimedia/ts/' + vId;
+
+			del([pristineVideoPath, tsVideoPath]).then(paths => {
+				console.log('Deleted files and folders:\n', paths.join('\n'));
+			});
+		});
+
+	},
 }
 
 // 执行SQL
@@ -1321,6 +1417,17 @@ module.exports.query = function (operation, params, response, request) {
 }
 
 module.exports.post = function (operation, request, response, pathParams) {
+	operations.usrInfo = request.usrInfo;
+	var formidable = require('formidable');
+	var form = new formidable.IncomingForm();
+
+	form.parse(request, function(err, fields, files){
+		pathParams && Object.assign(fields, pathParams);
+		operations[operation] && operations[operation](response, fields, request);
+	});
+}
+
+module.exports.put = function (operation, request, response, pathParams) {
 	operations.usrInfo = request.usrInfo;
 	var formidable = require('formidable');
 	var form = new formidable.IncomingForm();

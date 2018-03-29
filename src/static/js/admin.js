@@ -1,4 +1,4 @@
-temp.upload =  `
+temp.uploadAdmin =  `
     <div>
         <h2>视频上传页面</h2>
 
@@ -8,7 +8,12 @@ temp.upload =  `
             </el-col>
 
             <el-col :span="4">
-                <el-select v-model="SO.albumId" clearable placeholder="请选择" @command="chooseAlbumHandler">
+                <el-select 
+                :disabled="!editable"
+                v-model="SO.albumId" 
+                clearable 
+                placeholder="请选择" 
+                @command="chooseAlbumHandler">
                     <el-option
                         v-for="item in albums"
                         :key="item.id"
@@ -18,7 +23,7 @@ temp.upload =  `
                 </el-select>
             </el-col>
             
-            <el-button @click="openAlbumDialog();" class="new-album-btn">新建Album</el-button>
+            <el-button v-show="editable" @click="openAlbumDialog();" class="new-album-btn">新建Album</el-button>
         </el-row>
 
         <el-row v-if="selectedMaker">
@@ -32,21 +37,21 @@ temp.upload =  `
 
         <el-row>
             <el-col :span="4">
-                <label>Headline</label>
+                <label>标题</label>
             </el-col>
 
             <el-col :span="4">
-                <el-input v-model="SO.headline" placeholder="请输入标题"></el-input>
+                <el-input :disabled="!editable" v-model="SO.headline" placeholder="请输入标题"></el-input>
             </el-col>
         </el-row>
 
         <el-row>
             <el-col :span="4">
-                <label>Tag</label>
+                <label>标签</label>
             </el-col>
-
             <el-col :span="4">
-                <el-select v-model="SO.tag" 
+                <el-select v-model="SO.tag"
+                    :disabled="!editable" 
                     clearable
                     multiple
                     filterable
@@ -60,7 +65,7 @@ temp.upload =  `
                 </el-select>
             </el-col>
             
-            <el-button v-on:click="" @click="tagConfig.visibility = true" class="new-tag-btn">新建Tag</el-button>
+            <el-button v-show="editable" v-on:click="" @click="tagConfig.visibility = true" class="new-tag-btn">新建Tag</el-button>
         </el-row>
 
         <el-row>
@@ -70,6 +75,7 @@ temp.upload =  `
 
             <el-col :span="4">
                 <el-upload
+                    v-show="editable"
                     class="upload-demo"
                     action="/upload"
                     :data="{type:'video'}"
@@ -83,6 +89,7 @@ temp.upload =  `
                     >
                     <el-button size="small" type="primary">上传视频</el-button>
                 </el-upload>
+                <el-input v-show="!editable" :value="vId+videoInfo.video_ext" disabled/>
             </el-col>
         </el-row>
 
@@ -93,6 +100,7 @@ temp.upload =  `
 
             <el-col :span="4">
                 <el-upload
+                    v-show="editable"
                     class="upload-demo"
                     action="/upload"
                     :data="{type:'subtitle'}"
@@ -105,13 +113,15 @@ temp.upload =  `
                     >
                     <el-button size="small" type="primary">上传字幕</el-button>
                 </el-upload>
+                <el-input v-show="!editable" :value="vId+'.srt'" disabled/>
             </el-col>
         </el-row>
 
         <el-row>
             <el-col :span="4">&nbsp;</el-col>
             <el-col :span="4">
-                <el-button v-on:click="postVedio" class="new-video-btn">提交</el-button>
+                <el-button v-show="editable" v-on:click="vId?putVideo(): postVideo()" class="new-video-btn">提交</el-button>
+                <el-button v-show="!editable" v-on:click="editable=true;" class="new-video-btn">编辑</el-button>
             </el-col>
         </el-row>
 
@@ -224,10 +234,11 @@ temp.upload =  `
     </div>
 `;
 
-COMPONENTS.Upload = {
-	props: ['isEdit'],
+COMPONENTS.UploadAdmin = {
+	props: ['vId'],
 	data: function () {
-        console.log(this.isEdit);
+        // console.log(this.vId);
+
 		let tagConfig = {
 			visibility: false,
 			title: '新建标签',
@@ -244,7 +255,15 @@ COMPONENTS.Upload = {
 		};
 
 		var d = {
-			SO: {}, 
+            SO: {
+                albumId: '',
+                headline: '',
+                tag: '',
+                videoAbsPath: '',
+                subtitleAbsPath: ''
+            }, 
+            videoInfo: {},
+            editable: this.vId ? false: true,
 			albums: [], 
 			tags: [], 
 			sports: [], 
@@ -290,7 +309,7 @@ COMPONENTS.Upload = {
 			this.newAlbum.cover = res.relPath;
 		},
 
-		postVedio(){
+		postVideo(){
 			let so = Object.assign({}, this.SO);
 			so.tag = this.SO.tag.join(',');
 
@@ -299,7 +318,7 @@ COMPONENTS.Upload = {
 				this.$message({
 					message: '视频创建成功',
 					type: 'success'
-				});
+                });
 			}.bind(this), 'post', so);
 		},
 
@@ -379,25 +398,61 @@ COMPONENTS.Upload = {
 			}.bind(this));
 		},
 
+        fetchVideoInfo(){
+			tools.xhr('/vInfo/' + this.vId, function(resData){
+                this.videoInfo = resData;
+
+                this.SO.albumId = resData.album_id;
+                this.SO.headline = resData.headline;
+                this.SO.tag = resData.tag? resData.tag.split(',').map(function(){
+                    return Number(arguments[0])
+                }): [];
+			}.bind(this));
+        },
+        
+        putVideo(){
+			let so = Object.assign({}, this.SO);
+			so.tag = this.SO.tag.join(',');
+
+			tools.xhr('/video/' + this.vId, function(){
+				console.log(arguments);
+				this.$message({
+					message: '视频更新成功',
+					type: 'success'
+                });
+                this.editable = false;
+
+                this.SO.subtitleAbsPath = '';
+                this.SO.videoAbsPath = '';
+			}.bind(this), 'put', so, function(){
+                this.SO.subtitleAbsPath = '';
+                this.SO.videoAbsPath = '';
+            });
+		},
 	},
 
-	watch: {'SO.albumId': function(to, from){
-		if(to){
-			this.queryMaker(to)
-		}else{
-			this.selectedMaker = '';
-		}
-	}},
+	// watch: {'SO.albumId': function(to, from){
+	// 	if(to){
+	// 		this.queryMaker(to)
+	// 	}else{
+	// 		this.selectedMaker = '';
+	// 	}
+    // }},
+    
+    mounted: function(){
+        if(this.vId){
+            this.fetchVideoInfo();
+        }
+    },
 
-	template: temp.upload
+	template: temp.uploadAdmin
 };
 
 routeConfig.push(
-    { path: '/upload', component: COMPONENTS.Upload, props: function(route){return {isEdit: route.query.isEdit}} },
+    { path: '/uploadAdmin', component: COMPONENTS.UploadAdmin, props: function(route){return {vId: route.query.vId}} },
 );
 
-
-temp.feedbacks =  `
+temp.feedbacksAdmin =  `
     <div>
         <h2>反馈列表</h2>
 
@@ -456,7 +511,7 @@ temp.feedbacks =  `
     </div>
 `;
 
-COMPONENTS.Feedbacks = {
+COMPONENTS.FeedbacksAdmin = {
 	data: function () {
 
 		var d = {
@@ -490,13 +545,21 @@ COMPONENTS.Feedbacks = {
         },
         
         deleteFeedback: function(id){
-            tools.xhr('/feedback/' + id, function(resData){
-                this.fetchFeedbacks(this.curPage);
-                this.$message({
-                    message: '删除成功',
-                    type: 'success'
-                });
-			}.bind(this), 'delete');
+            this.$confirm('确定删除', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(function(){
+                tools.xhr('/feedback/' + id, function(resData){
+                    this.fetchFeedbacks(this.curPage);
+                    this.$message({
+                        message: '删除成功',
+                        type: 'success'
+                    });
+                }.bind(this), 'delete');
+            }.bind(this)).catch(function(){
+
+            });
         },
 
         blockUsr: function(ip, usrId, e){
@@ -527,7 +590,7 @@ COMPONENTS.Feedbacks = {
 	// 	}
 	// }},
 
-    template: temp.feedbacks,
+    template: temp.feedbacksAdmin,
     
     mounted: function(){
         this.fetchFeedbacks(1);
@@ -535,5 +598,109 @@ COMPONENTS.Feedbacks = {
 };
 
 routeConfig.push(
-    { path: '/feedbacks', component: COMPONENTS.Feedbacks, props: function(route){return {isEdit: route.query.isEdit}} },
+    { path: '/feedbacksAdmin', component: COMPONENTS.FeedbacksAdmin},
+);
+
+temp.videosAdmin =  `
+    <div>
+        <h2>视频列表</h2>
+
+        <el-table
+        :data="videos"
+        style="width: 100%">
+            <el-table-column
+                prop="id"
+                label="id">
+            </el-table-column>
+            
+            <el-table-column
+                prop="album_id"
+                label="album_id">
+            </el-table-column>
+            <el-table-column
+                prop="headline"
+                label="headline">
+            </el-table-column>
+            <el-table-column
+                prop="tag"
+                label="tag">
+            </el-table-column>
+
+            <el-table-column
+                fixed="right"
+                label="操作"
+                width="100">
+                <template slot-scope="scope">
+                    <el-button @click="patchVideo(scope.row.id)" type="text" size="small">更新</el-button>
+                    <el-button @click="deleteVideo(scope.row.id)" type="text" size="small">删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <el-pagination
+            layout="prev, pager, next"
+            :total="total"
+            :page-size="pageSize"
+            @current-change="fetchVideos">
+        </el-pagination>
+    </div>
+`;
+
+COMPONENTS.VideosAdmin = {
+	data: function () {
+
+		var d = {
+            pageSize: 10,
+            curPage: 0,
+            total: 0,
+			videos: []
+		};
+
+		return d;
+	},
+	methods: {
+
+		fetchVideos(pageNum){
+			tools.xhr('/pageVideos', function(resData){
+                this.videos = resData.datalist;
+                this.total = resData.total;
+                this.curPage = pageNum;
+			}.bind(this), 'get', {
+                pageNum: pageNum - 1,
+                pageSize: this.pageSize
+            });
+        },
+
+        patchVideo: function(id){
+            location.href = `#/uploadAdmin?vId=${id}`;
+        },
+        
+        deleteVideo: function(id){
+            this.$confirm('确定删除', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(function(){
+                tools.xhr('/video/' + id, function(resData){
+                    this.fetchVideos(this.curPage);
+                    this.$message({
+                        message: '删除成功',
+                        type: 'success'
+                    });
+                }.bind(this), 'delete');
+            }.bind(this)).catch(function(){
+            });
+        },
+
+	},
+
+    template: temp.videosAdmin,
+    
+    mounted: function(){
+        this.fetchVideos(1);
+    }
+};
+
+routeConfig.push(
+    { path: '/videosAdmin', component: COMPONENTS.VideosAdmin},
 );

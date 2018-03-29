@@ -154,15 +154,21 @@ var temp = {
             </div>
             <div class="guide-section" v-if="loginUsrInfo && loginUsrInfo.is_admin == 1">
                 <div class="guide-entry" id="upload-entry" >
-                    <a href="#/upload" class="guide-entry-renderer">
+                    <a href="#/uploadAdmin" class="guide-entry-renderer">
                         <i class="el-icon-upload icon"></i>
-                        <span class="text">上传</span>
+                        <span class="text">上传视频</span>
                     </a>
                 </div>
                 <div class="guide-entry" id="upload-entry" >
-                    <a href="#/feedbacks" class="guide-entry-renderer">
+                    <a href="#/feedbacksAdmin" class="guide-entry-renderer">
                         <i class="el-icon-upload icon"></i>
                         <span class="text">反馈列表</span>
+                    </a>
+                </div>
+                <div class="guide-entry" id="upload-entry" >
+                    <a href="#/videosAdmin" class="guide-entry-renderer">
+                        <i class="el-icon-upload icon"></i>
+                        <span class="text">视频列表</span>
                     </a>
                 </div>
             </div>
@@ -410,7 +416,7 @@ var temp = {
         </div>
     `,
 
-    videos: `
+    searchedvideos: `
         <div>
             <!-- <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ path: '/sports' }">首页</el-breadcrumb-item>

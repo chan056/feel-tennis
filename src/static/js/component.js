@@ -88,7 +88,7 @@ COMPONENTS.HeaderComponent = {
 
 			this.$refs[formName].validate((valid) => {
 				if (valid) {
-					location.hash = "#/videos?headline=" + this.searchForm.name;
+					location.hash = "#/searchedVideos?headline=" + this.searchForm.name;
 					// this.searchForm.name = '';
 				} else {
 					console.log('error submit!!');
@@ -973,7 +973,7 @@ COMPONENTS.Video = {
 	}
 };
 
-COMPONENTS.videos = {
+COMPONENTS.searchedvideos = {
 	data: function () {
 		var d = {
 			videos: [],
@@ -983,7 +983,7 @@ COMPONENTS.videos = {
 
 		return d;
 	},
-	template: temp.videos,
+	template: temp.searchedvideos,
 	created() {
 		
 	},
@@ -1825,9 +1825,9 @@ COMPONENTS.Compete = {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
 						type: 'warning'
-					}).then(() => {
+					}).then(function(){
 						location.href="#/datum";
-					}).catch(() => {
+					}).catch(function(){
 						location.href="#/datum";
 					});
 				}

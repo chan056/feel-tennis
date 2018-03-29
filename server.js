@@ -2,7 +2,7 @@ var PORT = 3000;
 
 var http = require('http');
 
-global.rootDir = __dirname;
+global.staticRoot = __dirname + '/src/static';
 
 // require('sesh').magicSession();
 // let session = require('sesh').session;

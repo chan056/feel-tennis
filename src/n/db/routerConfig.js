@@ -36,6 +36,9 @@ const routerConfig = {
             r.query('queryAlbum', params, res, req);
         },
         
+        '/vInfo/:id': function(params, res, req){
+            r.query('queryVinfo', params, res, req);
+        },
         // 根据video id 查询某个视频
         '/videos/:id': function(params, res, req){
             r.query('queryVideo', params, res, req);
@@ -69,6 +72,14 @@ const routerConfig = {
                     res.end();
                 }
             });
+        },
+
+        // 分页video列表
+        '/pageVideos':{
+            fn: function(params, res, req){
+                r.query('queryPageVideos', params, res, req);
+            },
+            limit: {level: 100}
         },
     
         // 根据关键字搜索视频
@@ -464,7 +475,16 @@ const routerConfig = {
             limit: {level: 100}
         },
     },
+
     // ============put update完整资源=============
+    put: {
+        '/video/:id': {
+            fn: function(req, res, pathParams){
+                r.put('updateVideoInfo', req, res, pathParams);
+            },
+            limit: {level: 100}
+        }
+    },
 
     // patch update部分资源
     patch: {
@@ -500,6 +520,13 @@ const routerConfig = {
         '/feedback/:id': {
             fn: function(req, res, pathParams){
                 r.delete('deleteFeedback', req, res, pathParams);
+            },
+            limit: {level: 100}
+        },
+
+        '/video/:id': {
+            fn: function(req, res, pathParams){
+                r.delete('deleteVideo', req, res, pathParams);
             },
             limit: {level: 100}
         }

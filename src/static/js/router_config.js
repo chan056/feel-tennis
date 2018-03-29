@@ -29,8 +29,8 @@ const routeConfig = [
 		props: true,
 	},
 	{ 
-		path: '/videos', 
-		component: COMPONENTS.videos, 
+		path: '/searchedvideos', 
+		component: COMPONENTS.searchedvideos, 
 		meta: {title: '视频列表'},
 		beforeRouteUpdate(to, from, next) {
 			console.log(to, from)

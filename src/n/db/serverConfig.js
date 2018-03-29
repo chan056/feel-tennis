@@ -29,7 +29,7 @@ module.exports = function(req, res) {
 		function disposeStaticResource(){
 			var realPath;
 	
-			realPath = path.join(global.rootDir, "src/static", pathname);
+			realPath = path.join(global.staticRoot, pathname);
 	
 			fs.exists(realPath, function(exists) {
 				if (!exists) {
