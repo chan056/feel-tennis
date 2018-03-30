@@ -251,7 +251,7 @@ var temp = {
             </el-breadcrumb>
             <div class="tags">
                 <el-tag type="info" v-for="tag in tags" :key="tag.id">
-                    <router-link :to="{path: '/videos?tagId=' + tag.id}">{{tag.name}}</router-link>
+                    <router-link :to="{path: '/searchedvideos?tagId=' + tag.id}">{{tag.name}}</router-link>
                 </el-tag>
             </div>
             <ul class="block-list video-list">
@@ -290,7 +290,7 @@ var temp = {
             </el-breadcrumb>
             <div class="tags">
                 <el-tag type="info" v-for="tag in tags" :key="tag.id">
-                    <router-link :to="{path: '/videos?tagId=' + tag.id}">{{tag.name}}</router-link>
+                    <router-link :to="{path: '/searchedvideos?tagId=' + tag.id}">{{tag.name}}</router-link>
                 </el-tag>
             </div>
             <div id="palyer-wrapper">
@@ -681,7 +681,7 @@ var temp = {
     `,
 
     feedback: `
-        <div class="feedback">
+        <div class="feedback-wrapper">
             <h2 class="ovh">
                 <span class="fl">发生了什么</span>
                 <i class="fr el-icon-back" @click="goback()" style="cursor: pointer;"></i>

@@ -1,5 +1,5 @@
 temp.uploadAdmin =  `
-    <div>
+    <div class="upload-wrapper">
         <h2>视频上传页面</h2>
 
         <el-row>
@@ -7,7 +7,7 @@ temp.uploadAdmin =  `
                 <label>专辑</label>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="10">
                 <el-select 
                 :disabled="!editable"
                 v-model="SO.albumId" 
@@ -30,7 +30,7 @@ temp.uploadAdmin =  `
             <el-col :span="4">
                 <label>专辑作者</label>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="10">
                 <el-input v-model="selectedMaker" :disabled="!!selectedMaker" placeholder="请输入标题"></el-input>
             </el-col>
         </el-row>
@@ -40,7 +40,7 @@ temp.uploadAdmin =  `
                 <label>标题</label>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="10">
                 <el-input :disabled="!editable" v-model="SO.headline" placeholder="请输入标题"></el-input>
             </el-col>
         </el-row>
@@ -49,7 +49,7 @@ temp.uploadAdmin =  `
             <el-col :span="4">
                 <label>标签</label>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="10">
                 <el-select v-model="SO.tag"
                     :disabled="!editable" 
                     clearable
@@ -73,7 +73,7 @@ temp.uploadAdmin =  `
                 <label>视频</label>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="10">
                 <el-upload
                     v-show="editable"
                     class="upload-demo"
@@ -98,7 +98,7 @@ temp.uploadAdmin =  `
                 <label>字幕</label>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="10">
                 <el-upload
                     v-show="editable"
                     class="upload-demo"
@@ -119,7 +119,7 @@ temp.uploadAdmin =  `
 
         <el-row>
             <el-col :span="4">&nbsp;</el-col>
-            <el-col :span="4">
+            <el-col :span="10">
                 <el-button v-show="editable" v-on:click="vId?putVideo(): postVideo()" class="new-video-btn">提交</el-button>
                 <el-button v-show="!editable" v-on:click="editable=true;" class="new-video-btn">编辑</el-button>
             </el-col>
