@@ -171,6 +171,18 @@ var temp = {
                         <span class="text">视频列表</span>
                     </a>
                 </div>
+                <div class="guide-entry" id="upload-entry" >
+                    <a href="#/albumsAdmin" class="guide-entry-renderer">
+                        <i class="fa fa-video-camera icon"></i>
+                        <span class="text">专辑列表</span>
+                    </a>
+                </div>
+                <div class="guide-entry" id="upload-entry" >
+                    <a href="#/sportsAdmin" class="guide-entry-renderer">
+                        <i class="fa fa-video-camera icon"></i>
+                        <span class="text">运动列表</span>
+                    </a>
+                </div>
             </div>
             
             <div id="footer">

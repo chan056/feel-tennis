@@ -360,6 +360,7 @@ COMPONENTS.UploadAdmin = {
 		},
 
 		queryAlbums(){
+            // 某项运动下的专辑列表 选定运动后 获取专辑数据 todo
 			tools.xhr('/albums', function(resData){
 				this.albums = resData;
 			}.bind(this));
@@ -707,6 +708,238 @@ COMPONENTS.VideosAdmin = {
 
 routeConfig.push(
     { path: '/videosAdmin', component: COMPONENTS.VideosAdmin},
+);
+
+temp.albumsAdmin =  `
+    <div>
+        <h2>视频列表</h2>
+
+        <el-table
+        :data="albums"
+        style="width: 100%">
+            <el-table-column
+                prop="id"
+                label="id">
+            </el-table-column>
+            
+            <el-table-column
+                prop="sport_id"
+                label="运动">
+            </el-table-column>
+            <el-table-column
+                prop="author_id"
+                label="制作者编号">
+            </el-table-column>
+            <el-table-column
+                prop="name"
+                label="标题">
+            </el-table-column>
+            <el-table-column
+                prop="tag"
+                label="标签">
+            </el-table-column>
+            <el-table-column
+                prop="impression"
+                label="观看次数">
+            </el-table-column>
+            <el-table-column
+                prop="update_time"
+                label="更新时间">
+            </el-table-column>
+
+            <el-table-column
+                fixed="right"
+                label="操作"
+                width="200">
+                <template slot-scope="scope">
+                    <el-button @click="patchVideo(scope.row.id)" type="text" size="small">更新</el-button>
+                    <el-button @click="deleteVideo(scope.row.id)" type="text" size="small">删除</el-button>
+                    <el-button @click="redirect(scope.row.id)" type="text" size="small">查看</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <el-pagination
+            layout="prev, pager, next"
+            :total="total"
+            :page-size="pageSize"
+            @current-change="fetchAlbums">
+        </el-pagination>
+    </div>
+`;
+
+COMPONENTS.AlbumsAdmin = {
+	data: function () {
+
+		var d = {
+            pageSize: 10,
+            curPage: 0,
+            total: 0,
+			albums: []
+		};
+
+		return d;
+	},
+	methods: {
+
+		fetchAlbums(pageNum){
+            // 分页专辑
+			tools.xhr('/albums', function(resData){
+                this.albums = resData.datalist;
+                this.total = resData.total;
+                this.curPage = pageNum;
+			}.bind(this), 'get', {
+                pageNum: pageNum - 1,
+                pageSize: this.pageSize
+            });
+        },
+
+        patchVideo: function(id){
+            location.href = `#/uploadAdmin?vId=${id}`;
+        },
+        
+        deleteVideo: function(id){
+            this.$confirm('确定删除', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(function(){
+                tools.xhr('/video/' + id, function(resData){
+                    this.fetchAlbums(this.curPage);
+                    this.$message({
+                        message: '删除成功',
+                        type: 'success'
+                    });
+                }.bind(this), 'delete');
+            }.bind(this)).catch(function(){
+            });
+        },
+
+        redirect: function(id){
+            location.href="#/videos/"+id;
+        }
+	},
+
+    template: temp.albumsAdmin,
+    
+    mounted: function(){
+        this.fetchAlbums(1);
+    }
+};
+
+routeConfig.push(
+    { path: '/albumsAdmin', component: COMPONENTS.AlbumsAdmin},
+);
+
+temp.sportsAdmin =  `
+    <div>
+        <h2>运动列表</h2>
+
+        <el-table
+        :data="sports"
+        style="width: 100%">
+            <el-table-column
+                prop="id"
+                label="id">
+            </el-table-column>
+            
+            <el-table-column
+                prop="name"
+                label="名称">
+            </el-table-column>
+
+            <el-table-column
+                prop="impression"
+                label="观看次数">
+            </el-table-column>
+
+            <el-table-column
+                prop="update_time"
+                label="更新时间">
+            </el-table-column>
+
+            <el-table-column
+                fixed="right"
+                label="操作"
+                width="200">
+                <template slot-scope="scope">
+                    <el-button @click="patchVideo(scope.row.id)" type="text" size="small">更新</el-button>
+                    <el-button @click="deleteVideo(scope.row.id)" type="text" size="small">删除</el-button>
+                    <el-button @click="redirect(scope.row.id)" type="text" size="small">查看</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <el-pagination
+            layout="prev, pager, next"
+            :total="total"
+            :page-size="pageSize"
+            @current-change="fetchSports">
+        </el-pagination>
+    </div>
+`;
+
+COMPONENTS.SportsAdmin = {
+	data: function () {
+
+		var d = {
+            pageSize: 10,
+            curPage: 0,
+            total: 0,
+			sports: []
+		};
+
+		return d;
+	},
+	methods: {
+
+		fetchSports(pageNum){
+            // 分页专辑
+			tools.xhr('/sports', function(resData){
+                this.sports = resData.datalist;
+                this.total = resData.total;
+                this.curPage = pageNum;
+			}.bind(this), 'get', {
+                pageNum: pageNum - 1,
+                pageSize: this.pageSize
+            });
+        },
+
+        patchVideo: function(id){
+            location.href = `#/uploadAdmin?vId=${id}`;
+        },
+        
+        deleteVideo: function(id){
+            this.$confirm('确定删除', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(function(){
+                tools.xhr('/video/' + id, function(resData){
+                    this.fetchSports(this.curPage);
+                    this.$message({
+                        message: '删除成功',
+                        type: 'success'
+                    });
+                }.bind(this), 'delete');
+            }.bind(this)).catch(function(){
+            });
+        },
+
+        redirect: function(id){
+            location.href="#/videos/"+id;
+        }
+	},
+
+    template: temp.sportsAdmin,
+    
+    mounted: function(){
+        this.fetchSports(1);
+    }
+};
+
+routeConfig.push(
+    { path: '/sportsAdmin', component: COMPONENTS.SportsAdmin},
 );$(function(){
 
 	var navInstance = new Vue(COMPONENTS.HeaderComponent);

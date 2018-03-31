@@ -291,9 +291,12 @@ COMPONENTS.HeaderComponent = {
 	},
 
 	created: function(){
-		(new BMap.LocalCity()).get(function(city){
+		try{(new BMap.LocalCity()).get(function(city){
 			this.cityZH = city.name;
-		}.bind(this))
+		}.bind(this))}
+		catch(e){
+
+		}
 	},
 
 	// beforeCreate: function () {
@@ -443,6 +446,7 @@ COMPONENTS.AlbumList = {
 
 	methods: {
 		fetchAlbumList: function(pageNum){
+			// 某项运动下的所有专辑
 			tools.xhr('/sports/' + this.sportId + '/albums', function(resData){
 				this.albumList = resData.datalist;
 				this.total = resData.total;

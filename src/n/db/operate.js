@@ -71,12 +71,19 @@ let operations = {
 			from album as a inner join maker as m 
 			where a.author_id = m.id`;
 
-		if(params.sport_id){
-			sql += ` and a.sport_id = ${params.sport_id}`;
+		params.sport_id && (sql += ` and a.sport_id = ${params.sport_id}`);
+
+		if(params.pageSize){
+			sql = disposePageSql(sql, params);
 			conn.query(sql, function (err, list, fields) {
 				if (err) throw err;
 	
-				let sql = `select count(*) as count from album where sport_id=${params.sport_id}`
+				let sql = '';
+				if(params.sport_id){
+					sql = `select count(*) as count from album where sport_id=${params.sport_id}`
+				}else{
+					sql = `select count(*) as count from album`
+				}
 	
 				conn.query(sql, function(err, result){
 					let json = JSON.stringify({

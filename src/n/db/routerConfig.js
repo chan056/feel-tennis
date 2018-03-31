@@ -24,10 +24,11 @@ const routerConfig = {
             r.query('querySport', params, res, req);
         },
     
+        // 
         '/albums': function(params, res, req){
             r.query('queryAlbumList', params, res, req);
         },
-    
+
         '/sports/:sport_id/albums': function(params, res, req){
             r.query('queryAlbumList', params, res, req);
         },
