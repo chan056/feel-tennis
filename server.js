@@ -17,4 +17,5 @@ var serverConfig = require('./src/n/db/serverConfig');
 var server = http.createServer(serverConfig);
 
 server.listen(PORT, function(){
+    console.log('listen on ' + PORT)
 });
