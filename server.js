@@ -1,4 +1,9 @@
-var PORT = 3000;
+var PORT = 80;
+
+var argv = process.argv;
+if(argv[0] == '/usr/local/bin/node'){
+    PORT = 3000;
+}
 
 var http = require('http');
 

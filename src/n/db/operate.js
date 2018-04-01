@@ -864,11 +864,11 @@ let operations = {
 		
 							let emailSubject = 'chantube注册确认',
 								emailContent = `你好 ${postObj.name}, 
-									<a href="http://localhost:3000?code=${encryptedCode}#/emailConfirm">点击</a>完成注册
+									<a href="${req.headers.referer}?code=${encryptedCode}#/emailConfirm">点击</a>完成注册
 									<br/>
 									如无法打开，请复制以下链接
 									<br/>
-									http://localhost:3000?code=${encryptedCode}#/emailConfirm`;
+									${req.headers.referer}?code=${encryptedCode}#/emailConfirm`;
 		
 							let emailer = require('../mail');
 							emailer.sendMail(email, emailSubject, emailContent);
