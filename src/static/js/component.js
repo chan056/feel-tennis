@@ -62,8 +62,8 @@ COMPONENTS.HeaderComponent = {
 		loginForm: {
 			formLabelWidth: '100px',
 			visible: false,
-			name: 'chenyi',
-			psw: '62191056'
+			name: '',
+			psw: ''
 		},
 
 		resetPswForm: {

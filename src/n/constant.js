@@ -3,7 +3,7 @@ module.exports = {
 
     whiteList: [
         'http://localhost:3000/',
-        'http://www.chantube.cn'
+        'http://www.yitube.cn'
     ],// 访问白名单
     bootJS: 'tube.js',// JS入口
     sessionSecret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD',// session加密字符
