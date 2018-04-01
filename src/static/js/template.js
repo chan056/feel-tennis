@@ -71,6 +71,7 @@ var temp = {
                     </el-form-item>
                     <p class="btns">
                         <el-button @click="resetPswForm.visible = true; loginForm.visible = false;" class="rst-psw-btn">重置密码</el-button>
+                        <el-button @click="retrievePsw()" class="rst-psw-btn">找回密码</el-button>
                         <el-button @click="handlerRegist(); loginForm.visible = false;" class="rgst-btn">注册</el-button>
                     </p>
                 </el-form>
@@ -545,7 +546,7 @@ var temp = {
     datum: `
         <div>
             <div style="width: 300px; margin: auto; padding: 10px 20px;">
-                <el-form ref="datum-form" :rules="datumForm.datumFormRules" :model="datumForm.unstableDatum" label-width="80px" >
+                <el-form ref="datum-form" :rules="datumForm.rules" :model="datumForm.unstableDatum" label-width="80px" >
                     <el-form-item label="昵称" prop="nickname">
                         <el-input v-model="datumForm.unstableDatum.nickname" v-bind:disabled="!datumForm.editable"></el-input>
                     </el-form-item>

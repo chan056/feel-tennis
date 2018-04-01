@@ -752,6 +752,15 @@ let operations = {
 		});
 	},
 
+	retrievePsw: function(res, qualification, params){
+		let emailSubject = 'yitube找回密码',
+			emailContent = `你好 ${postObj.name}, 
+				<a href="${req.headers.referer}?code=${encryptedCode}#/emailConfirm">点击</a>完成注册`;
+
+		let emailer = require('../mail');
+		emailer.sendMail(email, emailSubject, emailContent);
+	},
+
 	// ===============POST================
 	login: function(res, postObj, req){
 		var sql = `select * from usr where name=? and psw=?`;

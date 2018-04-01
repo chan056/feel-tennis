@@ -329,8 +329,21 @@ const routerConfig = {
             r.query('checkUsrDatumIntegrity', params, res, req)
         },
 
-        '/feedbacks': function(params, res, req){
-            r.query('fetchFeedbackList', params, res, req)
+        '/feedbacks': {
+            fn: function(params, res, req){
+                r.query('fetchFeedbackList', params, res, req)
+            },
+            limit: {level: 10}
+        },
+
+        '/password': {
+            fn: function(params, res, req){
+                r.query('retrievePsw', params, res, req)
+            },
+            limit: {
+                level: 10,
+                visits: 2
+            }
         },
         
     },

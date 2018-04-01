@@ -139,6 +139,10 @@ COMPONENTS.HeaderComponent = {
 			tools.insertScriptTag(1, '../lib/md5.js', 'md5');
 		},
 
+		retrievePsw: function(){
+			
+		},
+
 		handlerLogout(){
 			this.logoutForm.visible=true;
 		},
@@ -274,6 +278,7 @@ COMPONENTS.HeaderComponent = {
 			}.bind(this));
 		}
 	},
+
 	mounted: function () {
 		// 用户管理
 		var tmpUsr = Cookies.get('tmpUsr');
@@ -1014,7 +1019,6 @@ COMPONENTS.searchedvideos = {
 	}
 };
 
-// 目前只考虑网球
 COMPONENTS.Datum = {
 	data: function(){
 		return {
@@ -1027,7 +1031,7 @@ COMPONENTS.Datum = {
 					avatar: '',
 					sex: ''
 				},
-				datumFormRules: {
+				rules: {
 					nickname:[{required: true, message: '昵称不能为空'}],
 					wechat:[{required: true, message: '微信不能为空'}],
 					level:[{required: true, message: '水平不能为空'}],
@@ -1038,8 +1042,9 @@ COMPONENTS.Datum = {
 				editable: false
 			},
 
-			usrDtum: {},// 真实信息
+			usrDatum: {},// 真实信息
 	
+			// 目前只考虑网球
 			levels: ['1.0','1.5','2.0','2.5','3.0','3.5','4.0','4.5','5.0','5.5','6.0','7.0'],
 
 			sexes: [{
@@ -1063,12 +1068,13 @@ COMPONENTS.Datum = {
 	methods: {
 		fetchUsrDatum: function(){
 			tools.xhr('/usrDatum', function(res){
-				this.usrDtum.nickname = this.datumForm.unstableDatum.nickname = res.nickname;
-				this.usrDtum.wechat = this.datumForm.unstableDatum.wechat = res.wechat;
-				this.usrDtum.level = this.datumForm.unstableDatum.level = res.level;
-				this.usrDtum.status = this.datumForm.unstableDatum.status = res.status;
-				this.usrDtum.avatar = this.datumForm.unstableDatum.avatar = res.avatar;
-				this.usrDtum.sex = this.datumForm.unstableDatum.sex = res.sex;
+				this.usrDatum.nickname = this.datumForm.unstableDatum.nickname = res.nickname;
+				this.usrDatum.wechat = this.datumForm.unstableDatum.wechat = res.wechat;
+				this.usrDatum.level = this.datumForm.unstableDatum.level = res.level;
+				this.usrDatum.status = this.datumForm.unstableDatum.status = res.status;
+				this.usrDatum.avatar = this.datumForm.unstableDatum.avatar = res.avatar;
+				this.usrDatum.sex = this.datumForm.unstableDatum.sex = res.sex;
+				// console.log(this.usrDatum);
 			}.bind(this));
 		},
 
@@ -1099,12 +1105,14 @@ COMPONENTS.Datum = {
 		},
 
 		cancelUpdateUsrDatum: function(){
-			this.datumForm.nickname = this.usrDtum.nickname;
-			this.datumForm.level = this.usrDtum.level;
-			this.datumForm.status = this.usrDtum.status;
-			this.datumForm.avatar = this.usrDtum.avatar;
+			this.datumForm.unstableDatum.nickname = this.usrDatum.nickname;
+			this.datumForm.unstableDatum.wechat = this.usrDatum.wechat;
+			this.datumForm.unstableDatum.level = this.usrDatum.level;
+			this.datumForm.unstableDatum.status = this.usrDatum.status;
+			this.datumForm.unstableDatum.avatar = this.usrDatum.avatar;
+			this.datumForm.unstableDatum.sex = this.usrDatum.sex;
 
-			('.default-avatar-list img').removeClass('selected');
+			$('.default-avatar-list img').removeClass('selected');
 		},
 
 		showLevelTip: function(){
