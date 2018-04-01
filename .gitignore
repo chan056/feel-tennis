@@ -4,6 +4,7 @@ sessions/
 .package-lock.json
 src/n/package-lock.json
 /src/static/img/avatar/*.*
+/src/static/img/cover
 /src/static/js/tmp.js
 
 # Logs
