@@ -121,12 +121,34 @@ let operations = {
 
 	},
 
-	queryVinfo: function (res, qualification, params) {
+	queryVideoInfo: function (res, qualification, params) {
 		conn.query('SELECT * from video' + qualification, function (err, result, fields) {
 			if (err) throw err;
 			
 			let vInfo = result[0];
 			result = JSON.stringify(vInfo);
+			
+			res.end(result);
+		});
+	},
+
+	queryAlbumInfo: function (res, qualification, params) {
+		conn.query('SELECT * from album' + qualification, function (err, result, fields) {
+			if (err) throw err;
+			
+			let albumInfo = result[0];
+			result = JSON.stringify(albumInfo);
+			
+			res.end(result);
+		});
+	},
+
+	querySportInfo: function (res, qualification, params) {
+		conn.query('SELECT * from sport' + qualification, function (err, result, fields) {
+			if (err) throw err;
+			
+			let sportInfo = result[0];
+			result = JSON.stringify(sportInfo);
 			
 			res.end(result);
 		});
@@ -857,27 +879,6 @@ let operations = {
 		});
 	},
 
-	updateVideoInfo: function(res, postObj){
-		let vId = postObj.id;
-		var sql = `update video set album_id=?, headline=?, tag=?, update_time=? where id=${postObj.id}`;
-
-		conn.query(sql, [postObj.albumId, postObj.headline, postObj.tag, +new Date()], function(err, result, fields){
-			if(err)
-				throw err;
-
-			res.end();
-
-			// 更新album 和 sport
-			let now = +new Date();
-			let albumId = postObj.albumId;
-
-			conn.query('update album set update_time = ' + now + ' where id=' + albumId);
-			conn.query('update sport set update_time = ' + now + ' where id = (select sport_id from album where id = ' + albumId + ')');
-
-			vId && this.generateVideo(vId, postObj);
-		}.bind(this));
-	},
-
 	generateVideo: function(vId, obj){
 		let videoAbsPath = obj.videoAbsPath;
 		let subtitleAbsPath = obj.subtitleAbsPath;
@@ -1001,7 +1002,6 @@ let operations = {
 		conn.query(sql, [postObj.sportId, postObj.maker, postObj.name, postObj.tag], function(err, result, fields){
 			if(err)
 				throw err;
-			// console.log(arguments);
 
 			let albumId = result.insertId;;
 
@@ -1009,7 +1009,7 @@ let operations = {
 				path = require('path');
 
 			let sourceCoverPath = path.resolve(__dirname, `../../static${postObj.cover}`),
-				destCoverPath = path.resolve(__dirname, `../../static/img/cover/album/` + albumId + '.jpg');// 封面格式动态 todo
+				destCoverPath = path.resolve(__dirname, `../../static/img/cover/album/` + albumId + '.jpg');// todo ext
 				
 			fs.rename(sourceCoverPath, destCoverPath, function(){
 				console.log('专辑封面移动完成');
@@ -1137,6 +1137,17 @@ let operations = {
 				}
 			});
 		}
+	},
+
+	creatSport: function(res, postObj, req){
+		let sql = `insert into sport (name, update_time) values ('${postObj.name}', ${+new Date()})`;
+
+		conn.query(sql, function(err, result){
+			if(err)
+				console.log(err);
+
+			res.end();
+		});
 	},
 
 	// ===============PATCH================
@@ -1405,6 +1416,80 @@ let operations = {
 			});
 		});
 
+	},
+	
+	deleteSport: function (res, deleteObj, req) {
+		
+		let sql = 'delete from sport where id=?';
+
+		conn.query(sql, [deleteObj.id], function (err, result, fields) {
+			if (err) throw err;
+
+			if(result.affectedRows == 1)
+				res.end()
+		});
+
+	},
+
+	// ===============PUT================
+	updateVideoInfo: function(res, postObj){
+		let vId = postObj.id;
+		var sql = `update video set album_id=?, headline=?, tag=?, update_time=? where id=${postObj.id}`;
+
+		conn.query(sql, [postObj.albumId, postObj.headline, postObj.tag, +new Date()], function(err, result, fields){
+			if(err)
+				throw err;
+
+			res.end();
+
+			// 更新album 和 sport
+			let now = +new Date();
+			let albumId = postObj.albumId;
+
+			conn.query('update album set update_time = ' + now + ' where id=' + albumId);
+			conn.query('update sport set update_time = ' + now + ' where id = (select sport_id from album where id = ' + albumId + ')');
+
+			vId && this.generateVideo(vId, postObj);
+		}.bind(this));
+	},
+
+	updateAlbumInfo: function(res, putObj){
+		var sql = `update album set sport_id=?, author_id=?, tag=?, update_time=? where id=${putObj.id}`;
+
+		conn.query(sql, [putObj.sportId, putObj.maker, putObj.tag, +new Date()], function(err, result, fields){
+			if(err)
+				throw err;
+				
+			if(result.affectedRows){
+				res.end();
+
+				if(putObj.cover){
+					let fs = require('fs'),
+						path = require('path');
+	
+					let sourceCoverPath = path.resolve(__dirname, `../../static${putObj.cover}`),
+						destCoverPath = path.resolve(__dirname, `../../static/img/cover/album/` + putObj.id + '.jpg');// 封面格式动态 todo
+						
+					fs.rename(sourceCoverPath, destCoverPath, function(){
+						console.log('专辑封面移动完成');
+					});
+				}
+				conn.query('update sport set update_time = ' + (+new Date()) + ' where id = (select sport_id from album where id = ' + putObj.id + ')');
+			}
+		});
+	},
+
+	updateSportInfo:function(res, putObj){
+		var sql = `update sport set name=?, update_time=? where id=${putObj.id}`;
+
+		conn.query(sql, [putObj.name, +new Date()], function(err, result, fields){
+			if(err)
+				throw err;
+				
+			if(result.affectedRows){
+				res.end();
+			}
+		});
 	},
 }
 

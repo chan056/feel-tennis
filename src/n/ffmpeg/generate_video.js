@@ -57,7 +57,7 @@ function execM3U(videoStorePath, tsDir){
 // 生成视频封面
 function generateVideoCover(videoStorePath, tsDir){
     let vDurationCmd = `coder$ ffprobe -show_format ${videoStorePath} | sed -n '/duration/s/.*=//p'`;
-    let screenshotCmd = `ffmpeg -ss 00:10:00 -i ${videoStorePath} -y -f image2 -vframes 1 -s 210x118 cover.jpg`;
+    let screenshotCmd = `ffmpeg -ss 00:10:00 -i ${videoStorePath} -y -f image2 -vframes 1 -s ${require('../constant').videoCoverSize} cover.jpg`;
 
     exec(vDurationCmd, function(error, out){
         if(error){

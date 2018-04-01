@@ -1,15 +1,39 @@
 temp.uploadAdmin =  `
     <div class="upload-wrapper">
-        <h2>视频上传页面</h2>
+        <h2>视频上传</h2>
 
         <el-row>
+            <el-col :span="4">
+                <label>运动</label>
+            </el-col>
+
+            <el-col :span="10">
+                <el-select 
+                :disabled="!videoEditable"
+                v-model="sport_id" 
+                clearable 
+                placeholder="请选择" 
+                @change="handleChooseSport">
+                    <el-option
+                        v-for="item in sports"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-col>
+            
+            <el-button v-show="videoEditable" @click="newSportConfig.visibility=true" class="new-sport-btn">新建运动</el-button>
+        </el-row>
+
+        <el-row ng-show="sport_id">
             <el-col :span="4">
                 <label>专辑</label>
             </el-col>
 
             <el-col :span="10">
                 <el-select 
-                :disabled="!editable"
+                :disabled="!videoEditable"
                 v-model="SO.albumId" 
                 clearable 
                 placeholder="请选择" 
@@ -23,7 +47,7 @@ temp.uploadAdmin =  `
                 </el-select>
             </el-col>
             
-            <el-button v-show="editable" @click="openAlbumDialog();" class="new-album-btn">新建Album</el-button>
+            <el-button v-show="videoEditable" @click="openAlbumDialog();" class="new-album-btn">新建专辑</el-button>
         </el-row>
 
         <el-row v-if="selectedMaker">
@@ -41,7 +65,7 @@ temp.uploadAdmin =  `
             </el-col>
 
             <el-col :span="10">
-                <el-input :disabled="!editable" v-model="SO.headline" placeholder="请输入标题"></el-input>
+                <el-input :disabled="!videoEditable" v-model="SO.headline" placeholder="请输入标题"></el-input>
             </el-col>
         </el-row>
 
@@ -51,7 +75,7 @@ temp.uploadAdmin =  `
             </el-col>
             <el-col :span="10">
                 <el-select v-model="SO.tag"
-                    :disabled="!editable" 
+                    :disabled="!videoEditable" 
                     clearable
                     multiple
                     filterable
@@ -65,7 +89,7 @@ temp.uploadAdmin =  `
                 </el-select>
             </el-col>
             
-            <el-button v-show="editable" v-on:click="" @click="tagConfig.visibility = true" class="new-tag-btn">新建Tag</el-button>
+            <el-button v-show="videoEditable" v-on:click="" @click="tagConfig.visibility = true" class="new-tag-btn">新建标签</el-button>
         </el-row>
 
         <el-row>
@@ -75,7 +99,7 @@ temp.uploadAdmin =  `
 
             <el-col :span="10">
                 <el-upload
-                    v-show="editable"
+                    v-show="videoEditable"
                     class="upload-demo"
                     action="/upload"
                     :data="{type:'video'}"
@@ -83,13 +107,13 @@ temp.uploadAdmin =  `
                     :on-remove="handleRemove"
                     :on-success="handleSuccess"
                     multiple
-                    :limit="3"
+                    :limit="10"
                     :on-exceed="handleExceed"
                     :file-list="fileList"
                     >
                     <el-button size="small" type="primary">上传视频</el-button>
                 </el-upload>
-                <el-input v-show="!editable" :value="vId+videoInfo.video_ext" disabled/>
+                <el-input v-show="!videoEditable" :value="vId+videoInfo.video_ext" disabled/>
             </el-col>
         </el-row>
 
@@ -100,7 +124,7 @@ temp.uploadAdmin =  `
 
             <el-col :span="10">
                 <el-upload
-                    v-show="editable"
+                    v-show="videoEditable"
                     class="upload-demo"
                     action="/upload"
                     :data="{type:'subtitle'}"
@@ -113,22 +137,40 @@ temp.uploadAdmin =  `
                     >
                     <el-button size="small" type="primary">上传字幕</el-button>
                 </el-upload>
-                <el-input v-show="!editable" :value="vId+'.srt'" disabled/>
+                <el-input v-show="!videoEditable" :value="vId+'.srt'" disabled/>
             </el-col>
         </el-row>
 
         <el-row>
             <el-col :span="4">&nbsp;</el-col>
             <el-col :span="10">
-                <el-button v-show="editable" v-on:click="vId?putVideo(): postVideo()" class="new-video-btn">提交</el-button>
-                <el-button v-show="!editable" v-on:click="editable=true;" class="new-video-btn">编辑</el-button>
+                <el-button v-show="videoEditable" v-on:click="vId?putVideo(): postVideo()" class="new-video-btn">提交</el-button>
+                <el-button v-show="!videoEditable" v-on:click="videoEditable=true;" class="new-video-btn">编辑</el-button>
             </el-col>
         </el-row>
 
-        <el-dialog v-bind:title="albumConfig.title" :visible.sync="albumConfig.visibility">
+        <el-dialog v-bind:title="newSportConfig.title" :visible.sync="newSportConfig.visibility" @close="newSportConfig.visibility=true">
+            <el-form class="newTagDialog">
+                <el-form-item label="运动名称">
+                    <el-input v-model="newSport.name" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer" v-show="!sId">
+                <el-button @click="newSportConfig.visibility = false">取 消</el-button>
+                <el-button type="primary" @click="newSportConfig.visibility = false; postSport();">确 定</el-button>
+            </div>
+
+            <div slot="footer" class="dialog-footer" v-show="sId">
+                <el-button type="primary" @click="newSportConfig.visibility = false; putSport()">确 定</el-button>
+                <el-button @click="backToSportList()">返 回</el-button>
+            </div>
+        </el-dialog>
+
+        <el-dialog v-bind:title="albumConfig.title" :visible.sync="albumConfig.visibility" @close="dealCloseDialog">
             <el-form class="newAlbumDialog">
                 <el-form-item label="运动项目">
                     <el-select v-model="newAlbum.sportId" 
+                        :disabled="!albumEditable"
                         clearable
                         filterable
                         placeholder="请选择">
@@ -142,6 +184,7 @@ temp.uploadAdmin =  `
                 </el-form-item>
                 <el-form-item label="制作者">
                     <el-select v-model="newAlbum.maker" 
+                        :disabled="!albumEditable"
                         clearable
                         filterable
                         placeholder="请选择">
@@ -152,10 +195,11 @@ temp.uploadAdmin =  `
                             :value="item.id">
                         </el-option>
                     </el-select>
-                    <el-button @click="makerConfig.visibility=true">创建</el-button>
+                    <el-button @click="makerConfig.visibility=true" v-show="!aId || (aId && albumEditable)">创建</el-button>
                 </el-form-item>
                 <el-form-item label="标签">
                     <el-select v-model="newAlbum.tag" 
+                        :disabled="!albumEditable"
                         clearable
                         filterable
                         placeholder="请选择">
@@ -168,9 +212,9 @@ temp.uploadAdmin =  `
                     </el-select>
                 </el-form-item>
                 <el-form-item label="专辑名称">
-                    <el-input v-model="newAlbum.name" auto-complete="off" style="width: 217px;"></el-input>
+                    <el-input v-model="newAlbum.name" :disabled="!albumEditable" auto-complete="off" style="width: 217px;"></el-input>
                 </el-form-item>
-                <el-form-item label="">
+                <el-form-item label="" v-if="!aId">
                     <el-upload
                         class="album-cover-uploader"
                         action="/upload"
@@ -185,10 +229,33 @@ temp.uploadAdmin =  `
                         <el-button size="" type="primary">上传封面</el-button>
                     </el-upload>
                 </el-form-item>
+                <el-form-item label="" v-if="aId">
+                    <el-upload
+                        v-show="albumEditable"
+                        class="album-cover-uploader"
+                        action="/upload"
+                        :data="{type:'img'}"
+                        :on-remove="handleRemove"
+                        :on-success="handleAlbumCoverSuccess"
+                        multiple
+                        :limit="1"
+                        :on-exceed="handleExceed"
+                        :file-list="fileList"
+                        >
+                        <el-button size="" type="primary">上传封面</el-button>
+                    </el-upload>
+                    <img v-show="!albumEditable" :src="'/img/cover/album/' + aId + '.jpg'"/>
+                </el-form-item>
             </el-form>
-            <div slot="footer" class="dialog-footer">
+            <div slot="footer" class="dialog-footer" v-show="!aId">
                 <el-button @click="albumConfig.visibility = false">取 消</el-button>
-                <el-button type="primary" @click="albumConfig.visibility = false; postAlbum();">确 定</el-button>
+                <el-button type="primary"  @click="albumConfig.visibility = false; postAlbum();">确 定</el-button>
+            </div>
+
+            <div slot="footer" class="dialog-footer" v-show="aId">
+                <el-button type="primary" v-show="albumEditable" @click="albumConfig.visibility = false; putAlbum()">确 定</el-button>
+                <el-button type="primary" @click="albumEditable=true" v-show="!albumEditable">编辑</el-button>
+                <el-button @click="backToAlbumList()">返 回</el-button>
             </div>
         </el-dialog>
 
@@ -235,9 +302,12 @@ temp.uploadAdmin =  `
 `;
 
 COMPONENTS.UploadAdmin = {
-	props: ['vId'],
+	props: ['vId', 'aId', 'sId'],
 	data: function () {
-        // console.log(this.vId);
+        let newSportConfig = {
+            visibility: false,
+            title: '新建运动'
+        };
 
 		let tagConfig = {
 			visibility: false,
@@ -255,6 +325,7 @@ COMPONENTS.UploadAdmin = {
 		};
 
 		var d = {
+            sport_id: 1,// 默认网球
             SO: {
                 albumId: '',
                 headline: '',
@@ -262,30 +333,59 @@ COMPONENTS.UploadAdmin = {
                 videoAbsPath: '',
                 subtitleAbsPath: ''
             }, 
-            videoInfo: {},
-            editable: this.vId ? false: true,
 			albums: [], 
 			tags: [], 
 			sports: [], 
-			makers: [],
+            makers: [],
+            newSportConfig: newSportConfig,
 			tagConfig: tagConfig, 
 			albumConfig: albumConfig,
-			makerConfig: makerConfig,
+            makerConfig: makerConfig,
+            
+            newSport:{},
 			newTag: {},
 			newAlbum: {},
 			newMaker:{},
-			selectedMaker: ''
-		};
+            selectedMaker: '',
+
+            videoInfo: {},
+            // albumInfo: {},
+            sportInfo: {},
+            
+            videoEditable: true,
+            albumEditable: false,
+        };
+        
+        if(this.vId){
+            d.videoEditable = false;
+        }else if(this.aId){
+            d.albumEditable = false;
+        }else if(this.sId){
+            d.newSportConfig = {
+                title: '编辑运动',
+                visibility: true
+            }
+        }
 
 		d.fileList = [];
-
-		this.queryAlbums();
-		this.queryTags();
-		this.querySports();
 
 		return d;
 	},
 	methods: {
+        dealCloseDialog: function(){
+            if(this.aId){
+                this.albumConfig.visibility = true;
+            }
+        },
+
+        backToAlbumList: function(){
+            location.href="#/albumsAdmin";
+        },
+        
+        backToSportList: function(){
+            location.href="#/sportsAdmin";
+        },
+
 		handleRemove(file, fileList) {
 			console.log(file, fileList);
 		},
@@ -305,9 +405,13 @@ COMPONENTS.UploadAdmin = {
 		},
 
 		handleAlbumCoverSuccess(res){
-			debugger;
 			this.newAlbum.cover = res.relPath;
-		},
+        },
+        
+        handleChooseSport: function(sportId){
+            if(sportId)
+                this.queryAlbums(sportId);
+        },
 
 		postVideo(){
 			let so = Object.assign({}, this.SO);
@@ -322,6 +426,18 @@ COMPONENTS.UploadAdmin = {
 			}.bind(this), 'post', so);
 		},
 
+        
+        postSport(){
+
+			tools.xhr('/sport', function(){
+                this.$message({
+                    message: '新建成功',
+                    type: 'success'
+                });
+                this.querySports();
+			}.bind(this), 'post', this.newSport);
+			
+		},
 		postTag(){
 
 			tools.xhr('/tag', function(){
@@ -354,14 +470,16 @@ COMPONENTS.UploadAdmin = {
 					type: 'success'
 				});
 
-				this.queryAlbums();
+				this.queryAlbums(this.sport_id);
 
 			}.bind(this), 'post', this.newAlbum);
 		},
 
-		queryAlbums(){
-            // 某项运动下的专辑列表 选定运动后 获取专辑数据 todo
-			tools.xhr('/albums', function(resData){
+		queryAlbums(sportId){
+            if(!sportId)
+                return;
+
+			tools.xhr('/sports/'+sportId+'/albums', function(resData){
 				this.albums = resData;
 			}.bind(this));
 		},
@@ -400,7 +518,7 @@ COMPONENTS.UploadAdmin = {
 		},
 
         fetchVideoInfo(){
-			tools.xhr('/vInfo/' + this.vId, function(resData){
+			tools.xhr('/videoInfo/' + this.vId, function(resData){
                 this.videoInfo = resData;
 
                 this.SO.albumId = resData.album_id;
@@ -408,6 +526,23 @@ COMPONENTS.UploadAdmin = {
                 this.SO.tag = resData.tag? resData.tag.split(',').map(function(){
                     return Number(arguments[0])
                 }): [];
+			}.bind(this));
+        },
+
+        fetchAlbumInfo: function(){
+            tools.xhr('/albumInfo/' + this.aId, function(resData){
+                // this.albumInfo = resData;
+                // this.newAlbum = resData;
+                this.newAlbum.sportId = resData.sport_id;
+                this.newAlbum.maker = Number(resData.author_id);
+                this.newAlbum.tag = Number(resData.tag);
+                this.newAlbum.name = resData.name;
+			}.bind(this));
+        },
+
+        fetchSportInfo: function(){
+            tools.xhr('/sportInfo/' + this.sId, function(resData){
+                this.newSport.name = resData.name;
 			}.bind(this));
         },
         
@@ -421,7 +556,7 @@ COMPONENTS.UploadAdmin = {
 					message: '视频更新成功',
 					type: 'success'
                 });
-                this.editable = false;
+                this.videoEditable = false;
 
                 this.SO.subtitleAbsPath = '';
                 this.SO.videoAbsPath = '';
@@ -429,7 +564,38 @@ COMPONENTS.UploadAdmin = {
                 this.SO.subtitleAbsPath = '';
                 this.SO.videoAbsPath = '';
             });
-		},
+        },
+        
+        putAlbum: function(){
+			tools.xhr('/album/' + this.aId, function(){
+				this.$message({
+					message: '更新成功',
+					type: 'success'
+                });
+                this.albumEditable = false;
+                location.href="#/albumsAdmin"
+			}.bind(this), 'put', this.newAlbum, function(){
+                this.$message({
+					message: '更新出错',
+					type: 'success'
+                });
+            });
+        },
+
+        putSport: function(){
+			tools.xhr('/sport/' + this.sId, function(){
+				this.$message({
+					message: '更新成功',
+					type: 'success'
+                });
+                location.href="#/sportsAdmin"
+			}.bind(this), 'put', this.newSport, function(){
+                this.$message({
+					message: '更新出错',
+					type: 'success'
+                });
+            });
+        }
 	},
 
 	// watch: {'SO.albumId': function(to, from){
@@ -443,14 +609,24 @@ COMPONENTS.UploadAdmin = {
     mounted: function(){
         if(this.vId){
             this.fetchVideoInfo();
+        }else if(this.aId){
+            this.fetchAlbumInfo();
+            this.queryMakers();
+            this.albumConfig.visibility = true;
+            this.albumConfig.title = '更新专辑';
+        }else if(this.sId){
+            this.fetchSportInfo();
         }
+
+        this.querySports();
+		this.queryTags();
     },
 
 	template: temp.uploadAdmin
 };
 
 routeConfig.push(
-    { path: '/uploadAdmin', component: COMPONENTS.UploadAdmin, props: function(route){return {vId: route.query.vId}} },
+    { path: '/uploadAdmin', component: COMPONENTS.UploadAdmin, props: function(route){return {vId: route.query.vId, aId: route.query.aId, sId: route.query.sId}} },
 );
 
 temp.feedbacksAdmin =  `
@@ -712,7 +888,7 @@ routeConfig.push(
 
 temp.albumsAdmin =  `
     <div>
-        <h2>视频列表</h2>
+        <h2>专辑列表</h2>
 
         <el-table
         :data="albums"
@@ -752,8 +928,8 @@ temp.albumsAdmin =  `
                 label="操作"
                 width="200">
                 <template slot-scope="scope">
-                    <el-button @click="patchVideo(scope.row.id)" type="text" size="small">更新</el-button>
-                    <el-button @click="deleteVideo(scope.row.id)" type="text" size="small">删除</el-button>
+                    <el-button @click="patchAlbum(scope.row.id)" type="text" size="small">更新</el-button>
+                    <el-button @click="deleteAlbum(scope.row.id)" type="text" size="small">删除</el-button>
                     <el-button @click="redirect(scope.row.id)" type="text" size="small">查看</el-button>
                 </template>
             </el-table-column>
@@ -794,17 +970,17 @@ COMPONENTS.AlbumsAdmin = {
             });
         },
 
-        patchVideo: function(id){
-            location.href = `#/uploadAdmin?vId=${id}`;
+        patchAlbum: function(id){
+            location.href = `#/uploadAdmin?aId=${id}`;
         },
         
-        deleteVideo: function(id){
+        deleteAlbum: function(id){
             this.$confirm('确定删除', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(function(){
-                tools.xhr('/video/' + id, function(resData){
+                tools.xhr('/album/' + id, function(resData){
                     this.fetchAlbums(this.curPage);
                     this.$message({
                         message: '删除成功',
@@ -816,7 +992,7 @@ COMPONENTS.AlbumsAdmin = {
         },
 
         redirect: function(id){
-            location.href="#/videos/"+id;
+            location.href="#/albums/"+id;
         }
 	},
 
@@ -863,8 +1039,8 @@ temp.sportsAdmin =  `
                 label="操作"
                 width="200">
                 <template slot-scope="scope">
-                    <el-button @click="patchVideo(scope.row.id)" type="text" size="small">更新</el-button>
-                    <el-button @click="deleteVideo(scope.row.id)" type="text" size="small">删除</el-button>
+                    <el-button @click="patchSport(scope.row.id)" type="text" size="small">更新</el-button>
+                    <el-button @click="deleteSport(scope.row.id)" type="text" size="small">删除</el-button>
                     <el-button @click="redirect(scope.row.id)" type="text" size="small">查看</el-button>
                 </template>
             </el-table-column>
@@ -905,17 +1081,17 @@ COMPONENTS.SportsAdmin = {
             });
         },
 
-        patchVideo: function(id){
-            location.href = `#/uploadAdmin?vId=${id}`;
+        patchSport: function(id){
+            location.href = `#/uploadAdmin?sId=${id}`;
         },
         
-        deleteVideo: function(id){
+        deleteSport: function(id){
             this.$confirm('确定删除', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(function(){
-                tools.xhr('/video/' + id, function(resData){
+                tools.xhr('/sport/' + id, function(resData){
                     this.fetchSports(this.curPage);
                     this.$message({
                         message: '删除成功',
@@ -927,7 +1103,7 @@ COMPONENTS.SportsAdmin = {
         },
 
         redirect: function(id){
-            location.href="#/videos/"+id;
+            location.href="#/sports/"+id;
         }
 	},
 

@@ -154,15 +154,15 @@ var temp = {
             </div>
             <div class="guide-section" v-if="loginUsrInfo && loginUsrInfo.is_admin == 1">
                 <div class="guide-entry" id="upload-entry" >
-                    <a href="#/uploadAdmin" class="guide-entry-renderer">
-                        <i class="el-icon-upload icon"></i>
-                        <span class="text">上传视频</span>
-                    </a>
-                </div>
-                <div class="guide-entry" id="upload-entry" >
                     <a href="#/feedbacksAdmin" class="guide-entry-renderer">
                         <i class="fa fa-coffee icon"></i>
                         <span class="text">反馈列表</span>
+                    </a>
+                </div>
+                <div class="guide-entry" id="upload-entry" >
+                    <a href="#/uploadAdmin" class="guide-entry-renderer">
+                        <i class="el-icon-upload icon"></i>
+                        <span class="text">上传视频</span>
                     </a>
                 </div>
                 <div class="guide-entry" id="upload-entry" >

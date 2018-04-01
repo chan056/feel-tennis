@@ -37,12 +37,21 @@ const routerConfig = {
             r.query('queryAlbum', params, res, req);
         },
         
-        '/vInfo/:id': function(params, res, req){
-            r.query('queryVinfo', params, res, req);
+        '/videoInfo/:id': function(params, res, req){
+            r.query('queryVideoInfo', params, res, req);
         },
-        // 根据video id 查询某个视频
+
+        // 根据video信息并更新相关记录
         '/videos/:id': function(params, res, req){
             r.query('queryVideo', params, res, req);
+        },
+
+        '/albumInfo/:id': function(params, res, req){
+            r.query('queryAlbumInfo', params, res, req);
+        },
+
+        '/sportInfo/:id': function(params, res, req){
+            r.query('querySportInfo', params, res, req);
         },
     
         '/makers': {
@@ -354,6 +363,13 @@ const routerConfig = {
             },
             limit: {level: 100}
         },
+
+        '/sport': {
+            fn: function(req, res){
+                r.post('creatSport', req, res);
+            },
+            limit: {level: 100}
+        },
     
         '/tag': {
             fn: function(req, res){
@@ -484,7 +500,21 @@ const routerConfig = {
                 r.put('updateVideoInfo', req, res, pathParams);
             },
             limit: {level: 100}
-        }
+        },
+
+        '/album/:id': {
+            fn: function(req, res, pathParams){
+                r.put('updateAlbumInfo', req, res, pathParams);
+            },
+            limit: {level: 100}
+        },
+
+        '/sport/:id': {
+            fn: function(req, res, pathParams){
+                r.put('updateSportInfo', req, res, pathParams);
+            },
+            limit: {level: 100}
+        },
     },
 
     // patch update部分资源
@@ -528,6 +558,13 @@ const routerConfig = {
         '/video/:id': {
             fn: function(req, res, pathParams){
                 r.delete('deleteVideo', req, res, pathParams);
+            },
+            limit: {level: 100}
+        },
+
+        '/sport/:id': {
+            fn: function(req, res, pathParams){
+                r.delete('deleteSport', req, res, pathParams);
             },
             limit: {level: 100}
         }

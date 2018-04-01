@@ -265,10 +265,6 @@ app {
 .newTagDialog .el-input {
   width: 300px;
 }
-.new-album-btn,
-.new-tag-btn {
-  margin-left: 20px;
-}
 #login-dialog .btns {
   padding-left: 100px;
 }
@@ -414,6 +410,7 @@ app {
   max-width: 100%!important;
   height: 100%!important;
   z-index: 1000!important;
+  padding: 0 !important;
 }
 .map-container .close-btn {
   position: absolute;
