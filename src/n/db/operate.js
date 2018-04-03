@@ -766,7 +766,6 @@ let operations = {
 					isAdmin = usr.is_admin,
 					isActive = usr.is_active;
 
-				console.log(isActive)
 				let info = {id: id, isAdmin: isAdmin, isActive: isActive};
 				info = JSON.stringify(info);
 

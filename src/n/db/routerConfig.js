@@ -79,6 +79,15 @@ const routerConfig = {
             let sql = `update usr set is_active = '1', active_code = '' where id = ${decryptedCode.id} and active_code = ${decryptedCode.code}`;
             r.excuteSQL(sql, res, function(result){
                 if(result.affectedRows){
+                    require('../cookie').setCookie(res, {
+                        name: `sid`,
+                        value: '',
+                        HttpOnly: true
+                    });
+                    res.end();
+                }else{
+                    res.statusMessage = 'active code invalid';
+                    res.statusCode = 499;
                     res.end();
                 }
             });

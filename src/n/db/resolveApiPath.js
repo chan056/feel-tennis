@@ -37,7 +37,6 @@ function resolveApiPath(req, res) {
                 level = limit.level,
                 visits = limit.visits;
             
-            console.log(req.usrInfo)
             if(!Number(req.usrInfo.isActive)){
                 res.statusCode = 402;
                 return res.end();
