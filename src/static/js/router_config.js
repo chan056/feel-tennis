@@ -6,7 +6,7 @@ const routeConfig = [
 	{ 
 		path: '/sports', 
 		component: COMPONENTS.Sports, 
-		meta: {title: '首页'}
+		meta: {title: '首页'},
 	},
 	{ 
 		path: '/sports/:sportId', 
@@ -56,6 +56,10 @@ const routeConfig = [
 	{ 
 		path: '/emailConfirm', 
 		component: COMPONENTS.EmailConfirm
+	},
+	{ 
+		path: '/retrievePsw', 
+		component: COMPONENTS.RetrievePsw
 	},
 	{ 
 		path: '/stars', 

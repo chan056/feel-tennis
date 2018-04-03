@@ -335,16 +335,6 @@ const routerConfig = {
             },
             limit: {level: 10}
         },
-
-        '/password': {
-            fn: function(params, res, req){
-                r.query('retrievePsw', params, res, req)
-            },
-            limit: {
-                level: 10,
-                visits: 2
-            }
-        },
         
     },
 
@@ -556,6 +546,14 @@ const routerConfig = {
                 r.patch('markMatchResult', req, res);
             },
             limit: {level: 10}
+        },
+
+        '/retrievePswEmail': function(req, res){
+            r.patch('retrievePswEmail', req, res)
+        },
+        
+        '/retrievePsw': function(req, res){
+            r.patch('retrievePsw', req, res)
         },
     },
 

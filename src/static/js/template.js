@@ -70,8 +70,7 @@ var temp = {
                         <el-input type="password" id="last-login-iput" v-model="loginForm.psw" auto-complete="off" clearable></el-input>
                     </el-form-item>
                     <p class="btns">
-                        <el-button @click="resetPswForm.visible = true; loginForm.visible = false;" class="rst-psw-btn">重置密码</el-button>
-                        <el-button @click="retrievePsw()" class="rst-psw-btn">找回密码</el-button>
+                        <el-button @click="resetPswForm.visible = true; loginForm.visible = false;" class="rst-psw-btn">修改密码</el-button>
                         <el-button @click="handlerRegist(); loginForm.visible = false;" class="rgst-btn">注册</el-button>
                     </p>
                 </el-form>
@@ -81,14 +80,19 @@ var temp = {
                 </div>
             </el-dialog>
 
-            <el-dialog title="重置密码" :visible.sync="resetPswForm.visible">
-                <el-form :model="resetPswForm">
-                    <el-form-item label="用户名" :label-width="resetPswForm.formLabelWidth">
+            <el-dialog title="修改密码" :visible.sync="resetPswForm.visible">
+                <el-form :model="resetPswForm" ref="resetPswForm" :rules="resetPswForm.rules">
+                    <el-form-item label="用户名" :label-width="resetPswForm.formLabelWidth" prop="name">
                         <el-input v-model="resetPswForm.name" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="旧密码" :label-width="resetPswForm.formLabelWidth">
                         <el-input type="password" v-model="resetPswForm.opsw" auto-complete="off" clearable></el-input>
                     </el-form-item>
+                    <el-form-item label="" :label-width="resetPswForm.formLabelWidth">
+                        <!--避免恶意发邮件 todo-->
+                        <i class="el-icon-question" @click="retrievePswEmail();" title="点击发送密码重置邮件"></i>
+                    </el-form-item>
+                    
                     <el-form-item label="新密码" :label-width="resetPswForm.formLabelWidth">
                         <el-input type="password" id="last-login-iput" v-model="resetPswForm.npsw" auto-complete="off" clearable></el-input>
                     </el-form-item>
@@ -96,6 +100,18 @@ var temp = {
                 <div slot="footer" class="dialog-footer">
                     <el-button type="primary" @click="resetPswForm.visible = false;">取 消</el-button>
                     <el-button type="primary" @click="resetPsw();">确 认</el-button>
+                </div>
+            </el-dialog>
+
+            <el-dialog title="重置密码" :visible.sync="retrievePswForm.visible">
+                <el-form :model="retrievePswForm" ref="retrievePswForm" :rules="retrievePswForm.rules">
+                    <el-form-item label="新密码" :label-width="retrievePswForm.formLabelWidth" prop="npsw">
+                        <el-input type="password" id="" v-model="retrievePswForm.npsw" auto-complete="off" clearable></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="retrievePswForm.visible = false;">取 消</el-button>
+                    <el-button type="primary" @click="retrievePsw();">确 认</el-button>
                 </div>
             </el-dialog>
 

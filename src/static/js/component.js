@@ -70,7 +70,23 @@ COMPONENTS.HeaderComponent = {
 			formLabelWidth: '100px',
 			visible: false,
 			opsw: '',
-			npsw: ''
+			npsw: '',
+			rules: {
+				name: [
+					{required: true, message: '请输入用户名', trigger: 'blur' },
+				]
+			}
+		},
+
+		retrievePswForm: {
+			formLabelWidth: '100px',
+			visible: false,
+			npsw: '',
+			rules: {
+				name: [
+					{required: true, message: '请输入新密码', trigger: 'blur' },
+				]
+			}
 		},
 
 		logoutForm: {
@@ -139,10 +155,6 @@ COMPONENTS.HeaderComponent = {
 			tools.insertScriptTag(1, '../lib/md5.js', 'md5');
 		},
 
-		retrievePsw: function(){
-			
-		},
-
 		handlerLogout(){
 			this.logoutForm.visible=true;
 		},
@@ -209,17 +221,75 @@ COMPONENTS.HeaderComponent = {
 			});
 		},
 
+		// 找回密码邮件
+		retrievePswEmail: function(){
+			const t = this;
+			
+			this.$refs['resetPswForm'].validateField('name', function(err){
+				if(!err){
+					var name = $.trim(t.resetPswForm.name);
+
+					t.$alert(`确认重置密码?`, '注意', {
+						confirmButtonText: '确定',
+						callback: function (action) {
+							tools.xhr('/retrievePswEmail', function(res){
+								t.$message({
+									type: 'info',
+									message: `密码重置邮件发送成功`
+								});
+
+								// t.resetPswForm.visible = false; 
+							}, 'patch', {
+								usrname: name
+							}, function(){
+								t.$message({
+									type: 'warning',
+									message: `密码重置邮件发送失败`
+								});
+							});
+						}
+					});
+				}
+			})
+		},
+
+		// 重置密码
+		retrievePsw: function(){
+			var t = this;
+			tools.xhr('/retrievePsw', function(res){
+				t.$message({
+					type: 'info',
+					message: `密码重置成功`
+				});
+
+				setTimeout(function(){
+					location.href=location.origin + '/#/';
+				}, 1000);
+
+				t.retrievePswForm.visible = false; 
+			}, 'patch', {
+				code: this.retrievePswCode,
+				npsw: md5($.trim(this.retrievePswForm.npsw))
+			}, function(){
+				t.$message({
+					type: 'warning',
+					message: `密码重置失败`
+				});
+			});
+		},
+
+		// 密码修改
 		resetPsw: function(){
 			const t = this;
 			let trim = $.trim;
 
-			this.$alert(`确认将密码重置为${t.resetPswForm.npsw}?`, '注意', {
+			this.$alert(`确认将密码修改为${t.resetPswForm.npsw}?`, '注意', {
 				confirmButtonText: '确定',
 				callback: function (action) {
 					tools.xhr('/resetPsw', function(res){
 						t.$message({
 							type: 'info',
-							message: `密码重置成功`
+							message: `密码修改成功`
 						});
 
 						t.resetPswForm.visible = false; 
@@ -230,7 +300,7 @@ COMPONENTS.HeaderComponent = {
 					}, function(){
 						t.$message({
 							type: 'warning',
-							message: `密码重置失败`
+							message: `密码修改失败`
 						});
 					});
 				}
@@ -293,6 +363,17 @@ COMPONENTS.HeaderComponent = {
 		$('.aside-menu-btn').on('click', function(){
 			$('#root-container').toggleClass('brief');
 		});
+
+		var retrievePswCode = '';
+		if(location.search.match(/\?retrievePswCode/)){
+			retrievePswCode = location.search.match(/retrievePswCode=([^&#]+)/);
+			retrievePswCode && (retrievePswCode = retrievePswCode[1]);
+
+			tools.insertScriptTag(1, '../lib/md5.js', 'md5');
+
+			this.retrievePswCode = retrievePswCode;
+			this.retrievePswForm.visible = true;
+		}
 	},
 
 	created: function(){

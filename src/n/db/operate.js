@@ -752,15 +752,6 @@ let operations = {
 		});
 	},
 
-	retrievePsw: function(res, qualification, params){
-		let emailSubject = 'yitube找回密码',
-			emailContent = `你好 ${postObj.name}, 
-				<a href="${req.headers.referer}?code=${encryptedCode}#/emailConfirm">点击</a>完成注册`;
-
-		let emailer = require('../mail');
-		emailer.sendMail(email, emailSubject, emailContent);
-	},
-
 	// ===============POST================
 	login: function(res, postObj, req){
 		var sql = `select * from usr where name=? and psw=?`;
@@ -772,9 +763,11 @@ let operations = {
 			let usr = result[0];
 			if(usr && usr.id){
 				let id = usr.id,
-					isAdmin = usr.is_admin;
+					isAdmin = usr.is_admin,
+					isActive = usr.is_active;
 
-				let info = {id: id, isAdmin: isAdmin};
+				console.log(isActive)
+				let info = {id: id, isAdmin: isAdmin, isActive: isActive};
 				info = JSON.stringify(info);
 
 				require('../cookie').setCookie(res, {
@@ -1238,6 +1231,89 @@ let operations = {
 			res.statusCode = 401;
 			res.end();
 		}
+	},
+
+	resetPsw: function(res, patchObj, req){
+		let sql = `update usr set psw='${patchObj.npsw}' where psw='${patchObj.opsw}' and name='${patchObj.name}'`;
+		// console.log(sql);
+		
+		conn.query(sql, function(err, result){
+			if(err)
+				console.log( err );
+
+			if(result.affectedRows == 1){
+				res.statusMessage = 'reset password success';
+				res.end();
+			}else{
+				res.statusCode = 401;
+				res.statusMessage = 'reset password fail';
+				res.end();
+			}
+		});
+	},
+
+	retrievePswEmail: function(res, patchObj, req){
+		let usrname = patchObj.usrname;
+		let code = Math.floor(Math.random() * 1000000000);
+		let sql = `update usr set retrieve_code=${code} where name='${usrname}'`;
+
+		conn.query(sql, function(err, result){
+			if(err){
+				console.log(err);
+			}
+
+			if(result.affectedRows){
+				
+				let codeStr = JSON.stringify({
+					name: usrname,
+					code: code
+				});
+		
+				let crypto = require('../crypto.js');
+				let encryptedCode = crypto.aesEncrypt(codeStr, require('../constant').aesKey);
+		
+				let emailSubject = 'yitube找回密码',
+					emailContent = `你好 ${usrname}, 
+						<a href="${req.headers.referer}?retrievePswCode=${encryptedCode}">点击或复制链接</a>完成密码重置`;
+		
+				let emailer = require('../mail');
+
+				sql = `select email from usr where name='${usrname}'`;
+				conn.query(sql, function(err, result){
+					if(err)
+						console.log(err);
+					
+					if(result[0]){
+						emailer.sendMail(result[0].email, emailSubject, emailContent);
+						res.end();
+					}
+				});
+			}else{
+				res.statusCode = 400;
+				return res.end()
+			}
+		})
+	},
+
+	retrievePsw: function(res, patchObj, req){
+		let code = patchObj.code;
+		let crypto = require('../crypto.js');
+		let encryptedCode = crypto.aesDecrypt(code, require('../constant').aesKey);
+		encryptedCode = JSON.parse(encryptedCode);
+
+		let sql = `update usr set psw='${patchObj.npsw}' where name='${encryptedCode.name}' and retrieve_code='${encryptedCode.code}'`;
+
+		conn.query(sql, function(err, result){
+			if(err)
+				console.log(err);
+
+			if(result && result.affectedRows == 1){
+				res.end();
+			}else{
+				res.statusCode = 400;
+				res.end();
+			}
+		})
 	},
 
 	resetPsw: function(res, patchObj, req){

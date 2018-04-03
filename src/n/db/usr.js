@@ -15,7 +15,8 @@ module.exports = function(req, fn, res){
         usrInfo = {
             type: 1,
             usrId: usr.id,
-            isAdmin: usr.isAdmin
+            isAdmin: usr.isAdmin,
+            isActive: usr.isActive
         }
     }else{
         let crypto = require('../crypto.js');
