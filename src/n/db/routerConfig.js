@@ -486,8 +486,11 @@ const routerConfig = {
             limit: {level: 10}
         },
     
-        '/video/:vId/remark': function(req, res, pathParams){
-            r.post('createVideoRemarks', req, res, pathParams);
+        '/video/:vId/remark': {
+            fn: function(req, res, pathParams){
+                r.post('createVideoRemarks', req, res, pathParams);
+            },
+            limit: {level: 10}
         },
 
         '/match': {

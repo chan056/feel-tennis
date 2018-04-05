@@ -1,6 +1,3 @@
-
-
-// 从路径中抽取参数
 function resolveApiPath(req, res) {
     var pathToRegexp = require('path-to-regexp');
     var routerConfig = require('./routerConfig');
@@ -37,7 +34,7 @@ function resolveApiPath(req, res) {
                 level = limit.level,
                 visits = limit.visits;
             
-            if(!Number(req.usrInfo.isActive)){
+            if(!Number(req.usrInfo.isActive)){//  && !admin
                 res.statusCode = 402;
                 return res.end();
             }
@@ -81,7 +78,6 @@ function resolveApiPath(req, res) {
                             if(usrId){
                                 let isAdmin = req.usrInfo.isAdmin || '0';
                                 
-                                // 记录
                                 let iSql = `insert into usr_api_access_log (api, uid, is_admin, timestamp)
                                  values ('${path}', ${usrId}, '${isAdmin}', now())`;
                                 conn.query(iSql);
