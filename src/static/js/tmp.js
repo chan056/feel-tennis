@@ -325,7 +325,7 @@ COMPONENTS.UploadAdmin = {
 		};
 
 		var d = {
-            sport_id: 1,// 默认网球
+            sport_id: null,
             SO: {
                 albumId: '',
                 headline: '',
