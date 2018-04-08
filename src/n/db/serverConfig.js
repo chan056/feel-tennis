@@ -50,6 +50,7 @@ module.exports = function(req, res) {
 							// 所有的静态资源添加同域限制 todo
 							if(ext == 'm3u8'){
 								let referer = req.headers.referer;
+								referer = path.basename(referer);
 
 								if(constants.whiteList.indexOf(referer) == -1){
 									return res.end();

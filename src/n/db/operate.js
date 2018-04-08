@@ -852,7 +852,7 @@ let operations = {
 						});
 		
 						res.statusMessage = 'regist success';
-						res.end();
+						res.end(`邮件已发送至 ${email}`);
 		
 						if(email){
 							let activeCode = JSON.stringify({
@@ -1272,8 +1272,9 @@ let operations = {
 				let encryptedCode = crypto.aesEncrypt(codeStr, require('../constant').aesKey);
 		
 				let emailSubject = 'yitube找回密码',
-					emailContent = `你好 ${usrname}, 
-						<a href="${req.headers.referer}?retrievePswCode=${encryptedCode}">点击或复制链接</a>完成密码重置`;
+					link = `${req.headers.referer}?retrievePswCode=${encryptedCode}`,
+					emailContent = `你好 ${usrname}, 点击或复制链接完成密码重置
+						<br/><a href="${link}">${link}</a>`;
 		
 				let emailer = require('../mail');
 
@@ -1284,7 +1285,7 @@ let operations = {
 					
 					if(result[0]){
 						emailer.sendMail(result[0].email, emailSubject, emailContent);
-						res.end();
+						res.end(`邮件已发送至 ${result[0].email}`);
 					}
 				});
 			}else{

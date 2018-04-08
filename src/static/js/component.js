@@ -198,10 +198,10 @@ COMPONENTS.HeaderComponent = {
 				if (valid) {
 					let trim = $.trim;
 
-					tools.xhr('/regist', function(){
+					tools.xhr('/regist', function(res){
 						t.registForm.visible = false;
 		
-						t.$alert('注册成功,请查收邮件激活账号', '提示', {
+						t.$alert('注册成功,' + res, '提示', {
 							confirmButtonText: '确定',
 							callback: function(){
 								location.reload();
@@ -235,7 +235,7 @@ COMPONENTS.HeaderComponent = {
 							tools.xhr('/retrievePswEmail', function(res){
 								t.$message({
 									type: 'info',
-									message: `密码重置邮件发送成功`
+									message: res
 								});
 
 								// t.resetPswForm.visible = false; 
