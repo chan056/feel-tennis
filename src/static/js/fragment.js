@@ -6,7 +6,10 @@ FRAGMENTS = {
                 var video = $('video')[0];
                 // window.vEle = video;
                 
-                var hls = new Hls();
+                var hls = new Hls({
+                    maxBufferLength: 20,
+                    maxMaxBufferLength: 20,
+                });
 
                 hls.loadSource('/multimedia/ts/`+ vId + `/_.m3u8');
                 
@@ -14,7 +17,7 @@ FRAGMENTS = {
 
                 hls.on(Hls.Events.MANIFEST_PARSED,function() {
                     // video.play();
-                    video.volume = 0;
+                    // video.volume = 0;
                 });
             }
         }`
