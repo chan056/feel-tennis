@@ -5,7 +5,7 @@ var temp = {
                 <el-col :span="4">
                     <i class="el-icon-menu aside-menu-btn"></i>
                     <a href="#/sports" id="logo">
-                        <img src="../img/logo.png" width="60px" alt="logo/>
+                        <img src="../img/logo.png" width="60px" alt="logo"/>
                     </a>
                     
                 </el-col>
