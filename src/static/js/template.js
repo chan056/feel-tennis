@@ -5,7 +5,7 @@ var temp = {
                 <el-col :span="4">
                     <i class="el-icon-menu aside-menu-btn"></i>
                     <a href="#/sports" id="logo">
-                        <img src="../img/logo.png" width="60px"/>
+                        <img src="../img/logo.png" width="60px" alt="logo/>
                     </a>
                     
                 </el-col>
@@ -219,7 +219,7 @@ var temp = {
             <ul class="block-list">
                 <li class="" v-for="sport in sports">
                     <router-link :to="{path: '/sports/'+ sport.id }" :title="sport.name">
-                        <img :src="'/img/cover/sport/' + sport.id + '.jpg'" class="block-thumb spt-thumb"/>
+                        <img :src="'/img/cover/sport/' + sport.id + '.jpg'" class="block-thumb spt-thumb" alt="sport"/>
                         <p class="clearfix block-info">
                             <span class="play-count">{{sport.impression}}次观看</span>
                             <span class="update-time">
@@ -246,7 +246,7 @@ var temp = {
             <ul id="video-container" class="block-list">
                 <li v-for="album in albumList">
                     <router-link :to="{path: '/albums/'+ album.id }">
-                        <img :src="'/img/cover/album/' + album.id + '.jpg'" class="block-thumb album-thumb"/>
+                        <img :src="'/img/cover/album/' + album.id + '.jpg'" class="block-thumb album-thumb" alt="album"/>
                     </router-link>
                     <h3 class="block-title album-title">
                         {{ album.name }}
@@ -286,7 +286,8 @@ var temp = {
             <ul class="block-list video-list">
                 <li v-for="video in albumVideoList">
                     <router-link :to="{path: '/videos/'+ video.id }">
-                        <img @mouseover="dynamivePreview($event);" @mouseout="staticPreview($event);" :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb video-thumb"/>
+                        <img @mouseover="dynamivePreview($event);" @mouseout="staticPreview($event);" 
+                            :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb video-thumb" alt="video"/>
                         <h3 class="block-title video-title ellipsis">
                             <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
                         </h3>
@@ -398,7 +399,7 @@ var temp = {
                 :visible.sync="previewerVisible"
                 >
                 <p v-if="gifLink" id="shoot-container">
-                    <img v-bind:src="gifLink" />
+                    <img v-bind:src="gifLink" alt="gif"/>
                 </p>
                 <span slot="footer" class="dialog-footer">
                     <el-popover
@@ -441,7 +442,7 @@ var temp = {
                 </el-form>
             </el-dialog>
 
-            <img id="kick-off-ball" src="/img/tennis_ball.png" @load="opening($event)"/>
+            <img id="kick-off-ball" src="/img/tennis_ball.png" @load="opening($event)" alt="loading"/>
         </div>
     `,
 
@@ -454,7 +455,7 @@ var temp = {
             <ul class="block-list video-list">
                 <li v-for="video in videos">
                     <router-link :to="{path: '/videos/' + video.id}">
-                        <img src="/img/logo.png" class="block-thumb video-thumb"/>
+                        <img src="/img/logo.png" class="block-thumb video-thumb" alt="video"/>
                         <h3 class="block-title video-title ellipsis">
                             <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
                         </h3>
@@ -499,7 +500,7 @@ var temp = {
             <ul class="block-list v-list">
                 <li class="" v-for="video in shotVideos">
                     <router-link :to="{path: '/usrVshoots?vId='+ video.id }">
-                        <img :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb spt-thumb"/>
+                        <img :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb spt-thumb" alt="video"/>
                         <h3 class="block-title video-title ellipsis">
                             <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
                         </h3>
@@ -522,7 +523,8 @@ var temp = {
             <ul class="block-list video-list">
                 <li v-for="video in starVideos">
                     <router-link :to="{path: '/videos/'+ video.id }">
-                        <img @mouseover="dynamivePreview($event);" @mouseout="staticPreview($event);" :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb"/>
+                        <img @mouseover="dynamivePreview($event);" @mouseout="staticPreview($event);" 
+                        :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb" alt="video"/>
                         <h3 class="block-title video-title ellipsis">
                             <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
                         </h3>
@@ -546,7 +548,8 @@ var temp = {
                 <li class="" v-for="shoot in shoots">
                     <img :data-src="'/multimedia/gif/'+shoot.screenshot" 
                     :src="'/multimedia/gif/'+shoot.screenshot + '.jpg'" 
-                    class="block-thumb video-thumb"/>
+                    class="block-thumb video-thumb"
+                    alt="screenshot"/>
                 </li>
             </ul>
 
@@ -614,7 +617,7 @@ var temp = {
                     </el-form-item>
 
                     <el-form-item label="头像" prop="avatar">
-                        <img v-if="!datumForm.editable" :src="datumForm.unstableDatum.avatar"></img>
+                        <img v-if="!datumForm.editable" :src="datumForm.unstableDatum.avatar" alt="avatar"></img>
                         <el-upload
                             v-if="datumForm.editable"
                             class=""
@@ -627,8 +630,8 @@ var temp = {
                             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                         </el-upload>
                         <div v-if="datumForm.editable" class="default-avatar-list">
-                            <img @click="selectDefaultAvatar($event)" src="/img/avatar/default/male.png"/>
-                            <img @click="selectDefaultAvatar($event)" src="/img/avatar/default/female.png"/>
+                            <img @click="selectDefaultAvatar($event)" src="/img/avatar/default/male.png" alt="default male"/>
+                            <img @click="selectDefaultAvatar($event)" src="/img/avatar/default/female.png" alt="default female"/>
                         </div>
                     </el-form-item>
 

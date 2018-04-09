@@ -47,7 +47,7 @@ module.exports = function(req, res) {
 		}
 
 		function serveStatic(){
-			fs.readFile(realPath, "binary", function(err, file) {
+			/* fs.readFile(realPath, "binary", function(err, file) {
 				if (err) {
 					res.writeHead(500, {
 						'Content-Type': 'text/plain'
@@ -67,16 +67,34 @@ module.exports = function(req, res) {
 			
 						if(constants.whiteList.indexOf(referer) == -1){
 							return res.end();
-						}/* else{
-							res.write(file, "binary");
-							return res.end();
-						} */
+						}
 					}
 			
 					res.write(file, "binary");
 					res.end();
 				}
+			}); */
+
+			var zlib = require('zlib');
+			var file = fs.createReadStream(realPath);
+			var acceptEncoding = req.headers['accept-encoding'];
+			if (acceptEncoding && acceptEncoding.indexOf('gzip') != -1) {
+				var gzipStream = zlib.createGzip();
+
+				res.setHeader("Content-Encoding", "gzip");
+				
+				file.pipe(gzipStream).pipe(res);
+
+			} else {
+				file.pipe(res);
+			}
+
+			res.writeHead(200, {
+				'Content-Type': contentType,
+				'Cache-Control': 'max-age=3600'
 			});
+
+			res.pipe(file);
 		}
 	});
 }

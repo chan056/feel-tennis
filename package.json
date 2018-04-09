@@ -18,7 +18,8 @@
     "nodemailer": "^4.4.2",
     "nodemailer-smtp-transport": "^2.7.4",
     "path-to-regexp": "^2.1.0",
-    "subtitles-parser": "0.0.2"
+    "subtitles-parser": "0.0.2",
+    "zlib": "^1.0.5"
   },
   "devDependencies": {
     "open": "0.0.5"
