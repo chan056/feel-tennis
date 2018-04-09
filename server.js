@@ -1,7 +1,7 @@
 var PORT = 80;
 
 var argv = process.argv;
-if(argv[0] == '/usr/local/bin/node'){
+if(argv[0] == '/usr/local/bin/node' || argv[0] == 'E:\\soft\\node\\node.exe'){
     PORT = 3000;
 }
 
