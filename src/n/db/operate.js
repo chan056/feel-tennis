@@ -188,7 +188,7 @@ let operations = {
 						dayView = tmpUsrRecord.day_view;
 						// console.log(dayView +1);
 						if(dayView < constants.tmpUsrDayView){
-							conn.query(`update tmp_usr set day_view=day_view+1 where ip='${usrIP}'`);
+							conn.query(`update tmp_usr set day_view=day_view+1,time=now() where ip='${usrIP}'`);
 							dayViewLeft = constants.tmpUsrDayView - dayView - 1;
 							queryVinfo();
 						}else{
@@ -934,7 +934,7 @@ let operations = {
 
 			conn.query('update album set update_time = ' + now + ' where id=' + albumId);
 			conn.query('update sport set update_time = ' + now + ' where id = (select sport_id from album where id = ' + albumId + ')');
-debugger;
+
 			let insertId = result.insertId;
 			insertId && this.generateVideo(insertId, postObj);
 		}.bind(this));
