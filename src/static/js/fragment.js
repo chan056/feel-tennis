@@ -17,7 +17,7 @@ FRAGMENTS = {
 
                 hls.on(Hls.Events.MANIFEST_PARSED,function() {
                     // video.play();
-                    // video.volume = 0;
+                    video.volume = .6;
                 });
             }
         }`

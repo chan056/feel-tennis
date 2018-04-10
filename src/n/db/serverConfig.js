@@ -47,100 +47,54 @@ module.exports = function(req, res) {
 		}
 
 		function serveStatic(){
-			if(/* ext != 'ts' */1){
-				fs.readFile(realPath, "binary", function(err, file) {
-					if (err) {
-						res.writeHead(500, {
-							'Content-Type': 'text/plain'
-						});
-						res.end(err);
-					} else {
-						res.writeHead(200, {
-							'Content-Type': contentType,
-							'Cache-Control': 'max-age=3600'
-						});
-				
-						// 所有的静态资源添加同域限制 todo
-						if(ext == 'm3u8'){
-							let referer = req.headers.referer;
-							referer = path.basename(referer);
-				
-							if(constants.whiteList.indexOf(referer) == -1){
-								return res.end();
-							}/* else{
-								res.write(file, "binary");
-								return res.end();
-							} */
-						}
-				
-						res.write(file, "binary");
-						res.end();
-					}
-				});
-			}else{
-				var file = {
-					path: realPath,
-					name: path.basename(realPath),
-					size: (fs.statSync(realPath)).size
-				};
-	
-				fs.open(file.path, 'r', function (err, fd) {
+			/* fs.readFile(realPath, "binary", function(err, file) {
+				if (err) {
+					res.writeHead(500, {
+						'Content-Type': 'text/plain'
+					});
+					console.log(err);
+					res.end();
+				} else {
 					res.writeHead(200, {
-			
 						'Content-Type': contentType,
-			
-						'Content-Length': file.size,
-			
-						// 'Content-Disposition': "attachment;filename=" + file.name
-			
+						'Cache-Control': 'max-age=3600'
 					});
 			
-					var buff = new Buffer(4096);// 每一小块 4K
-					var position = 0;
+					// 所有的静态资源添加同域限制 todo
+					if(ext == 'm3u8'){
+						let referer = req.headers.referer;
+						referer = path.basename(referer);
 			
-					var id = setInterval(function () {
-			
-						var quota = 300000; //Byte par seconde
-			
-						req.on('close', function () {
-			
-							res.end();
-
-							clearInterval(id);
-			
-							fs.close(fd);
-			
-							quota = 0;
-			
-						});
-			
-						while (quota > 0) {
-							var bytesRead = fs.readSync(fd, buff, 0, buff.length, position);
-							res.write(buff);
-			
-							position += bytesRead;
-			
-							quota -= bytesRead;
-			
-							if (bytesRead < buff.length) {
-			
-								clearInterval(id);
-
-								res.end();
-			
-								fs.close(fd);
-			
-								break;
-			
-							}
-			
+						if(constants.whiteList.indexOf(referer) == -1){
+							return res.end();
 						}
+					}
 			
-					}, 1000);
-				});
+					res.write(file, "binary");
+					res.end();
+				}
+			}); */
+
+			var zlib = require('zlib');
+			var file = fs.createReadStream(realPath);
+			var acceptEncoding = req.headers['accept-encoding'];
+			if (acceptEncoding && acceptEncoding.indexOf('gzip') != -1) {
+				var gzipStream = zlib.createGzip();
+
+				res.setHeader("Content-Encoding", "gzip");
+				
+				file.pipe(gzipStream).pipe(res);
+
+			} else {
+				file.pipe(res);
 			}
+
+			res.writeHead(200, {
+				'Content-Type': contentType,
+				'Cache-Control': 'max-age=3600'
+			});
+
+			res.pipe(file);
 		}
-
-
 	});
 }
