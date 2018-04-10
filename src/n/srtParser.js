@@ -15,8 +15,8 @@ module.exports = {
                 data = trimSrt(data);
                 res.end(JSON.stringify(data));
             }else{
-                res.statusCode = 404;
-                res.end('srt 404');
+                // res.statusCode = 404;
+                res.end();
             }
         }.bind(this));
 

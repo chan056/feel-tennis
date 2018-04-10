@@ -666,6 +666,9 @@ COMPONENTS.Video = {
 		});
 		
 		tools.xhr('/srt/' + videoId, function(resData){
+			if(!resData)
+				return;
+				
 			let playerWrapper = $('#palyer-wrapper')
 
 			tools.attachSubtile(window.vEle, resData, 500, function(subtitle){
