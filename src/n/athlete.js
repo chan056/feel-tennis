@@ -45,7 +45,7 @@ function truncateAthlete(fn){
 }
 
 function fetchAndfilterData(html, sportId) {
-    console.log(arguments)
+    // console.log(arguments)
     if (html) {
         let $ = cheerio.load(html);
         // return console.log($('#plyrRankings').length, $('#plyrRankings tbody td').length, $('#plyrRankings tbody td:nth-child(3)').length)

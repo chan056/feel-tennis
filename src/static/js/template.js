@@ -190,13 +190,13 @@ var temp = {
                 </div>
                 <div class="guide-entry" id="upload-entry" >
                     <a href="#/albumsAdmin" class="guide-entry-renderer">
-                        <i class="fa fa-video-camera icon"></i>
+                        <i class="fa fa-book icon"></i>
                         <span class="text">专辑列表</span>
                     </a>
                 </div>
                 <div class="guide-entry" id="upload-entry" >
                     <a href="#/sportsAdmin" class="guide-entry-renderer">
-                        <i class="fa fa-video-camera icon"></i>
+                        <i class="fa fa-soccer-ball-o icon"></i>
                         <span class="text">运动列表</span>
                     </a>
                 </div>
