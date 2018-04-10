@@ -353,7 +353,7 @@ COMPONENTS.UploadAdmin = {
             sportInfo: {},
             
             videoEditable: true,
-            albumEditable: false,
+            albumEditable: true,
         };
         
         if(this.vId){
