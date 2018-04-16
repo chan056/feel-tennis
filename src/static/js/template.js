@@ -37,6 +37,7 @@ var temp = {
                     </el-dropdown>
 
                     <i class="fa fa-bell-o" title="消息"></i>
+                    <i class="fa fa-money" title="投币"></i>
                 </el-col>
             </el-row>
 
@@ -448,14 +449,13 @@ var temp = {
 
     searchedvideos: `
         <div>
-            <!-- <el-breadcrumb separator="/">
-                <el-breadcrumb-item :to="{ path: '/sports' }">首页</el-breadcrumb-item>
-            </el-breadcrumb> -->
-            
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item :to="{ path: '/sports' }">视频</el-breadcrumb-item>
+            </el-breadcrumb>
             <ul class="block-list video-list">
                 <li v-for="video in videos">
                     <router-link :to="{path: '/videos/' + video.id}">
-                        <img src="/img/logo.png" class="block-thumb video-thumb" alt="video"/>
+                        <img :src="'/multimedia/ts/' + video.id + '/cover.jpg'" class="block-thumb video-thumb" alt="video"/>
                         <h3 class="block-title video-title ellipsis">
                             <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
                         </h3>
