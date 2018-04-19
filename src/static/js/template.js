@@ -26,7 +26,7 @@ var temp = {
                 </el-col>
 
                 <el-col :span="6" class="masthead fr">
-                    <el-dropdown id="usr-btns" class="fr" @command="handleUsrBtns">
+                    <el-dropdown id="usr-btns" class="item" @command="handleUsrBtns">
                         <i v-bind:class="loginUsrInfo.name? 'el-icon-setting': 'el-icon-view'" title="" @click=""></i>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item v-if="!loginUsrInfo.name" command="login" id="header-btn-login">登录</el-dropdown-item>
@@ -36,8 +36,20 @@ var temp = {
                         </el-dropdown-menu>
                     </el-dropdown>
 
-                    <i class="fa fa-bell-o" title="消息"></i>
-                    <i class="fa fa-money" title="投币"></i>
+                    <el-badge is-dot class="item item">
+                        <i class="fa fa-bell-o" title="消息"></i>
+                    </el-badge>
+
+                    <el-popover
+                        ref="popover1"
+                        placement="top-start"
+                        title=""
+                        width="200"
+                        trigger="hover">
+                        123
+                    </el-popover>
+                    
+                    <i v-popover:popover1 class="fa fa-money item" title="投币"></i>
                 </el-col>
             </el-row>
 
