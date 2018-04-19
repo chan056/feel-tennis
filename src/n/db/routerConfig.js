@@ -319,8 +319,11 @@ const routerConfig = {
         },
 
         
-        '/sameCityPlayer/:last_login_city': function(params, res, req){
-            r.query('fetchSameCityPlayer', params, res, req)
+        '/sameCityPlayer/:last_login_city': {
+            fn: function(params, res, req){
+                r.query('fetchSameCityPlayer', params, res, req)
+            },
+            limit: {level: 10}
         },
 
         '/cityPlayer': function(params, res, req){
