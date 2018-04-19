@@ -122,7 +122,14 @@ let operations = {
 	},
 
 	queryVideoInfo: function (res, qualification, params) {
-		conn.query('SELECT * from video' + qualification, function (err, result, fields) {
+		let sql = `SELECT
+			v.*,
+			(SELECT sport_id from album where id=v.album_id ) as sport_id
+		FROM
+			video AS v
+		${qualification}`;
+
+		conn.query(sql, function (err, result, fields) {
 			if (err) throw err;
 			
 			let vInfo = result[0];
@@ -919,10 +926,10 @@ let operations = {
 		let ext = path.extname(videoAbsPath);
 
 		var sql = `INSERT INTO video 
-			(album_id, headline, tag, video_ext, update_time)
-			VALUES (?, ?, ?, ?, ?)`;
+			(album_id, headline, headline_eng, tag, video_ext, update_time)
+			VALUES (?, ?, ?, ?, ?, ?)`;
 
-		conn.query(sql, [postObj.albumId, postObj.headline, postObj.tag, ext, +new Date()], function(err, result, fields){
+		conn.query(sql, [postObj.albumId, postObj.headline, postObj.headlineEng, postObj.tag, ext, +new Date()], function(err, result, fields){
 			if(err)
 				throw err;
 
@@ -1519,9 +1526,9 @@ let operations = {
 	// ===============PUT================
 	updateVideoInfo: function(res, postObj){
 		let vId = postObj.id;
-		var sql = `update video set album_id=?, headline=?, tag=?, update_time=? where id=${postObj.id}`;
+		var sql = `update video set album_id=?, headline=?, headline_eng=?, tag=?, update_time=? where id=${postObj.id}`;
 
-		conn.query(sql, [postObj.albumId, postObj.headline, postObj.tag, +new Date()], function(err, result, fields){
+		conn.query(sql, [postObj.albumId, postObj.headline, postObj.headlineEng, postObj.tag, +new Date()], function(err, result, fields){
 			if(err)
 				throw err;
 

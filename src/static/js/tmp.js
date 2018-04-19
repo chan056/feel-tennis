@@ -55,7 +55,7 @@ temp.uploadAdmin =  `
                 <label>专辑作者</label>
             </el-col>
             <el-col :span="10">
-                <el-input v-model="selectedMaker" :disabled="!!selectedMaker" placeholder="请输入标题"></el-input>
+                <el-input v-model="selectedMaker" :disabled="!!selectedMaker" placeholder="请输入作者"></el-input>
             </el-col>
         </el-row>
 
@@ -66,6 +66,16 @@ temp.uploadAdmin =  `
 
             <el-col :span="10">
                 <el-input :disabled="!videoEditable" v-model="SO.headline" placeholder="请输入标题"></el-input>
+            </el-col>
+        </el-row>
+
+        <el-row>
+            <el-col :span="4">
+                <label>英文标题</label>
+            </el-col>
+
+            <el-col :span="10">
+                <el-input :disabled="!videoEditable" v-model="SO.headlineEng" placeholder="请输入英文标题"></el-input>
             </el-col>
         </el-row>
 
@@ -521,8 +531,11 @@ COMPONENTS.UploadAdmin = {
 			tools.xhr('/videoInfo/' + this.vId, function(resData){
                 this.videoInfo = resData;
 
+                this.sport_id =  resData.sport_id;
+
                 this.SO.albumId = resData.album_id;
                 this.SO.headline = resData.headline;
+                this.SO.headlineEng = resData.headline_eng;
                 this.SO.tag = resData.tag? resData.tag.split(',').map(function(){
                     return Number(arguments[0])
                 }): [];
