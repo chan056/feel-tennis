@@ -1,7 +1,9 @@
-module.exports = function(){
+// module.exports = function(){
     var fragment = {
         attachVideo: function(vId){
+            alert(1);
             return `{
+                let m3u = '/multimedia/ts/`+ vId + `/_.m3u8';
                 if(Hls.isSupported()) {
                     var video = $('video')[0];
                     // window.vEle = video;
@@ -11,7 +13,7 @@ module.exports = function(){
                         maxMaxBufferLength: 20,
                     });
     
-                    hls.loadSource('/multimedia/ts/`+ vId + `/_.m3u8');
+                    hls.loadSource(m3u);
                     
                     hls.attachMedia(video);
     
@@ -19,7 +21,12 @@ module.exports = function(){
                         // video.play();
                         video.volume = .6;
                     });
-                }
+                }else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    video.src = m3u;
+                    video.addEventListener('canplay',function() {
+                        video.play();
+                    });
+                  }
             }`
         },
     
@@ -51,4 +58,4 @@ module.exports = function(){
     }
     
     window.FRAGMENTS = fragment;
-}
+// }

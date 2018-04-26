@@ -182,4 +182,11 @@ nodesession 独立
 ^^ 180403
     账号是否激活的影响
     找回密码
-    
+
+^^ 180418
+    视频英文名 用于检索
+
+^^ 
+    移动端支持 （https://github.com/video-dev/hls.js）Safari已支持
+
+    现代浏览器使用提示

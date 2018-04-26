@@ -1,4 +1,4 @@
-module.exports = function(){
+// module.exports = function(){
     let tagCreatorConstructor = Vue.extend({
         template: `
             <el-dialog v-bind:title="config.title" :visible.sync="config.visibility">
@@ -31,4 +31,4 @@ module.exports = function(){
             };
         }
     });
-}
+// }

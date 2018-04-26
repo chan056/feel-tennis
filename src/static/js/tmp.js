@@ -1139,7 +1139,7 @@ routeConfig.push(
 		routes: routeConfig
 	});
 	
-	mainRouter.beforeEach((to, from, next) => {
+	mainRouter.beforeEach(function (to, from, next) {
 		console.log(from.fullPath, '==>', to.fullPath);
 		next();
 	});

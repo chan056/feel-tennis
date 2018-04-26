@@ -1,4 +1,4 @@
-module.exports = function(){
+// module.exports = function(){
 	var COMPONENTS = {};
 
 	COMPONENTS.HeaderComponent = {
@@ -1950,4 +1950,4 @@ module.exports = function(){
 	}
 
 	window.COMPONENTS = COMPONENTS;
-}
+// }
