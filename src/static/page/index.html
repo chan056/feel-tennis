@@ -10,6 +10,12 @@
 		<link rel="stylesheet" href="../css/comp.css">
 		<link rel="stylesheet" href="../css/font-awesome.min.css">
 		<link rel="stylesheet" href="../css/media.css">
+
+		<script src="../lib/browser-detect.js"></script>
+		<script>
+			var noSupportItems = {ie: [11, 10, 9, 8, 7, 5, 6]}
+			BrowserDetect.init(noSupportItems);
+		</script>
 	</head>
 
 	<body>
@@ -35,16 +41,21 @@
 	<script src="../lib/element/index.js"></script>
 	<script src="../lib/vue-clipboard.min.js"></script>
 
-	<script src="../js/constant.js"></script>
+	<!-- bundle 部分 -->
+	<!-- <script src="../js/constant.js"></script>
 	<script src="../js/tools.js"></script>
 
 	<script src="../js/template.js"></script>
 	<script src="../js/g-component.js"></script>
+
 	<script src="../js/component.js"></script>
 	<script src="../js/fragment.js"></script>
 	<script src="../js/router_config.js"></script>
+	<script src="../js/global_event.js"></script> -->
+
+	<script src="../js/bundle.js"></script>
+
 	<script src="/tube"></script>
-	<script src="../js/global_hide.js"></script>
 `
 	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5XGIRhLpHgiaALCHuFfkCGcAewbkm4IP"></script>
 </html>
