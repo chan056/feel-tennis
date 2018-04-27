@@ -1,7 +1,6 @@
 // module.exports = function(){
     var fragment = {
         attachVideo: function(vId){
-            alert(1);
             return `{
                 let m3u = '/multimedia/ts/`+ vId + `/_.m3u8';
                 if(Hls.isSupported()) {
