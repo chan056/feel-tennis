@@ -80,7 +80,7 @@ let tools = {
             let st, et;// 微秒
 
             let i = 0;
-            l = srts.length;
+            let l = srts.length;
 
             if(lastSrtIndex){
                 i = lastSrtIndex;
@@ -170,3 +170,5 @@ let tools = {
         return '';
     }
 };
+
+window.tools = tools;
