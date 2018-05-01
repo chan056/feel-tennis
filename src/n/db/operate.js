@@ -107,6 +107,7 @@ let operations = {
 	queryAlbum: function (res, qualification, params) {
 		var sql = 'SELECT * from video' + qualification;
 		sql = disposePageSql(sql, params);
+		console.log(sql);
 		
 		conn.query(sql, function (err, list, fields) {
 			if (err) throw err;
@@ -1681,7 +1682,7 @@ function disposePageSql(sql, params){
 
 	if(pageNum || pageSize){
 		let firstPage = pageNum * pageSize;
-		sql += ` limit ${firstPage}, ${firstPage + pageSize}`;
+		sql += ` limit ${firstPage}, ${pageSize}`;
 	}
 
 	return sql;
