@@ -105,9 +105,11 @@ let operations = {
 	},
 
 	queryAlbum: function (res, qualification, params) {
+
 		var sql = 'SELECT * from video' + qualification;
-		sql = disposePageSql(sql, params);
 		console.log(sql);
+		
+		sql = disposePageSql(sql, params);
 		
 		conn.query(sql, function (err, list, fields) {
 			if (err) throw err;
