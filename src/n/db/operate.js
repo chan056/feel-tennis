@@ -105,7 +105,10 @@ let operations = {
 	},
 
 	queryAlbum: function (res, qualification, params) {
-		conn.query('SELECT * from video' + qualification, function (err, list, fields) {
+		var sql = 'SELECT * from video' + qualification;
+		sql = disposePageSql(sql, params);
+		
+		conn.query(sql, function (err, list, fields) {
 			if (err) throw err;
 		
 			conn.query(`select count(*) as count from video ${qualification}`, function(err, result){
