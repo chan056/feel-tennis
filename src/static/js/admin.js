@@ -154,7 +154,7 @@ temp.uploadAdmin =  `
         <el-row>
             <el-col :span="4">&nbsp;</el-col>
             <el-col :span="10">
-                <el-button v-show="videoEditable && SO.videoAbsPath" v-on:click="vId?putVideo(): postVideo()" class="new-video-btn">提交</el-button>
+                <el-button v-show="videoEditable && (vId || SO.videoAbsPath)" v-on:click="vId?putVideo(): postVideo()" class="new-video-btn">提交</el-button>
                 <el-button v-show="!videoEditable" v-on:click="videoEditable=true;" class="new-video-btn">编辑</el-button>
             </el-col>
         </el-row>
