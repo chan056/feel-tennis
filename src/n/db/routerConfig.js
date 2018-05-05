@@ -116,7 +116,7 @@ const routerConfig = {
             }
     
             if(params.headline){
-                clauses.push(`headline like '%` + params.headline + `%'`);
+                clauses.push(`(headline like '%${params.headline}%' or headline_eng like '%${params.headline}%')`);
                 delete params.headline;
             }
             
