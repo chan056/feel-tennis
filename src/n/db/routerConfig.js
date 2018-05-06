@@ -419,6 +419,8 @@ const routerConfig = {
             let fileType;
             
             form.multiples = true;
+
+            form.maxFileSize = 400 * 1024 * 1024;
         
             form.uploadDir = path.join(__dirname, "../../static", '/upload');
             let uploadDir = '/upload';
@@ -449,6 +451,7 @@ const routerConfig = {
         
             form.on('error', function(err) {
                 console.log('An error has occured: \n' + err);
+                res.end(JSON.stringify(err));
             });
         
             form.on('end', function() {
