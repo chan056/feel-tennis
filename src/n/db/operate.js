@@ -107,7 +107,6 @@ let operations = {
 	queryAlbum: function (res, qualification, params) {
 
 		var sql = 'SELECT * from video' + qualification;
-		console.log(sql);
 		
 		sql = disposePageSql(sql, params);
 		
