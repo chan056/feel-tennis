@@ -530,7 +530,7 @@ COMPONENTS.UploadAdmin = {
 			}.bind(this));
 		},
 
-        fetchVideoInfo(){
+        fetchVideoInfo(fn){
 			tools.xhr('/videoInfo/' + this.vId, function(resData){
                 this.videoInfo = resData;
 
@@ -542,6 +542,8 @@ COMPONENTS.UploadAdmin = {
                 this.SO.tag = resData.tag? resData.tag.split(',').map(function(){
                     return Number(arguments[0])
                 }): [];
+
+                fn && fn(resData.sport_id);
 			}.bind(this));
         },
 
@@ -624,17 +626,21 @@ COMPONENTS.UploadAdmin = {
     
     mounted: function(){
         if(this.vId){
-            this.fetchVideoInfo();
+            this.fetchVideoInfo(function(sId){
+                this.queryAlbums(sId);
+            }.bind(this));
+            this.querySports();
         }else if(this.aId){
             this.fetchAlbumInfo();
             this.queryMakers();
             this.albumConfig.visibility = true;
             this.albumConfig.title = '更新专辑';
+            this.querySports();
         }else if(this.sId){
             this.fetchSportInfo();
+            this.querySports();
         }
-
-        this.querySports();
+        
 		this.queryTags();
     },
 
