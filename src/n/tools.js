@@ -33,9 +33,10 @@ function newQueryClause(params) {
 			}else if(i == 'sort'){
 				sort = k;
 			}else{
+				// k = `'${k}'`;
 				n == 0?
-				qualification += i + '=' + k:
-				qualification += ' and ' + i + '=' + k;
+				qualification += `${i}=${k}`:
+				qualification += ` and ${i}=${k}`;
 			}
 		}
 
