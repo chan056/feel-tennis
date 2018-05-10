@@ -35,7 +35,7 @@ function newQueryClause(params) {
 			}else{
 				// k = `'${k}'`;
 				n == 0?
-				qualification += `${i}=${k}`:
+				qualification += `${i}='${k}'`:
 				qualification += ` and ${i}=${k}`;
 			}
 		}
