@@ -286,6 +286,7 @@ let operations = {
 	},
 
 	checkUsernameExist: function(res, qualification, params){
+		console.log('SELECT * from usr' + qualification)
 		conn.query('SELECT * from usr' + qualification, function (err, result, fields) {
 			if (err) throw err;
 
