@@ -19,6 +19,8 @@ function newQueryClause(params) {
 
 	var qualification = '';
 	var n = 0;
+	var sortBy = '';
+	var sort = '';
 	for (var i in params) {
 		let k = params[i];
 
@@ -26,13 +28,29 @@ function newQueryClause(params) {
 		k = mysql.escape(k);
 
 		if(i != 'pageNum' && i != 'pageSize'){
-			n == 0?
+			if(i == 'sortBy'){
+				sortBy = k;
+			}else if(i == 'sort'){
+				sort = k;
+			}else{
+				n == 0?
 				qualification += i + '=' + k:
 				qualification += ' and ' + i + '=' + k;
-
-			n ++;
+			}
 		}
+
+		n ++;
 	}
+
+	if(sortBy){
+		qualification += ` order by ${sortBy}`;
+	}
+
+	if(sort){
+		qualification += ` ${sort}`;
+	}
+
+	qualification = qualification.replace(/'/g, '');
 
 	return qualification;
 }

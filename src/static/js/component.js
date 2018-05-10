@@ -577,7 +577,7 @@
 		template: temp.album,
 		methods: {
 			fetchAlbumVideo: function(pageNum){
-				tools.xhr('/albums/' + this.albumId + '/videos', function(resData){
+				tools.xhr('/albums/' + this.albumId + '/videos?sortBy=id&sort=desc', function(resData){
 					this.albumVideoList = resData.datalist;
 					this.total = resData.total;
 				}.bind(this),'get',{
