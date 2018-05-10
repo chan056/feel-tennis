@@ -25,7 +25,7 @@ function newQueryClause(params) {
 		let k = params[i];
 
 		// i = mysql.escape(i);
-		k = mysql.escape(k);
+		// k = mysql.escape(k);
 
 		if(i != 'pageNum' && i != 'pageSize'){
 			if(i == 'sortBy'){
@@ -33,10 +33,9 @@ function newQueryClause(params) {
 			}else if(i == 'sort'){
 				sort = k;
 			}else{
-				// k = `'${k}'`;
 				n == 0?
-				qualification += `${i}='${k}'`:
-				qualification += ` and ${i}=${k}`;
+				qualification += i + '="' + k + '"':
+				qualification += ' and ' + i + '="' + k + '"';
 			}
 		}
 
