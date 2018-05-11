@@ -91,7 +91,7 @@ module.exports = function(req, res) {
 
 			res.writeHead(200, {
 				'Content-Type': contentType,
-				'Cache-Control': 'max-age=3600'
+				// 'Cache-Control': 'max-age=3600'
 			});
 
 			res.pipe(file);

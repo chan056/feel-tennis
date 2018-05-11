@@ -3,7 +3,11 @@
         attachVideo: function(vId){
             return `{
                 let m3u = '/multimedia/ts/`+ vId + `/_.m3u8';
+                let vtt = '/multimedia/ts/`+ vId + `/subtitle.vtt';
+                
+                
                 if(Hls.isSupported()) {
+                    alert('1')
                     var video = $('video')[0];
                     // window.vEle = video;
                     
@@ -11,6 +15,7 @@
                         maxBufferLength: 20,
                         maxMaxBufferLength: 20,
                     });
+                    
     
                     hls.loadSource(m3u);
                     
@@ -19,8 +24,12 @@
                     hls.on(Hls.Events.MANIFEST_PARSED,function() {
                         // video.play();
                         video.volume = .6;
+                        hls.subtitleTrack = 2;
+                        hls.subtitleDisplay = true;
+                        console.log(hls.subtitleTracks, hls.subtitleDisplay)
                     });
                 }else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    alert(2);
                     video.src = m3u;
                     video.addEventListener('canplay',function() {
                         video.play();

@@ -338,8 +338,11 @@
                     </el-tag>
                 </div>
                 <div id="palyer-wrapper">
-                    <video id="video" controls="controls" height="400">Not support this browser, please use Chrome.</video>
-                    <track src="http://www.storiesinflight.com/js_videosub/jellies.srt" kind="subtitle" srclang="en-US" label="English" />
+
+                    <video id="video" controls="controls" height="400">
+                        <track kind="subtitles" :src="'/multimedia/ts/'+videoId+'/subtitle.vtt'" srclang="en" label="XXX" default>
+                        请使用现代浏览器，如Chrome Firefox Safari Edge
+                    </video>
                     <p class="subtitle"></p>
                 </div>
                 <div v-if="video" id="usr-operation-desk">

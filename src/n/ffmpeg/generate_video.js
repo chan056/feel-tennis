@@ -75,7 +75,20 @@ function storeSubtitle(subtitleAbsPath, tsDir){
 
     // 多字幕 todo
     let subtitleStorePath = path.resolve(tsDir, `./subtitle`);
-    fs.rename(subtitleAbsPath, subtitleStorePath);
+    fs.rename(subtitleAbsPath, subtitleStorePath, function(){
+        convertSrt2vtt(subtitleStorePath);
+    });
+
+    function convertSrt2vtt(srtPath){
+        var fs = require('fs');
+        var srt2vtt = require('srt2vtt');
+
+        var srtData = fs.readFileSync(srtPath);
+        srt2vtt(srtData, function(err, vttData) {
+            if (err) throw new Error(err);
+                fs.writeFileSync('subtitle.vtt', vttData);
+        });
+    }
 }
 
 function screenShot (videoStorePath, tsDir){

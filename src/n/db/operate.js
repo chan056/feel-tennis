@@ -9,7 +9,7 @@ let operations = {
 		sql = disposePageSql(sql, params);
 
 		conn.query(sql, function (err, list, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			if(params.pageSize){
 				conn.query('select count(*) as count from sport', function(err, result){
@@ -31,7 +31,7 @@ let operations = {
 	querySkills: function (res, qualification, params) {
 
 		conn.query('SELECT * from skill' + qualification, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			result = JSON.stringify(result);
 			res.end(result)
@@ -42,7 +42,7 @@ let operations = {
 	queryAthletes: function (res, qualification, params) {
 
 		conn.query('SELECT * from athlete' + qualification, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			result = JSON.stringify(result);
 			res.end(result)
@@ -53,7 +53,7 @@ let operations = {
 	querySport: function (res, qualification, params) {
 		
 		conn.query('SELECT * from sport' + qualification, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			result = JSON.stringify(result);
 			res.end(result)
@@ -76,7 +76,7 @@ let operations = {
 		if(params.pageSize){
 			sql = disposePageSql(sql, params);
 			conn.query(sql, function (err, list, fields) {
-				if (err) throw err;
+				if (err) return throwError(err, res);
 	
 				let sql = '';
 				if(params.sport_id){
@@ -96,7 +96,7 @@ let operations = {
 			});
 		}else{
 			conn.query(sql, function (err, result, fields) {
-				if (err) throw err;
+				if (err) return throwError(err, res);
 	
 				result = JSON.stringify(result);
 				res.end(result);
@@ -111,7 +111,7 @@ let operations = {
 		sql = disposePageSql(sql, params);
 		
 		conn.query(sql, function (err, list, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 		
 			conn.query(`select count(*) as count from video ${qualification}`, function(err, result){
 
@@ -135,7 +135,7 @@ let operations = {
 		${qualification}`;
 
 		conn.query(sql, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 			
 			let vInfo = result[0];
 			result = JSON.stringify(vInfo);
@@ -146,7 +146,7 @@ let operations = {
 
 	queryAlbumInfo: function (res, qualification, params) {
 		conn.query('SELECT * from album' + qualification, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 			
 			let albumInfo = result[0];
 			result = JSON.stringify(albumInfo);
@@ -157,7 +157,7 @@ let operations = {
 
 	querySportInfo: function (res, qualification, params) {
 		conn.query('SELECT * from sport' + qualification, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 			
 			let sportInfo = result[0];
 			result = JSON.stringify(sportInfo);
@@ -224,7 +224,7 @@ let operations = {
 
 		function queryVinfo(){
 			conn.query('SELECT * from video' + qualification, function (err, result, fields) {
-				if (err) throw err;
+				if (err) return throwError(err, res);
 				
 				let vInfo = result[0];
 				
@@ -246,7 +246,7 @@ let operations = {
 
 	queryMakers: function(res, qualification, params) {
 		conn.query('SELECT * from maker' + qualification, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			result = JSON.stringify(result);
 
@@ -256,7 +256,7 @@ let operations = {
 
 	queryMaker: function(res, qualification, params) {
 		conn.query('SELECT * from maker' + qualification, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			result = JSON.stringify(result);
 
@@ -267,7 +267,7 @@ let operations = {
 	queryTag: function (res, qualification, params) {
 
 		conn.query('SELECT * from tag' + qualification, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			result = JSON.stringify(result);
 			res.end(result);
@@ -280,7 +280,7 @@ let operations = {
 		
 		if(usrInfo.type == 1){
 			conn.query('select name, day_view, is_admin from usr where id = ' + usrInfo.usrId, function(err, result){
-				if (err) throw err;
+				if (err) return throwError(err, res);
 
 				result = JSON.stringify(result[0]);
 				res.end(result);
@@ -293,7 +293,7 @@ let operations = {
 	checkUsernameExist: function(res, qualification, params){
 		console.log('SELECT * from usr' + qualification)
 		conn.query('SELECT * from usr' + qualification, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			if(result && result.length){
 				res.end('1');
@@ -305,7 +305,7 @@ let operations = {
 
 	checkEmailExist: function(res, qualification, params){
 		conn.query('SELECT * from usr' + qualification, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			if(result && result.length){
 				res.end('1');
@@ -356,12 +356,12 @@ let operations = {
 
 		let resData = {};
 		conn.query(sql, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			resData.skill = result;
 
 			conn.query(sql2, function (err, result, fields) {
-				if (err) throw err;
+				if (err) return throwError(err, res);
 				
 				resData.athlete = result;
 
@@ -377,7 +377,7 @@ let operations = {
 			sql = disposePageSql(sql, params);
 
 			conn.query(sql, function (err, list, fields) {
-				if (err) throw err;
+				if (err) return throwError(err, res);
 	
 				conn.query('select count(*) as count from star where usr_id=' + this.usrInfo.usrId, function(err, result){
 	
@@ -391,7 +391,7 @@ let operations = {
 			}.bind(this));
 		}else{
 			conn.query(sql, function (err, list, fields) {
-				if (err) throw err;
+				if (err) return throwError(err, res);
 	
 				res.end(JSON.stringify(list));
 			});
@@ -414,7 +414,7 @@ let operations = {
 		sql = disposePageSql(sql, params);
 
 		conn.query(sql, function (err, list, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			conn.query(`SELECT
 				count(*) as count
@@ -450,7 +450,7 @@ let operations = {
 			and
 			usv.v_id=v.id`
 		conn.query(sql, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			result = JSON.stringify(result);
 			res.end(result);
@@ -475,7 +475,7 @@ let operations = {
 		sql = disposePageSql(sql, params);
 		
 		conn.query(sql, function (err, list, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			conn.query(`SELECT
 			count(*) as count
@@ -516,7 +516,7 @@ let operations = {
 		sql = disposePageSql(sql, params)
 		
 		conn.query(sql, function (err, list, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			conn.query(`SELECT
 				count(*) as count
@@ -550,7 +550,7 @@ let operations = {
 		sql = disposePageSql(sql, params);
 
 		conn.query(sql, function (err, list, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 	
 			conn.query(`SELECT
 					count(*) as count
@@ -574,7 +574,7 @@ let operations = {
 
 	queryVideoRemarks: function(res, qualification, params){
 		conn.query(`SELECT * FROM video_remark where v_id='${params.v_id}'`, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			result = JSON.stringify(result);
 			res.end(result);
@@ -583,7 +583,7 @@ let operations = {
 
 	queryUsrVideoRemarks: function(res, qualification, params){
 		conn.query(`SELECT * FROM video_remark where v_id='${params.v_id}' and usr_id=${this.usrInfo.usrId}`, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			result = JSON.stringify(result);
 			res.end(result);
@@ -593,7 +593,7 @@ let operations = {
 	fetchUsrDatum: function(res, qualification, params){
 		let sql = `SELECT * FROM usr_datum where usr_id=${this.usrInfo.usrId}`;
 		conn.query(sql, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			if(result && result[0]){
 				result = JSON.stringify(result[0]);
@@ -624,7 +624,7 @@ let operations = {
 			AND ud.usr_id = ull.usr_id`;
 
 		conn.query(sql, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			if(result){
 				result = JSON.stringify(result);
@@ -658,7 +658,7 @@ let operations = {
 			AND stage < 3`;
 		
 		conn.query(sql, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 	
 			if(result){
 				// 过滤
@@ -771,7 +771,7 @@ let operations = {
 
 		conn.query(sql, [postObj.name, postObj.psw], function(err, result, fields){
 			if(err)
-				throw err;
+				return throwError(err, res);
 
 			let usr = result[0];
 			if(usr && usr.id){
@@ -824,7 +824,7 @@ let operations = {
 
 		conn.query(`SELECT * from usr WHERE regist_ip='${ip}' and regist_time > DATE_SUB(CURRENT_TIMESTAMP(),INTERVAL 1 DAY)`, function(err, result){
 			if(err)
-				throw err;
+				return throwError(err, res);
 
 			// 1天内同个IP注册超过10个
 			// 将IP加入黑名单
@@ -852,7 +852,7 @@ let operations = {
 		
 				conn.query(sql, [postObj.name, postObj.psw, email, code, ip], function(err, result, fields){
 					if(err)
-						throw err;
+						return throwError(err, res);
 		
 					let usrId = result.insertId;
 					if(usrId){
@@ -937,7 +937,7 @@ let operations = {
 
 		conn.query(sql, [postObj.albumId, postObj.headline, postObj.headlineEng, postObj.tag, ext, +new Date()], function(err, result, fields){
 			if(err)
-				throw err;
+				return throwError(err, res);
 
 			res.end();
 
@@ -1002,7 +1002,7 @@ let operations = {
 
 		conn.query(sql, [postObj.name, postObj.sportId], function(err, result, fields){
 			if(err)
-				throw err;
+				return throwError(err, res);
 			
 			res.end();
 		});
@@ -1015,7 +1015,7 @@ let operations = {
 
 		conn.query(sql, [postObj.sportId, postObj.maker, postObj.name, postObj.tag], function(err, result, fields){
 			if(err)
-				throw err;
+				return throwError(err, res);
 
 			let albumId = result.insertId;;
 
@@ -1040,7 +1040,7 @@ let operations = {
 
 		conn.query(sql, [postObj.name, postObj.desc], function(err, result, fields){
 			if(err)
-				throw err;
+				return throwError(err, res);
 			// console.log(arguments);
 			res.end();
 		});
@@ -1053,7 +1053,7 @@ let operations = {
 
 			conn.query(sql, [this.usrInfo.usrId, postObj.name], function(err, result, fields){
 			if(err)
-				throw err;
+				return throwError(err, res);
 			// console.log(result);
 			res.end(`${result.insertId}`);
 		});
@@ -1078,7 +1078,7 @@ let operations = {
 
 				conn.query(iSql, [postObj.starId, postObj.vId], function(err, result, fields){
 					if(err)
-						throw err;
+						return throwError(err, res);
 					
 					res.end();
 				});
@@ -1091,7 +1091,7 @@ let operations = {
 		let sql =  `INSERT INTO video_remark (v_id, usr_id, remark, moment) VALUES (?, ?, ?, ?)`;
 
 		conn.query(sql, [postObj.vId, this.usrInfo.usrId, postObj.remark, postObj.moment], function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			res.end();
 		});
@@ -1137,7 +1137,7 @@ let operations = {
 
 		function addBlack(sql){
 			conn.query(sql, function (err, result, fields) {
-				if (err) throw err;
+				if (err) return throwError(err, res);
 	
 				if(result.affectedRows){
 					require('../cookie').setCookie(res, {
@@ -1203,7 +1203,7 @@ let operations = {
 
 			conn.query(sql, [vId], function(err, result){
 				if(err)
-					throw err;
+					return throwError(err, res);
 
 				collectVideoVoteInfo();
 			});
@@ -1211,20 +1211,20 @@ let operations = {
 			sql = `select id from usr_comment where usr_id=? and video_id=? and comment_type=?`;
 			conn.query(sql, [usrId, vId, '1'], function(err, result){
 				if(err)
-					throw err;
+					return throwError(err, res);
 
 				if(result && result[0]){
 					sql = `update usr_comment set comment=? where usr_id=? and video_id=? and comment_type=?`;
 					conn.query(sql, [voteStatus, usrId, vId, '1'], function(err, result){
 						if(err)
-							throw err;
+							return throwError(err, res);
 					});
 				}else{
 					sql = `insert into usr_comment (usr_id, video_id, comment_type, comment) values (?,?,?,?)`;
 					// console.log(sql);
 					conn.query(sql, [usrId, vId, '1', voteStatus], function(err, result){
 						if(err)
-							throw err;
+							return throwError(err, res);
 					});
 				}
 			});
@@ -1233,7 +1233,7 @@ let operations = {
 				let sql = `select support_time,degrade_time from video where id=?`
 				conn.query(sql, [vId], function(err, result, fields){
 					if(err)
-						throw err;
+						return throwError(err, res);
 	
 					result = result[0];
 					res.end(JSON.stringify(result));
@@ -1392,7 +1392,7 @@ let operations = {
 			
 			conn.query(sql, function(err, result){
 				if(err)
-					throw err;
+					return throwError(err, res);
 	
 				if(result.affectedRows > 0){
 					res.statusMessage = 'update usrinfo success';
@@ -1486,7 +1486,7 @@ let operations = {
 		let sql = 'delete from feedback where id=?';
 
 		conn.query(sql, [deleteObj.id], function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			if(result.affectedRows == 1)
 				res.end()
@@ -1499,7 +1499,7 @@ let operations = {
 		let sql = `delete from video where id=${vId}`;
 
 		conn.query(sql, function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			if(result.affectedRows == 1)
 				res.end()
@@ -1521,7 +1521,7 @@ let operations = {
 		let sql = 'delete from sport where id=?';
 
 		conn.query(sql, [deleteObj.id], function (err, result, fields) {
-			if (err) throw err;
+			if (err) return throwError(err, res);
 
 			if(result.affectedRows == 1)
 				res.end()
@@ -1536,7 +1536,7 @@ let operations = {
 
 		conn.query(sql, [postObj.albumId, postObj.headline, postObj.headlineEng, postObj.tag, +new Date()], function(err, result, fields){
 			if(err)
-				throw err;
+				return throwError(err, res);
 
 			res.end();
 
@@ -1556,7 +1556,7 @@ let operations = {
 
 		conn.query(sql, [putObj.sportId, putObj.maker, putObj.tag, +new Date()], function(err, result, fields){
 			if(err)
-				throw err;
+				return throwError(err, res);
 				
 			if(result.affectedRows){
 				res.end();
@@ -1582,7 +1582,7 @@ let operations = {
 
 		conn.query(sql, [putObj.name, +new Date()], function(err, result, fields){
 			if(err)
-				throw err;
+				return throwError(err, res);
 				
 			if(result.affectedRows){
 				res.end();
@@ -1595,7 +1595,7 @@ let operations = {
 module.exports.excuteSQL = function (sql, res, fn) {
 	conn.query(sql,  function(err, result, fields){
 		if(err)
-			throw err;
+			return throwError(err, res);
 		
 		if(fn){
 			fn(result);
@@ -1662,7 +1662,7 @@ module.exports.delete = function (operation, request, response, pathParams) {
 
 function responseQry(sql, res, single){
 	conn.query(sql, function (err, result, fields) {
-		if (err) throw err;
+		if (err) return throwError(err, res);
 
 		if(result){
 			if(single){
@@ -1688,4 +1688,13 @@ function disposePageSql(sql, params){
 	}
 
 	return sql;
+}
+
+function throwError(err, res){
+	var errCode = err.code;
+
+	res.statusCode = 500;
+	res.end(JSON.stringify({
+		erorCode: errCode
+	}))
 }

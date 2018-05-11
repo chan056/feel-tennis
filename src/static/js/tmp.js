@@ -629,18 +629,16 @@ COMPONENTS.UploadAdmin = {
             this.fetchVideoInfo(function(sId){
                 this.queryAlbums(sId);
             }.bind(this));
-            this.querySports();
         }else if(this.aId){
             this.fetchAlbumInfo();
             this.queryMakers();
             this.albumConfig.visibility = true;
             this.albumConfig.title = '更新专辑';
-            this.querySports();
         }else if(this.sId){
             this.fetchSportInfo();
-            this.querySports();
         }
         
+        this.querySports();
 		this.queryTags();
     },
 
