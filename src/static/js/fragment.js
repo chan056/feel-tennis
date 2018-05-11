@@ -7,7 +7,6 @@
                 
                 
                 if(Hls.isSupported()) {
-                    alert('1')
                     var video = $('video')[0];
                     // window.vEle = video;
                     
@@ -29,7 +28,6 @@
                         console.log(hls.subtitleTracks, hls.subtitleDisplay)
                     });
                 }else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                    alert(2);
                     video.src = m3u;
                     video.addEventListener('canplay',function() {
                         video.play();
