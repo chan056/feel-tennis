@@ -666,18 +666,18 @@
 				d.tags = resData;
 			});
 			
-			// tools.xhr('/srt/' + videoId, function(resData){
-			// 	if(!resData)
-			// 		return;
+			tools.xhr('/srt/' + videoId, function(resData){
+				if(!resData)
+					return;
 					
-			// 	let playerWrapper = $('#palyer-wrapper')
+				let playerWrapper = $('#palyer-wrapper')
 
-			// 	tools.attachSubtile(window.vEle, resData, 500, function(subtitle){
-			// 		playerWrapper.find('.subtitle').text(subtitle).css({
+				tools.attachSubtile(window.vEle, resData, 500, function(subtitle){
+					playerWrapper.find('.subtitle').text(subtitle).css({
 
-			// 		});
-			// 	});
-			// });
+					});
+				});
+			});
 
 			d.newStarForm = {starName: '', visible: false};
 			d.stars = [];

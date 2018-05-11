@@ -340,7 +340,7 @@
                 <div id="palyer-wrapper">
 
                     <video id="video" controls="controls" height="400">
-                        <track kind="subtitles" :src="'/multimedia/ts/'+videoId+'/subtitle.vtt'" srclang="en" label="XXX" default>
+                        <track kind="subtitles" :src="'/multimedia/ts/'+videoId+'/subtitle.vtt'" srclang="zh" label="中文" default >
                         请使用现代浏览器，如Chrome Firefox Safari Edge
                     </video>
                     <p class="subtitle"></p>

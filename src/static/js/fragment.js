@@ -5,7 +5,6 @@
                 let m3u = '/multimedia/ts/`+ vId + `/_.m3u8';
                 let vtt = '/multimedia/ts/`+ vId + `/subtitle.vtt';
                 
-                
                 if(Hls.isSupported()) {
                     var video = $('video')[0];
                     // window.vEle = video;
@@ -15,22 +14,24 @@
                         maxMaxBufferLength: 20,
                     });
                     
-    
                     hls.loadSource(m3u);
                     
                     hls.attachMedia(video);
-    
+
                     hls.on(Hls.Events.MANIFEST_PARSED,function() {
-                        // video.play();
                         video.volume = .6;
-                        hls.subtitleTrack = 2;
-                        hls.subtitleDisplay = true;
-                        console.log(hls.subtitleTracks, hls.subtitleDisplay)
                     });
+
+                    // hls.on(Hls.Events.SUBTITLE_TRACK_LOADED,function() {
+                    //     hls.subtitleDisplay = true;
+                    //     hls.subtitleTrack = 0;
+                    //     console.log(hls.subtitleTracks)
+                        
+                    // })
                 }else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                     video.src = m3u;
                     video.addEventListener('canplay',function() {
-                        video.play();
+                        // video.play();
                     });
                 }else{
                     alert('请更换浏览器后再试,Chrome/Firefox/EDGE等现代浏览器');
