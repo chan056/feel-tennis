@@ -339,6 +339,7 @@
                 </div>
                 <div id="palyer-wrapper">
                     <video id="video" controls="controls" height="400">Not support this browser, please use Chrome.</video>
+                    <track src="http://www.storiesinflight.com/js_videosub/jellies.srt" kind="subtitle" srclang="en-US" label="English" />
                     <p class="subtitle"></p>
                 </div>
                 <div v-if="video" id="usr-operation-desk">

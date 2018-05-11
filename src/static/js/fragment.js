@@ -25,7 +25,9 @@
                     video.addEventListener('canplay',function() {
                         video.play();
                     });
-                  }
+                }else{
+                    alert('请更换浏览器后再试,Chrome/Firefox/EDGE等现代浏览器');
+                }
             }`
         },
     
