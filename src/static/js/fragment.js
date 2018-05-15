@@ -2,9 +2,8 @@
     var fragment = {
         attachVideo: function(vId){
             return `{
-                let m3u = '/multimedia/ts/`+ vId + `/_.m3u8';
-                let vtt = '/multimedia/ts/`+ vId + `/subtitle.vtt';
-                
+                let m3u = '/multimedia/ts/${vId}/_.m3u8';
+                // m3u = '/multimedia/pristine_v/${vId}.mp4';
                 if(Hls.isSupported()) {
                     var video = $('video')[0];
                     // window.vEle = video;
@@ -12,6 +11,7 @@
                     var hls = new Hls({
                         maxBufferLength: 20,
                         maxMaxBufferLength: 20,
+                        enableWebVTT: true
                     });
                     
                     hls.loadSource(m3u);
@@ -22,14 +22,10 @@
                         video.volume = .6;
                     });
 
-                    // hls.on(Hls.Events.SUBTITLE_TRACK_LOADED,function() {
-                    //     hls.subtitleDisplay = true;
-                    //     hls.subtitleTrack = 0;
-                    //     console.log(hls.subtitleTracks)
-                        
-                    // })
                 }else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                     video.src = m3u;
+                    var s = '<track kind="subtitles" src="/multimedia/ts/${vId}/subtitle.vtt" srclang="zh" label="中文" default >';
+                    $(video).prepend(s);
                     video.addEventListener('canplay',function() {
                         // video.play();
                     });
@@ -38,7 +34,7 @@
                 }
             }`
         },
-    
+
         attachSubtitle: `
             console.log('attachSubtitle loaded')
         `,

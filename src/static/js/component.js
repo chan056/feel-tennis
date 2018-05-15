@@ -640,6 +640,7 @@
 							this.$message({message: `当天剩余播放次数 ${resData.dayViewLeft || 0}次`, type: 'warning'});
 						}
 
+						// ***HLS
 						tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
 							tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
 
@@ -666,18 +667,24 @@
 				d.tags = resData;
 			});
 			
-			tools.xhr('/srt/' + videoId, function(resData){
-				if(!resData)
-					return;
-					
-				let playerWrapper = $('#palyer-wrapper')
+			// SRT字幕
+			if(1){
+			
+				tools.xhr('/srt/' + videoId, function(resData){
+					if(!resData)
+						return;
+						
+					let playerWrapper = $('#palyer-wrapper')
 
-				tools.attachSubtile(window.vEle, resData, 500, function(subtitle){
-					playerWrapper.find('.subtitle').text(subtitle).css({
+					tools.attachSubtile(window.vEle, resData, 500, function(subtitle){
+						playerWrapper.find('.subtitle').text(subtitle).css({
 
+						});
 					});
+					
 				});
-			});
+
+			}
 
 			d.newStarForm = {starName: '', visible: false};
 			d.stars = [];

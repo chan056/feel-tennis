@@ -84,11 +84,17 @@ function storeSubtitle(subtitleAbsPath, tsDir){
         var fs = require('fs');
         var srt2vtt = require('srt2vtt');
 
-        var srtData = fs.readFileSync(srtPath);
-        srt2vtt(srtData, function(err, vttData) {
-            if (err) throw new Error(err);
-                fs.writeFileSync('subtitle.vtt', vttData);
-        });
+        fs.exists(srtPath, function(doExist){
+            if(doExist){
+                var srtData = fs.readFileSync(srtPath);
+                srt2vtt(srtData, function(err, vttData) {
+                    if (err) throw new Error(err);
+        
+                    var storePos = path.resolve(tsDir, 'subtitle.vtt');
+                    fs.writeFileSync(storePos, vttData);
+                });
+            }
+        })
     }
 }
 
