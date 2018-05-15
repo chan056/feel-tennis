@@ -19,3 +19,10 @@ var server = http.createServer(serverConfig);
 server.listen(PORT, function(){
     console.log('listen on ' + PORT)
 });
+
+// process.on('uncaughtException',function(err){
+//     console.log(err);
+//     return false;
+// }) //监听未捕获的异常
+
+// process.on('unhandledRejection',function(err,promise){}) //监听Promise没有被捕获的失败函数

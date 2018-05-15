@@ -24,5 +24,6 @@ exports.types = {
     "map": 'text/plain',
     "m3u8": 'application/vnd.apple.mpegurl',// application/vnd.apple.mpegurl
     "ts": 'video/mp2t',
-    "srt": 'application/x-subrip'
+    "srt": 'application/x-subrip',
+    "vtt": 'text/vtt'
 };
