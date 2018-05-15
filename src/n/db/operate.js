@@ -912,11 +912,13 @@ let operations = {
 				let ext = path.extname(videoAbsPath);
 				let videoStorePath = global.staticRoot + `/multimedia/pristine_v/${vId}${ext}`;
 				let videoGenerator = require('../ffmpeg/generate_video');
-				fs.renameSync(videoAbsPath, videoStorePath,);// 用于生成gif
+				fs.renameSync(videoAbsPath, videoStorePath);// 用于生成gif
 
-				videoGenerator.execM3U(videoStorePath, tsDir);
-				videoGenerator.screenShot(videoStorePath, tsDir);
-				videoGenerator.dynamicPreview(videoStorePath, tsDir, vId);
+				videoGenerator.watermark(videoStorePath, function(){
+					videoGenerator.execM3U(videoStorePath, tsDir);
+					videoGenerator.screenShot(videoStorePath, tsDir);
+					videoGenerator.dynamicPreview(videoStorePath, tsDir, vId);
+				});
 
 				subtitleAbsPath && videoGenerator.storeSubtitle(subtitleAbsPath, tsDir);
 			})

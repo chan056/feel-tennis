@@ -13,6 +13,7 @@ module.exports.storeSubtitle = storeSubtitle;
 module.exports.execM3U = execM3U;
 module.exports.screenShot = screenShot;
 module.exports.dynamicPreview = dynamicPreview;
+module.exports.watermark = watermark;
 
 function execM3U(videoStorePath, tsDir){
     let multiResolution = {
@@ -119,5 +120,27 @@ function dynamicPreview(videoStorePath, tsDir, vId){
             scale: CONSTANTS.dynamicPreview.width,
             output: tsDir + '/d_cover.gif',
         });
+    })
+}
+
+// 水印
+function watermark (videoStorePath, fn){
+    let videoStorePathObj = path.parse(videoStorePath);
+    let outputVideoPath = path.dirname(videoStorePath) + `/${videoStorePathObj.name}.copy${videoStorePathObj.ext}`;
+
+    let logo = path.resolve(__dirname, '../../static/img/logo.jpg');
+
+    let cmd =  `ffmpeg -i ${videoStorePath} -framerate 30000/1001 -loop 1 -i ${logo} -filter_complex "[1:v] fade=out:st=30:d=1:alpha=1 [ov]; [0:v][ov] overlay=W-w-35:35 [v]" -map "[v]" -map 0:a -c:v libx264 -c:a copy -shortest ${outputVideoPath}`;
+
+    exec(cmd, function(error, duration){
+        if(error){
+            console.log(error);
+        }
+
+        fs.renameSync(outputVideoPath, videoStorePath);
+
+        console.log('watermark done........')
+
+        fn && fn();
     })
 }

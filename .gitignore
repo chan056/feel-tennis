@@ -6,6 +6,8 @@ src/n/package-lock.json
 /src/static/img/avatar/*.*
 /src/static/img/cover
 /src/static/js/tmp.js
+/src/n/ffmpeg/*.mp4
+/src/n/ffmpeg/test.js
 
 # Logs
 logs
