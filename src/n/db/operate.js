@@ -906,7 +906,7 @@ let operations = {
 			const fs = require('fs');
 
 			del([tsDir]).then(paths => {
-				console.log('Deleted files and folders:\n', paths.join('\n'));
+				// console.log('Deleted files and folders:\n', paths.join('\n'));
 				fs.mkdirSync(tsDir, 0777);
 
 				let ext = path.extname(videoAbsPath);

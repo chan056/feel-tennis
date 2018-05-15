@@ -430,15 +430,15 @@ const routerConfig = {
                 if(fileType == 'video'){
                     absPath = path.join(form.uploadDir, file.name);
                     relPath = path.join(uploadDir, file.name);
-                    fs.rename(file.path, absPath);// 没必要rename todo
+                    fs.rename(file.path, absPath, function(){});// 没必要rename todo
                 }else if(fileType == 'subtitle'){
                     absPath = path.join(form.uploadDir, file.name);
                     relPath = path.join(uploadDir, file.name);
-                    fs.rename(file.path, absPath);
+                    fs.rename(file.path, absPath, function(){});
                 }else if(fileType == 'img'){
                     absPath = path.join(form.uploadDir, file.name);
                     relPath = path.join(uploadDir, file.name);
-                    fs.rename(file.path, absPath);
+                    fs.rename(file.path, absPath, function(){});
                 }
             });
     
