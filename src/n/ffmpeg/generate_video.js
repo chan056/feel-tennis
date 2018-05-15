@@ -141,7 +141,7 @@ function watermark (videoStorePath, fn){
     let videoStorePathObj = path.parse(videoStorePath);
     let outputVideoPath = path.dirname(videoStorePath) + `/${videoStorePathObj.name}.copy${videoStorePathObj.ext}`;
 
-    let logo = path.resolve(__dirname, '../../static/img/logo.jpg');
+    let logo = path.resolve(__dirname, '../../static/img/site.jpg');
 
     let cmd =  `ffmpeg -i ${videoStorePath} -framerate 30000/1001 -loop 1 -i ${logo} -filter_complex "[1:v] fade=out:st=30:d=1:alpha=1 [ov]; [0:v][ov] overlay=W-w-35:35 [v]" -map "[v]" -map 0:a -c:v libx264 -c:a copy -shortest ${outputVideoPath}`;
 
