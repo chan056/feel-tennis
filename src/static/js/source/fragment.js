@@ -1,4 +1,4 @@
-// module.exports = function(){
+module.exports = function(){
     var fragment = {
         attachVideo: function(vId){
             return `{
@@ -63,4 +63,4 @@
     }
     
     window.FRAGMENTS = fragment;
-// }
+}

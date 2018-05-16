@@ -15,11 +15,14 @@ var webpack=require('webpack');
 const path=require("path");
 
 module.exports={
-    entry:'./src/static/js/entry.js',
+    entry:{
+        app: './src/static/js/source/entry.js',
+        admin: './src/static/js/source/admin.js'
+    },
 
     output:{
         path:__dirname + '/src/static/js/',
-        filename:'bundle.js'
+        filename: '[name].js'
     },
 
     module: {

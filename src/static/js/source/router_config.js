@@ -1,4 +1,4 @@
-// module.exports = function(){
+module.exports = function(){
 	const routeConfig = [
 		{ 
 			path: '/', 
@@ -82,4 +82,4 @@
 	];
 
 	window.routeConfig = routeConfig;
-// };
+};

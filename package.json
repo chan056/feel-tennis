@@ -4,6 +4,7 @@
   "description": "",
   "main": "mine.js",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "cheerio": "^1.0.0-rc.2",
     "client-ip": "^1.0.0",
     "concat-files": "^0.1.1",

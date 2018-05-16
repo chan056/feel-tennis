@@ -13,7 +13,7 @@
 
 		<script src="../lib/browser-detect.js"></script>
 		<script>
-			var noSupportItems = {ie: [11, 10, 9, 8, 7, 5, 6]}
+			var noSupportItems = {ie: [8, 7, 5, 6]};
 			BrowserDetect.init(noSupportItems);
 		</script>
 	</head>
@@ -26,6 +26,7 @@
 				<div id="main">
 					<router-view id="main-router-view" class="view"></router-view>
 				</div>
+				<br class="clr">
 			</div>
 		</app>
 
@@ -41,8 +42,9 @@
 	<script src="../lib/element/index.js"></script>
 	<script src="../lib/vue-clipboard.min.js"></script>
 
+	
 	<!-- bundle 部分 -->
-	<script src="../js/constant.js"></script>
+	<!-- <script src="../js/constant.js"></script>
 	<script src="../js/tools.js"></script>
 
 	<script src="../js/template.js"></script>
@@ -51,7 +53,9 @@
 	<script src="../js/component.js"></script>
 	<script src="../js/fragment.js"></script>
 	<script src="../js/router_config.js"></script>
-	<script src="../js/global_event.js"></script>
+	<script src="../js/global_event.js"></script> -->
+
+	<script src="../js/app.js"></script>
 
 	<script src="/tube"></script>
 `

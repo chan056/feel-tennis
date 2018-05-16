@@ -8,6 +8,7 @@
 // <script src="../js/router_config.js"></script>
 // <script src="../js/global_hide.js"></script>
 
+import "babel-polyfill";
 
 require('./constant.js');
 require('./tools.js');

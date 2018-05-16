@@ -1,340 +1,102 @@
-temp.uploadAdmin =  `
-    <div class="upload-wrapper">
-        <h2>视频上传</h2>
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 336);
+/******/ })
+/************************************************************************/
+/******/ ({
 
-        <el-row>
-            <el-col :span="4">
-                <label>运动</label>
-            </el-col>
+/***/ 336:
+/***/ (function(module, exports, __webpack_require__) {
 
-            <el-col :span="10">
-                <el-select 
-                :disabled="!videoEditable"
-                v-model="sport_id" 
-                clearable 
-                placeholder="请选择" 
-                @change="handleChooseSport">
-                    <el-option
-                        v-for="item in sports"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id">
-                    </el-option>
-                </el-select>
-            </el-col>
-            
-            <el-button v-show="videoEditable" @click="newSportConfig.visibility=true" class="new-sport-btn">新建运动</el-button>
-        </el-row>
+"use strict";
 
-        <el-row ng-show="sport_id">
-            <el-col :span="4">
-                <label>专辑</label>
-            </el-col>
 
-            <el-col :span="10">
-                <el-select 
-                :disabled="!videoEditable"
-                v-model="SO.albumId" 
-                clearable 
-                placeholder="请选择" 
-                @command="chooseAlbumHandler">
-                    <el-option
-                        v-for="item in albums"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id">
-                    </el-option>
-                </el-select>
-            </el-col>
-            
-            <el-button v-show="videoEditable" @click="openAlbumDialog();" class="new-album-btn">新建专辑</el-button>
-        </el-row>
-
-        <el-row v-if="selectedMaker">
-            <el-col :span="4">
-                <label>专辑作者</label>
-            </el-col>
-            <el-col :span="10">
-                <el-input v-model="selectedMaker" :disabled="!!selectedMaker" placeholder="请输入作者"></el-input>
-            </el-col>
-        </el-row>
-
-        <el-row>
-            <el-col :span="4">
-                <label>标题</label>
-            </el-col>
-
-            <el-col :span="10">
-                <el-input :disabled="!videoEditable" v-model="SO.headline" placeholder="请输入标题"></el-input>
-            </el-col>
-        </el-row>
-
-        <el-row>
-            <el-col :span="4">
-                <label>英文标题</label>
-            </el-col>
-
-            <el-col :span="10">
-                <el-input :disabled="!videoEditable" v-model="SO.headlineEng" placeholder="请输入英文标题"></el-input>
-            </el-col>
-        </el-row>
-
-        <el-row>
-            <el-col :span="4">
-                <label>标签</label>
-            </el-col>
-            <el-col :span="10">
-                <el-select v-model="SO.tag"
-                    :disabled="!videoEditable" 
-                    clearable
-                    multiple
-                    filterable
-                    placeholder="请选择tag">
-                    <el-option
-                        v-for="item in tags"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id">
-                    </el-option>
-                </el-select>
-            </el-col>
-            
-            <el-button v-show="videoEditable" v-on:click="" @click="tagConfig.visibility = true" class="new-tag-btn">新建标签</el-button>
-        </el-row>
-
-        <el-row>
-            <el-col :span="4">
-                <label>视频</label>
-            </el-col>
-
-            <el-col :span="10">
-                <el-upload
-                    v-show="videoEditable"
-                    class="upload-demo"
-                    action="/upload"
-                    :data="{type:'video'}"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                    :on-success="handleSuccess"
-                    multiple
-                    :limit="10"
-                    :on-exceed="handleExceed"
-                    :file-list="fileList"
-                    >
-                    <el-button size="small" type="primary">上传视频</el-button>
-                </el-upload>
-                <el-input v-show="!videoEditable" :value="vId+videoInfo.video_ext" disabled/>
-            </el-col>
-        </el-row>
-
-        <el-row>
-            <el-col :span="4">
-                <label>字幕</label>
-            </el-col>
-
-            <el-col :span="10">
-                <el-upload
-                    v-show="videoEditable"
-                    class="upload-demo"
-                    action="/upload"
-                    :data="{type:'subtitle'}"
-                    :on-remove="handleRemove"
-                    :on-success="handleSubtitleSuccess"
-                    multiple
-                    :limit="1"
-                    :on-exceed="handleExceed"
-                    :file-list="fileList"
-                    >
-                    <el-button size="small" type="primary">上传字幕</el-button>
-                </el-upload>
-                <el-input v-show="!videoEditable" :value="vId+'.srt'" disabled/>
-            </el-col>
-        </el-row>
-
-        <el-row>
-            <el-col :span="4">&nbsp;</el-col>
-            <el-col :span="10">
-                <el-button v-show="videoEditable && (vId || SO.videoAbsPath)" v-on:click="vId?putVideo(): postVideo()" class="new-video-btn">提交</el-button>
-                <el-button v-show="!videoEditable" v-on:click="videoEditable=true;" class="new-video-btn">编辑</el-button>
-            </el-col>
-        </el-row>
-
-        <el-dialog v-bind:title="newSportConfig.title" :visible.sync="newSportConfig.visibility" @close="newSportConfig.visibility=true">
-            <el-form class="newTagDialog">
-                <el-form-item label="运动名称">
-                    <el-input v-model="newSport.name" auto-complete="off"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer" v-show="!sId">
-                <el-button @click="newSportConfig.visibility = false">取 消</el-button>
-                <el-button type="primary" @click="newSportConfig.visibility = false; postSport();">确 定</el-button>
-            </div>
-
-            <div slot="footer" class="dialog-footer" v-show="sId">
-                <el-button type="primary" @click="newSportConfig.visibility = false; putSport()">确 定</el-button>
-                <el-button @click="backToSportList()">返 回</el-button>
-            </div>
-        </el-dialog>
-
-        <el-dialog v-bind:title="albumConfig.title" :visible.sync="albumConfig.visibility" @close="dealCloseDialog">
-            <el-form class="newAlbumDialog">
-                <el-form-item label="运动项目">
-                    <el-select v-model="newAlbum.sportId" 
-                        :disabled="!albumEditable"
-                        clearable
-                        filterable
-                        placeholder="请选择">
-                        <el-option
-                            v-for="item in sports"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="制作者">
-                    <el-select v-model="newAlbum.maker" 
-                        :disabled="!albumEditable"
-                        clearable
-                        filterable
-                        placeholder="请选择">
-                        <el-option
-                            v-for="item in makers"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-                    <el-button @click="makerConfig.visibility=true" v-show="!aId || (aId && albumEditable)">创建</el-button>
-                </el-form-item>
-                <el-form-item label="标签">
-                    <el-select v-model="newAlbum.tag" 
-                        :disabled="!albumEditable"
-                        clearable
-                        filterable
-                        placeholder="请选择">
-                        <el-option
-                            v-for="item in tags"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="专辑名称">
-                    <el-input v-model="newAlbum.name" :disabled="!albumEditable" auto-complete="off" style="width: 217px;"></el-input>
-                </el-form-item>
-                <el-form-item label="" v-if="!aId">
-                    <el-upload
-                        class="album-cover-uploader"
-                        action="/upload"
-                        :data="{type:'img'}"
-                        :on-remove="handleRemove"
-                        :on-success="handleAlbumCoverSuccess"
-                        multiple
-                        :limit="1"
-                        :on-exceed="handleExceed"
-                        :file-list="fileList"
-                        >
-                        <el-button size="" type="primary">上传封面</el-button>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item label="" v-if="aId">
-                    <el-upload
-                        v-show="albumEditable"
-                        class="album-cover-uploader"
-                        action="/upload"
-                        :data="{type:'img'}"
-                        :on-remove="handleRemove"
-                        :on-success="handleAlbumCoverSuccess"
-                        multiple
-                        :limit="1"
-                        :on-exceed="handleExceed"
-                        :file-list="fileList"
-                        >
-                        <el-button size="" type="primary">上传封面</el-button>
-                    </el-upload>
-                    <img v-show="!albumEditable" :src="'/img/cover/album/' + aId + '.jpg'"/>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer" v-show="!aId">
-                <el-button @click="albumConfig.visibility = false">取 消</el-button>
-                <el-button type="primary"  @click="albumConfig.visibility = false; postAlbum();">确 定</el-button>
-            </div>
-
-            <div slot="footer" class="dialog-footer" v-show="aId">
-                <el-button type="primary" v-show="albumEditable" @click="albumConfig.visibility = false; putAlbum()">确 定</el-button>
-                <el-button type="primary" @click="albumEditable=true" v-show="!albumEditable">编辑</el-button>
-                <el-button @click="backToAlbumList()">返 回</el-button>
-            </div>
-        </el-dialog>
-
-        <el-dialog v-bind:title="tagConfig.title" :visible.sync="tagConfig.visibility">
-            <el-form class="newTagDialog">
-                <el-form-item label="标签名称">
-                    <el-input v-model="newTag.name" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="运动项目">
-                    <el-select v-model="newTag.sportId" 
-                        clearable
-                        filterable
-                        placeholder="请选择">
-                        <el-option
-                            v-for="item in sports"
-                            :key="item.id"
-                            :label="item.name"
-                            :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="tagConfig.visibility = false">取 消</el-button>
-                <el-button type="primary" @click="tagConfig.visibility = false; postTag();">确 定</el-button>
-            </div>
-        </el-dialog>
-
-        <el-dialog v-bind:title="makerConfig.title" :visible.sync="makerConfig.visibility">
-            <el-form class="newTagDialog">
-                <el-form-item label="名字">
-                    <el-input v-model="newMaker.name" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="描述">
-                    <el-input v-model="newMaker.desc" type="textarea" style="width: 300px;"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="makerConfig.visibility = false">取 消</el-button>
-                <el-button type="primary" @click="makerConfig.visibility = false; postMaker();">确 定</el-button>
-            </div>
-        </el-dialog>
-    </div>
-`;
+temp.uploadAdmin = '\n    <div class="upload-wrapper">\n        <h2>\u89C6\u9891\u4E0A\u4F20</h2>\n\n        <el-row>\n            <el-col :span="4">\n                <label>\u8FD0\u52A8</label>\n            </el-col>\n\n            <el-col :span="10">\n                <el-select \n                :disabled="!videoEditable"\n                v-model="sport_id" \n                clearable \n                placeholder="\u8BF7\u9009\u62E9" \n                @change="handleChooseSport">\n                    <el-option\n                        v-for="item in sports"\n                        :key="item.id"\n                        :label="item.name"\n                        :value="item.id">\n                    </el-option>\n                </el-select>\n            </el-col>\n            \n            <el-button v-show="videoEditable" @click="newSportConfig.visibility=true" class="new-sport-btn">\u65B0\u5EFA\u8FD0\u52A8</el-button>\n        </el-row>\n\n        <el-row ng-show="sport_id">\n            <el-col :span="4">\n                <label>\u4E13\u8F91</label>\n            </el-col>\n\n            <el-col :span="10">\n                <el-select \n                :disabled="!videoEditable"\n                v-model="SO.albumId" \n                clearable \n                placeholder="\u8BF7\u9009\u62E9" \n                @command="chooseAlbumHandler">\n                    <el-option\n                        v-for="item in albums"\n                        :key="item.id"\n                        :label="item.name"\n                        :value="item.id">\n                    </el-option>\n                </el-select>\n            </el-col>\n            \n            <el-button v-show="videoEditable" @click="openAlbumDialog();" class="new-album-btn">\u65B0\u5EFA\u4E13\u8F91</el-button>\n        </el-row>\n\n        <el-row v-if="selectedMaker">\n            <el-col :span="4">\n                <label>\u4E13\u8F91\u4F5C\u8005</label>\n            </el-col>\n            <el-col :span="10">\n                <el-input v-model="selectedMaker" :disabled="!!selectedMaker" placeholder="\u8BF7\u8F93\u5165\u4F5C\u8005"></el-input>\n            </el-col>\n        </el-row>\n\n        <el-row>\n            <el-col :span="4">\n                <label>\u6807\u9898</label>\n            </el-col>\n\n            <el-col :span="10">\n                <el-input :disabled="!videoEditable" v-model="SO.headline" placeholder="\u8BF7\u8F93\u5165\u6807\u9898"></el-input>\n            </el-col>\n        </el-row>\n\n        <el-row>\n            <el-col :span="4">\n                <label>\u82F1\u6587\u6807\u9898</label>\n            </el-col>\n\n            <el-col :span="10">\n                <el-input :disabled="!videoEditable" v-model="SO.headlineEng" placeholder="\u8BF7\u8F93\u5165\u82F1\u6587\u6807\u9898"></el-input>\n            </el-col>\n        </el-row>\n\n        <el-row>\n            <el-col :span="4">\n                <label>\u6807\u7B7E</label>\n            </el-col>\n            <el-col :span="10">\n                <el-select v-model="SO.tag"\n                    :disabled="!videoEditable" \n                    clearable\n                    multiple\n                    filterable\n                    placeholder="\u8BF7\u9009\u62E9tag">\n                    <el-option\n                        v-for="item in tags"\n                        :key="item.id"\n                        :label="item.name"\n                        :value="item.id">\n                    </el-option>\n                </el-select>\n            </el-col>\n            \n            <el-button v-show="videoEditable" v-on:click="" @click="tagConfig.visibility = true" class="new-tag-btn">\u65B0\u5EFA\u6807\u7B7E</el-button>\n        </el-row>\n\n        <el-row>\n            <el-col :span="4">\n                <label>\u89C6\u9891</label>\n            </el-col>\n\n            <el-col :span="10">\n                <el-upload\n                    v-show="videoEditable"\n                    class="upload-demo"\n                    action="/upload"\n                    :data="{type:\'video\'}"\n                    :on-preview="handlePreview"\n                    :on-remove="handleRemove"\n                    :on-success="handleSuccess"\n                    multiple\n                    :limit="10"\n                    :on-exceed="handleExceed"\n                    :file-list="fileList"\n                    >\n                    <el-button size="small" type="primary">\u4E0A\u4F20\u89C6\u9891</el-button>\n                </el-upload>\n                <el-input v-show="!videoEditable" :value="vId+videoInfo.video_ext" disabled/>\n            </el-col>\n        </el-row>\n\n        <el-row>\n            <el-col :span="4">\n                <label>\u5B57\u5E55</label>\n            </el-col>\n\n            <el-col :span="10">\n                <el-upload\n                    v-show="videoEditable"\n                    class="upload-demo"\n                    action="/upload"\n                    :data="{type:\'subtitle\'}"\n                    :on-remove="handleRemove"\n                    :on-success="handleSubtitleSuccess"\n                    multiple\n                    :limit="1"\n                    :on-exceed="handleExceed"\n                    :file-list="fileList"\n                    >\n                    <el-button size="small" type="primary">\u4E0A\u4F20\u5B57\u5E55</el-button>\n                </el-upload>\n                <el-input v-show="!videoEditable" :value="vId+\'.srt\'" disabled/>\n            </el-col>\n        </el-row>\n\n        <el-row>\n            <el-col :span="4">&nbsp;</el-col>\n            <el-col :span="10">\n                <el-button v-show="videoEditable && (vId || SO.videoAbsPath)" v-on:click="vId?putVideo(): postVideo()" class="new-video-btn">\u63D0\u4EA4</el-button>\n                <el-button v-show="!videoEditable" v-on:click="videoEditable=true;" class="new-video-btn">\u7F16\u8F91</el-button>\n            </el-col>\n        </el-row>\n\n        <el-dialog v-bind:title="newSportConfig.title" :visible.sync="newSportConfig.visibility" @close="newSportConfig.visibility=true">\n            <el-form class="newTagDialog">\n                <el-form-item label="\u8FD0\u52A8\u540D\u79F0">\n                    <el-input v-model="newSport.name" auto-complete="off"></el-input>\n                </el-form-item>\n            </el-form>\n            <div slot="footer" class="dialog-footer" v-show="!sId">\n                <el-button @click="newSportConfig.visibility = false">\u53D6 \u6D88</el-button>\n                <el-button type="primary" @click="newSportConfig.visibility = false; postSport();">\u786E \u5B9A</el-button>\n            </div>\n\n            <div slot="footer" class="dialog-footer" v-show="sId">\n                <el-button type="primary" @click="newSportConfig.visibility = false; putSport()">\u786E \u5B9A</el-button>\n                <el-button @click="backToSportList()">\u8FD4 \u56DE</el-button>\n            </div>\n        </el-dialog>\n\n        <el-dialog v-bind:title="albumConfig.title" :visible.sync="albumConfig.visibility" @close="dealCloseDialog">\n            <el-form class="newAlbumDialog">\n                <el-form-item label="\u8FD0\u52A8\u9879\u76EE">\n                    <el-select v-model="newAlbum.sportId" \n                        :disabled="!albumEditable"\n                        clearable\n                        filterable\n                        placeholder="\u8BF7\u9009\u62E9">\n                        <el-option\n                            v-for="item in sports"\n                            :key="item.id"\n                            :label="item.name"\n                            :value="item.id">\n                        </el-option>\n                    </el-select>\n                </el-form-item>\n                <el-form-item label="\u5236\u4F5C\u8005">\n                    <el-select v-model="newAlbum.maker" \n                        :disabled="!albumEditable"\n                        clearable\n                        filterable\n                        placeholder="\u8BF7\u9009\u62E9">\n                        <el-option\n                            v-for="item in makers"\n                            :key="item.id"\n                            :label="item.name"\n                            :value="item.id">\n                        </el-option>\n                    </el-select>\n                    <el-button @click="makerConfig.visibility=true" v-show="!aId || (aId && albumEditable)">\u521B\u5EFA</el-button>\n                </el-form-item>\n                <el-form-item label="\u6807\u7B7E">\n                    <el-select v-model="newAlbum.tag" \n                        :disabled="!albumEditable"\n                        clearable\n                        filterable\n                        placeholder="\u8BF7\u9009\u62E9">\n                        <el-option\n                            v-for="item in tags"\n                            :key="item.id"\n                            :label="item.name"\n                            :value="item.id">\n                        </el-option>\n                    </el-select>\n                </el-form-item>\n                <el-form-item label="\u4E13\u8F91\u540D\u79F0">\n                    <el-input v-model="newAlbum.name" :disabled="!albumEditable" auto-complete="off" style="width: 217px;"></el-input>\n                </el-form-item>\n                <el-form-item label="" v-if="!aId">\n                    <el-upload\n                        class="album-cover-uploader"\n                        action="/upload"\n                        :data="{type:\'img\'}"\n                        :on-remove="handleRemove"\n                        :on-success="handleAlbumCoverSuccess"\n                        multiple\n                        :limit="1"\n                        :on-exceed="handleExceed"\n                        :file-list="fileList"\n                        >\n                        <el-button size="" type="primary">\u4E0A\u4F20\u5C01\u9762</el-button>\n                    </el-upload>\n                </el-form-item>\n                <el-form-item label="" v-if="aId">\n                    <el-upload\n                        v-show="albumEditable"\n                        class="album-cover-uploader"\n                        action="/upload"\n                        :data="{type:\'img\'}"\n                        :on-remove="handleRemove"\n                        :on-success="handleAlbumCoverSuccess"\n                        multiple\n                        :limit="1"\n                        :on-exceed="handleExceed"\n                        :file-list="fileList"\n                        >\n                        <el-button size="" type="primary">\u4E0A\u4F20\u5C01\u9762</el-button>\n                    </el-upload>\n                    <img v-show="!albumEditable" :src="\'/img/cover/album/\' + aId + \'.jpg\'"/>\n                </el-form-item>\n            </el-form>\n            <div slot="footer" class="dialog-footer" v-show="!aId">\n                <el-button @click="albumConfig.visibility = false">\u53D6 \u6D88</el-button>\n                <el-button type="primary"  @click="albumConfig.visibility = false; postAlbum();">\u786E \u5B9A</el-button>\n            </div>\n\n            <div slot="footer" class="dialog-footer" v-show="aId">\n                <el-button type="primary" v-show="albumEditable" @click="albumConfig.visibility = false; putAlbum()">\u786E \u5B9A</el-button>\n                <el-button type="primary" @click="albumEditable=true" v-show="!albumEditable">\u7F16\u8F91</el-button>\n                <el-button @click="backToAlbumList()">\u8FD4 \u56DE</el-button>\n            </div>\n        </el-dialog>\n\n        <el-dialog v-bind:title="tagConfig.title" :visible.sync="tagConfig.visibility">\n            <el-form class="newTagDialog">\n                <el-form-item label="\u6807\u7B7E\u540D\u79F0">\n                    <el-input v-model="newTag.name" auto-complete="off"></el-input>\n                </el-form-item>\n                <el-form-item label="\u8FD0\u52A8\u9879\u76EE">\n                    <el-select v-model="newTag.sportId" \n                        clearable\n                        filterable\n                        placeholder="\u8BF7\u9009\u62E9">\n                        <el-option\n                            v-for="item in sports"\n                            :key="item.id"\n                            :label="item.name"\n                            :value="item.id">\n                        </el-option>\n                    </el-select>\n                </el-form-item>\n            </el-form>\n            <div slot="footer" class="dialog-footer">\n                <el-button @click="tagConfig.visibility = false">\u53D6 \u6D88</el-button>\n                <el-button type="primary" @click="tagConfig.visibility = false; postTag();">\u786E \u5B9A</el-button>\n            </div>\n        </el-dialog>\n\n        <el-dialog v-bind:title="makerConfig.title" :visible.sync="makerConfig.visibility">\n            <el-form class="newTagDialog">\n                <el-form-item label="\u540D\u5B57">\n                    <el-input v-model="newMaker.name" auto-complete="off"></el-input>\n                </el-form-item>\n                <el-form-item label="\u63CF\u8FF0">\n                    <el-input v-model="newMaker.desc" type="textarea" style="width: 300px;"></el-input>\n                </el-form-item>\n            </el-form>\n            <div slot="footer" class="dialog-footer">\n                <el-button @click="makerConfig.visibility = false">\u53D6 \u6D88</el-button>\n                <el-button type="primary" @click="makerConfig.visibility = false; postMaker();">\u786E \u5B9A</el-button>\n            </div>\n        </el-dialog>\n    </div>\n';
 
 COMPONENTS.UploadAdmin = {
-	props: ['vId', 'aId', 'sId'],
-	data: function () {
-        let newSportConfig = {
+    props: ['vId', 'aId', 'sId'],
+    data: function data() {
+        var newSportConfig = {
             visibility: false,
             title: '新建运动'
         };
 
-		let tagConfig = {
-			visibility: false,
-			title: '新建标签',
-		};
+        var tagConfig = {
+            visibility: false,
+            title: '新建标签'
+        };
 
-		let albumConfig = {
-			visibility: false,
-			title: '新建专辑',
-		};
+        var albumConfig = {
+            visibility: false,
+            title: '新建专辑'
+        };
 
-		let makerConfig = {
-			visibility: false,
-			title: '新建制作者',
-		};
+        var makerConfig = {
+            visibility: false,
+            title: '新建制作者'
+        };
 
-		var d = {
+        var d = {
             sport_id: null,
             SO: {
                 albumId: '',
@@ -342,427 +104,349 @@ COMPONENTS.UploadAdmin = {
                 tag: '',
                 videoAbsPath: '',
                 subtitleAbsPath: ''
-            }, 
-			albums: [], 
-			tags: [], 
-			sports: [], 
+            },
+            albums: [],
+            tags: [],
+            sports: [],
             makers: [],
             newSportConfig: newSportConfig,
-			tagConfig: tagConfig, 
-			albumConfig: albumConfig,
+            tagConfig: tagConfig,
+            albumConfig: albumConfig,
             makerConfig: makerConfig,
-            
-            newSport:{},
-			newTag: {},
-			newAlbum: {},
-			newMaker:{},
+
+            newSport: {},
+            newTag: {},
+            newAlbum: {},
+            newMaker: {},
             selectedMaker: '',
 
             videoInfo: {},
             // albumInfo: {},
             sportInfo: {},
-            
+
             videoEditable: true,
-            albumEditable: true,
+            albumEditable: true
         };
-        
-        if(this.vId){
+
+        if (this.vId) {
             d.videoEditable = false;
-        }else if(this.aId){
+        } else if (this.aId) {
             d.albumEditable = false;
-        }else if(this.sId){
+        } else if (this.sId) {
             d.newSportConfig = {
                 title: '编辑运动',
                 visibility: true
-            }
+            };
         }
 
-		d.fileList = [];
+        d.fileList = [];
 
-		return d;
-	},
-	methods: {
-        dealCloseDialog: function(){
-            if(this.aId){
+        return d;
+    },
+    methods: {
+        dealCloseDialog: function dealCloseDialog() {
+            if (this.aId) {
                 this.albumConfig.visibility = true;
             }
         },
 
-        backToAlbumList: function(){
-            location.href="#/albumsAdmin";
-        },
-        
-        backToSportList: function(){
-            location.href="#/sportsAdmin";
+        backToAlbumList: function backToAlbumList() {
+            location.href = "#/albumsAdmin";
         },
 
-		handleRemove(file, fileList) {
-			console.log(file, fileList);
-		},
-		handlePreview(file) {
-			console.log(file);
-		},
-		handleExceed(files, fileList) {
-			this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-		},
-		handleSuccess(res){
-			// console.log(res);
+        backToSportList: function backToSportList() {
+            location.href = "#/sportsAdmin";
+        },
+
+        handleRemove: function handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePreview: function handlePreview(file) {
+            console.log(file);
+        },
+        handleExceed: function handleExceed(files, fileList) {
+            this.$message.warning('\u5F53\u524D\u9650\u5236\u9009\u62E9 3 \u4E2A\u6587\u4EF6\uFF0C\u672C\u6B21\u9009\u62E9\u4E86 ' + files.length + ' \u4E2A\u6587\u4EF6\uFF0C\u5171\u9009\u62E9\u4E86 ' + (files.length + fileList.length) + ' \u4E2A\u6587\u4EF6');
+        },
+        handleSuccess: function handleSuccess(res) {
+            // console.log(res);
             this.SO.videoAbsPath = res.absPath;
-		},
-
-		handleSubtitleSuccess(res){
-			this.SO.subtitleAbsPath = res.absPath;
-		},
-
-		handleAlbumCoverSuccess(res){
-			this.newAlbum.cover = res.relPath;
         },
-        
-        handleChooseSport: function(sportId){
-            if(sportId)
-                this.queryAlbums(sportId);
+        handleSubtitleSuccess: function handleSubtitleSuccess(res) {
+            this.SO.subtitleAbsPath = res.absPath;
+        },
+        handleAlbumCoverSuccess: function handleAlbumCoverSuccess(res) {
+            this.newAlbum.cover = res.relPath;
         },
 
-		postVideo(){
-			let so = Object.assign({}, this.SO);
-			so.tag = this.SO.tag.join(',');
 
-			tools.xhr('/video', function(){
-				// console.log(arguments);
-				this.$message({
-					message: '视频创建成功',
-					type: 'success'
+        handleChooseSport: function handleChooseSport(sportId) {
+            if (sportId) this.queryAlbums(sportId);
+        },
+
+        postVideo: function postVideo() {
+            var so = Object.assign({}, this.SO);
+            so.tag = this.SO.tag.join(',');
+
+            tools.xhr('/video', function () {
+                // console.log(arguments);
+                this.$message({
+                    message: '视频创建成功',
+                    type: 'success'
                 });
 
                 this.SO.videoAbsPath = '';
                 this.SO.subtitleAbsPath = '';
-			}.bind(this), 'post', so);
-		},
+            }.bind(this), 'post', so);
+        },
+        postSport: function postSport() {
 
-        
-        postSport(){
-
-			tools.xhr('/sport', function(){
+            tools.xhr('/sport', function () {
                 this.$message({
                     message: '新建成功',
                     type: 'success'
                 });
                 this.querySports();
-			}.bind(this), 'post', this.newSport);
-			
-		},
-		postTag(){
+            }.bind(this), 'post', this.newSport);
+        },
+        postTag: function postTag() {
 
-			tools.xhr('/tag', function(){
-				console.log(arguments)
-			}, 'post', this.newTag);
-			
-		},
+            tools.xhr('/tag', function () {
+                console.log(arguments);
+            }, 'post', this.newTag);
+        },
+        postMaker: function postMaker() {
+            tools.xhr('/maker', function () {
+                console.log(arguments);
+                this.$message({
+                    message: '制作者创建成功',
+                    type: 'success'
+                });
+                this.queryMakers();
+            }.bind(this), 'post', this.newMaker);
+        },
+        openAlbumDialog: function openAlbumDialog() {
+            this.albumConfig.visibility = true;
+            this.queryMakers();
+        },
+        postAlbum: function postAlbum() {
+            tools.xhr('/album', function () {
+                // console.log(arguments);
+                this.$message({
+                    message: '专辑创建成功',
+                    type: 'success'
+                });
 
-		postMaker(){
-			tools.xhr('/maker', function(){
-				console.log(arguments);
-				this.$message({
-					message: '制作者创建成功',
-					type: 'success'
-				});
-				this.queryMakers();
-			}.bind(this), 'post', this.newMaker);
-		},
+                this.queryAlbums(this.sport_id);
+            }.bind(this), 'post', this.newAlbum);
+        },
+        queryAlbums: function queryAlbums(sportId) {
+            if (!sportId) return;
 
-		openAlbumDialog(){
-			this.albumConfig.visibility = true;
-			this.queryMakers();
-		},
-
-		postAlbum(){
-			tools.xhr('/album', function(){
-				// console.log(arguments);
-				this.$message({
-					message: '专辑创建成功',
-					type: 'success'
-				});
-
-				this.queryAlbums(this.sport_id);
-
-			}.bind(this), 'post', this.newAlbum);
-		},
-
-		queryAlbums(sportId){
-            if(!sportId)
-                return;
-
-			tools.xhr('/sports/'+sportId+'/albums', function(resData){
-				this.albums = resData;
-			}.bind(this));
-		},
-
-		queryTags(){
-			tools.xhr('/tags', function(resData){
-				this.tags = resData;
-			}.bind(this));
-		},
-
-		querySports(){
-			tools.xhr('/sports', function(resData){
-				this.sports = resData;
-			}.bind(this));
-		},
-
-		queryMakers(){
-			tools.xhr('/makers', function(resData){
-				this.makers = resData;
-			}.bind(this));
-		},
-
-		chooseAlbumHandler(){
-			console.log('chooseAlbumHandler', arguments);
-		},
-
-		queryMaker(makerId){
-			tools.xhr('/maker/' + makerId, function(resData){
-				let makerInfo = resData[0];
-				if(makerInfo){
-					this.selectedMaker = resData[0].name;
-				}else{
-					this.selectedMaker = '';
-				}
-			}.bind(this));
-		},
-
-        fetchVideoInfo(fn){
-			tools.xhr('/videoInfo/' + this.vId, function(resData){
+            tools.xhr('/sports/' + sportId + '/albums', function (resData) {
+                this.albums = resData;
+            }.bind(this));
+        },
+        queryTags: function queryTags() {
+            tools.xhr('/tags', function (resData) {
+                this.tags = resData;
+            }.bind(this));
+        },
+        querySports: function querySports() {
+            tools.xhr('/sports', function (resData) {
+                this.sports = resData;
+            }.bind(this));
+        },
+        queryMakers: function queryMakers() {
+            tools.xhr('/makers', function (resData) {
+                this.makers = resData;
+            }.bind(this));
+        },
+        chooseAlbumHandler: function chooseAlbumHandler() {
+            console.log('chooseAlbumHandler', arguments);
+        },
+        queryMaker: function queryMaker(makerId) {
+            tools.xhr('/maker/' + makerId, function (resData) {
+                var makerInfo = resData[0];
+                if (makerInfo) {
+                    this.selectedMaker = resData[0].name;
+                } else {
+                    this.selectedMaker = '';
+                }
+            }.bind(this));
+        },
+        fetchVideoInfo: function fetchVideoInfo(fn) {
+            tools.xhr('/videoInfo/' + this.vId, function (resData) {
                 this.videoInfo = resData;
 
-                this.sport_id =  resData.sport_id;
+                this.sport_id = resData.sport_id;
 
                 this.SO.albumId = resData.album_id;
                 this.SO.headline = resData.headline;
                 this.SO.headlineEng = resData.headline_eng;
-                this.SO.tag = resData.tag? resData.tag.split(',').map(function(){
-                    return Number(arguments[0])
-                }): [];
+                this.SO.tag = resData.tag ? resData.tag.split(',').map(function () {
+                    return Number(arguments[0]);
+                }) : [];
 
                 fn && fn(resData.sport_id);
-			}.bind(this));
+            }.bind(this));
         },
 
-        fetchAlbumInfo: function(){
-            tools.xhr('/albumInfo/' + this.aId, function(resData){
+
+        fetchAlbumInfo: function fetchAlbumInfo() {
+            tools.xhr('/albumInfo/' + this.aId, function (resData) {
                 // this.albumInfo = resData;
                 // this.newAlbum = resData;
                 this.newAlbum.sportId = resData.sport_id;
                 this.newAlbum.maker = Number(resData.author_id);
                 this.newAlbum.tag = Number(resData.tag);
                 this.newAlbum.name = resData.name;
-			}.bind(this));
+            }.bind(this));
         },
 
-        fetchSportInfo: function(){
-            tools.xhr('/sportInfo/' + this.sId, function(resData){
+        fetchSportInfo: function fetchSportInfo() {
+            tools.xhr('/sportInfo/' + this.sId, function (resData) {
                 this.newSport.name = resData.name;
-			}.bind(this));
+            }.bind(this));
         },
-        
-        putVideo(){
-			let so = Object.assign({}, this.SO);
-			so.tag = this.SO.tag.join(',');
 
-			tools.xhr('/video/' + this.vId, function(){
-				console.log(arguments);
-				this.$message({
-					message: '视频更新成功',
-					type: 'success'
+        putVideo: function putVideo() {
+            var so = Object.assign({}, this.SO);
+            so.tag = this.SO.tag.join(',');
+
+            tools.xhr('/video/' + this.vId, function () {
+                console.log(arguments);
+                this.$message({
+                    message: '视频更新成功',
+                    type: 'success'
                 });
                 this.videoEditable = false;
 
                 this.SO.subtitleAbsPath = '';
                 this.SO.videoAbsPath = '';
-			}.bind(this), 'put', so, function(){
+            }.bind(this), 'put', so, function () {
                 this.SO.subtitleAbsPath = '';
                 this.SO.videoAbsPath = '';
             });
         },
-        
-        putAlbum: function(){
-			tools.xhr('/album/' + this.aId, function(){
-				this.$message({
-					message: '更新成功',
-					type: 'success'
+
+
+        putAlbum: function putAlbum() {
+            tools.xhr('/album/' + this.aId, function () {
+                this.$message({
+                    message: '更新成功',
+                    type: 'success'
                 });
                 this.albumEditable = false;
-                location.href="#/albumsAdmin"
-			}.bind(this), 'put', this.newAlbum, function(){
+                location.href = "#/albumsAdmin";
+            }.bind(this), 'put', this.newAlbum, function () {
                 this.$message({
-					message: '更新出错',
-					type: 'success'
+                    message: '更新出错',
+                    type: 'success'
                 });
             });
         },
 
-        putSport: function(){
-			tools.xhr('/sport/' + this.sId, function(){
-				this.$message({
-					message: '更新成功',
-					type: 'success'
-                });
-                location.href="#/sportsAdmin"
-			}.bind(this), 'put', this.newSport, function(){
+        putSport: function putSport() {
+            tools.xhr('/sport/' + this.sId, function () {
                 this.$message({
-					message: '更新出错',
-					type: 'success'
+                    message: '更新成功',
+                    type: 'success'
+                });
+                location.href = "#/sportsAdmin";
+            }.bind(this), 'put', this.newSport, function () {
+                this.$message({
+                    message: '更新出错',
+                    type: 'success'
                 });
             });
         }
-	},
+    },
 
-	// watch: {'SO.albumId': function(to, from){
-	// 	if(to){
-	// 		this.queryMaker(to)
-	// 	}else{
-	// 		this.selectedMaker = '';
-	// 	}
+    // watch: {'SO.albumId': function(to, from){
+    // 	if(to){
+    // 		this.queryMaker(to)
+    // 	}else{
+    // 		this.selectedMaker = '';
+    // 	}
     // }},
-    
-    mounted: function(){
-        if(this.vId){
-            this.fetchVideoInfo(function(sId){
+
+    mounted: function mounted() {
+        if (this.vId) {
+            this.fetchVideoInfo(function (sId) {
                 this.queryAlbums(sId);
             }.bind(this));
-        }else if(this.aId){
+        } else if (this.aId) {
             this.fetchAlbumInfo();
             this.queryMakers();
             this.albumConfig.visibility = true;
             this.albumConfig.title = '更新专辑';
-        }else if(this.sId){
+        } else if (this.sId) {
             this.fetchSportInfo();
         }
-        
+
         this.querySports();
-		this.queryTags();
+        this.queryTags();
     },
 
-	template: temp.uploadAdmin
+    template: temp.uploadAdmin
 };
 
-routeConfig.push(
-    { path: '/uploadAdmin', component: COMPONENTS.UploadAdmin, props: function(route){return {vId: route.query.vId, aId: route.query.aId, sId: route.query.sId}} },
-);
+routeConfig.push({ path: '/uploadAdmin', component: COMPONENTS.UploadAdmin, props: function props(route) {
+        return { vId: route.query.vId, aId: route.query.aId, sId: route.query.sId };
+    } });
 
-temp.feedbacksAdmin =  `
-    <div>
-        <h2>反馈列表</h2>
-
-        <el-table
-        :data="feedbacks"
-        style="width: 100%">
-            <el-table-column
-                prop="id"
-                label="编号">
-            </el-table-column>
-            <el-table-column
-                prop="ip"
-                label="ip">
-            </el-table-column>
-            <el-table-column
-                prop="usr_id"
-                label="用户id">
-            </el-table-column>
-            <el-table-column
-                prop="description"
-                label="描述">
-            </el-table-column>
-            <el-table-column
-                prop="site"
-                label="网址">
-            </el-table-column>
-            <el-table-column
-                prop="wechat"
-                label="微信">
-            </el-table-column>
-            <el-table-column
-                prop="email"
-                label="邮件">
-            </el-table-column>
-            <el-table-column
-                prop="files"
-                label="文件">
-            </el-table-column>
-            <el-table-column
-                fixed="right"
-                label="操作"
-                width="100">
-                <template slot-scope="scope">
-                    <el-button @click="deleteFeedback(scope.row.id)" type="text" size="small">删除</el-button>
-                    <el-button v-if="!scope.row.black_usr_id_record && !scope.row.black_ip_record" @click="blockUsr(scope.row.ip, scope.row.usr_id, $event)" type="text" size="small">加黑</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-
-        <el-pagination
-            layout="prev, pager, next"
-            :total="total"
-            :page-size="pageSize"
-            @current-change="fetchFeedbacks">
-        </el-pagination>
-    </div>
-`;
+temp.feedbacksAdmin = '\n    <div>\n        <h2>\u53CD\u9988\u5217\u8868</h2>\n\n        <el-table\n        :data="feedbacks"\n        style="width: 100%">\n            <el-table-column\n                prop="id"\n                label="\u7F16\u53F7">\n            </el-table-column>\n            <el-table-column\n                prop="ip"\n                label="ip">\n            </el-table-column>\n            <el-table-column\n                prop="usr_id"\n                label="\u7528\u6237id">\n            </el-table-column>\n            <el-table-column\n                prop="description"\n                label="\u63CF\u8FF0">\n            </el-table-column>\n            <el-table-column\n                prop="site"\n                label="\u7F51\u5740">\n            </el-table-column>\n            <el-table-column\n                prop="wechat"\n                label="\u5FAE\u4FE1">\n            </el-table-column>\n            <el-table-column\n                prop="email"\n                label="\u90AE\u4EF6">\n            </el-table-column>\n            <el-table-column\n                prop="files"\n                label="\u6587\u4EF6">\n            </el-table-column>\n            <el-table-column\n                fixed="right"\n                label="\u64CD\u4F5C"\n                width="100">\n                <template slot-scope="scope">\n                    <el-button @click="deleteFeedback(scope.row.id)" type="text" size="small">\u5220\u9664</el-button>\n                    <el-button v-if="!scope.row.black_usr_id_record && !scope.row.black_ip_record" @click="blockUsr(scope.row.ip, scope.row.usr_id, $event)" type="text" size="small">\u52A0\u9ED1</el-button>\n                </template>\n            </el-table-column>\n        </el-table>\n\n        <el-pagination\n            layout="prev, pager, next"\n            :total="total"\n            :page-size="pageSize"\n            @current-change="fetchFeedbacks">\n        </el-pagination>\n    </div>\n';
 
 COMPONENTS.FeedbacksAdmin = {
-	data: function () {
+    data: function data() {
 
-		var d = {
+        var d = {
             pageSize: 10,
             curPage: 0,
             total: 0,
-			feedbacks: []
-		};
+            feedbacks: []
+        };
 
-		return d;
-	},
-	methods: {
+        return d;
+    },
+    methods: {
+        postTag: function postTag() {
 
-		postTag(){
-
-			tools.xhr('/tag', function(){
-				console.log(arguments)
-			}, 'post', this.newTag);
-			
-		},
-
-		fetchFeedbacks(pageNum){
-			tools.xhr('/feedbacks', function(resData){
+            tools.xhr('/tag', function () {
+                console.log(arguments);
+            }, 'post', this.newTag);
+        },
+        fetchFeedbacks: function fetchFeedbacks(pageNum) {
+            tools.xhr('/feedbacks', function (resData) {
                 this.feedbacks = resData.datalist;
                 this.total = resData.total;
                 this.curPage = pageNum;
-			}.bind(this), 'get', {
+            }.bind(this), 'get', {
                 pageNum: pageNum - 1,
                 pageSize: this.pageSize
             });
         },
-        
-        deleteFeedback: function(id){
+
+
+        deleteFeedback: function deleteFeedback(id) {
             this.$confirm('确定删除', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-            }).then(function(){
-                tools.xhr('/feedback/' + id, function(resData){
+            }).then(function () {
+                tools.xhr('/feedback/' + id, function (resData) {
                     this.fetchFeedbacks(this.curPage);
                     this.$message({
                         message: '删除成功',
                         type: 'success'
                     });
                 }.bind(this), 'delete');
-            }.bind(this)).catch(function(){
-
-            });
+            }.bind(this)).catch(function () {});
         },
 
-        blockUsr: function(ip, usrId, e){
-            this.$confirm('确认加黑？')
-            .then(function(){
-                tools.xhr('/blockedUsr', function(resData){
+        blockUsr: function blockUsr(ip, usrId, e) {
+            this.$confirm('确认加黑？').then(function () {
+                tools.xhr('/blockedUsr', function (resData) {
                     this.$message({
                         message: '加黑成功',
                         type: 'success'
@@ -773,367 +457,212 @@ COMPONENTS.FeedbacksAdmin = {
                     ip: ip,
                     usrId: usrId
                 });
-            }.bind(this)).catch(function(){
-
-            });
+            }.bind(this)).catch(function () {});
         }
-	},
+    },
 
-	// watch: {'SO.albumId': function(to, from){
-	// 	if(to){
-	// 		this.queryMaker(to)
-	// 	}else{
-	// 		this.selectedMaker = '';
-	// 	}
-	// }},
+    // watch: {'SO.albumId': function(to, from){
+    // 	if(to){
+    // 		this.queryMaker(to)
+    // 	}else{
+    // 		this.selectedMaker = '';
+    // 	}
+    // }},
 
     template: temp.feedbacksAdmin,
-    
-    mounted: function(){
+
+    mounted: function mounted() {
         this.fetchFeedbacks(1);
     }
 };
 
-routeConfig.push(
-    { path: '/feedbacksAdmin', component: COMPONENTS.FeedbacksAdmin},
-);
+routeConfig.push({ path: '/feedbacksAdmin', component: COMPONENTS.FeedbacksAdmin });
 
-temp.videosAdmin =  `
-    <div>
-        <h2>视频列表</h2>
-
-        <el-table
-        :data="videos"
-        style="width: 100%">
-            <el-table-column
-                prop="id"
-                label="id">
-            </el-table-column>
-            
-            <el-table-column
-                prop="album_id"
-                label="album_id">
-            </el-table-column>
-            <el-table-column
-                prop="headline"
-                label="headline">
-            </el-table-column>
-            <el-table-column
-                prop="tag"
-                label="tag">
-            </el-table-column>
-
-            <el-table-column
-                fixed="right"
-                label="操作"
-                width="200">
-                <template slot-scope="scope">
-                    <el-button @click="patchVideo(scope.row.id)" type="text" size="small">更新</el-button>
-                    <el-button @click="deleteVideo(scope.row.id)" type="text" size="small">删除</el-button>
-                    <el-button @click="redirect(scope.row.id)" type="text" size="small">查看</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-
-        <el-pagination
-            layout="prev, pager, next"
-            :total="total"
-            :page-size="pageSize"
-            @current-change="fetchVideos">
-        </el-pagination>
-    </div>
-`;
+temp.videosAdmin = '\n    <div>\n        <h2>\u89C6\u9891\u5217\u8868</h2>\n\n        <el-table\n        :data="videos"\n        style="width: 100%">\n            <el-table-column\n                prop="id"\n                label="id">\n            </el-table-column>\n            \n            <el-table-column\n                prop="album_id"\n                label="album_id">\n            </el-table-column>\n            <el-table-column\n                prop="headline"\n                label="headline">\n            </el-table-column>\n            <el-table-column\n                prop="tag"\n                label="tag">\n            </el-table-column>\n\n            <el-table-column\n                fixed="right"\n                label="\u64CD\u4F5C"\n                width="200">\n                <template slot-scope="scope">\n                    <el-button @click="patchVideo(scope.row.id)" type="text" size="small">\u66F4\u65B0</el-button>\n                    <el-button @click="deleteVideo(scope.row.id)" type="text" size="small">\u5220\u9664</el-button>\n                    <el-button @click="redirect(scope.row.id)" type="text" size="small">\u67E5\u770B</el-button>\n                </template>\n            </el-table-column>\n        </el-table>\n\n        <el-pagination\n            layout="prev, pager, next"\n            :total="total"\n            :page-size="pageSize"\n            @current-change="fetchVideos">\n        </el-pagination>\n    </div>\n';
 
 COMPONENTS.VideosAdmin = {
-	data: function () {
+    data: function data() {
 
-		var d = {
+        var d = {
             pageSize: 10,
             curPage: 0,
             total: 0,
-			videos: []
-		};
+            videos: []
+        };
 
-		return d;
-	},
-	methods: {
-
-		fetchVideos(pageNum){
-			tools.xhr('/pageVideos', function(resData){
+        return d;
+    },
+    methods: {
+        fetchVideos: function fetchVideos(pageNum) {
+            tools.xhr('/pageVideos', function (resData) {
                 this.videos = resData.datalist;
                 this.total = resData.total;
                 this.curPage = pageNum;
-			}.bind(this), 'get', {
+            }.bind(this), 'get', {
                 pageNum: pageNum - 1,
                 pageSize: this.pageSize
             });
         },
 
-        patchVideo: function(id){
-            location.href = `#/uploadAdmin?vId=${id}`;
+
+        patchVideo: function patchVideo(id) {
+            location.href = '#/uploadAdmin?vId=' + id;
         },
-        
-        deleteVideo: function(id){
+
+        deleteVideo: function deleteVideo(id) {
             this.$confirm('确定删除', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-            }).then(function(){
-                tools.xhr('/video/' + id, function(resData){
+            }).then(function () {
+                tools.xhr('/video/' + id, function (resData) {
                     this.fetchVideos(this.curPage);
                     this.$message({
                         message: '删除成功',
                         type: 'success'
                     });
                 }.bind(this), 'delete');
-            }.bind(this)).catch(function(){
-            });
+            }.bind(this)).catch(function () {});
         },
 
-        redirect: function(id){
-            location.href="#/videos/"+id;
+        redirect: function redirect(id) {
+            location.href = "#/videos/" + id;
         }
-	},
+    },
 
     template: temp.videosAdmin,
-    
-    mounted: function(){
+
+    mounted: function mounted() {
         this.fetchVideos(1);
     }
 };
 
-routeConfig.push(
-    { path: '/videosAdmin', component: COMPONENTS.VideosAdmin},
-);
+routeConfig.push({ path: '/videosAdmin', component: COMPONENTS.VideosAdmin });
 
-temp.albumsAdmin =  `
-    <div>
-        <h2>专辑列表</h2>
-
-        <el-table
-        :data="albums"
-        style="width: 100%">
-            <el-table-column
-                prop="id"
-                label="id">
-            </el-table-column>
-            
-            <el-table-column
-                prop="sport_id"
-                label="运动">
-            </el-table-column>
-            <el-table-column
-                prop="author_id"
-                label="制作者编号">
-            </el-table-column>
-            <el-table-column
-                prop="name"
-                label="标题">
-            </el-table-column>
-            <el-table-column
-                prop="tag"
-                label="标签">
-            </el-table-column>
-            <el-table-column
-                prop="impression"
-                label="观看次数">
-            </el-table-column>
-            <el-table-column
-                prop="update_time"
-                label="更新时间">
-            </el-table-column>
-
-            <el-table-column
-                fixed="right"
-                label="操作"
-                width="200">
-                <template slot-scope="scope">
-                    <el-button @click="patchAlbum(scope.row.id)" type="text" size="small">更新</el-button>
-                    <el-button @click="deleteAlbum(scope.row.id)" type="text" size="small">删除</el-button>
-                    <el-button @click="redirect(scope.row.id)" type="text" size="small">查看</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-
-        <el-pagination
-            layout="prev, pager, next"
-            :total="total"
-            :page-size="pageSize"
-            @current-change="fetchAlbums">
-        </el-pagination>
-    </div>
-`;
+temp.albumsAdmin = '\n    <div>\n        <h2>\u4E13\u8F91\u5217\u8868</h2>\n\n        <el-table\n        :data="albums"\n        style="width: 100%">\n            <el-table-column\n                prop="id"\n                label="id">\n            </el-table-column>\n            \n            <el-table-column\n                prop="sport_id"\n                label="\u8FD0\u52A8">\n            </el-table-column>\n            <el-table-column\n                prop="author_id"\n                label="\u5236\u4F5C\u8005\u7F16\u53F7">\n            </el-table-column>\n            <el-table-column\n                prop="name"\n                label="\u6807\u9898">\n            </el-table-column>\n            <el-table-column\n                prop="tag"\n                label="\u6807\u7B7E">\n            </el-table-column>\n            <el-table-column\n                prop="impression"\n                label="\u89C2\u770B\u6B21\u6570">\n            </el-table-column>\n            <el-table-column\n                prop="update_time"\n                label="\u66F4\u65B0\u65F6\u95F4">\n            </el-table-column>\n\n            <el-table-column\n                fixed="right"\n                label="\u64CD\u4F5C"\n                width="200">\n                <template slot-scope="scope">\n                    <el-button @click="patchAlbum(scope.row.id)" type="text" size="small">\u66F4\u65B0</el-button>\n                    <el-button @click="deleteAlbum(scope.row.id)" type="text" size="small">\u5220\u9664</el-button>\n                    <el-button @click="redirect(scope.row.id)" type="text" size="small">\u67E5\u770B</el-button>\n                </template>\n            </el-table-column>\n        </el-table>\n\n        <el-pagination\n            layout="prev, pager, next"\n            :total="total"\n            :page-size="pageSize"\n            @current-change="fetchAlbums">\n        </el-pagination>\n    </div>\n';
 
 COMPONENTS.AlbumsAdmin = {
-	data: function () {
+    data: function data() {
 
-		var d = {
+        var d = {
             pageSize: 10,
             curPage: 0,
             total: 0,
-			albums: []
-		};
+            albums: []
+        };
 
-		return d;
-	},
-	methods: {
-
-		fetchAlbums(pageNum){
+        return d;
+    },
+    methods: {
+        fetchAlbums: function fetchAlbums(pageNum) {
             // 分页专辑
-			tools.xhr('/albums', function(resData){
+            tools.xhr('/albums', function (resData) {
                 this.albums = resData.datalist;
                 this.total = resData.total;
                 this.curPage = pageNum;
-			}.bind(this), 'get', {
+            }.bind(this), 'get', {
                 pageNum: pageNum - 1,
                 pageSize: this.pageSize
             });
         },
 
-        patchAlbum: function(id){
-            location.href = `#/uploadAdmin?aId=${id}`;
+
+        patchAlbum: function patchAlbum(id) {
+            location.href = '#/uploadAdmin?aId=' + id;
         },
-        
-        deleteAlbum: function(id){
+
+        deleteAlbum: function deleteAlbum(id) {
             this.$confirm('确定删除', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-            }).then(function(){
-                tools.xhr('/album/' + id, function(resData){
+            }).then(function () {
+                tools.xhr('/album/' + id, function (resData) {
                     this.fetchAlbums(this.curPage);
                     this.$message({
                         message: '删除成功',
                         type: 'success'
                     });
                 }.bind(this), 'delete');
-            }.bind(this)).catch(function(){
-            });
+            }.bind(this)).catch(function () {});
         },
 
-        redirect: function(id){
-            location.href="#/albums/"+id;
+        redirect: function redirect(id) {
+            location.href = "#/albums/" + id;
         }
-	},
+    },
 
     template: temp.albumsAdmin,
-    
-    mounted: function(){
+
+    mounted: function mounted() {
         this.fetchAlbums(1);
     }
 };
 
-routeConfig.push(
-    { path: '/albumsAdmin', component: COMPONENTS.AlbumsAdmin},
-);
+routeConfig.push({ path: '/albumsAdmin', component: COMPONENTS.AlbumsAdmin });
 
-temp.sportsAdmin =  `
-    <div>
-        <h2>运动列表</h2>
-
-        <el-table
-        :data="sports"
-        style="width: 100%">
-            <el-table-column
-                prop="id"
-                label="id">
-            </el-table-column>
-            
-            <el-table-column
-                prop="name"
-                label="名称">
-            </el-table-column>
-
-            <el-table-column
-                prop="impression"
-                label="观看次数">
-            </el-table-column>
-
-            <el-table-column
-                prop="update_time"
-                label="更新时间">
-            </el-table-column>
-
-            <el-table-column
-                fixed="right"
-                label="操作"
-                width="200">
-                <template slot-scope="scope">
-                    <el-button @click="patchSport(scope.row.id)" type="text" size="small">更新</el-button>
-                    <el-button @click="deleteSport(scope.row.id)" type="text" size="small">删除</el-button>
-                    <el-button @click="redirect(scope.row.id)" type="text" size="small">查看</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-
-        <el-pagination
-            layout="prev, pager, next"
-            :total="total"
-            :page-size="pageSize"
-            @current-change="fetchSports">
-        </el-pagination>
-    </div>
-`;
+temp.sportsAdmin = '\n    <div>\n        <h2>\u8FD0\u52A8\u5217\u8868</h2>\n\n        <el-table\n        :data="sports"\n        style="width: 100%">\n            <el-table-column\n                prop="id"\n                label="id">\n            </el-table-column>\n            \n            <el-table-column\n                prop="name"\n                label="\u540D\u79F0">\n            </el-table-column>\n\n            <el-table-column\n                prop="impression"\n                label="\u89C2\u770B\u6B21\u6570">\n            </el-table-column>\n\n            <el-table-column\n                prop="update_time"\n                label="\u66F4\u65B0\u65F6\u95F4">\n            </el-table-column>\n\n            <el-table-column\n                fixed="right"\n                label="\u64CD\u4F5C"\n                width="200">\n                <template slot-scope="scope">\n                    <el-button @click="patchSport(scope.row.id)" type="text" size="small">\u66F4\u65B0</el-button>\n                    <el-button @click="deleteSport(scope.row.id)" type="text" size="small">\u5220\u9664</el-button>\n                    <el-button @click="redirect(scope.row.id)" type="text" size="small">\u67E5\u770B</el-button>\n                </template>\n            </el-table-column>\n        </el-table>\n\n        <el-pagination\n            layout="prev, pager, next"\n            :total="total"\n            :page-size="pageSize"\n            @current-change="fetchSports">\n        </el-pagination>\n    </div>\n';
 
 COMPONENTS.SportsAdmin = {
-	data: function () {
+    data: function data() {
 
-		var d = {
+        var d = {
             pageSize: 10,
             curPage: 0,
             total: 0,
-			sports: []
-		};
+            sports: []
+        };
 
-		return d;
-	},
-	methods: {
-
-		fetchSports(pageNum){
+        return d;
+    },
+    methods: {
+        fetchSports: function fetchSports(pageNum) {
             // 分页专辑
-			tools.xhr('/sports', function(resData){
+            tools.xhr('/sports', function (resData) {
                 this.sports = resData.datalist;
                 this.total = resData.total;
                 this.curPage = pageNum;
-			}.bind(this), 'get', {
+            }.bind(this), 'get', {
                 pageNum: pageNum - 1,
                 pageSize: this.pageSize
             });
         },
 
-        patchSport: function(id){
-            location.href = `#/uploadAdmin?sId=${id}`;
+
+        patchSport: function patchSport(id) {
+            location.href = '#/uploadAdmin?sId=' + id;
         },
-        
-        deleteSport: function(id){
+
+        deleteSport: function deleteSport(id) {
             this.$confirm('确定删除', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
-            }).then(function(){
-                tools.xhr('/sport/' + id, function(resData){
+            }).then(function () {
+                tools.xhr('/sport/' + id, function (resData) {
                     this.fetchSports(this.curPage);
                     this.$message({
                         message: '删除成功',
                         type: 'success'
                     });
                 }.bind(this), 'delete');
-            }.bind(this)).catch(function(){
-            });
+            }.bind(this)).catch(function () {});
         },
 
-        redirect: function(id){
-            location.href="#/sports/"+id;
+        redirect: function redirect(id) {
+            location.href = "#/sports/" + id;
         }
-	},
+    },
 
     template: temp.sportsAdmin,
-    
-    mounted: function(){
+
+    mounted: function mounted() {
         this.fetchSports(1);
     }
 };
 
-routeConfig.push(
-    { path: '/sportsAdmin', component: COMPONENTS.SportsAdmin},
-);
+routeConfig.push({ path: '/sportsAdmin', component: COMPONENTS.SportsAdmin });
+
+/***/ })
+
+/******/ });

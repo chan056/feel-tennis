@@ -27,22 +27,27 @@ html {
 app{font-size: 14px;}
 
 #root-container{
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-content: flex-start;
-  align-items: flex-start;
-  &.brief #aside{
-    flex-basis: 100px;
+  // display: flex;
+  // flex-direction: row;
+  // flex-wrap: wrap;
+  // justify-content: flex-start;
+  // align-content: flex-start;
+  // align-items: flex-start;
+  &.brief{
+    #aside{
+      width: 140px;
+    }
+
+    #main{left: 141px;}
   }
 }
 
 #aside{
   width: 300px;
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: 300px;
+  float: left;
+  // flex-grow: 0;
+  // flex-shrink: 0;
+  // flex-basis: 300px;
   border: 1px solid @border-color;
   border-width: 0 1px 1px 0;
 
@@ -78,22 +83,27 @@ app{font-size: 14px;}
 }
 
 #main{
-  flex-grow: 1;
-  flex-shrink: 0;
-  flex-basis: 300px;
+  // flex-grow: 1;
+  // flex-shrink: 0;
+  // flex-basis: 300px;
+
+  position: absolute;
+  left: 301px;
+  right: 0;
+ 
   padding: 20px 0;
   border: 1px solid @border-color;
   border-width: 0 0 1px 1px;
 
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  // display: flex;
+  // justify-content: center;
+  // align-items: flex-start;
 }
 
 #main-router-view{
-  // width: 1000px; margin: auto;
+  min-width: 500px; margin: auto;
   padding: 0 10px;
-  flex-grow: 1;
+  // flex-grow: 1;
   max-width: 1000px;
   .el-breadcrumb{margin-bottom: 20px;}
   .el-row{margin-top: 20px;}

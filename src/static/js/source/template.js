@@ -1,4 +1,4 @@
-// module.exports = function(){
+module.exports = function(){
     var temp = {
         header: `
             <div id="header">
@@ -867,4 +867,4 @@
     };
 
     window.temp = temp;
-// }
+}
