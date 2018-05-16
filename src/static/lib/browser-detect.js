@@ -8,11 +8,15 @@ var BrowserDetect = {
         var b = browserInfo.browser;   // 浏览器类型转换小写
         var v = browserInfo.version;   // 版本号取整数
         var isSupport = this.isSupport(b, v, noSupportItems);
+
         if( !isSupport ){
+            if(callback)
+                return callback(isSupport);
+
             console.log("当前浏览器不支持！");
             this.showTips(b, v);
         }
-        callback && callback(isSupport);
+       
     },
 
     /**

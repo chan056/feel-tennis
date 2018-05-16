@@ -491,7 +491,17 @@ module.exports = function(){
 		template: temp.sports,
 
 		mounted: function(){
+			var t = this;
 			this.fetchSports(0);
+			
+			BrowserDetect.init({ie: '*'}, function(){
+				$(window).off('hashchange.ieHack').on('hashchange.ieHack', function(){
+					var currentPath = window.location.hash.slice(1);
+					if (this.$route.path !== currentPath) {
+						this.$router.push(currentPath)
+					}
+				}.bind(t))
+			})
 		},
 
 		methods: {
