@@ -168,7 +168,18 @@ let tools = {
         }
 
         return '';
-    }
+    },
+
+    togglePageIE: function(t){
+		BrowserDetect.init({ie: '*'}, function(){
+			$(window).off('hashchange.ieHack').on('hashchange.ieHack', function(){
+				var currentPath = window.location.hash.slice(1);
+				if (this.$route.path !== currentPath) {
+					this.$router.push(currentPath)
+				}
+			}.bind(t))
+		})
+	}
 };
 
 window.tools = tools;

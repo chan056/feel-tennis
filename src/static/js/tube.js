@@ -1,3 +1,4 @@
+
 $(function(){
 
 	var navInstance = new Vue(COMPONENTS.HeaderComponent);
@@ -14,7 +15,9 @@ $(function(){
 	});
 	
 	var mainInstance = new Vue({
-		router: mainRouter,
-	}).$mount('#main-router-view');
+		router: mainRouter
+	});
+
+	mainInstance.$mount('#main-router-view');
 
 });

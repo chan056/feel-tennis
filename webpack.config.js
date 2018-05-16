@@ -27,7 +27,11 @@ module.exports={
 
     module: {
         rules: [
-            { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
+            { 
+                test: /\.js$/, 
+                exclude: /node_modules/, 
+                loader: "babel-loader"
+            }
         ]
     },
     //4 配置HTML模板插件
@@ -42,5 +46,6 @@ module.exports={
     * */
     externals:{
        jquery:'window.jQuery'
-    }
+    },
+
 };

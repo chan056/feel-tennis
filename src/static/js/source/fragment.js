@@ -2,10 +2,10 @@ module.exports = function(){
     var fragment = {
         attachVideo: function(vId){
             return `{
-                let m3u = '/multimedia/ts/${vId}/_.m3u8';
-                // m3u = '/multimedia/pristine_v/${vId}.mp4';
+                var m3u = '/multimedia/ts/${vId}/_.m3u8';
+                var video = $('video')[0];
+
                 if(Hls.isSupported()) {
-                    var video = $('video')[0];
                     // window.vEle = video;
                     
                     var hls = new Hls({
@@ -30,7 +30,13 @@ module.exports = function(){
                         // video.play();
                     });
                 }else{
-                    alert('请更换浏览器后再试,Chrome/Firefox/EDGE等现代浏览器');
+                    // alert('请更换浏览器后再试,Chrome/Firefox/EDGE等现代浏览器');
+                    Vue.prototype.$alert('请更换浏览器后再试,Chrome/Firefox/EDGE等现代浏览器，或者升级IE到IE11', '提示', {
+                        confirmButtonText: '确定',
+                        callback: function() {
+
+                        }
+                    })
                 }
             }`
         },

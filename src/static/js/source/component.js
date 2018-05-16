@@ -491,17 +491,9 @@ module.exports = function(){
 		template: temp.sports,
 
 		mounted: function(){
-			var t = this;
 			this.fetchSports(0);
 			
-			BrowserDetect.init({ie: '*'}, function(){
-				$(window).off('hashchange.ieHack').on('hashchange.ieHack', function(){
-					var currentPath = window.location.hash.slice(1);
-					if (this.$route.path !== currentPath) {
-						this.$router.push(currentPath)
-					}
-				}.bind(t))
-			})
+			tools.togglePageIE(this)
 		},
 
 		methods: {
@@ -560,6 +552,8 @@ module.exports = function(){
 
 		mounted: function(){
 			this.fetchAlbumList(0);
+
+			tools.togglePageIE(this);
 		},
 	};
 
@@ -616,6 +610,8 @@ module.exports = function(){
 
 		mounted: function(){
 			this.fetchAlbumVideo(0);
+
+			tools.togglePageIE(this);
 		},
 	};
 
@@ -684,7 +680,7 @@ module.exports = function(){
 					if(!resData)
 						return;
 						
-					let playerWrapper = $('#palyer-wrapper')
+					let playerWrapper = $('#palyer-wrapper');
 
 					tools.attachSubtile(window.vEle, resData, 500, function(subtitle){
 						playerWrapper.find('.subtitle').text(subtitle).css({
@@ -725,6 +721,8 @@ module.exports = function(){
 		template: temp.video,
 		mounted() {
 			let t = this;
+
+			tools.togglePageIE(this);
 
 			window.vEle = document.querySelector('#video');
 
@@ -1040,7 +1038,7 @@ module.exports = function(){
 						t.selfRemarks = res;
 					}
 
-					attachRemark(res)
+					attachRemark(res);
 				});
 
 				function attachRemark(data){
@@ -1101,6 +1099,7 @@ module.exports = function(){
 
 		mounted(to, from, next) {
 			this.fetchVideolist(0);
+			tools.togglePageIE(this);
 		},
 
 		methods: {
@@ -1237,6 +1236,7 @@ module.exports = function(){
 
 		mounted: function(){
 			this.fetchUsrDatum();
+			tools.togglePageIE(this);
 		}
 	};
 
@@ -1480,6 +1480,8 @@ module.exports = function(){
 		mounted: function(){
 			tools.insertScriptTag(1, "../lib/Chart.js", {onload: function(){
 			}.bind(this), id: 'chartjs'});
+
+			tools.togglePageIE(this);
 		},
 
 		watch: {
@@ -1596,6 +1598,10 @@ module.exports = function(){
 		},
 
 		template: temp.feedback,
+
+		mounted: function(){
+			tools.togglePageIE(this);
+		}
 	};
 
 	COMPONENTS.About = {
@@ -1609,6 +1615,10 @@ module.exports = function(){
 		},
 
 		template: temp.about,
+
+		mounted: function(){
+			tools.togglePageIE(this);
+		}
 	};
 
 	COMPONENTS.EmailConfirm = {
@@ -1639,7 +1649,11 @@ module.exports = function(){
 			}
 		},
 
-		template: temp.emailConfirm
+		template: temp.emailConfirm,
+
+		mounted: function(){
+			tools.togglePageIE(this);
+		}
 	}
 
 	COMPONENTS.Stars = {
@@ -1660,6 +1674,7 @@ module.exports = function(){
 		mounted: function(){
 			this.fetchVideoStar(0);
 			this.fetchShootVideo(0);
+			tools.togglePageIE(this);
 		},
 
 		methods: {
@@ -1714,6 +1729,7 @@ module.exports = function(){
 
 		mounted: function(){
 			this.fetchStarVideo(0);
+			tools.togglePageIE(this);
 		},
 
 		methods: {
@@ -1782,6 +1798,8 @@ module.exports = function(){
 
 		mounted: function(){
 			this.fetchVideoShoot(0);
+
+			tools.togglePageIE(this);
 
 			$('#video-shoot-list').on('mouseover click', '.video-thumb', function(){
 				let src = $(this).data('src');
@@ -1946,6 +1964,8 @@ module.exports = function(){
 		},
 
 		mounted: function(){
+			tools.togglePageIE(this);
+
 			$('#map-script').remove();
 			tools.insertScriptTag(1, '../js/map.js', {onload: function(){
 				var mapConstainer = $('.map-container');

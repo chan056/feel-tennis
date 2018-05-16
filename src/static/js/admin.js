@@ -371,6 +371,8 @@ COMPONENTS.UploadAdmin = {
     // }},
 
     mounted: function mounted() {
+
+        tools.togglePageIE(this);
         if (this.vId) {
             this.fetchVideoInfo(function (sId) {
                 this.queryAlbums(sId);
@@ -472,6 +474,8 @@ COMPONENTS.FeedbacksAdmin = {
     template: temp.feedbacksAdmin,
 
     mounted: function mounted() {
+
+        tools.togglePageIE(this);
         this.fetchFeedbacks(1);
     }
 };
@@ -533,6 +537,7 @@ COMPONENTS.VideosAdmin = {
     template: temp.videosAdmin,
 
     mounted: function mounted() {
+        tools.togglePageIE(this);
         this.fetchVideos(1);
     }
 };
@@ -595,6 +600,7 @@ COMPONENTS.AlbumsAdmin = {
     template: temp.albumsAdmin,
 
     mounted: function mounted() {
+        tools.togglePageIE(this);
         this.fetchAlbums(1);
     }
 };
@@ -657,6 +663,7 @@ COMPONENTS.SportsAdmin = {
     template: temp.sportsAdmin,
 
     mounted: function mounted() {
+        tools.togglePageIE(this);
         this.fetchSports(1);
     }
 };

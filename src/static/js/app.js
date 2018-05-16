@@ -9247,6 +9247,17 @@ var tools = {
         }
 
         return '';
+    },
+
+    togglePageIE: function togglePageIE(t) {
+        BrowserDetect.init({ ie: '*' }, function () {
+            $(window).off('hashchange.ieHack').on('hashchange.ieHack', function () {
+                var currentPath = window.location.hash.slice(1);
+                if (this.$route.path !== currentPath) {
+                    this.$router.push(currentPath);
+                }
+            }.bind(t));
+        });
     }
 };
 
@@ -9809,17 +9820,9 @@ module.exports = function () {
 		template: temp.sports,
 
 		mounted: function mounted() {
-			var t = this;
 			this.fetchSports(0);
 
-			BrowserDetect.init({ ie: '*' }, function () {
-				$(window).off('hashchange.ieHack').on('hashchange.ieHack', function () {
-					var currentPath = window.location.hash.slice(1);
-					if (this.$route.path !== currentPath) {
-						this.$router.push(currentPath);
-					}
-				}.bind(t));
-			});
+			tools.togglePageIE(this);
 		},
 
 		methods: {
@@ -9878,6 +9881,8 @@ module.exports = function () {
 
 		mounted: function mounted() {
 			this.fetchAlbumList(0);
+
+			tools.togglePageIE(this);
 		}
 	};
 
@@ -9934,6 +9939,8 @@ module.exports = function () {
 
 		mounted: function mounted() {
 			this.fetchAlbumVideo(0);
+
+			tools.togglePageIE(this);
 		}
 	};
 
@@ -10035,6 +10042,8 @@ module.exports = function () {
 		template: temp.video,
 		mounted: function mounted() {
 			var t = this;
+
+			tools.togglePageIE(this);
 
 			window.vEle = document.querySelector('#video');
 
@@ -10406,6 +10415,7 @@ module.exports = function () {
 		created: function created() {},
 		mounted: function mounted(to, from, next) {
 			this.fetchVideolist(0);
+			tools.togglePageIE(this);
 		},
 
 
@@ -10540,6 +10550,7 @@ module.exports = function () {
 
 		mounted: function mounted() {
 			this.fetchUsrDatum();
+			tools.togglePageIE(this);
 		}
 	};
 
@@ -10776,6 +10787,8 @@ module.exports = function () {
 
 		mounted: function mounted() {
 			tools.insertScriptTag(1, "../lib/Chart.js", { onload: function () {}.bind(this), id: 'chartjs' });
+
+			tools.togglePageIE(this);
 		},
 
 		watch: {
@@ -10887,7 +10900,11 @@ module.exports = function () {
 			}
 		},
 
-		template: temp.feedback
+		template: temp.feedback,
+
+		mounted: function mounted() {
+			tools.togglePageIE(this);
+		}
 	};
 
 	COMPONENTS.About = {
@@ -10898,7 +10915,11 @@ module.exports = function () {
 
 		methods: {},
 
-		template: temp.about
+		template: temp.about,
+
+		mounted: function mounted() {
+			tools.togglePageIE(this);
+		}
 	};
 
 	COMPONENTS.EmailConfirm = {
@@ -10928,7 +10949,11 @@ module.exports = function () {
 			}
 		},
 
-		template: temp.emailConfirm
+		template: temp.emailConfirm,
+
+		mounted: function mounted() {
+			tools.togglePageIE(this);
+		}
 	};
 
 	COMPONENTS.Stars = {
@@ -10949,6 +10974,7 @@ module.exports = function () {
 		mounted: function mounted() {
 			this.fetchVideoStar(0);
 			this.fetchShootVideo(0);
+			tools.togglePageIE(this);
 		},
 
 		methods: {
@@ -11003,6 +11029,7 @@ module.exports = function () {
 
 		mounted: function mounted() {
 			this.fetchStarVideo(0);
+			tools.togglePageIE(this);
 		},
 
 		methods: {
@@ -11069,6 +11096,8 @@ module.exports = function () {
 
 		mounted: function mounted() {
 			this.fetchVideoShoot(0);
+
+			tools.togglePageIE(this);
 
 			$('#video-shoot-list').on('mouseover click', '.video-thumb', function () {
 				var src = $(this).data('src');
@@ -11229,6 +11258,8 @@ module.exports = function () {
 		},
 
 		mounted: function mounted() {
+			tools.togglePageIE(this);
+
 			$('#map-script').remove();
 			tools.insertScriptTag(1, '../js/map.js', { onload: function () {
 					var mapConstainer = $('.map-container');
@@ -11262,7 +11293,7 @@ module.exports = function () {
 module.exports = function () {
     var fragment = {
         attachVideo: function attachVideo(vId) {
-            return "{\n                let m3u = '/multimedia/ts/" + vId + "/_.m3u8';\n                // m3u = '/multimedia/pristine_v/" + vId + ".mp4';\n                if(Hls.isSupported()) {\n                    var video = $('video')[0];\n                    // window.vEle = video;\n                    \n                    var hls = new Hls({\n                        maxBufferLength: 20,\n                        maxMaxBufferLength: 20,\n                        enableWebVTT: true\n                    });\n                    \n                    hls.loadSource(m3u);\n                    \n                    hls.attachMedia(video);\n\n                    hls.on(Hls.Events.MANIFEST_PARSED,function() {\n                        video.volume = .6;\n                    });\n\n                }else if (video.canPlayType('application/vnd.apple.mpegurl')) {\n                    video.src = m3u;\n                    var s = '<track kind=\"subtitles\" src=\"/multimedia/ts/" + vId + "/subtitle.vtt\" srclang=\"zh\" label=\"\u4E2D\u6587\" default >';\n                    $(video).prepend(s);\n                    video.addEventListener('canplay',function() {\n                        // video.play();\n                    });\n                }else{\n                    alert('\u8BF7\u66F4\u6362\u6D4F\u89C8\u5668\u540E\u518D\u8BD5,Chrome/Firefox/EDGE\u7B49\u73B0\u4EE3\u6D4F\u89C8\u5668');\n                }\n            }";
+            return "{\n                var m3u = '/multimedia/ts/" + vId + "/_.m3u8';\n                var video = $('video')[0];\n\n                if(Hls.isSupported()) {\n                    // window.vEle = video;\n                    \n                    var hls = new Hls({\n                        maxBufferLength: 20,\n                        maxMaxBufferLength: 20,\n                        enableWebVTT: true\n                    });\n                    \n                    hls.loadSource(m3u);\n                    \n                    hls.attachMedia(video);\n\n                    hls.on(Hls.Events.MANIFEST_PARSED,function() {\n                        video.volume = .6;\n                    });\n\n                }else if (video.canPlayType('application/vnd.apple.mpegurl')) {\n                    video.src = m3u;\n                    var s = '<track kind=\"subtitles\" src=\"/multimedia/ts/" + vId + "/subtitle.vtt\" srclang=\"zh\" label=\"\u4E2D\u6587\" default >';\n                    $(video).prepend(s);\n                    video.addEventListener('canplay',function() {\n                        // video.play();\n                    });\n                }else{\n                    // alert('\u8BF7\u66F4\u6362\u6D4F\u89C8\u5668\u540E\u518D\u8BD5,Chrome/Firefox/EDGE\u7B49\u73B0\u4EE3\u6D4F\u89C8\u5668');\n                    Vue.prototype.$alert('\u8BF7\u66F4\u6362\u6D4F\u89C8\u5668\u540E\u518D\u8BD5,Chrome/Firefox/EDGE\u7B49\u73B0\u4EE3\u6D4F\u89C8\u5668', '\u63D0\u793A', {\n                        confirmButtonText: '\u786E\u5B9A',\n                        callback: function() {\n\n                        }\n                    })\n                }\n            }";
         },
 
         attachSubtitle: "\n            console.log('attachSubtitle loaded')\n        ",
