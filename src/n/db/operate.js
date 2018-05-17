@@ -1026,7 +1026,8 @@ let operations = {
 				path = require('path');
 
 			let sourceCoverPath = path.resolve(__dirname, `../../static${postObj.cover}`),
-				destCoverPath = path.resolve(__dirname, `../../static/img/cover/album/` + albumId + '.jpg');// todo ext
+				ext = path.extname(sourceCoverPath),
+				destCoverPath = path.resolve(__dirname, `../../static/img/cover/album/` + albumId + ext);// todo ext
 				
 			fs.rename(sourceCoverPath, destCoverPath, function(){
 				console.log('专辑封面移动完成');

@@ -352,7 +352,7 @@ COMPONENTS.UploadAdmin = {
             
             newSport:{},
 			newTag: {},
-			newAlbum: {},
+            newAlbum: {sportId: '', maker: '', tag: '', name: '', cover: ''},// 必须要给默认值？
 			newMaker:{},
             selectedMaker: '',
 
@@ -568,8 +568,6 @@ COMPONENTS.UploadAdmin = {
 
         fetchAlbumInfo: function(){
             tools.xhr('/albumInfo/' + this.aId, function(resData){
-                // this.albumInfo = resData;
-                // this.newAlbum = resData;
                 this.newAlbum.sportId = resData.sport_id;
                 this.newAlbum.maker = Number(resData.author_id);
                 this.newAlbum.tag = Number(resData.tag);

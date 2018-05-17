@@ -14,7 +14,10 @@ var webpack=require('webpack');
 
 const path=require("path");
 
+const env = process.env.NODE_ENV
+
 module.exports={
+    mode: env || 'development',
     entry:{
         app: './src/static/js/source/entry.js',
         admin: './src/static/js/source/admin.js'
