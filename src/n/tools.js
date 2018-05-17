@@ -79,9 +79,30 @@ function formatTime(seconds){
 	}
 }
 
+function convertSrt2vtt(r){
+	var path = require('path');
+	var fs = require('fs');
+	
+    var srtPath = path.resolve(r, './subtitle');
+	var srt2vtt = require('srt2vtt');
+
+    fs.exists(srtPath, function(doExist){
+        if(doExist){
+            var srtData = fs.readFileSync(srtPath);
+            srt2vtt(srtData, function(err, vttData) {
+                if (err) throw new Error(err);
+                    
+                var storePos = path.resolve(r, 'subtitle.vtt')
+                fs.writeFileSync(storePos, vttData);
+            });
+        }
+    })
+}
+
 module.exports = {
     response404: response404,
     isEmpty: isEmpty,
 	newClause: newQueryClause,
 	formatTime: formatTime,
+	convertSrt2vtt: convertSrt2vtt
 }

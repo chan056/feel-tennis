@@ -906,9 +906,9 @@ let operations = {
 			const fs = require('fs');
 
 			// 如果只传视频 字幕会被误删
-			del([tsDir]).then(paths => {
+			del([tsDir + '/*.*', '!' + tsDir + '/subtitle', '!' + tsDir + 'subtitle.vtt']).then(paths => {
 				// console.log('Deleted files and folders:\n', paths.join('\n'));
-				fs.mkdirSync(tsDir, 0777);
+				fs.existsSync(tsDir) || fs.mkdirSync(tsDir, 0777);
 
 				let ext = path.extname(videoAbsPath);
 				let videoStorePath = global.staticRoot + `/multimedia/pristine_v/${vId}${ext}`;
