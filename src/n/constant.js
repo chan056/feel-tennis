@@ -2,7 +2,7 @@ module.exports = {
     aesKey: 'key',// 密钥
 
     whiteList: [
-        'localhost:3000',
+        'localhost',
         '47.98.108.40',
         'www.yitube.cn',
         '192.168.33.30',// 公司

@@ -1,6 +1,4 @@
 module.exports = function(req, res) {
-	var path = require('path');
-
 	// 检查用户IP是否在黑名单
 	require('../ip_guard')(req, res, function(){
 		const url = require('url');
@@ -78,9 +76,12 @@ module.exports = function(req, res) {
 
 			if(ext == 'm3u8' || ext == 'mp4'){
 				let referer = req.headers.referer || '';
-				referer = path.basename(referer);
+
+				const { URL } = require('url');
+				const myURL = new URL(referer);
+				refererHost = myURL.hostname;
 	
-				if(constants.whiteList.indexOf(referer) == -1){
+				if(constants.whiteList.indexOf(refererHost) == -1){
 					return res.end();
 				}
 			}
