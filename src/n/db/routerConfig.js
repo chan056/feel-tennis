@@ -374,7 +374,7 @@ const routerConfig = {
     
         '/video': {
             fn: function(req, res){
-                r.post('creatVedio', req, res);
+                r.post('creatVideo', req, res);
             },
             limit: {level: 100}
         },

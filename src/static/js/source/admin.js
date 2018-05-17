@@ -112,14 +112,14 @@ temp.uploadAdmin =  `
                     v-show="videoEditable"
                     class="upload-demo"
                     action="/upload"
+                    accept="video/*"
                     :data="{type:'video'}"
                     :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                    :on-success="handleSuccess"
-                    multiple
-                    :limit="10"
+                    :on-remove="handleVideoRemove"
+                    :on-success="handleVideoSuccess"
+                    :limit="1"
                     :on-exceed="handleExceed"
-                    :file-list="fileList"
+                    :file-list="videoFileList"
                     >
                     <el-button size="small" type="primary">上传视频</el-button>
                 </el-upload>
@@ -137,13 +137,13 @@ temp.uploadAdmin =  `
                     v-show="videoEditable"
                     class="upload-demo"
                     action="/upload"
+                    accept=".srt"
                     :data="{type:'subtitle'}"
-                    :on-remove="handleRemove"
+                    :on-remove="handleSubtitleRemove"
                     :on-success="handleSubtitleSuccess"
-                    multiple
                     :limit="1"
                     :on-exceed="handleExceed"
-                    :file-list="fileList"
+                    :file-list="subtitleFileList"
                     >
                     <el-button size="small" type="primary">上传字幕</el-button>
                 </el-upload>
@@ -229,12 +229,11 @@ temp.uploadAdmin =  `
                         class="album-cover-uploader"
                         action="/upload"
                         :data="{type:'img'}"
-                        :on-remove="handleRemove"
+                        :on-remove="handleAlbumCoverRemove"
                         :on-success="handleAlbumCoverSuccess"
-                        multiple
                         :limit="1"
                         :on-exceed="handleExceed"
-                        :file-list="fileList"
+                        :file-list="albumCoverfileList"
                         >
                         <el-button size="" type="primary">上传封面</el-button>
                     </el-upload>
@@ -245,12 +244,11 @@ temp.uploadAdmin =  `
                         class="album-cover-uploader"
                         action="/upload"
                         :data="{type:'img'}"
-                        :on-remove="handleRemove"
+                        :on-remove="handleAlbumCoverRemove"
                         :on-success="handleAlbumCoverSuccess"
-                        multiple
                         :limit="1"
                         :on-exceed="handleExceed"
-                        :file-list="fileList"
+                        :file-list="albumCoverfileList"
                         >
                         <el-button size="" type="primary">上传封面</el-button>
                     </el-upload>
@@ -364,6 +362,10 @@ COMPONENTS.UploadAdmin = {
             
             videoEditable: true,
             albumEditable: true,
+
+            videoFileList: [],
+            subtitleFileList: [],
+            albumCoverfileList: []
         };
         
         if(this.vId){
@@ -396,16 +398,27 @@ COMPONENTS.UploadAdmin = {
             location.href="#/sportsAdmin";
         },
 
-		handleRemove(file, fileList) {
-			console.log(file, fileList);
-		},
+		handleVideoRemove(file, fileList) {
+            this.SO.videoAbsPath = '';
+        },
+        
+        handleSubtitleRemove(file, fileList) {
+            this.SO.subtitleAbsPath = '';
+        },
+        
+        handleAlbumCoverRemove(file, fileList) {
+            this.newAlbum.cover = '';
+        },
+        
 		handlePreview(file) {
 			console.log(file);
-		},
+        },
+        // 只能传一个文件，视频、字幕、专辑封面
 		handleExceed(files, fileList) {
-			this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+            this.$message.warning(`只能传一个文件`);
+			// this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
 		},
-		handleSuccess(res){
+		handleVideoSuccess(res){
 			// console.log(res);
             this.SO.videoAbsPath = res.absPath;
 		},
@@ -428,14 +441,20 @@ COMPONENTS.UploadAdmin = {
 			so.tag = this.SO.tag.join(',');
 
 			tools.xhr('/video', function(){
-				// console.log(arguments);
+                // console.log(arguments);
+                vId = this.vId;
+                var message  = `视频${this.vId? '更新': '创建'}成功`;
 				this.$message({
-					message: '视频创建成功',
+					message: message,
 					type: 'success'
                 });
 
                 this.SO.videoAbsPath = '';
                 this.SO.subtitleAbsPath = '';
+
+                this.videoFileList = [];
+                this.subtitleFileList = [];
+
 			}.bind(this), 'post', so);
 		},
 
@@ -576,8 +595,11 @@ COMPONENTS.UploadAdmin = {
                 });
                 this.videoEditable = false;
 
-                this.SO.subtitleAbsPath = '';
                 this.SO.videoAbsPath = '';
+                this.SO.subtitleAbsPath = '';
+
+                this.videoFileList = [];
+                this.subtitleFileList = [];
 			}.bind(this), 'put', so, function(){
                 this.SO.subtitleAbsPath = '';
                 this.SO.videoAbsPath = '';

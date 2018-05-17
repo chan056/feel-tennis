@@ -928,7 +928,7 @@ let operations = {
 		}
 	},
 
-	creatVedio: function(res, postObj){
+	creatVideo: function(res, postObj){
 		const path = require('path');
 
 		let videoAbsPath = postObj.videoAbsPath;
