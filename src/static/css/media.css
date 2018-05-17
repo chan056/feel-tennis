@@ -1,14 +1,43 @@
 @media screen and (max-width: 1000px) {
+  app {
+    font-size: 24px;
+  }
+  #header #logo img {
+    width: 80px;
+  }
+  #header #search-form-wrapper {
+    width: 58%;
+  }
+  #header #searchForm .el-form-item__content {
+    margin-left: 0;
+  }
+  #header .searchBox .el-input__inner {
+    line-height: 60px;
+    height: 60px;
+  }
+  #header .header-search-btn {
+    display: none;
+  }
+  #header .el-icon-search {
+    font-size: 24px;
+  }
+  #header [class^=el-icon-],
+  #header .fa {
+    font-size: 40px !important;
+  }
   .aside-menu-btn {
     display: none;
   }
-  #aside {
-    flex-basis: 100px;
+  .guide-entry {
+    margin-bottom: 15px;
   }
-  #searchForm .el-form-item__content {
-    margin-left: 0;
+  .guide-entry-renderer .icon {
+    font-size: 50px !important;
   }
-  #search-form-wrapper {
-    width: 58%;
+  #usr-operation-desk {
+    width: 500px;
+  }
+  .el-form-item__label {
+    font-size: 24px;
   }
 }

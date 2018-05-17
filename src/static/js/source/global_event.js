@@ -5,4 +5,11 @@ module.exports = function(){
     $('body').on('click', function(){
         $('#star-section').hide();
     });
+
+    var W = $(window);
+    W.on('resize', function(){
+        if(W.width() < 1000){
+            $('#root-container').addClass('brief');
+        }
+    }).trigger('resize');
 }

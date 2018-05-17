@@ -1,7 +1,26 @@
 @media screen and (max-width: 1000px) {
+    @fz: 24px;
+    app{font-size: @fz;}
+    
+    // 顶栏
+    #header{
+        #logo img{width: 80px;}
+        #search-form-wrapper{width: 58%;}
+        #searchForm .el-form-item__content{margin-left: 0;}
+        .searchBox .el-input__inner{line-height: 60px; height: 60px;}
+        .header-search-btn{display: none;}
+        .el-icon-search{font-size: @fz;}
+        [class^=el-icon-], .fa{font-size: 40px !important;}
+    }
+
+    // 侧栏
     .aside-menu-btn{display: none;}
-    #aside{flex-basis: 100px;}
-    #searchForm .el-form-item__content{margin-left: 0;}
-    #search-form-wrapper{width: 58%;}
-    // .header-search-btn{display: none;}
+    .guide-entry{margin-bottom: 15px;}
+    .guide-entry-renderer{
+        .icon{font-size: 50px !important;}
+    }
+
+    // 主体
+    #usr-operation-desk{width: 500px;}
+    .el-form-item__label{font-size: @fz;}
 }

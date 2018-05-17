@@ -9,6 +9,7 @@
 
 body{
   min-width:600px;
+  font-family: "Arial","Microsoft YaHei","黑体","宋体","sans-serif;"
 }
 
 #main{
@@ -35,10 +36,17 @@ app{font-size: 14px;}
   // align-items: flex-start;
   &.brief{
     #aside{
-      width: 140px;
+      width: 80px;
     }
 
-    #main{left: 141px;}
+    #main{left: 81px;}
+
+    .guide-entry-renderer{
+      text-align: center;
+
+      .text{display: none;}
+      .icon{font-size: 20px; margin-left: 0;}
+    }
   }
 }
 
@@ -129,8 +137,8 @@ app{font-size: 14px;}
   .el-form{padding-top: 12px;}
   #searchForm .el-form-item {margin-bottom: 0;}
 
-  [class^=el-icon-], .fa{font-size: 3rem;}
-  .el-icon-search{font-size: 1.5rem;}
+  [class^=el-icon-], .fa{font-size: 30px;}
+  .el-icon-search{font-size: 15px;}
 
   .masthead{
     margin-top: 20px;

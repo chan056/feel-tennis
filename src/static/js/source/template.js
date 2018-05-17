@@ -16,7 +16,7 @@ module.exports = function(){
                             <el-row>
                                 <el-col :span=20>
                                     <el-form-item label="" prop="name">
-                                        <el-input v-model="searchForm.name"></el-input>
+                                        <el-input class="searchBox" v-model="searchForm.name"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span=4 class="header-search-btn">
@@ -147,13 +147,13 @@ module.exports = function(){
             <div id="aside">
                 <div class="guide-section">
                     <div class="guide-entry">
-                        <a href="#/sports" class="guide-entry-renderer">
+                        <a href="#/sports" class="guide-entry-renderer" title="首页">
                             <i class="icon fa fa-home"></i>
                             <span class="text">首页</span>
                         </a>
                     </div>
                     <div v-if="(loginUsrInfo && loginUsrInfo.name)"  class="guide-entry">
-                        <a href="#/stars" class="guide-entry-renderer">
+                        <a href="#/stars" class="guide-entry-renderer" title="收藏">
                             <i class="icon fa fa-star"></i>
                             <span class="text">收藏</span>
                         </a>
@@ -161,23 +161,21 @@ module.exports = function(){
                 </div>
                 <div class="guide-section">
                     <div v-if="loginUsrInfo && loginUsrInfo.name" class="guide-entry" id="upload-entry" >
-                        <div class="guide-entry-renderer">
-                            <a href="#/compete" class="guide-entry-renderer">
-                                <i class="fa fa-paw icon"></i>
-                                <span class="text">竞赛</span>
-                            </a>
-                        </div>
+                        <a href="#/compete" class="guide-entry-renderer" title="竞赛">
+                            <i class="fa fa-paw icon"></i>
+                            <span class="text">竞赛</span>
+                        </a>
                     </div>
                 </div>
                 <div class="guide-section">
                     <div v-if="(loginUsrInfo && loginUsrInfo.name)" class="guide-entry">
-                        <a href="#/voteNext" class="guide-entry-renderer">
+                        <a href="#/voteNext" class="guide-entry-renderer" title="投票">
                             <i class="fa fa-hand-paper-o icon"></i>
                             <span class="text">投票</span>
                         </a>
                     </div>
                     <div class="guide-entry" id="feedback-entry">
-                        <a href="#/feedback" class="guide-entry-renderer">
+                        <a href="#/feedback" class="guide-entry-renderer" title="反馈">
                             <i class="el-icon-service icon"></i>
                             <span class="text">反馈</span>
                         </a>
@@ -185,31 +183,31 @@ module.exports = function(){
                 </div>
                 <div class="guide-section" v-if="loginUsrInfo && loginUsrInfo.is_admin == 1">
                     <div class="guide-entry" id="upload-entry" >
-                        <a href="#/feedbacksAdmin" class="guide-entry-renderer">
+                        <a href="#/feedbacksAdmin" class="guide-entry-renderer" title="反馈列表">
                             <i class="fa fa-coffee icon"></i>
                             <span class="text">反馈列表</span>
                         </a>
                     </div>
                     <div class="guide-entry" id="upload-entry" >
-                        <a href="#/uploadAdmin" class="guide-entry-renderer">
+                        <a href="#/uploadAdmin" class="guide-entry-renderer" title="上传视频">
                             <i class="el-icon-upload icon"></i>
                             <span class="text">上传视频</span>
                         </a>
                     </div>
                     <div class="guide-entry" id="upload-entry" >
-                        <a href="#/videosAdmin" class="guide-entry-renderer">
+                        <a href="#/videosAdmin" class="guide-entry-renderer" title="视频列表">
                             <i class="fa fa-video-camera icon"></i>
                             <span class="text">视频列表</span>
                         </a>
                     </div>
                     <div class="guide-entry" id="upload-entry" >
-                        <a href="#/albumsAdmin" class="guide-entry-renderer">
+                        <a href="#/albumsAdmin" class="guide-entry-renderer" title="专辑列表">
                             <i class="fa fa-book icon"></i>
                             <span class="text">专辑列表</span>
                         </a>
                     </div>
                     <div class="guide-entry" id="upload-entry" >
-                        <a href="#/sportsAdmin" class="guide-entry-renderer">
+                        <a href="#/sportsAdmin" class="guide-entry-renderer" title="运动列表">
                             <i class="fa fa-soccer-ball-o icon"></i>
                             <span class="text">运动列表</span>
                         </a>
