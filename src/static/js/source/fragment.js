@@ -24,19 +24,21 @@ module.exports = function(){
 
                 }else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                     video.src = m3u;
-                    var s = '<track kind="subtitles" src="/multimedia/ts/${vId}/subtitle.vtt" srclang="zh" label="中文" default >';
+                    var s = '<track kind="subtitles" src="/multimedia/ts/${vId}/subtitle.vtt" srclang="zh" label="中文" default></track>';
                     $(video).prepend(s);
                     video.addEventListener('canplay',function() {
                         // video.play();
                     });
                 }else{
                     // alert('请更换浏览器后再试,Chrome/Firefox/EDGE等现代浏览器');
-                    Vue.prototype.$alert('请更换浏览器后再试,Chrome/Firefox/EDGE等现代浏览器，或者升级IE到IE11', '提示', {
-                        confirmButtonText: '确定',
-                        callback: function() {
+                    // Vue.prototype.$alert('请更换浏览器后再试,Chrome/Firefox/EDGE等现代浏览器，或者升级IE到IE11', '提示', {
+                    //     confirmButtonText: '确定',
+                    //     callback: function() {
 
-                        }
-                    })
+                    //     }
+                    // })
+
+                    video.src = '/multimedia/pristine_v/${vId}.mp4';
                 }
             }`
         },

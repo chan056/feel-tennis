@@ -1,5 +1,6 @@
 module.exports = function(req, res) {
-	
+	var path = require('path');
+
 	// 检查用户IP是否在黑名单
 	require('../ip_guard')(req, res, function(){
 		const url = require('url');
@@ -74,6 +75,15 @@ module.exports = function(req, res) {
 					res.end();
 				}
 			}); */
+
+			if(ext == 'm3u8' || ext == 'mp4'){
+				let referer = req.headers.referer || '';
+				referer = path.basename(referer);
+	
+				if(constants.whiteList.indexOf(referer) == -1){
+					return res.end();
+				}
+			}
 
 			var zlib = require('zlib');
 			var file = fs.createReadStream(realPath);

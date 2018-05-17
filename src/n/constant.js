@@ -5,7 +5,8 @@ module.exports = {
         'localhost:3000',
         '47.98.108.40',
         'www.yitube.cn',
-        'www.csstool.cn',
+        '192.168.33.30',// 公司
+        '192.168.3.3',// 家
     ],// 访问白名单
     bootJS: 'tube.js',// JS入口
     sessionSecret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD',// session加密字符

@@ -22,6 +22,9 @@ a {
 em {
   font-style: normal;
 }
+img {
+  border-width: 0;
+}
 .fl {
   float: left;
 }
