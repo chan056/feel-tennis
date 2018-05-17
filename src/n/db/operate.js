@@ -905,6 +905,7 @@ let operations = {
 			const path = require('path');
 			const fs = require('fs');
 
+			// 如果只传视频 字幕会被误删
 			del([tsDir]).then(paths => {
 				// console.log('Deleted files and folders:\n', paths.join('\n'));
 				fs.mkdirSync(tsDir, 0777);
