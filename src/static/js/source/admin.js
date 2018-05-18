@@ -441,9 +441,10 @@ COMPONENTS.UploadAdmin = {
 			so.tag = this.SO.tag.join(',');
 
 			tools.xhr('/video', function(){
-                // console.log(arguments);
-                vId = this.vId;
-                var message  = `视频${this.vId? '更新': '创建'}成功`;
+                var vId = this.vId;
+                var action = this.vId? '更新': '创建';
+                var message  = `视频${action}成功`;
+                
 				this.$message({
 					message: message,
 					type: 'success'
