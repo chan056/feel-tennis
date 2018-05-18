@@ -16,7 +16,7 @@ module.exports = function(){
                             <el-row>
                                 <el-col :span=20>
                                     <el-form-item label="" prop="name">
-                                        <el-input class="searchBox" v-model="searchForm.name"></el-input>
+                                        <el-input class="searchBox" v-model="searchForm.name" @keyup.enter.native="submitForm('searchForm');"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span=4 class="header-search-btn">

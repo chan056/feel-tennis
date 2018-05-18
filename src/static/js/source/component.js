@@ -99,6 +99,7 @@ module.exports = function(){
 
 		methods: {
 			submitForm: function(formName) {
+				let t = this;
 				let name = $.trim(this.searchForm.name);
 				if(!name)
 					return;
@@ -106,7 +107,7 @@ module.exports = function(){
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
 						location.hash = "#/searchedVideos?headline=" + this.searchForm.name;
-						// this.searchForm.name = '';
+						t.searchForm.name = '';
 					} else {
 						console.log('error submit!!');
 						return false;
