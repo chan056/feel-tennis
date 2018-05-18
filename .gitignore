@@ -1,10 +1,10 @@
-
 sessions/
 .git-credentials
 .package-lock.json
 src/n/package-lock.json
 /src/static/img/avatar/*.*
 /src/static/img/cover
+/src/static/img/cover/album/*.*
 /src/static/js/tmp.js
 /src/n/ffmpeg/*.mp4
 /src/n/ffmpeg/test.js
@@ -67,3 +67,4 @@ typings/
 
 # dotenv environment variables file
 .env
+src/static/img/cover/album/13.jpg

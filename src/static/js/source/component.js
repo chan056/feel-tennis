@@ -1221,11 +1221,12 @@ module.exports = function(){
 			},
 
 			handleUploadSuccess: function(res){
-				// return console.log(res);
-				this.datumForm.avatar = res.relPath;
+				// console.log(this.datumForm, res.relPath);
+				this.datumForm.unstableDatum.avatar = res.relPath;
 			},
 
 			selectDefaultAvatar: function(e){
+				debugger;
 				var t = $(e.target);
 				this.datumForm.unstableDatum.avatar = this.datumForm.avatar = t.attr('src');
 				t.addClass('selected').siblings().removeClass('selected')

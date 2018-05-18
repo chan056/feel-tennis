@@ -99,10 +99,35 @@ function convertSrt2vtt(r){
     })
 }
 
+function scaleImage(source, dest, imgSize, fn){
+	// ffmpeg -i input.jpg -vf scale=320:-1 output_320.png 等比例
+	// `ffmpeg -i ${source} -vf scale=${avatarWidth}:ih*${avatarWidth}/iw ${dest} -y 等比例
+
+	const exec = require('child_process').exec;
+
+	var cmd;
+	imgSize = imgSize || require('./constant').videoCoverSize.split('x');
+
+	if(imgSize.constructor === Array){
+		cmd = `ffmpeg -i ${source} -vf scale=${imgSize[0]}:${imgSize[1]} ${dest} -y`;
+	}else if(imgSize.constructor === Number){
+		cmd = `ffmpeg -i ${source} -vf scale=${imgSize}:-1 ${dest} -y`;
+	}
+
+	exec(cmd, function(err){
+		if(err){
+			console.log(err);
+		}
+
+		fn && fn();
+	});
+}
+
 module.exports = {
     response404: response404,
     isEmpty: isEmpty,
 	newClause: newQueryClause,
 	formatTime: formatTime,
-	convertSrt2vtt: convertSrt2vtt
+	convertSrt2vtt: convertSrt2vtt,
+	scaleImage: scaleImage
 }

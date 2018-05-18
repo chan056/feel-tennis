@@ -1027,11 +1027,9 @@ let operations = {
 
 			let sourceCoverPath = path.resolve(__dirname, `../../static${postObj.cover}`),
 				ext = path.extname(sourceCoverPath),
-				destCoverPath = path.resolve(__dirname, `../../static/img/cover/album/` + albumId + ext);// todo ext
+				destCoverPath = path.resolve(__dirname, `../../static/img/cover/album/` + albumId + ext);
 				
-			fs.rename(sourceCoverPath, destCoverPath, function(){
-				console.log('专辑封面移动完成');
-			});
+			require('../tools.js').scaleImage(sourceCoverPath, destCoverPath);
 
 			res.end();
 		});
@@ -1356,33 +1354,17 @@ let operations = {
 		// 移动头像位置
 		var path = require('path');
 		var fs = require('fs');
-		var avatar = path.parse(patchObj.avatar);
 
-		var filename = avatar.base;
-		var fileExt = avatar.ext;
+		var avatarExt = path.extname(patchObj.avatar);
 
 		var usrId = this.usrInfo.usrId;
-		var srcPath = path.join(__dirname, "../../static/upload", filename);
-		var pathStored = patchObj.avatar;
+		var srcPath = path.join(global.staticRoot, './' + patchObj.avatar);
 		
+		var pathStored = '/img/avatar/' + usrId + avatarExt;
 		if(fs.existsSync(srcPath)){
-			pathStored = '/img/avatar/' + usrId+fileExt;
-			var desPath = path.join(__dirname, "../../static", pathStored);
+			var desPath = path.resolve(global.staticRoot, '.' + pathStored);
 
-			fs.rename(srcPath, desPath, function(){
-				// 压缩图片
-				const exec = require('child_process').exec;
-				const avatarWidth = require('../constant').avtarThumbWidth;
-				var cmd = `ffmpeg -i ${desPath} -vf scale=${avatarWidth}:ih*${avatarWidth}/iw ${desPath} -y`;
-
-				exec(cmd, function(err){
-					if(err){
-						console.log(err);
-					}
-
-					updateData();
-				});
-			});
+			require('../tools.js').scaleImage(srcPath, desPath, require('../constant.js').avtarThumbWidth, updateData)
 		}else{
 			updateData();
 		}
@@ -1392,7 +1374,6 @@ let operations = {
 				insert into usr_datum values(${usrId}, '${patchObj.nickname}', '${patchObj.wechat}', '${patchObj.level}', '${patchObj.status}', '${pathStored}', 0, 0, ${patchObj.sex}) 
 				ON DUPLICATE KEY 
 				update nickname='${patchObj.nickname}',wechat='${patchObj.wechat}', level='${patchObj.level}', status='${patchObj.status}', avatar='${pathStored}', sex=${patchObj.sex}`;
-				// console.log(sql);
 			
 			conn.query(sql, function(err, result){
 				if(err)
@@ -1569,12 +1550,11 @@ let operations = {
 					let fs = require('fs'),
 						path = require('path');
 	
-					let sourceCoverPath = path.resolve(__dirname, `../../static${putObj.cover}`),
-						destCoverPath = path.resolve(__dirname, `../../static/img/cover/album/` + putObj.id + '.jpg');// 封面格式动态 todo
+					let sourceCoverPath = path.resolve(global.staticRoot, `./${putObj.cover}`),
+						ext = path.extname(sourceCoverPath),
+						destCoverPath = path.resolve(global.staticRoot, `./img/cover/album/` + putObj.id + ext);// 封面格式动态 todo
 						
-					fs.rename(sourceCoverPath, destCoverPath, function(){
-						console.log('专辑封面移动完成');
-					});
+					require('../tools.js').scaleImage(sourceCoverPath, destCoverPath);
 				}
 				conn.query('update sport set update_time = ' + (+new Date()) + ' where id = (select sport_id from album where id = ' + putObj.id + ')');
 			}
