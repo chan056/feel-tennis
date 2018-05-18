@@ -347,7 +347,33 @@ const routerConfig = {
             },
             limit: {level: 10}
         },
-        
+
+        '/resendActiveEmail': function(params, res, req){
+            let usrId = req.usrInfo.usrId;
+            if(!usrId)
+                return;
+                
+            let sql = `select active_code,email,name from usr where id=${usrId}`;
+
+            let conn = require('./connect.js').conn;
+            conn.query(sql, function(err, result){
+                if(err)
+                    console.log(err);
+                
+                console.log(result)
+
+                let activeCode = result[0]['active_code'];
+                let email = result[0]['email'];
+                let name = result[0]['name'];
+
+                if(email && activeCode){
+                    require('../tools.js').sendActiveEmail(usrId, name, email, activeCode, req, res);
+
+                    res.statusMessage = 'resend success';
+					res.end(`邮件已发送至 ${email}, 请查收`);
+                }
+            });
+        },
     },
 
     post: {

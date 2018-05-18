@@ -5,6 +5,8 @@ module.exports = function(req, res, fn){
     if(clientIp == '::1'){
         clientIp = '::ffff:127.0.0.1';
     }
+    clientIp = clientIp.replace('::ffff:', '');
+
     let sql = `select * from black where ip = '${clientIp}'`;
 
     conn.query(sql, function(err, result){

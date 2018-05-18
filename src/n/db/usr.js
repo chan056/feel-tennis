@@ -25,6 +25,7 @@ module.exports = function(req, fn, res){
         if(ip == '::1'){
             ip = '::ffff:127.0.0.1';
         }
+        ip = ip.replace('::ffff:', '');
 
         usrInfo = {
             type: 2,

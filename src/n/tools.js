@@ -123,11 +123,37 @@ function scaleImage(source, dest, imgSize, fn){
 	});
 }
 
+function sendActiveEmail(usrId, name, email, code, req, res){
+	let host = req.headers.referer;
+	if(!host)
+		return;
+
+	let activeCode = JSON.stringify({
+		id: usrId,
+		code: code
+	});
+
+	let crypto = require('./crypto.js');
+	let encryptedCode = crypto.aesEncrypt(activeCode, require('./constant').aesKey);
+
+	let emailSubject = 'www.yitube.cn 注册确认',
+		emailContent = `你好 ${name}, 
+			<a href="${host}?code=${encryptedCode}#/emailConfirm">点击</a>完成注册
+			<br/>
+			如无法打开，请复制以下链接
+			<br/>
+			${host}?code=${encryptedCode}#/emailConfirm`;
+
+	let emailer = require('./mail');
+	emailer.sendMail(email, emailSubject, emailContent);
+}
+
 module.exports = {
     response404: response404,
     isEmpty: isEmpty,
 	newClause: newQueryClause,
 	formatTime: formatTime,
 	convertSrt2vtt: convertSrt2vtt,
-	scaleImage: scaleImage
+	scaleImage: scaleImage,
+	sendActiveEmail: sendActiveEmail,
 }

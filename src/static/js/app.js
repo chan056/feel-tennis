@@ -9093,12 +9093,11 @@ var tools = {
 
             var statusCode = response.status;
 
-            // 自定义错误处理
-            errorHandle && errorHandle(response);
-
-            // 统一错误处理
-            setTimeout(function () {
-                Vue.prototype.$notify({
+            if (errorHandle) {
+                // 自定义错误处理
+                errorHandle(response);
+            } else {
+                var notifyConfig = {
                     title: response.statusText,
                     message: CONSTANT.erroMsg[statusCode] || '',
                     type: 'warning',
@@ -9106,8 +9105,23 @@ var tools = {
                     onClose: function onClose() {
                         console.log('close');
                     }
-                });
-            }, 100);
+                };
+
+                // 未激活
+                if (statusCode == 402) {
+                    // 重新激活
+                    notifyConfig.onClick = function () {
+                        tools.xhr('/resendActiveEmail', function (data) {
+                            console.log(data);
+                        });
+                    };
+                }
+
+                // 统一错误处理
+                setTimeout(function () {
+                    Vue.prototype.$notify(notifyConfig);
+                }, 100);
+            }
         });
     },
 

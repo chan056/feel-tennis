@@ -21,7 +21,7 @@ module.exports = {
     emailSender: {
         service: 'QQ',
         user: '374029208@qq.com',
-        pass: 'btwnqqiqgvjybiid',
+        pass: 'rpnuovesymglcaic',  //btwnqqiqgvjybiid
     },
 
     dbConfig: {

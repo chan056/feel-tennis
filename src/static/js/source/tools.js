@@ -17,12 +17,11 @@ let tools = {
 
             let statusCode = response.status;
             
-            // 自定义错误处理
-            errorHandle && errorHandle(response)
-
-            // 统一错误处理
-            setTimeout(function(){
-                Vue.prototype.$notify({
+            if(errorHandle){
+                // 自定义错误处理
+                errorHandle(response);
+            }else{
+                var notifyConfig = {
                     title: response.statusText,
                     message: CONSTANT.erroMsg[statusCode] || '',
                     type: 'warning',
@@ -30,8 +29,34 @@ let tools = {
                     onClose: function(){
                         console.log('close');
                     }
-                });
-            }, 100)
+                };
+
+                // 未激活
+                if(statusCode == 402){
+                    // 重新激活
+                    notifyConfig.onClick = function(){
+                        Vue.prototype.$confirm('是否发送新的激活邮件', '提示', {
+							confirmButtonText: '确定',
+							cancelButtonText: '取消',
+							type: 'warning'
+						}).then(function(){
+							tools.xhr('/resendActiveEmail', function(data){
+                                Vue.prototype.$message({
+                                    message: data,
+                                    type: 'success'
+                                });
+                            });
+						}).catch(function(){
+							
+                        });
+                    }
+                }
+
+                // 统一错误处理
+                setTimeout(function(){
+                    Vue.prototype.$notify(notifyConfig);
+                }, 100)
+            }
         });
     },
     

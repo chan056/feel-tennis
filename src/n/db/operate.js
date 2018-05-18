@@ -764,7 +764,7 @@ let operations = {
 			})
 		});
 	},
-
+	
 	// ===============POST================
 	login: function(res, postObj, req){
 		var sql = `select * from usr where name=? and psw=?`;
@@ -821,6 +821,7 @@ let operations = {
 		if(ip == '::1'){
 			ip = '::ffff:127.0.0.1';
 		}
+		ip = ip.replace('::ffff:', '');
 
 		conn.query(`SELECT * from usr WHERE regist_ip='${ip}' and regist_time > DATE_SUB(CURRENT_TIMESTAMP(),INTERVAL 1 DAY)`, function(err, result){
 			if(err)
@@ -865,27 +866,10 @@ let operations = {
 						});
 		
 						res.statusMessage = 'regist success';
-						res.end(`邮件已发送至 ${email}`);
+						res.end(`邮件已发送至 ${email}, 请查收`);
 		
 						if(email){
-							let activeCode = JSON.stringify({
-								id: usrId,
-								code: code
-							});
-		
-							let crypto = require('../crypto.js');
-							let encryptedCode = crypto.aesEncrypt(activeCode, require('../constant').aesKey);
-		
-							let emailSubject = 'chantube注册确认',
-								emailContent = `你好 ${postObj.name}, 
-									<a href="${req.headers.referer}?code=${encryptedCode}#/emailConfirm">点击</a>完成注册
-									<br/>
-									如无法打开，请复制以下链接
-									<br/>
-									${req.headers.referer}?code=${encryptedCode}#/emailConfirm`;
-		
-							let emailer = require('../mail');
-							emailer.sendMail(email, emailSubject, emailContent);
+							require('../tools.js').sendActiveEmail(usrId, postObj.name, email, code, req, res);
 						}
 					}
 				});
@@ -961,6 +945,8 @@ let operations = {
 		if(ip == '::1'){
 			ip = '::ffff:127.0.0.1';
 		}
+		ip = ip.replace('::ffff:', '');
+
 		var sql = `INSERT INTO feedback 
 			(description, ip, site, wechat, email, files, usr_id, time)
 			VALUES (?, ?, ?, ?, ?, ?, ?, now())`;
