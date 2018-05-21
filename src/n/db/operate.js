@@ -884,10 +884,15 @@ let operations = {
 		let videoGenerator = require('../ffmpeg/generate_video');
 		let tsDir = global.staticRoot + `/multimedia/ts/${vId}`;
 		
+		const fs = require('fs');
+		
 		if(videoAbsPath){
+			if(!fs.existsSync(videoAbsPath)){
+				return
+			}
+			
 			const del = require('del');
 			const path = require('path');
-			const fs = require('fs');
 
 			// 如果只传视频 字幕会被误删
 			del([tsDir + '/*.*', '!' + tsDir + '/subtitle', '!' + tsDir + '/subtitle.vtt']).then(paths => {
@@ -908,6 +913,10 @@ let operations = {
 				subtitleAbsPath && videoGenerator.storeSubtitle(subtitleAbsPath, tsDir);
 			})
 		}else{
+			if(!fs.existsSync(subtitleAbsPath)){
+				return
+			}
+			
 			subtitleAbsPath && videoGenerator.storeSubtitle(subtitleAbsPath, tsDir);
 		}
 	},
