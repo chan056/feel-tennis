@@ -76,6 +76,8 @@ module.exports = function(req, res) {
 
 			if(ext == 'm3u8' || ext == 'mp4'){
 				let referer = req.headers.referer || '';
+				if(!referer)
+					return res.end();
 
 				const { URL } = require('url');
 				const myURL = new URL(referer);
