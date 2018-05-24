@@ -47,7 +47,8 @@ module.exports = function(){
                             title=""
                             width="200"
                             trigger="hover">
-                            123
+                            <img class="pay-code" src="/img/ali.jpeg" alt="支付宝" title="支付宝">
+                            <img class="pay-code" src="/img/wechat.jpeg" alt="微信" title="微信">
                         </el-popover>
                         
                         <i v-popover:popover1 class="fa fa-money item" title="投币"></i>

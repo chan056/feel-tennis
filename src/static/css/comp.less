@@ -50,6 +50,36 @@ app{font-size: 14px;}
   }
 }
 
+// #header
+#header{
+  border-bottom: 1px solid @border-color;
+  .el-form-item.is-success .el-input__inner{border-color: #dcdfe6;}
+  .el-form-item.is-error .el-input__inner{border-color: #dcdfe6;}
+
+  // .aside-menu-btn{font-size: 2rem;}
+  .aside-menu-btn{float: left; margin: 20px 30px 0; cursor: pointer;}
+  /* #logo img{width: 60px; background-image: url("@{img-dir-path}logo.png");} */
+  .el-form{padding-top: 12px;}
+  #searchForm .el-form-item {margin-bottom: 0;}
+
+  [class^=el-icon-], .fa{font-size: 30px;}
+  .el-icon-search{font-size: 15px;}
+
+  .masthead{
+    margin-top: 20px;
+    .item{float: right; margin-right: 20px; cursor: pointer;}
+    .el-submenu__title{height: auto !important; line-height: inherit !important;}
+    .el-menu--horizontal .el-submenu .el-menu{top: 30px;}
+    .el-submenu__title{border-bottom-width: 0 !important;}
+
+    .el-menu{ text-align: center;}
+    .el-menu-item{min-width: 70px !important;}
+  }
+  
+  #usr-btns{}
+
+}
+
 #aside{
   width: 300px;
   float: left;
@@ -117,41 +147,14 @@ app{font-size: 14px;}
   .el-row{margin-top: 20px;}
 }
 
+.pay-code{width: 100px;}
+
 .block-list{
   .block-thumb{display: block; width: @list-item-width; height: @list-item-height;}
   .block-title{
     margin: 8px auto; font-weight: normal; font-size: inherit;
     a{text-decoration: none; max-height: 52px; overflow: hidden;}
   }
-}
-
-// #header
-#header{
-  border-bottom: 1px solid @border-color;
-  .el-form-item.is-success .el-input__inner{border-color: #dcdfe6;}
-  .el-form-item.is-error .el-input__inner{border-color: #dcdfe6;}
-
-  // .aside-menu-btn{font-size: 2rem;}
-  .aside-menu-btn{float: left; margin: 20px 30px 0; cursor: pointer;}
-  /* #logo img{width: 60px; background-image: url("@{img-dir-path}logo.png");} */
-  .el-form{padding-top: 12px;}
-  #searchForm .el-form-item {margin-bottom: 0;}
-
-  [class^=el-icon-], .fa{font-size: 30px;}
-  .el-icon-search{font-size: 15px;}
-
-  .masthead{
-    margin-top: 20px;
-    .item{float: right; margin-right: 20px; cursor: pointer;}
-    .el-submenu__title{height: auto !important; line-height: inherit !important;}
-    .el-menu--horizontal .el-submenu .el-menu{top: 30px;}
-    .el-submenu__title{border-bottom-width: 0 !important;}
-
-    .el-menu{ text-align: center;}
-    .el-menu-item{min-width: 70px !important;}
-  }
-  
-  #usr-btns{}
 }
 
 // 上传页
@@ -209,6 +212,7 @@ app{font-size: 14px;}
 }
 
 #star-section{
+  background-color: #fff;
   position: absolute;
   bottom: 0;
   left: 15px;

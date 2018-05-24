@@ -1325,7 +1325,7 @@ module.exports = function(){
 							footer: function(tooltipItems, data) {
 								var s = '';
 		
-								tooltipItem = tooltipItems[0];
+								var tooltipItem = tooltipItems[0];
 								var datasetIndex = tooltipItem.datasetIndex,
 									itemIndex = tooltipItem.index;
 
@@ -1341,7 +1341,7 @@ module.exports = function(){
 							afterFooter: function(tooltipItems, data) {
 								var s = '';
 		
-								tooltipItem = tooltipItems[0];
+								var tooltipItem = tooltipItems[0];
 								var datasetIndex = tooltipItem.datasetIndex,
 									itemIndex = tooltipItem.index;
 
@@ -1847,7 +1847,7 @@ module.exports = function(){
 
 			// 发起比赛
 			foundMatch: function(defenseId){
-				if(!usrDatumIntegrity){
+				if(!this.usrDatumIntegrity){
 					return;
 				}
 
@@ -1860,18 +1860,19 @@ module.exports = function(){
 					tools.xhr('/match', function(res){
 						this.fetchRelatedMatches();
 						this.$message({
-							messgae: '比赛发起成功',
-							type: 'success'
+							message: '比赛发起成功',
+							type: 'success',
+							// duration: 0
 						})
 					}.bind(this), 'post', {
-						matchId: this.match.id,
+						defenseId: defenseId,
 					});
 				}
 			},
 
 			// 接受比赛
 			acceptChallenge: function(){
-				if(!usrDatumIntegrity){
+				if(!this.usrDatumIntegrity){
 					return;
 				}
 
@@ -1879,8 +1880,8 @@ module.exports = function(){
 					this.fetchRelatedMatches();
 
 					this.$message({
-						messgae: '应战成功',
-						type: 'success'
+						message: '应战成功',
+						type: 'success',
 					});
 				}.bind(this), 'patch', {
 					matchId: this.match.id,
@@ -1926,6 +1927,7 @@ module.exports = function(){
 
 			showMatchDetail: function(match, index){
 				this.match = match;
+				console.log(match)
 				
 				if(match.stage == 1){
 					if(match.defensive){
@@ -1947,6 +1949,7 @@ module.exports = function(){
 				}
 			},
 
+			// 检测用户资料是否完善
 			checkUsrDatumIntegrity: function(){
 				tools.xhr('/usrDatumIntegrity', function(res){
 					this.usrDatumIntegrity = res;
