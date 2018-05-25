@@ -21,7 +21,7 @@
     (new BMap.LocalCity({
         renderOptions: {map: map}
     })).get(function(city){
-        fetchSameCityPlayer(city.name);
+        fetchCityPlayerDetail(city.name);
     });
     
     // ==========EVENT============
@@ -30,27 +30,19 @@
         myDis.open();  //开启鼠标测距
         //myDis.close();  //关闭鼠标测距大
     });*/
+    var criticalZoom = 10;
+
     map.addEventListener('zoomend', function(){
         var target = arguments[0]['currentTarget'];
-        var zoomBefore = target.Lc,
+        var zoomStart = target.Lc,
             zoomEnd = target.Oa;
-        var criticalZoom = 10;
         
-        if(zoomBefore > criticalZoom && zoomEnd <= criticalZoom){
-            removeAllOverlay();
+        if(zoomStart > criticalZoom && zoomEnd <= criticalZoom){
             fetchCityPlayer();
-        }else if(zoomBefore <= criticalZoom && zoomEnd > criticalZoom){//放大
-            removeAllOverlay();
-            fetchSameCityPlayer(lastQueryCity);
+        }else if(zoomStart <= criticalZoom && zoomEnd > criticalZoom){//放大
+            fetchCityPlayerDetail(lastQueryCity);
         }
-
-        function removeAllOverlay(){
-            var overlays = map.getOverlays();
-            for (var i = 0; i < overlays.length; i++){
-                map.removeOverlay(overlays[i]);
-            }
-        }
-    })
+    });
     
     //map.addEventListener("tilesloaded",function(){alert("地图加载完毕");});
 
@@ -58,57 +50,33 @@
     
     map.addEventListener("click", function(e){        
         var pt = e.point;
-        // console.log(pt);
+        console.log(pt);
 
         geoc.getLocation(pt, function(rs){
             var addComp = rs.addressComponents;
             var city = addComp.city;// 中文
             if(city != lastQueryCity){
-                fetchSameCityPlayer(city);
+                fetchCityPlayerDetail(city);
             }
         });        
     });
 
-    /*function getCurPos(fn){
-        var geolocation = new BMap.Geolocation();
-        geolocation.getCurrentPosition(function(r){
-            if(this.getStatus() == BMAP_STATUS_SUCCESS){
-                console.log(r);
-                fn(r.point);
-            } else {
-                alert('failed'+this.getStatus());
-            }
-        },{enableHighAccuracy: true})
-    }*/
+    window.refreshMapPlayer = function(){
+        if(map.getZoom() < criticalZoom){
+            fetchCityPlayer();
+        }else{
+            fetchCityPlayerDetail(lastQueryCity);
+        }
+    }
 
-
-    // function getCurPos(fn){
-    //     // 获取坐标
-    //     var CURPOS = window.CURPOS;
-    //     if(CURPOS){
-    //         fn && fn();
-    //     }else{
-    //         setTimeout(function(){
-    //             getCurPos(fn);
-    //         }, 2000);
-    //     }
-    // }
-
-    
-    /*getCurPos( function(){
-        var pos = {lng: CURPOS.longitude, lat: CURPOS.latitude};
-        var point = new BMap.Point(CURPOS.longitude, CURPOS.latitude);
-        map.centerAndZoom(point,12);
-        map.panTo(pos);// 跳转
-
-        fetchSameCityPlayer();
-        lastQueryCity = CURPOS.city;
-    });*/
-
-    function fetchSameCityPlayer(city){
+    // 详细情况
+    function fetchCityPlayerDetail(city){
         if(!city){
             return;
         }
+
+        removeAllOverlay();
+
         var imgLoader = $('#img-loader');
         tools.xhr('/sameCityPlayer/' + city, function(res){
             lastQueryCity = city;
@@ -171,10 +139,11 @@
             
                     var markerMenu = new BMap.ContextMenu();
                     
+                    // 绑定菜单
                     if(!usr.is_self){
                         var matchingUsrIds = collectMatchingUsrs();
                         if(matchingUsrIds.indexOf(usr.usr_id) == -1){// 非交战
-                            if(usr.status ==1 ){// 接收对战
+                            if(usr.status == 1 ){// 接收对战
                                 var menu = new BMap.MenuItem('交战',function(e,ee,marker){
                                     window.foundMatch(usr.usr_id);
                                 }.bind(mk));
@@ -189,7 +158,9 @@
         });
     }
 
+    // 概况
     function fetchCityPlayer(){
+        removeAllOverlay();
         tools.xhr('/cityPlayer', function(res){
             res.forEach(function(){
                 city = arguments[0].city;
@@ -224,6 +195,13 @@
         })
     }
 
+    function removeAllOverlay(){
+        var overlays = map.getOverlays();
+        for (var i = 0; i < overlays.length; i++){
+            map.removeOverlay(overlays[i]);
+        }
+    }
+
     function collectMatchingUsrs(){
         var matches = window.matches;
         // console.log(matches)
@@ -239,4 +217,43 @@
     
         return usrs;
     }
+
 })();
+
+
+
+/*function getCurPos(fn){
+    var geolocation = new BMap.Geolocation();
+    geolocation.getCurrentPosition(function(r){
+        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+            console.log(r);
+            fn(r.point);
+        } else {
+            alert('failed'+this.getStatus());
+        }
+    },{enableHighAccuracy: true})
+}*/
+
+
+// function getCurPos(fn){
+//     // 获取坐标
+//     var CURPOS = window.CURPOS;
+//     if(CURPOS){
+//         fn && fn();
+//     }else{
+//         setTimeout(function(){
+//             getCurPos(fn);
+//         }, 2000);
+//     }
+// }
+
+
+/*getCurPos( function(){
+    var pos = {lng: CURPOS.longitude, lat: CURPOS.latitude};
+    var point = new BMap.Point(CURPOS.longitude, CURPOS.latitude);
+    map.centerAndZoom(point,12);
+    map.panTo(pos);// 跳转
+
+    fetchCityPlayerDetail();
+    lastQueryCity = CURPOS.city;
+});*/

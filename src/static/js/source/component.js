@@ -1863,7 +1863,8 @@ module.exports = function(){
 							message: '比赛发起成功',
 							type: 'success',
 							// duration: 0
-						})
+						});
+						refreshMapPlayer();
 					}.bind(this), 'post', {
 						defenseId: defenseId,
 					});
@@ -1871,7 +1872,7 @@ module.exports = function(){
 			},
 
 			// 接受比赛
-			acceptChallenge: function(){
+			responseChallenge: function(responseResult){
 				if(!this.usrDatumIntegrity){
 					return;
 				}
@@ -1880,18 +1881,27 @@ module.exports = function(){
 					this.fetchRelatedMatches();
 
 					this.$message({
-						message: '应战成功',
+						message: '操作成功',
 						type: 'success',
 					});
+
+					refreshMapPlayer();
 				}.bind(this), 'patch', {
 					matchId: this.match.id,
+					response: responseResult
 				});
 			},
 
 			// 接收比赛
 			defense: function(){
 				this.defenseDialogVisible = false;
-				this.acceptChallenge();
+				this.responseChallenge(2);
+			},
+
+			// 拒绝比赛
+			refuseCompete: function(){
+				this.defenseDialogVisible = false;
+				this.responseChallenge(3);
 			},
 
 			// 确认比赛结果
@@ -1910,8 +1920,12 @@ module.exports = function(){
 						type: 'success'
 					});
 
-					this.matchPanelVisible = false;
-					this.matchResult = 3;
+					if(res){// 比赛结束 '1'
+						refreshMapPlayer();
+					}
+
+					this.matchPanelVisible = false;// 默认隐藏
+					this.matchResult = 3;// 默认“平”
 				}.bind(this), 'patch', {
 					matchId: this.match.id,
 					result: this.matchResult,
@@ -1919,6 +1933,11 @@ module.exports = function(){
 					if(res.status == 400){
 						this.$message({
 							message: '一天后才可以提交比赛结果',
+							type: 'warning'
+						});
+					}else if(res.status == 401){
+						this.$message({
+							message: '比赛结果有误',
 							type: 'warning'
 						});
 					}

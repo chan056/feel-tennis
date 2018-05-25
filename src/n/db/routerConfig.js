@@ -374,6 +374,8 @@ const routerConfig = {
                 }
             });
         },
+
+        
     },
 
     post: {
@@ -580,7 +582,7 @@ const routerConfig = {
 
         '/match': {
             fn: function(req, res){
-                r.patch('acceptChallenge', req, res);
+                r.patch('responseChallenge', req, res);
             },
             limit: {level: 10}
         },

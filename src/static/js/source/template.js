@@ -854,8 +854,8 @@ module.exports = function(){
                 >
                     <span>是否应战？</span>
                     <span slot="footer" class="dialog-footer">
-                        <el-button @click="defenseDialogVisible = false">取 消</el-button>
-                        <el-button type="primary" @click="defense()">确 定</el-button>
+                        <el-button @click="refuseCompete()">拒 绝</el-button>
+                        <el-button type="primary" @click="defense()">接 受</el-button>
                     </span>
                 </el-dialog>
             </div>

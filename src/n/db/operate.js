@@ -1382,8 +1382,8 @@ let operations = {
 		}
 	},
 
-	acceptChallenge: function(res, patchObj, req){
-		let sql = `update competition set stage=2, defense_time=now() where id=${patchObj.matchId}`;
+	responseChallenge: function(res, patchObj, req){
+		let sql = `update competition set stage=${patchObj.response}, defense_time=now() where id=${patchObj.matchId}`;
 		conn.query(sql, function(err, result){
 			if(err)
 				console.log(err);
@@ -1391,7 +1391,7 @@ let operations = {
 			res.end();
 		});
 	},
-	
+
 	markMatchResult: function(res, patchObj, req){
 		let sql = `select * from competition where id=${patchObj.matchId}`;
 		let usrId = this.usrInfo.usrId;
@@ -1412,6 +1412,8 @@ let operations = {
 				let usrMarkedResult = patchObj.result;
 				let doMatchClose = false;
 
+				let offenseDefense;
+
 				if(offenseUsrId == usrId){
 					if(NOW - offenseTime < ONEDAY){
 						res.statusCode = 400;
@@ -1421,10 +1423,11 @@ let operations = {
 
 					if(defenseRes){
 						doMatchClose = true;
-						sql = `update competition set offense_res=${usrMarkedResult}, stage=3, close_time=now() where id=${patchObj.matchId}`;
+						sql = `update competition set offense_res=${usrMarkedResult}, stage=4, close_time=now() where id=${patchObj.matchId}`;
 					}else
 						sql = `update competition set offense_res=${usrMarkedResult} where id=${patchObj.matchId}`;
 					
+					offenseDefense = defenseRes * usrMarkedResult;
 				}else if(defenseUsrId == usrId){
 					if(NOW - defenseTime < ONEDAY){
 						res.statusCode = 400;
@@ -1434,16 +1437,17 @@ let operations = {
 
 					if(offenseRes){
 						doMatchClose = true;
-						sql = `update competition set defense_res=${usrMarkedResult}, stage=3, close_time=now() where id=${patchObj.matchId}`;
+						sql = `update competition set defense_res=${usrMarkedResult}, stage=4, close_time=now() where id=${patchObj.matchId}`;
 					}else
 						sql = `update competition set defense_res=${usrMarkedResult} where id=${patchObj.matchId}`;
+					
+					offenseDefense = offenseRes * usrMarkedResult;
 				}
 
-				let offenseDefense = defenseRes * usrMarkedResult;
 				// 1 2 || 2 1 || 3 3
 				if(doMatchClose){
 					if(offenseDefense != 2 && offenseDefense != 9){
-						res.statusCode = 400;
+						res.statusCode = 401;
 						res.statusMessage = 'match result error';
 						return res.end();
 					}
@@ -1454,7 +1458,7 @@ let operations = {
 					if(err)
 						console.log(err);
 
-					res.end();
+					res.end(+doMatchClose + '');
 				});
 			}
 		})

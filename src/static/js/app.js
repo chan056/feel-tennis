@@ -9326,7 +9326,7 @@ module.exports = function () {
         aboutMake: '',
         emailConfirm: '<div></div>',
 
-        compete: '<div class="map-container">\n            <div class="close-btn">\u8FD4\u56DE</div>\n    \n            <div id="match-list">\n                <p v-for="(match, index) in matches" :key="match.id" class="match" @click="showMatchDetail(match, index)">\n                    <a href="javascript: ;" class="nodec" :title="\'\u5BF9\u624B\u7F16\u53F7\uFF1A\' + (match.offensive? match.defense: match.offense)">\n                        VS {{ match.offensive\n                            ? match.defense_nickname + \' \' + (match.defense_wechat || \'\')\n                            : match.offense_nickname + \' \' + (match.offense_wechat || \'\')\n                        }}\n                    </a>\n                </p>\n    \n                <div id="matchPanel" v-show="matchPanelVisible">\n                    <el-select v-model="matchResult" placeholder="\u8BF7\u9009\u62E9">\n                        <el-option\n                        v-for="item in options"\n                        :key="item.value"\n                        :label="item.label"\n                        :value="item.value"> \n                        </el-option>\n                    </el-select>\n                    <div class="">\n                        <el-button type="primary" @click="confirmMathcResult();">\u786E\u5B9A</el-button>\n                        <el-button @click="matchPanelVisible = false;">\u53D6\u6D88</el-button>\n                    </div>\n                </div>\n    \n                <el-dialog\n                title="\u63D0\u793A"\n                :visible.sync="matchResultdialogVisible"\n                :append-to-body="true"\n                width="30%"\n                >\n                    <span>\u786E\u8BA4\u65E0\u8BEF\uFF1F</span>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button @click="matchResultdialogVisible = false">\u53D6 \u6D88</el-button>\n                        <el-button type="primary" @click="matchResultdialogVisible = false">\u786E \u5B9A</el-button>\n                    </span>\n                </el-dialog>\n    \n                <el-dialog\n                title="\u63D0\u793A"\n                :visible.sync="defenseDialogVisible"\n                :append-to-body="true"\n                width="30%"\n                >\n                    <span>\u662F\u5426\u5E94\u6218\uFF1F</span>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button @click="defenseDialogVisible = false">\u53D6 \u6D88</el-button>\n                        <el-button type="primary" @click="defense()">\u786E \u5B9A</el-button>\n                    </span>\n                </el-dialog>\n            </div>\n    \n            <div id="baidu-map"></div>\n            <div id="img-loader"></div>\n        </div>'
+        compete: '<div class="map-container">\n            <div class="close-btn">\u8FD4\u56DE</div>\n    \n            <div id="match-list">\n                <p v-for="(match, index) in matches" :key="match.id" class="match" @click="showMatchDetail(match, index)">\n                    <a href="javascript: ;" class="nodec" :title="\'\u5BF9\u624B\u7F16\u53F7\uFF1A\' + (match.offensive? match.defense: match.offense)">\n                        VS {{ match.offensive\n                            ? match.defense_nickname + \' \' + (match.defense_wechat || \'\')\n                            : match.offense_nickname + \' \' + (match.offense_wechat || \'\')\n                        }}\n                    </a>\n                </p>\n    \n                <div id="matchPanel" v-show="matchPanelVisible">\n                    <el-select v-model="matchResult" placeholder="\u8BF7\u9009\u62E9">\n                        <el-option\n                        v-for="item in options"\n                        :key="item.value"\n                        :label="item.label"\n                        :value="item.value"> \n                        </el-option>\n                    </el-select>\n                    <div class="">\n                        <el-button type="primary" @click="confirmMathcResult();">\u786E\u5B9A</el-button>\n                        <el-button @click="matchPanelVisible = false;">\u53D6\u6D88</el-button>\n                    </div>\n                </div>\n    \n                <el-dialog\n                title="\u63D0\u793A"\n                :visible.sync="matchResultdialogVisible"\n                :append-to-body="true"\n                width="30%"\n                >\n                    <span>\u786E\u8BA4\u65E0\u8BEF\uFF1F</span>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button @click="matchResultdialogVisible = false">\u53D6 \u6D88</el-button>\n                        <el-button type="primary" @click="matchResultdialogVisible = false">\u786E \u5B9A</el-button>\n                    </span>\n                </el-dialog>\n    \n                <el-dialog\n                title="\u63D0\u793A"\n                :visible.sync="defenseDialogVisible"\n                :append-to-body="true"\n                width="30%"\n                >\n                    <span>\u662F\u5426\u5E94\u6218\uFF1F</span>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button @click="refuseCompete()">\u62D2 \u7EDD</el-button>\n                        <el-button type="primary" @click="defense()">\u63A5 \u53D7</el-button>\n                    </span>\n                </el-dialog>\n            </div>\n    \n            <div id="baidu-map"></div>\n            <div id="img-loader"></div>\n        </div>'
     };
 
     window.temp = temp;
@@ -11181,6 +11181,7 @@ module.exports = function () {
 							type: 'success'
 							// duration: 0
 						});
+						refreshMapPlayer();
 					}.bind(this), 'post', {
 						defenseId: defenseId
 					});
@@ -11188,7 +11189,7 @@ module.exports = function () {
 			},
 
 			// 接受比赛
-			acceptChallenge: function acceptChallenge() {
+			responseChallenge: function responseChallenge(responseResult) {
 				if (!this.usrDatumIntegrity) {
 					return;
 				}
@@ -11197,19 +11198,27 @@ module.exports = function () {
 					this.fetchRelatedMatches();
 
 					this.$message({
-						message: '应战成功',
-						type: 'success',
-						duration: 0
+						message: '操作成功',
+						type: 'success'
 					});
+
+					refreshMapPlayer();
 				}.bind(this), 'patch', {
-					matchId: this.match.id
+					matchId: this.match.id,
+					response: responseResult
 				});
 			},
 
 			// 接收比赛
 			defense: function defense() {
 				this.defenseDialogVisible = false;
-				this.acceptChallenge();
+				this.responseChallenge(2);
+			},
+
+			// 拒绝比赛
+			refuseCompete: function refuseCompete() {
+				this.defenseDialogVisible = false;
+				this.responseChallenge(3);
 			},
 
 			// 确认比赛结果
@@ -11228,8 +11237,13 @@ module.exports = function () {
 						type: 'success'
 					});
 
-					this.matchPanelVisible = false;
-					this.matchResult = 3;
+					if (res) {
+						// 比赛结束 '1'
+						refreshMapPlayer();
+					}
+
+					this.matchPanelVisible = false; // 默认隐藏
+					this.matchResult = 3; // 默认“平”
 				}.bind(this), 'patch', {
 					matchId: this.match.id,
 					result: this.matchResult
@@ -11237,6 +11251,11 @@ module.exports = function () {
 					if (res.status == 400) {
 						this.$message({
 							message: '一天后才可以提交比赛结果',
+							type: 'warning'
+						});
+					} else if (res.status == 401) {
+						this.$message({
+							message: '比赛结果有误',
 							type: 'warning'
 						});
 					}
@@ -11267,6 +11286,7 @@ module.exports = function () {
 				}
 			},
 
+			// 检测用户资料是否完善
 			checkUsrDatumIntegrity: function checkUsrDatumIntegrity() {
 				tools.xhr('/usrDatumIntegrity', function (res) {
 					this.usrDatumIntegrity = res;
