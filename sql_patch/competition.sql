@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-05-25 10:20:45
+Date: 2018-05-25 14:58:11
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,9 +25,9 @@ CREATE TABLE `competition` (
   `defense` mediumint(9) DEFAULT NULL,
   `offense_time` datetime DEFAULT NULL,
   `defense_time` datetime DEFAULT NULL,
-  `stage` tinyint(8) DEFAULT '1' COMMENT '1 发起 2 接受 3 结束 4拒绝',
+  `stage` tinyint(8) DEFAULT '1' COMMENT '1 发起 2 接受  3 拒绝 4 结束',
   `offense_res` tinyint(8) DEFAULT NULL COMMENT '1 胜 2 负 3 平',
   `defense_res` tinyint(8) DEFAULT NULL COMMENT '1 胜 2 负 3 平',
   `close_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
