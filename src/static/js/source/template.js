@@ -36,22 +36,37 @@ module.exports = function(){
                                 <el-dropdown-item v-if="loginUsrInfo.name"command="logout" id="header-btn-logout">登出</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
+
+                        <el-popover
+                        ref="inmail"
+                        placement="top-start"
+                        title=""
+                        width="100"
+                        trigger="hover">
+                            <ul v-if="inmails.length" id="inmail-list">
+                                <li v-on:click="showInmailDetail(inmail, k)" v-for="(inmail, k) in inmails" class="nowrap">
+                                    {{k+1 + '. '}}{{ inmail.content }}
+                                </li>
+                            </ul>
+
+                            <span v-if="!inmails.length">暂无新消息</span>
+                        </el-popover>
     
-                        <el-badge is-dot class="item item">
-                            <i class="fa fa-bell-o" title="消息"></i>
+                        <el-badge :value="inmails.length" class="item item">
+                            <i v-popover:inmail class="fa fa-bell-o" title="消息"></i>
                         </el-badge>
     
                         <el-popover
-                            ref="popover1"
+                            ref="paycode"
                             placement="top-start"
                             title=""
-                            width="200"
+                            width="100"
                             trigger="hover">
                             <img class="pay-code" src="/img/ali.jpeg" alt="支付宝" title="支付宝">
                             <img class="pay-code" src="/img/wechat.jpeg" alt="微信" title="微信">
                         </el-popover>
                         
-                        <i v-popover:popover1 class="fa fa-money item" title="投币"></i>
+                        <i v-popover:paycode class="fa fa-money item" title="投币"></i>
                     </el-col>
                 </el-row>
     
@@ -219,7 +234,7 @@ module.exports = function(){
                     <a class="guide-links-primary" href="#/about">关于</a>
                 </div>
                 <div id="llc">
-                    <span class="">2018 ChanTube</span>
+                    <span class="">2018 YiTube</span>
                 </div>
             </div>
         `,

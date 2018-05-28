@@ -764,6 +764,19 @@ let operations = {
 			})
 		});
 	},
+
+	fetchInmails: function(res, qualification, params){
+		var sql = `SELECT * from inmail where receiver=${this.usrInfo.usrId} and readed=0 order by id desc`;
+
+		conn.query(sql, function(err, list, fields){
+			if(err)
+				console.log(err.sql, err.sqlMessage) ;
+			
+			let json = JSON.stringify(list);
+
+			res.end(json);
+		});
+	},
 	
 	// ===============POST================
 	login: function(res, postObj, req){
@@ -1095,13 +1108,19 @@ let operations = {
 	},
 
 	foundMatch: function(res, postObj, req){
-		let sql = `insert into competition (offense, defense, offense_time, stage) values (${this.usrInfo.usrId}, ${postObj.defenseId}, now(), 1)`;
+		let offense = this.usrInfo.usrId,
+			defense = postObj.defenseId;
+
+		let sql = `insert into competition (offense, defense, offense_time, stage) values (${offense}, ${defense}, now(), 1)`;
 
 		conn.query(sql, function(err, result){
 			if(err)
 				console.log(err);
 
 			res.end();
+
+			let inmailContent = `有人向你发起了挑战`;
+			sendInmail(offense, defense, inmailContent);
 		});
 	},
 
@@ -1383,12 +1402,40 @@ let operations = {
 	},
 
 	responseChallenge: function(res, patchObj, req){
-		let sql = `update competition set stage=${patchObj.response}, defense_time=now() where id=${patchObj.matchId}`;
+		let matchId = patchObj.matchId;
+		let sql = `update competition set stage=${patchObj.response}, defense_time=now() where id=${matchId}`;
+		let usrId = this.usrInfo.usrId;
+		
 		conn.query(sql, function(err, result){
 			if(err)
 				console.log(err);
-
 			res.end();
+
+			conn.query('select offense from competition where id='+matchId, function(err, result){
+				if(err)
+					console.log(err);
+
+				let offense = result[0].offense,
+					defense = usrId;
+				
+				if(patchObj.response == 2){
+					let sql = `select wechat,nickname from usr_datum where usr_id=${defense}`;
+					conn.query(sql, function(err, result){
+						sendInmail(defense, offense, `约球成功，对方(${result[0].nickname})联系方式是微信: ${result[0].wechat}`);
+					});
+
+					sql = `select wechat,nickname from usr_datum where usr_id=${offense}`;
+					conn.query(sql, function(err, result){
+						sendInmail(offense, defense, `约球成功，对方(${result[0].nickname})联系方式是微信: ${result[0].wechat}`);
+					});
+				}else{
+					sql = `select nickname from usr_datum where usr_id=${defense}`;
+					conn.query(sql, function(err, result){
+						let inmailContent = `对方(${result[0].nickname})拒绝了你的挑战`;
+						sendInmail(defense, offense, inmailContent);
+					});
+				}
+			});
 		});
 	},
 
@@ -1450,18 +1497,41 @@ let operations = {
 						res.statusCode = 401;
 						res.statusMessage = 'match result error';
 						return res.end();
+
+						// todo 不计胜负
 					}
-					// 修改 usr 胜负
 				}
 
 				conn.query(sql, function(err, result){
 					if(err)
 						console.log(err);
 
-					res.end(+doMatchClose + '');
+					res.end(+doMatchClose + '');// '1' '0'
+
+					if(doMatchClose){
+
+					}else{
+
+					}
+					
+					if(offenseUsrId == usrId){
+						
+					}else if(defenseUsrId == usrId){
+						
+					}
 				});
 			}
 		})
+	},
+
+	markAsRead: function(res, patchObj, req){
+		let sql = `update inmail set readed=1 where id=${patchObj.inmailId}`;
+		conn.query(sql, function(err, result){
+			if(err)
+				console.log(err);
+
+			res.end();
+		});
 	},
 
 	// ===============DELETE================
@@ -1680,4 +1750,14 @@ function throwError(err, res){
 	res.end(JSON.stringify({
 		erorCode: errCode
 	}))
+}
+
+function sendInmail(sender, receiver, content){
+	let sql = `insert into inmail (sender, receiver, content, time) values (${sender}, ${receiver}, '${content}', now())`;
+
+	conn.query(sql, function(err, result){
+		if(err)
+			console.log(err);
+
+	});
 }

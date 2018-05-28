@@ -375,7 +375,12 @@ const routerConfig = {
             });
         },
 
-        
+        '/inmails': {
+            fn: function(params, res, req){
+                r.query('fetchInmails', params, res, req)
+            },
+            limit: {level: 10}
+        }
     },
 
     post: {
@@ -600,6 +605,13 @@ const routerConfig = {
         
         '/retrievePsw': function(req, res){
             r.patch('retrievePsw', req, res)
+        },
+
+        '/markAsRead': {
+            fn: function(req, res){
+                r.patch('markAsRead', req, res);
+            },
+            limit: {level: 10}
         },
     },
 

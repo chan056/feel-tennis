@@ -94,7 +94,8 @@ module.exports = function(){
 				visible: false
 			},
 
-			loginUsrInfo: {}
+			loginUsrInfo: {},
+			inmails: []
 		},
 
 		methods: {
@@ -336,7 +337,6 @@ module.exports = function(){
 			},
 
 			fetchUsrLoginInfo: function(){
-				// 首次打开时 获取用户信息
 				tools.xhr('/loginInfo', function(loginUsrInfo){
 					// 登陆状态在各组件共享 todo
 					this.loginUsrInfo = loginUsrInfo || {};
@@ -348,6 +348,27 @@ module.exports = function(){
 					this.$bus.emit('update-login-info', this.loginUsrInfo);
 
 				}.bind(this));
+			},
+
+			fetchInmails: function(){
+				tools.xhr('/inmails', function(data){
+					this.inmails = data;
+				}.bind(this));
+			},
+
+			showInmailDetail: function(inmail, key){
+				this.$alert(inmail.content, '消息详情', {
+					confirmButtonText: '确定',
+					callback: function(){
+						
+					}
+				});
+
+				// 标记已读
+				tools.xhr('/markAsRead', function(data){
+					this.fetchInmails();	
+				}.bind(this), 'patch', {inmailId: inmail.id});
+
 			}
 		},
 
@@ -361,6 +382,8 @@ module.exports = function(){
 			}
 
 			this.fetchUsrLoginInfo();
+
+			this.fetchInmails();
 
 			$('.aside-menu-btn').on('click', function(){
 				$('#root-container').toggleClass('brief');
@@ -385,6 +408,11 @@ module.exports = function(){
 			catch(e){
 
 			}
+
+			this.$bus.on('update-inmails', function(){
+				console.log('update-inmails');
+				this.fetchInmails();
+			}.bind(this));
 		},
 
 		// beforeCreate: function () {
@@ -1227,7 +1255,6 @@ module.exports = function(){
 			},
 
 			selectDefaultAvatar: function(e){
-				debugger;
 				var t = $(e.target);
 				this.datumForm.unstableDatum.avatar = this.datumForm.avatar = t.attr('src');
 				t.addClass('selected').siblings().removeClass('selected')
@@ -1857,16 +1884,24 @@ module.exports = function(){
 						type: 'warning'
 					});
 				}else{
-					tools.xhr('/match', function(res){
-						this.fetchRelatedMatches();
-						this.$message({
-							message: '比赛发起成功',
-							type: 'success',
-							// duration: 0
+					this.$confirm('确定发起挑战？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'warning'
+					}).then(function(){
+						tools.xhr('/match', function(res){
+							this.fetchRelatedMatches();
+							this.$message({
+								message: '比赛发起成功',
+								type: 'success',
+								// duration: 0
+							});
+							refreshMapPlayer();
+						}.bind(this), 'post', {
+							defenseId: defenseId,
 						});
-						refreshMapPlayer();
-					}.bind(this), 'post', {
-						defenseId: defenseId,
+					}).catch(function(){
+						
 					});
 				}
 			},
@@ -1886,6 +1921,9 @@ module.exports = function(){
 					});
 
 					refreshMapPlayer();
+
+					responseResult == 2 && this.$bus.emit('update-inmails');
+					
 				}.bind(this), 'patch', {
 					matchId: this.match.id,
 					response: responseResult

@@ -14,7 +14,7 @@ var webpack=require('webpack');
 
 const path=require("path");
 
-const env = process.env.NODE_ENV
+const env = process.env.NODE_ENV;
 
 module.exports={
     // mode: 'development',

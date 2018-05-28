@@ -490,3 +490,12 @@ app {
   max-width: 500px !important;
   margin: 0 auto;
 }
+#inmail-list li {
+  border-bottom: 1px solid #dcdfe6;
+  cursor: pointer;
+  height: 30px;
+  line-height: 30px;
+}
+#inmail-list li:last-child {
+  border-bottom-width: 0;
+}
