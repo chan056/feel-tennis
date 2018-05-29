@@ -31,6 +31,14 @@ let tools = {
                     }
                 };
 
+                // 未登录
+                if(statusCode == 401){
+                    // 弹出登录窗口
+                    notifyConfig.onClick = function(){
+                        
+                    }
+                }
+
                 // 未激活
                 if(statusCode == 402){
                     // 重新激活

@@ -191,6 +191,8 @@ module.exports = function(){
 							message: '登录失败，请检查用户名、密码',
 							type: 'error'
 						});
+					}else{
+
 					}
 				}.bind(this));
 			},
@@ -347,6 +349,7 @@ module.exports = function(){
 
 					this.$bus.emit('update-login-info', this.loginUsrInfo);
 
+					name && this.fetchInmails();
 				}.bind(this));
 			},
 
@@ -382,8 +385,6 @@ module.exports = function(){
 			}
 
 			this.fetchUsrLoginInfo();
-
-			this.fetchInmails();
 
 			$('.aside-menu-btn').on('click', function(){
 				$('#root-container').toggleClass('brief');
@@ -1853,6 +1854,9 @@ module.exports = function(){
 				matchPanelVisible: false,
 				matchResultdialogVisible: false,
 				defenseDialogVisible: false,
+				evaluateDialogVisible: false,
+				grade: 1,// 赛后评价 1 顶 2 贬
+				evaluateDetail: '',
 
 				matches: window.matches || [],
 				match: {},
@@ -1950,15 +1954,18 @@ module.exports = function(){
 
 			// 记录比赛结果
 			markMatchResult: function(){
-				tools.xhr('/matchResult', function(res){
+				tools.xhr('/matchResult', function(data){
 					this.fetchRelatedMatches();
 				
 					this.$message({
 						message: '记录成功',
-						type: 'success'
+						type: 'success',
+						onClose: function(){
+							this.evaluateDialogVisible = true;
+						}.bind(this)
 					});
 
-					if(res){// 比赛结束 '1'
+					if(data){// 比赛结束 '1'
 						refreshMapPlayer();
 					}
 
@@ -1968,23 +1975,70 @@ module.exports = function(){
 					matchId: this.match.id,
 					result: this.matchResult,
 				}, function(res){
+					// console.log(res);
 					if(res.status == 400){
 						this.$message({
 							message: '一天后才可以提交比赛结果',
 							type: 'warning'
 						});
 					}else if(res.status == 401){
-						this.$message({
-							message: '比赛结果有误',
-							type: 'warning'
+						let opponentRes = '';
+						this.options.forEach(function(){
+							if(arguments[0].value == res.data){
+								opponentRes = arguments[0].label;
+							}
 						});
+
+						this.$confirm(`对方记录的比赛结果是“${opponentRes}”,结果有误?`, '提示', {
+							confirmButtonText: '将对方加入黑名单',
+							cancelButtonText: '取消',
+							type: 'warning'
+						}).then(function(){
+							this.$confirm('确认加黑名单', '提示', {
+								confirmButtonText: '确定',
+								cancelButtonText: '取消',
+								type: 'warning'
+							}).then(function(){
+								// 加入比赛黑名单
+								this.addToCompetitionBlackList();
+							}.bind(this));
+						}.bind(this)).catch(function(){
+							// this.evaluateDialogVisible = true;
+						}.bind(this));
 					}
 				}.bind(this));
 			},
 
+			addToCompetitionBlackList: function(){
+				tools.xhr('/competeBlack', function(){
+					this.$message({
+						message: '加黑名单成功',
+						type: 'success',
+						onClose: function(){
+							this.evaluateDialogVisible = true;
+						}.bind(this)
+					});
+				}.bind(this), 'post', {
+					matchId: this.match.id
+				});
+			},
+
+			evaluate: function(){
+				tools.xhr('/competeEvaluate', function(){
+					this.$message({
+						message: '评价成功',
+						type: 'success',
+					});
+				}.bind(this), 'post', {
+					matchId: this.match.id,
+					evaluateResult: this.grade,
+					evaluateDetail: this.evaluateDetail
+				});
+			},
+
 			showMatchDetail: function(match, index){
 				this.match = match;
-				console.log(match)
+				// console.log(match)
 				
 				if(match.stage == 1){
 					if(match.defensive){

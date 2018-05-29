@@ -9107,6 +9107,12 @@ var tools = {
                     }
                 };
 
+                // 未登录
+                if (statusCode == 401) {
+                    // 弹出登录窗口
+                    notifyConfig.onClick = function () {};
+                }
+
                 // 未激活
                 if (statusCode == 402) {
                     // 重新激活
@@ -9326,7 +9332,7 @@ module.exports = function () {
         aboutMake: '',
         emailConfirm: '<div></div>',
 
-        compete: '<div class="map-container">\n            <div class="close-btn">\u8FD4\u56DE</div>\n    \n            <div id="match-list">\n                <p v-for="(match, index) in matches" :key="match.id" class="match" @click="showMatchDetail(match, index)">\n                    <a href="javascript: ;" class="nodec" :title="\'\u5BF9\u624B\u7F16\u53F7\uFF1A\' + (match.offensive? match.defense: match.offense)">\n                        VS {{ match.offensive\n                            ? match.defense_nickname + \' \' + (match.defense_wechat || \'\')\n                            : match.offense_nickname + \' \' + (match.offense_wechat || \'\')\n                        }}\n                    </a>\n                </p>\n    \n                <div id="matchPanel" v-show="matchPanelVisible">\n                    <el-select v-model="matchResult" placeholder="\u8BF7\u9009\u62E9">\n                        <el-option\n                        v-for="item in options"\n                        :key="item.value"\n                        :label="item.label"\n                        :value="item.value"> \n                        </el-option>\n                    </el-select>\n                    <div class="">\n                        <el-button type="primary" @click="confirmMathcResult();">\u786E\u5B9A</el-button>\n                        <el-button @click="matchPanelVisible = false;">\u53D6\u6D88</el-button>\n                    </div>\n                </div>\n    \n                <el-dialog\n                title="\u63D0\u793A"\n                :visible.sync="matchResultdialogVisible"\n                :append-to-body="true"\n                width="30%"\n                >\n                    <span>\u786E\u8BA4\u65E0\u8BEF\uFF1F</span>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button @click="matchResultdialogVisible = false">\u53D6 \u6D88</el-button>\n                        <el-button type="primary" @click="matchResultdialogVisible = false">\u786E \u5B9A</el-button>\n                    </span>\n                </el-dialog>\n    \n                <el-dialog\n                title="\u63D0\u793A"\n                :visible.sync="defenseDialogVisible"\n                :append-to-body="true"\n                width="30%"\n                >\n                    <span>\u662F\u5426\u5E94\u6218\uFF1F</span>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button @click="refuseCompete()">\u62D2 \u7EDD</el-button>\n                        <el-button type="primary" @click="defense()">\u63A5 \u53D7</el-button>\n                    </span>\n                </el-dialog>\n            </div>\n    \n            <div id="baidu-map"></div>\n            <div id="img-loader"></div>\n        </div>'
+        compete: '<div class="map-container">\n            <div class="close-btn">\u8FD4\u56DE</div>\n    \n            <div id="match-list">\n                <p v-for="(match, index) in matches" :key="match.id" class="match" @click="showMatchDetail(match, index)">\n                    <a href="javascript: ;" class="nodec" :title="\'\u5BF9\u624B\u7F16\u53F7\uFF1A\' + (match.offensive? match.defense: match.offense)">\n                        VS {{ match.offensive\n                            ? match.defense_nickname + \' \' + (match.defense_wechat || \'\')\n                            : match.offense_nickname + \' \' + (match.offense_wechat || \'\')\n                        }}\n                    </a>\n                </p>\n    \n                <div id="matchPanel" v-show="matchPanelVisible">\n                    <el-select v-model="matchResult" placeholder="\u8BF7\u9009\u62E9">\n                        <el-option\n                        v-for="item in options"\n                        :key="item.value"\n                        :label="item.label"\n                        :value="item.value"> \n                        </el-option>\n                    </el-select>\n                    <div class="">\n                        <el-button type="primary" @click="confirmMathcResult();">\u786E\u5B9A</el-button>\n                        <el-button @click="matchPanelVisible = false;">\u53D6\u6D88</el-button>\n                    </div>\n                </div>\n    \n                <el-dialog\n                title="\u63D0\u793A"\n                :visible.sync="matchResultdialogVisible"\n                :append-to-body="true"\n                width="30%"\n                >\n                    <span>\u786E\u8BA4\u65E0\u8BEF\uFF1F</span>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button @click="matchResultdialogVisible = false">\u53D6 \u6D88</el-button>\n                        <el-button type="primary" @click="matchResultdialogVisible = false">\u786E \u5B9A</el-button>\n                    </span>\n                </el-dialog>\n    \n                <el-dialog\n                title="\u63D0\u793A"\n                :visible.sync="defenseDialogVisible"\n                :append-to-body="true"\n                width="30%"\n                >\n                    <span>\u662F\u5426\u5E94\u6218\uFF1F</span>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button @click="refuseCompete()">\u62D2 \u7EDD</el-button>\n                        <el-button type="primary" @click="defense()">\u63A5 \u53D7</el-button>\n                    </span>\n                </el-dialog>\n\n                <el-dialog\n                title="\u8BC4\u4EF7\u5BF9\u624B"\n                :visible.sync="evaluateDialogVisible"\n                :append-to-body="true"\n                :close-on-click-modal="false"\n                :close-on-press-escape="false"\n                width="30%"\n                >\n                    <div class="evaluate-container">\n                        <i v-bind:class="{fa:true, \'fa-thumbs-o-up\': (grade != 1), \'fa-thumbs-up\': (grade == 1)}" @click="grade=1"></i>\n                        <i v-bind:class="{fa:true, \'fa-thumbs-o-down\': (grade != 2), \'fa-thumbs-down\': (grade == 2)}" @click="grade=2"></i>\n                    </div>\n\n                    <el-input\n                    type="textarea"\n                    :rows="3"\n                    placeholder="\u8BF7\u8F93\u5165\u8BE6\u7EC6\u8BC4\u4EF7\u53CA\u539F\u56E0\uFF08\u9009\u586B\uFF09"\n                    v-model="evaluateDetail">\n                    </el-input>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button type="primary" @click="evaluate">\u786E \u5B9A</el-button>\n                    </span>\n                </el-dialog>\n            </div>\n    \n            <div id="baidu-map"></div>\n            <div id="img-loader"></div>\n        </div>'
     };
 
     window.temp = temp;
@@ -9550,7 +9556,7 @@ module.exports = function () {
 							message: '登录失败，请检查用户名、密码',
 							type: 'error'
 						});
-					}
+					} else {}
 				}.bind(this));
 			},
 
@@ -9701,6 +9707,8 @@ module.exports = function () {
 					$('#header .el-icon-view').attr('title', name).addClass('usr');
 
 					this.$bus.emit('update-login-info', this.loginUsrInfo);
+
+					name && this.fetchInmails();
 				}.bind(this));
 			},
 
@@ -9733,8 +9741,6 @@ module.exports = function () {
 			}
 
 			this.fetchUsrLoginInfo();
-
-			this.fetchInmails();
 
 			$('.aside-menu-btn').on('click', function () {
 				$('#root-container').toggleClass('brief');
@@ -11167,6 +11173,9 @@ module.exports = function () {
 				matchPanelVisible: false,
 				matchResultdialogVisible: false,
 				defenseDialogVisible: false,
+				evaluateDialogVisible: false,
+				grade: 1, // 赛后评价 1 顶 2 贬
+				evaluateDetail: '',
 
 				matches: window.matches || [],
 				match: {},
@@ -11261,15 +11270,18 @@ module.exports = function () {
 
 			// 记录比赛结果
 			markMatchResult: function markMatchResult() {
-				tools.xhr('/matchResult', function (res) {
+				tools.xhr('/matchResult', function (data) {
 					this.fetchRelatedMatches();
 
 					this.$message({
 						message: '记录成功',
-						type: 'success'
+						type: 'success',
+						onClose: function () {
+							this.evaluateDialogVisible = true;
+						}.bind(this)
 					});
 
-					if (res) {
+					if (data) {
 						// 比赛结束 '1'
 						refreshMapPlayer();
 					}
@@ -11280,23 +11292,70 @@ module.exports = function () {
 					matchId: this.match.id,
 					result: this.matchResult
 				}, function (res) {
+					// console.log(res);
 					if (res.status == 400) {
 						this.$message({
 							message: '一天后才可以提交比赛结果',
 							type: 'warning'
 						});
 					} else if (res.status == 401) {
-						this.$message({
-							message: '比赛结果有误',
-							type: 'warning'
+						var opponentRes = '';
+						this.options.forEach(function () {
+							if (arguments[0].value == res.data) {
+								opponentRes = arguments[0].label;
+							}
 						});
+
+						this.$confirm('\u5BF9\u65B9\u8BB0\u5F55\u7684\u6BD4\u8D5B\u7ED3\u679C\u662F\u201C' + opponentRes + '\u201D,\u7ED3\u679C\u6709\u8BEF?', '提示', {
+							confirmButtonText: '将对方加入黑名单',
+							cancelButtonText: '取消',
+							type: 'warning'
+						}).then(function () {
+							this.$confirm('确认加黑名单', '提示', {
+								confirmButtonText: '确定',
+								cancelButtonText: '取消',
+								type: 'warning'
+							}).then(function () {
+								// 加入比赛黑名单
+								this.addToCompetitionBlackList();
+							}.bind(this));
+						}.bind(this)).catch(function () {
+							// this.evaluateDialogVisible = true;
+						}.bind(this));
 					}
 				}.bind(this));
 			},
 
+			addToCompetitionBlackList: function addToCompetitionBlackList() {
+				tools.xhr('/competeBlack', function () {
+					this.$message({
+						message: '加黑名单成功',
+						type: 'success',
+						onClose: function () {
+							this.evaluateDialogVisible = true;
+						}.bind(this)
+					});
+				}.bind(this), 'post', {
+					matchId: this.match.id
+				});
+			},
+
+			evaluate: function evaluate() {
+				tools.xhr('/competeEvaluate', function () {
+					this.$message({
+						message: '评价成功',
+						type: 'success'
+					});
+				}.bind(this), 'post', {
+					matchId: this.match.id,
+					evaluateResult: this.grade,
+					evaluateDetail: this.evaluateDetail
+				});
+			},
+
 			showMatchDetail: function showMatchDetail(match, index) {
 				this.match = match;
-				console.log(match);
+				// console.log(match)
 
 				if (match.stage == 1) {
 					if (match.defensive) {

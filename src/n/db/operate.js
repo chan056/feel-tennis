@@ -1180,6 +1180,73 @@ let operations = {
 		});
 	},
 
+	addCompeteBlack: function(res, postObj, req){
+		let t = this;
+
+		conn.query(`select * from competition where id=${postObj.matchId}`, function(err, items){
+			let competition = items[0];
+			let blackUsrId,
+				recorderId = this.usrInfo.usrId;
+
+			if(recorderId == competition.offense){
+				blackUsrId = competition.defense;
+			}else if(recorderId == competition.defense){
+				blackUsrId = competition.offense;
+			}
+
+			let sql = `insert into compete_black (usr_id, recorder_id, match_id, time) values (${blackUsrId}, ${recorderId}, ${postObj.matchId}, now() )`;
+
+			conn.query(sql, function(err, result){
+				if(err)
+					console.log(err);
+
+				res.end();
+			});
+
+			// 比赛结果为平 无效 todo
+			sql = `update competition set stage=4, offense_res=3, defense_res=3, defense_time=now(), close_time=now() where id=${postObj.matchId}`;
+			conn.query(sql, function(err, res){
+				if(err)
+					return console.log(err);
+
+				t.recordMatchResult([
+					blackUsrId + '_' + 3,
+					recorderId + '_' + 3
+				]);
+			});
+		}.bind(this));
+	},
+
+	competeEvaluate: function(res, postObj, req){
+		conn.query(`select * from competition where id=${postObj.matchId}`, function(err, items){
+			let competition = items[0];
+			let assessed,
+				evaluator = this.usrInfo.usrId;
+
+			if(evaluator == competition.offense){
+				assessed = competition.defense;
+			}else if(evaluator == competition.defense){
+				assessed = competition.offense;
+			}
+
+			let sql = `insert into compete_evaluate (evaluator, assessed, match_id, result, detail, time) values (${evaluator}, ${assessed}, ${postObj.matchId}, ${postObj.evaluateResult}, '${postObj.evaluateDetail}', now() )`;
+
+			conn.query(sql, function(err, result){
+				if(err)
+					console.log(err);
+
+				res.end();
+			});
+
+			let col = ['like', 'unlike'][postObj.evaluateResult-1];
+			sql = `update usr_datum set ${col} = ${col}+1 where usr_id=${assessed}`;
+			conn.query(sql, function(err, res){
+				if(err)
+					return console.log(err);
+			});
+		}.bind(this));
+	},
+
 	// ===============PATCH================
 	voteVideo: function(res, patchObj){
 		let voteType = patchObj.type;
@@ -1442,17 +1509,20 @@ let operations = {
 	markMatchResult: function(res, patchObj, req){
 		let sql = `select * from competition where id=${patchObj.matchId}`;
 		let usrId = this.usrInfo.usrId;
-		conn.query(sql, function(err, result){
+		let t = this;
+
+		conn.query(sql, function(err, matchDetail){
 			if(err)
 				console.log(err);
 
-			if(result && result[0]){
-				let offenseUsrId = result[0].offense;
-				let defenseUsrId = result[0].defense;
-				let offenseRes = result[0].offense_res;
-				let defenseRes = result[0].defense_res;
-				let offenseTime = +result[0].offense_time;
-				let defenseTime = +result[0].defense_time;
+			if(matchDetail && matchDetail[0]){
+				matchDetail = matchDetail[0];
+				let offenseUsrId = matchDetail.offense;
+				let defenseUsrId = matchDetail.defense;
+				let offenseRes = matchDetail.offense_res;
+				let defenseRes = matchDetail.defense_res;
+				let offenseTime = +matchDetail.offense_time;
+				let defenseTime = +matchDetail.defense_time;
 				let NOW = +new Date();
 				let ONEDAY = 1 * 24 * 60 * 60 *1000;
 
@@ -1468,13 +1538,16 @@ let operations = {
 						return res.end();
 					}
 
+					offenseRes = usrMarkedResult;
+
 					if(defenseRes){
 						doMatchClose = true;
-						sql = `update competition set offense_res=${usrMarkedResult}, stage=4, close_time=now() where id=${patchObj.matchId}`;
+						
+						sql = `update competition set offense_res=${offenseRes}, stage=4, close_time=now() where id=${patchObj.matchId}`;
 					}else
-						sql = `update competition set offense_res=${usrMarkedResult} where id=${patchObj.matchId}`;
+						sql = `update competition set offense_res=${offenseRes} where id=${patchObj.matchId}`;
 					
-					offenseDefense = defenseRes * usrMarkedResult;
+					offenseDefense = defenseRes * offenseRes;
 				}else if(defenseUsrId == usrId){
 					if(NOW - defenseTime < ONEDAY){
 						res.statusCode = 400;
@@ -1482,21 +1555,29 @@ let operations = {
 						return res.end();
 					}
 
+					defenseRes = usrMarkedResult;
+
 					if(offenseRes){
 						doMatchClose = true;
-						sql = `update competition set defense_res=${usrMarkedResult}, stage=4, close_time=now() where id=${patchObj.matchId}`;
+						sql = `update competition set defense_res=${defenseRes}, stage=4, close_time=now() where id=${patchObj.matchId}`;
 					}else
-						sql = `update competition set defense_res=${usrMarkedResult} where id=${patchObj.matchId}`;
+						sql = `update competition set defense_res=${defenseRes} where id=${patchObj.matchId}`;
 					
-					offenseDefense = offenseRes * usrMarkedResult;
+					offenseDefense = offenseRes * defenseRes;
 				}
 
 				// 1 2 || 2 1 || 3 3
 				if(doMatchClose){
+					// 双方互评，评价结果有误
 					if(offenseDefense != 2 && offenseDefense != 9){
 						res.statusCode = 401;
 						res.statusMessage = 'match result error';
-						return res.end();
+
+						if(offenseUsrId == usrId){
+							return res.end(defenseRes.toString());
+						}else if(defenseUsrId == usrId){
+							return res.end(offenseRes.toString());
+						}
 
 						// todo 不计胜负
 					}
@@ -1508,20 +1589,45 @@ let operations = {
 
 					res.end(+doMatchClose + '');// '1' '0'
 
+					// 双发评价无误，通知对方
 					if(doMatchClose){
+						if(offenseUsrId == usrId){
+							conn.query(`select nickname from usr_datum where usr_id = ${matchDetail.defense}`, function(err, items){
+								let inmailContent = `和(${items[0].nickname})的对战结果已记录`;
+								sendInmail(offenseUsrId, defenseUsrId, inmailContent);
+							});
+						}else if(defenseUsrId == usrId){
+							conn.query(`select nickname from usr_datum where usr_id = ${matchDetail.offense}`, function(err, items){
+								let inmailContent = `和(${items[0].nickname})的对战结果已记录`;
+								sendInmail(defenseUsrId, offenseUsrId, inmailContent);
+							})
+						}
 
-					}else{
-
-					}
-					
-					if(offenseUsrId == usrId){
-						
-					}else if(defenseUsrId == usrId){
-						
+						// 记录比赛结果
+						t.recordMatchResult([
+							offenseUsrId + '_' + offenseRes,
+							defenseUsrId + '_' + defenseRes
+						]);
 					}
 				});
 			}
 		})
+	},
+
+	recordMatchResult: function(items){
+		for(let i in items){
+			let item = items[i];
+			item = item.split('_');
+			let usrId = item[0];
+			let res = item[1];
+			let col = ['win', 'lose', 'tie'][res-1];
+			let sql = `update usr_datum set ${col}=${col}+1 where usr_id = ${usrId}`;
+			
+			conn.query(sql, function(err, result){
+				if(err)
+					console.log(err);
+			});
+		}
 	},
 
 	markAsRead: function(res, patchObj, req){

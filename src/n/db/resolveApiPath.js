@@ -33,9 +33,16 @@ function resolveApiPath(req, res) {
             let limit = fnMatched.limit,
                 level = limit.level,
                 visits = limit.visits;
+
+            if(!Number(req.usrInfo.usrId)){//  && !admin
+                res.statusCode = 401;
+                res.statusMessage = 'User Not Login';
+                return res.end();
+            }
             
             if(!Number(req.usrInfo.isActive)){//  && !admin
                 res.statusCode = 402;
+                res.statusMessage = 'User Not Activated';
                 return res.end();
             }
 

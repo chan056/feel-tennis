@@ -545,6 +545,20 @@ const routerConfig = {
             },
             limit: {level: 100}
         },
+
+        '/competeBlack': {
+            fn: function(req, res, pathParams){
+                r.post('addCompeteBlack', req, res, pathParams);
+            },
+            limit: {level: 10}
+        },
+
+        '/competeEvaluate': {
+            fn: function(req, res, pathParams){
+                r.post('competeEvaluate', req, res, pathParams);
+            },
+            limit: {level: 10}
+        }
     },
 
     // ============put update完整资源=============

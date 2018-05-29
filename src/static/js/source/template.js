@@ -873,6 +873,30 @@ module.exports = function(){
                         <el-button type="primary" @click="defense()">接 受</el-button>
                     </span>
                 </el-dialog>
+
+                <el-dialog
+                title="评价对手"
+                :visible.sync="evaluateDialogVisible"
+                :append-to-body="true"
+                :close-on-click-modal="false"
+                :close-on-press-escape="false"
+                width="30%"
+                >
+                    <div class="evaluate-container">
+                        <i v-bind:class="{fa:true, 'fa-thumbs-o-up': (grade != 1), 'fa-thumbs-up': (grade == 1)}" @click="grade=1"></i>
+                        <i v-bind:class="{fa:true, 'fa-thumbs-o-down': (grade != 2), 'fa-thumbs-down': (grade == 2)}" @click="grade=2"></i>
+                    </div>
+
+                    <el-input
+                    type="textarea"
+                    :rows="3"
+                    placeholder="请输入详细评价及原因（选填）"
+                    v-model="evaluateDetail">
+                    </el-input>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button type="primary" @click="evaluate">确 定</el-button>
+                    </span>
+                </el-dialog>
             </div>
     
             <div id="baidu-map"></div>

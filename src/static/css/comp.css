@@ -499,3 +499,7 @@ app {
 #inmail-list li:last-child {
   border-bottom-width: 0;
 }
+.evaluate-container .fa {
+  font-size: 5rem;
+  cursor: pointer;
+}

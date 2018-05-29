@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-05-25 14:58:11
+Date: 2018-05-29 18:16:08
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -30,4 +30,4 @@ CREATE TABLE `competition` (
   `defense_res` tinyint(8) DEFAULT NULL COMMENT '1 胜 2 负 3 平',
   `close_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
