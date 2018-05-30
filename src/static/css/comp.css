@@ -499,7 +499,16 @@ app {
 #inmail-list li:last-child {
   border-bottom-width: 0;
 }
+.evaluate-container {
+  text-align: center;
+}
 .evaluate-container .fa {
   font-size: 5rem;
   cursor: pointer;
+}
+.evaluate-container .thumb-down {
+  margin-left: 2rem;
+}
+.evaluate-container .el-textarea {
+  margin-top: 2rem;
 }

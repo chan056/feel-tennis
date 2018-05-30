@@ -880,11 +880,13 @@ module.exports = function(){
                 :append-to-body="true"
                 :close-on-click-modal="false"
                 :close-on-press-escape="false"
+                :show-close="false"
+                :custom-class="'evaluate-container'"
                 width="30%"
                 >
-                    <div class="evaluate-container">
-                        <i v-bind:class="{fa:true, 'fa-thumbs-o-up': (grade != 1), 'fa-thumbs-up': (grade == 1)}" @click="grade=1"></i>
-                        <i v-bind:class="{fa:true, 'fa-thumbs-o-down': (grade != 2), 'fa-thumbs-down': (grade == 2)}" @click="grade=2"></i>
+                    <div>
+                        <i v-bind:class="{'thumb-up': true, fa:true, 'fa-thumbs-o-up': (grade != 1), 'fa-thumbs-up': (grade == 1)}" @click="grade=1"></i>
+                        <i v-bind:class="{'thumb-down': true, fa:true, 'fa-thumbs-o-down': (grade != 2), 'fa-thumbs-down': (grade == 2)}" @click="grade=2"></i>
                     </div>
 
                     <el-input

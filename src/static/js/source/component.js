@@ -1965,12 +1965,10 @@ module.exports = function(){
 						}.bind(this)
 					});
 
-					if(data){// 比赛结束 '1'
-						refreshMapPlayer();
-					}
+					// 双方已评 '1'
+					data && refreshMapPlayer();
 
-					this.matchPanelVisible = false;// 默认隐藏
-					this.matchResult = 3;// 默认“平”
+					this.resetMatchPanel();
 				}.bind(this), 'patch', {
 					matchId: this.match.id,
 					result: this.matchResult,
@@ -1999,8 +1997,8 @@ module.exports = function(){
 								cancelButtonText: '取消',
 								type: 'warning'
 							}).then(function(){
-								// 加入比赛黑名单
 								this.addToCompetitionBlackList();
+								this.resetMatchPanel();
 							}.bind(this));
 						}.bind(this)).catch(function(){
 							// this.evaluateDialogVisible = true;
@@ -2011,6 +2009,7 @@ module.exports = function(){
 
 			addToCompetitionBlackList: function(){
 				tools.xhr('/competeBlack', function(){
+					this.fetchRelatedMatches();
 					this.$message({
 						message: '加黑名单成功',
 						type: 'success',
@@ -2025,6 +2024,10 @@ module.exports = function(){
 
 			evaluate: function(){
 				tools.xhr('/competeEvaluate', function(){
+					this.evaluateDialogVisible = false;
+					this.grade = 1;
+					this.evaluateDetail = '';
+
 					this.$message({
 						message: '评价成功',
 						type: 'success',
@@ -2038,24 +2041,20 @@ module.exports = function(){
 
 			showMatchDetail: function(match, index){
 				this.match = match;
-				// console.log(match)
+				console.log(match);
 				
 				if(match.stage == 1){
 					if(match.defensive){
-						// 是否接收
 						this.defenseDialogVisible = true;
 					}else{
-						// 提示 “等待应答”
 						this.$message({
 							message: '等待对方应答',
 							type: 'info'
 						});
 					}
 
-					this.matchPanelVisible = false;
-					this.matchResult = 3;
+					this.resetMatchPanel();
 				}else if(match.stage == 2){
-					// 标记“胜负”
 					this.matchPanelVisible = true;
 				}
 			},
@@ -2076,6 +2075,11 @@ module.exports = function(){
 						});
 					}
 				}.bind(this));
+			},
+
+			resetMatchPanel: function(){
+				this.matchPanelVisible = false;// 默认隐藏
+				this.matchResult = 3;// 默认“平”
 			}
 		},
 

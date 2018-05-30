@@ -9332,7 +9332,7 @@ module.exports = function () {
         aboutMake: '',
         emailConfirm: '<div></div>',
 
-        compete: '<div class="map-container">\n            <div class="close-btn">\u8FD4\u56DE</div>\n    \n            <div id="match-list">\n                <p v-for="(match, index) in matches" :key="match.id" class="match" @click="showMatchDetail(match, index)">\n                    <a href="javascript: ;" class="nodec" :title="\'\u5BF9\u624B\u7F16\u53F7\uFF1A\' + (match.offensive? match.defense: match.offense)">\n                        VS {{ match.offensive\n                            ? match.defense_nickname + \' \' + (match.defense_wechat || \'\')\n                            : match.offense_nickname + \' \' + (match.offense_wechat || \'\')\n                        }}\n                    </a>\n                </p>\n    \n                <div id="matchPanel" v-show="matchPanelVisible">\n                    <el-select v-model="matchResult" placeholder="\u8BF7\u9009\u62E9">\n                        <el-option\n                        v-for="item in options"\n                        :key="item.value"\n                        :label="item.label"\n                        :value="item.value"> \n                        </el-option>\n                    </el-select>\n                    <div class="">\n                        <el-button type="primary" @click="confirmMathcResult();">\u786E\u5B9A</el-button>\n                        <el-button @click="matchPanelVisible = false;">\u53D6\u6D88</el-button>\n                    </div>\n                </div>\n    \n                <el-dialog\n                title="\u63D0\u793A"\n                :visible.sync="matchResultdialogVisible"\n                :append-to-body="true"\n                width="30%"\n                >\n                    <span>\u786E\u8BA4\u65E0\u8BEF\uFF1F</span>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button @click="matchResultdialogVisible = false">\u53D6 \u6D88</el-button>\n                        <el-button type="primary" @click="matchResultdialogVisible = false">\u786E \u5B9A</el-button>\n                    </span>\n                </el-dialog>\n    \n                <el-dialog\n                title="\u63D0\u793A"\n                :visible.sync="defenseDialogVisible"\n                :append-to-body="true"\n                width="30%"\n                >\n                    <span>\u662F\u5426\u5E94\u6218\uFF1F</span>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button @click="refuseCompete()">\u62D2 \u7EDD</el-button>\n                        <el-button type="primary" @click="defense()">\u63A5 \u53D7</el-button>\n                    </span>\n                </el-dialog>\n\n                <el-dialog\n                title="\u8BC4\u4EF7\u5BF9\u624B"\n                :visible.sync="evaluateDialogVisible"\n                :append-to-body="true"\n                :close-on-click-modal="false"\n                :close-on-press-escape="false"\n                width="30%"\n                >\n                    <div class="evaluate-container">\n                        <i v-bind:class="{fa:true, \'fa-thumbs-o-up\': (grade != 1), \'fa-thumbs-up\': (grade == 1)}" @click="grade=1"></i>\n                        <i v-bind:class="{fa:true, \'fa-thumbs-o-down\': (grade != 2), \'fa-thumbs-down\': (grade == 2)}" @click="grade=2"></i>\n                    </div>\n\n                    <el-input\n                    type="textarea"\n                    :rows="3"\n                    placeholder="\u8BF7\u8F93\u5165\u8BE6\u7EC6\u8BC4\u4EF7\u53CA\u539F\u56E0\uFF08\u9009\u586B\uFF09"\n                    v-model="evaluateDetail">\n                    </el-input>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button type="primary" @click="evaluate">\u786E \u5B9A</el-button>\n                    </span>\n                </el-dialog>\n            </div>\n    \n            <div id="baidu-map"></div>\n            <div id="img-loader"></div>\n        </div>'
+        compete: '<div class="map-container">\n            <div class="close-btn">\u8FD4\u56DE</div>\n    \n            <div id="match-list">\n                <p v-for="(match, index) in matches" :key="match.id" class="match" @click="showMatchDetail(match, index)">\n                    <a href="javascript: ;" class="nodec" :title="\'\u5BF9\u624B\u7F16\u53F7\uFF1A\' + (match.offensive? match.defense: match.offense)">\n                        VS {{ match.offensive\n                            ? match.defense_nickname + \' \' + (match.defense_wechat || \'\')\n                            : match.offense_nickname + \' \' + (match.offense_wechat || \'\')\n                        }}\n                    </a>\n                </p>\n    \n                <div id="matchPanel" v-show="matchPanelVisible">\n                    <el-select v-model="matchResult" placeholder="\u8BF7\u9009\u62E9">\n                        <el-option\n                        v-for="item in options"\n                        :key="item.value"\n                        :label="item.label"\n                        :value="item.value"> \n                        </el-option>\n                    </el-select>\n                    <div class="">\n                        <el-button type="primary" @click="confirmMathcResult();">\u786E\u5B9A</el-button>\n                        <el-button @click="matchPanelVisible = false;">\u53D6\u6D88</el-button>\n                    </div>\n                </div>\n    \n                <el-dialog\n                title="\u63D0\u793A"\n                :visible.sync="matchResultdialogVisible"\n                :append-to-body="true"\n                width="30%"\n                >\n                    <span>\u786E\u8BA4\u65E0\u8BEF\uFF1F</span>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button @click="matchResultdialogVisible = false">\u53D6 \u6D88</el-button>\n                        <el-button type="primary" @click="matchResultdialogVisible = false">\u786E \u5B9A</el-button>\n                    </span>\n                </el-dialog>\n    \n                <el-dialog\n                title="\u63D0\u793A"\n                :visible.sync="defenseDialogVisible"\n                :append-to-body="true"\n                width="30%"\n                >\n                    <span>\u662F\u5426\u5E94\u6218\uFF1F</span>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button @click="refuseCompete()">\u62D2 \u7EDD</el-button>\n                        <el-button type="primary" @click="defense()">\u63A5 \u53D7</el-button>\n                    </span>\n                </el-dialog>\n\n                <el-dialog\n                title="\u8BC4\u4EF7\u5BF9\u624B"\n                :visible.sync="evaluateDialogVisible"\n                :append-to-body="true"\n                :close-on-click-modal="false"\n                :close-on-press-escape="false"\n                :show-close="false"\n                :custom-class="\'evaluate-container\'"\n                width="30%"\n                >\n                    <div>\n                        <i v-bind:class="{\'thumb-up\': true, fa:true, \'fa-thumbs-o-up\': (grade != 1), \'fa-thumbs-up\': (grade == 1)}" @click="grade=1"></i>\n                        <i v-bind:class="{\'thumb-down\': true, fa:true, \'fa-thumbs-o-down\': (grade != 2), \'fa-thumbs-down\': (grade == 2)}" @click="grade=2"></i>\n                    </div>\n\n                    <el-input\n                    type="textarea"\n                    :rows="3"\n                    placeholder="\u8BF7\u8F93\u5165\u8BE6\u7EC6\u8BC4\u4EF7\u53CA\u539F\u56E0\uFF08\u9009\u586B\uFF09"\n                    v-model="evaluateDetail">\n                    </el-input>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button type="primary" @click="evaluate">\u786E \u5B9A</el-button>\n                    </span>\n                </el-dialog>\n            </div>\n    \n            <div id="baidu-map"></div>\n            <div id="img-loader"></div>\n        </div>'
     };
 
     window.temp = temp;
@@ -11281,13 +11281,10 @@ module.exports = function () {
 						}.bind(this)
 					});
 
-					if (data) {
-						// 比赛结束 '1'
-						refreshMapPlayer();
-					}
+					// 双方已评 '1'
+					data && refreshMapPlayer();
 
-					this.matchPanelVisible = false; // 默认隐藏
-					this.matchResult = 3; // 默认“平”
+					this.resetMatchPanel();
 				}.bind(this), 'patch', {
 					matchId: this.match.id,
 					result: this.matchResult
@@ -11316,8 +11313,9 @@ module.exports = function () {
 								cancelButtonText: '取消',
 								type: 'warning'
 							}).then(function () {
-								// 加入比赛黑名单
 								this.addToCompetitionBlackList();
+								this.fetchRelatedMatches();
+								this.resetMatchPanel();
 							}.bind(this));
 						}.bind(this)).catch(function () {
 							// this.evaluateDialogVisible = true;
@@ -11342,6 +11340,10 @@ module.exports = function () {
 
 			evaluate: function evaluate() {
 				tools.xhr('/competeEvaluate', function () {
+					this.evaluateDialogVisible = false;
+					this.grade = 1;
+					this.evaluateDetail = '';
+
 					this.$message({
 						message: '评价成功',
 						type: 'success'
@@ -11355,24 +11357,20 @@ module.exports = function () {
 
 			showMatchDetail: function showMatchDetail(match, index) {
 				this.match = match;
-				// console.log(match)
+				console.log(match);
 
 				if (match.stage == 1) {
 					if (match.defensive) {
-						// 是否接收
 						this.defenseDialogVisible = true;
 					} else {
-						// 提示 “等待应答”
 						this.$message({
 							message: '等待对方应答',
 							type: 'info'
 						});
 					}
 
-					this.matchPanelVisible = false;
-					this.matchResult = 3;
+					this.resetMatchPanel();
 				} else if (match.stage == 2) {
-					// 标记“胜负”
 					this.matchPanelVisible = true;
 				}
 			},
@@ -11393,6 +11391,11 @@ module.exports = function () {
 						});
 					}
 				}.bind(this));
+			},
+
+			resetMatchPanel: function resetMatchPanel() {
+				this.matchPanelVisible = false; // 默认隐藏
+				this.matchResult = 3; // 默认“平”
 			}
 		},
 
