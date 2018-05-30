@@ -1157,6 +1157,7 @@ module.exports = function(){
 					unstableDatum: {
 						nickname: '',
 						wechat: '',
+						telephone: '',
 						level : '',
 						status: '1',
 						avatar: '',
@@ -1164,7 +1165,8 @@ module.exports = function(){
 					},
 					rules: {
 						nickname:[{required: true, message: '昵称不能为空'}],
-						wechat:[{required: true, message: '微信不能为空'}],
+						// wechat:[{required: true, message: '微信不能为空'}],
+						telephone:[{required: true, message: '手机号不能为空'}, {validator: checkTel, trigger: 'blur'}],
 						level:[{required: true, message: '水平不能为空'}],
 						status:[{required: true, message: '状态不能为空'}],
 						avatar: [{required: true, message: '头像必填'}],
@@ -1194,6 +1196,15 @@ module.exports = function(){
 					name: '修整中',
 				}]
 			}
+
+			function checkTel(rule, value, callback) {
+				let telReg = /^[1][3,4,5,7,8][0-9]{9}$/;
+				if(telReg.test($.trim(value))){
+					callback();
+				}else{
+					return callback(new Error('请输入正在使用的11位手机号码'));
+				}
+			};
 		},
 
 		methods: {
@@ -1201,6 +1212,7 @@ module.exports = function(){
 				tools.xhr('/usrDatum', function(res){
 					this.usrDatum.nickname = this.datumForm.unstableDatum.nickname = res.nickname;
 					this.usrDatum.wechat = this.datumForm.unstableDatum.wechat = res.wechat;
+					this.usrDatum.telephone = this.datumForm.unstableDatum.telephone = res.tel;
 					this.usrDatum.level = this.datumForm.unstableDatum.level = res.level;
 					this.usrDatum.status = this.datumForm.unstableDatum.status = res.status;
 					this.usrDatum.avatar = this.datumForm.unstableDatum.avatar = res.avatar;
@@ -1238,6 +1250,7 @@ module.exports = function(){
 			cancelUpdateUsrDatum: function(){
 				this.datumForm.unstableDatum.nickname = this.usrDatum.nickname;
 				this.datumForm.unstableDatum.wechat = this.usrDatum.wechat;
+				this.datumForm.unstableDatum.telephone = this.usrDatum.telephone;
 				this.datumForm.unstableDatum.level = this.usrDatum.level;
 				this.datumForm.unstableDatum.status = this.usrDatum.status;
 				this.datumForm.unstableDatum.avatar = this.usrDatum.avatar;
@@ -1948,8 +1961,15 @@ module.exports = function(){
 
 			// 确认比赛结果
 			confirmMathcResult: function(){
-				this.matchResultdialogVisible = false;
-				this.markMatchResult();
+				this.$confirm('比赛结果无误？', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					// type: 'warning'
+				}).then(function(){
+					this.matchResultdialogVisible = false;
+					this.markMatchResult();
+				}.bind(this)).catch(function(){
+				});
 			},
 
 			// 记录比赛结果

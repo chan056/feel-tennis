@@ -603,7 +603,11 @@ module.exports = function(){
                         </el-form-item>
     
                         <el-form-item label="微信" prop="wechat">
-                            <el-input v-model="datumForm.unstableDatum.wechat" v-bind:disabled="!datumForm.editable"></el-input>
+                            <el-input type="tel" v-model="datumForm.unstableDatum.wechat" v-bind:disabled="!datumForm.editable"></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="手机" prop="telephone">
+                            <el-input v-model="datumForm.unstableDatum.telephone" v-bind:disabled="!datumForm.editable"></el-input>
                         </el-form-item>
     
                         <el-form-item label="等级" prop="level" @change="showLevelTip()">
@@ -827,10 +831,23 @@ module.exports = function(){
                 <p v-for="(match, index) in matches" :key="match.id" class="match" @click="showMatchDetail(match, index)">
                     <a href="javascript: ;" class="nodec" :title="'对手编号：' + (match.offensive? match.defense: match.offense)">
                         VS {{ match.offensive
-                            ? match.defense_nickname + ' ' + (match.defense_wechat || '')
-                            : match.offense_nickname + ' ' + (match.offense_wechat || '')
+                            ? match.defense_nickname
+                            : match.offense_nickname
                         }}
                     </a>
+                    <br/>
+                    电话: {{
+                        match.offensive
+                            ? match.defense_tel
+                            : match.offense_tel
+                    }}
+                    <br/>
+                    微信: {{
+                        match.offensive
+                            ? match.defense_wechat
+                            : match.offense_wechat
+                    }}
+                    <br/>
                 </p>
     
                 <div id="matchPanel" v-show="matchPanelVisible">

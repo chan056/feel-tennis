@@ -645,14 +645,16 @@ let operations = {
 
 		let sql = `SELECT
 				*,
-				(select nickname from usr_datum where usr_id = offense)  as offense_nickname,
-				(select nickname from usr_datum where usr_id = defense)  as defense_nickname,
-				(select wechat from usr_datum where usr_id = offense)  as offense_wechat,
-				(select wechat from usr_datum where usr_id = defense)  as defense_wechat,
+				(select nickname from usr_datum where usr_id = c.offense)  as offense_nickname,
+				(select nickname from usr_datum where usr_id = c.defense)  as defense_nickname,
+				(select wechat from usr_datum where usr_id = c.offense)  as offense_wechat,
+				(select wechat from usr_datum where usr_id = c.defense)  as defense_wechat,
+				(select tel from usr_datum where usr_id = c.offense)  as offense_tel,
+				(select tel from usr_datum where usr_id = defense)  as defense_tel,
 				(select 1 where offense=${usrId}) as offensive,
 				(select 1 where defense=${usrId}) as defensive
 			FROM
-				competition
+				competition as c
 			WHERE
 				(offense = ${usrId} OR defense = ${usrId})
 			AND stage < 3`;
@@ -671,6 +673,7 @@ let operations = {
 					}else if(match.defense == usrId && match.defense_res){
 
 					}else{
+						// 自己没有记录过
 						proceededResult.push(match);
 					}
 				});
@@ -1451,10 +1454,30 @@ let operations = {
 		}
 
 		function updateData(){
-			let sql = `
-				insert into usr_datum values(${usrId}, '${patchObj.nickname}', '${patchObj.wechat}', '${patchObj.level}', '${patchObj.status}', '${pathStored}', 0, 0, ${patchObj.sex}) 
-				ON DUPLICATE KEY 
-				update nickname='${patchObj.nickname}',wechat='${patchObj.wechat}', level='${patchObj.level}', status='${patchObj.status}', avatar='${pathStored}', sex=${patchObj.sex}`;
+			let sql = `INSERT INTO usr_datum
+				VALUES
+				(
+					${usrId}, 
+					'${patchObj.nickname}',
+					'${patchObj.wechat}',
+					${patchObj.telephone}, 
+					'${patchObj.level}',
+					'${patchObj.status}',
+					'${pathStored}',
+					${patchObj.sex}, 
+					0,
+					0,
+					0,
+					0,
+					0
+				) ON DUPLICATE KEY UPDATE 
+				nickname = '${patchObj.nickname}',
+				wechat = '${patchObj.wechat}',
+				tel = ${ patchObj.telephone }, 
+				LEVEL = '${patchObj.level}',
+				STATUS = '${patchObj.status}',
+				avatar = '${pathStored}',
+				sex = ${ patchObj.sex }`;
 			
 			conn.query(sql, function(err, result){
 				if(err)
@@ -1850,7 +1873,7 @@ function disposePageSql(sql, params){
 }
 
 function throwError(err, res){
-	var errCode = err.code;
+	var errCode = err.sqlMessage;
 
 	res.statusCode = 500;
 	res.end(JSON.stringify({
