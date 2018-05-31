@@ -9303,7 +9303,7 @@ module.exports = function () {
     var temp = {
         header: '\n            <div id="header">\n                <el-row>\n                    <el-col :span="4">\n                        <i class="el-icon-menu aside-menu-btn"></i>\n                        <a href="#/sports" id="logo">\n                            <img src="../img/logo.png" width="60px" alt="logo"/>\n                        </a>\n                        \n                    </el-col>\n    \n                    <el-col :span="10" id="search-form-wrapper">\n                        <el-form :model="searchForm" :rules="searchFormRules" ref="searchForm"  class="" id="searchForm">\n                            <el-row>\n                                <el-col :span=20>\n                                    <el-form-item label="" prop="name">\n                                        <el-input class="searchBox" v-model="searchForm.name" @keyup.enter.native="submitForm(\'searchForm\');"></el-input>\n                                    </el-form-item>\n                                </el-col>\n                                <el-col :span=4 class="header-search-btn">\n                                    <el-button style="width: 100%;" icon="el-icon-search" @click="submitForm(\'searchForm\')"></el-button>\n                                </el-col>\n                            </el-row>\n                        </el-form>\n                    </el-col>\n    \n                    <el-col :span="6" class="masthead fr">\n                        <el-dropdown id="usr-btns" class="item" @command="handleUsrBtns">\n                            <i v-bind:class="loginUsrInfo.name? \'el-icon-setting\': \'el-icon-view\'" title="" @click=""></i>\n                            <el-dropdown-menu slot="dropdown">\n                                <el-dropdown-item v-if="!loginUsrInfo.name" command="login" id="header-btn-login">\u767B\u5F55</el-dropdown-item>\n                                <el-dropdown-item v-if="!loginUsrInfo.name" command="regist" id="header-btn-regist">\u6CE8\u518C</el-dropdown-item>\n                                <el-dropdown-item v-if="loginUsrInfo.name" command="datum" id="header-btn-profile">\u8D44\u6599</el-dropdown-item>\n                                <el-dropdown-item v-if="loginUsrInfo.name"command="logout" id="header-btn-logout">\u767B\u51FA</el-dropdown-item>\n                            </el-dropdown-menu>\n                        </el-dropdown>\n\n                        <el-popover\n                        ref="inmail"\n                        placement="top-start"\n                        title=""\n                        width="100"\n                        trigger="hover">\n                            <ul v-if="inmails.length" id="inmail-list">\n                                <li v-on:click="showInmailDetail(inmail, k)" v-for="(inmail, k) in inmails" class="nowrap">\n                                    {{k+1 + \'. \'}}{{ inmail.content }}\n                                </li>\n                            </ul>\n\n                            <span v-if="!inmails.length">\u6682\u65E0\u65B0\u6D88\u606F</span>\n                        </el-popover>\n    \n                        <el-badge :value="inmails.length" class="item item">\n                            <i v-popover:inmail class="fa fa-bell-o" title="\u6D88\u606F"></i>\n                        </el-badge>\n    \n                        <el-popover\n                            ref="paycode"\n                            placement="top-start"\n                            title=""\n                            width="100"\n                            trigger="hover">\n                            <img class="pay-code" src="/img/ali.jpeg" alt="\u652F\u4ED8\u5B9D" title="\u652F\u4ED8\u5B9D">\n                            <img class="pay-code" src="/img/wechat.jpeg" alt="\u5FAE\u4FE1" title="\u5FAE\u4FE1">\n                        </el-popover>\n                        \n                        <i v-popover:paycode class="fa fa-money item" title="\u6295\u5E01"></i>\n                    </el-col>\n                </el-row>\n    \n                <el-dialog title="\u6CE8\u518C" :visible.sync="registForm.visible">\n                    <el-form status-icon ref="registForm" :model="registForm" :rules="registFormRule">\n                        <el-form-item label="\u7528\u6237\u540D" :label-width="registForm.formLabelWidth" prop="name">\n                            <el-input v-model="registForm.name" auto-complete="off"></el-input>\n                        </el-form-item>\n                        <el-form-item label="\u5BC6\u7801" :label-width="registForm.formLabelWidth" prop="psw">\n                            <el-input type="password" v-model="registForm.psw" auto-complete="off"></el-input>\n                        </el-form-item>\n                        <el-form-item label="\u90AE\u7BB1" :label-width="registForm.formLabelWidth" prop="email">\n                            <el-input type="email" v-model="registForm.email" auto-complete="off"></el-input>\n                        </el-form-item>\n                        <el-form-item label="" :label-width="registForm.formLabelWidth" prop="captcha">\n                            <input v-model="registForm.captcha" class="jCaptcha" placeholder="\u8BF7\u8F93\u5165\u8BA1\u7B97\u7ED3\u679C"/>\n                        </el-form-item>\n                    </el-form>\n                    <div slot="footer" class="dialog-footer">\n                        <el-button type="primary" @click="resetForm(\'registForm\');">\u91CD \u7F6E</el-button>\n                        <el-button id="regist-btn" type="primary" @click="registForm.visible = true; regist();">\u6CE8 \u518C</el-button>\n                    </div>\n                </el-dialog>\n    \n                <el-dialog title="\u767B\u5F55" :visible.sync="loginForm.visible" id="login-dialog">\n                    <el-form :model="loginForm">\n                        <el-form-item label="\u7528\u6237\u540D" :label-width="loginForm.formLabelWidth">\n                            <el-input v-model="loginForm.name" auto-complete="on"></el-input>\n                        </el-form-item>\n                        <el-form-item label="\u5BC6\u7801" :label-width="loginForm.formLabelWidth">\n                            <el-input type="password" id="last-login-iput" v-model="loginForm.psw" auto-complete="off" clearable></el-input>\n                        </el-form-item>\n                        <p class="btns">\n                            <el-button @click="resetPswForm.visible = true; loginForm.visible = false;" class="rst-psw-btn">\u4FEE\u6539\u5BC6\u7801</el-button>\n                            <el-button @click="handlerRegist(); loginForm.visible = false;" class="rgst-btn">\u6CE8\u518C</el-button>\n                        </p>\n                    </el-form>\n                    <div slot="footer" class="dialog-footer">\n                        <el-button type="primary" @click="loginForm.visible = false;">\u53D6 \u6D88</el-button>\n                        <el-button type="primary" @click="loginForm.visible = true; login();">\u767B \u5F55</el-button>\n                    </div>\n                </el-dialog>\n    \n                <el-dialog title="\u4FEE\u6539\u5BC6\u7801" :visible.sync="resetPswForm.visible">\n                    <el-form :model="resetPswForm" ref="resetPswForm" :rules="resetPswForm.rules">\n                        <el-form-item label="\u7528\u6237\u540D" :label-width="resetPswForm.formLabelWidth" prop="name">\n                            <el-input v-model="resetPswForm.name" auto-complete="off"></el-input>\n                        </el-form-item>\n                        <el-form-item label="\u65E7\u5BC6\u7801" :label-width="resetPswForm.formLabelWidth">\n                            <el-input type="password" v-model="resetPswForm.opsw" auto-complete="off" clearable></el-input>\n                        </el-form-item>\n                        <el-form-item label="" :label-width="resetPswForm.formLabelWidth">\n                            <!--\u907F\u514D\u6076\u610F\u53D1\u90AE\u4EF6 todo-->\n                            <i class="el-icon-question" @click="retrievePswEmail();" title="\u70B9\u51FB\u53D1\u9001\u5BC6\u7801\u91CD\u7F6E\u90AE\u4EF6"></i>\n                        </el-form-item>\n                        \n                        <el-form-item label="\u65B0\u5BC6\u7801" :label-width="resetPswForm.formLabelWidth">\n                            <el-input type="password" id="last-login-iput" v-model="resetPswForm.npsw" auto-complete="off" clearable></el-input>\n                        </el-form-item>\n                    </el-form>\n                    <div slot="footer" class="dialog-footer">\n                        <el-button type="primary" @click="resetPswForm.visible = false;">\u53D6 \u6D88</el-button>\n                        <el-button type="primary" @click="resetPsw();">\u786E \u8BA4</el-button>\n                    </div>\n                </el-dialog>\n    \n                <el-dialog title="\u91CD\u7F6E\u5BC6\u7801" :visible.sync="retrievePswForm.visible">\n                    <el-form :model="retrievePswForm" ref="retrievePswForm" :rules="retrievePswForm.rules">\n                        <el-form-item label="\u65B0\u5BC6\u7801" :label-width="retrievePswForm.formLabelWidth" prop="npsw">\n                            <el-input type="password" id="" v-model="retrievePswForm.npsw" auto-complete="off" clearable></el-input>\n                        </el-form-item>\n                    </el-form>\n                    <div slot="footer" class="dialog-footer">\n                        <el-button type="primary" @click="retrievePswForm.visible = false;">\u53D6 \u6D88</el-button>\n                        <el-button type="primary" @click="retrievePsw();">\u786E \u8BA4</el-button>\n                    </div>\n                </el-dialog>\n    \n                <el-dialog\n                    title="\u767B\u51FA"\n                    :visible.sync="logoutForm.visible"\n                    width="30%"\n                    :before-close="beforeLogout">\n                    <span>\u786E\u8BA4\u767B\u51FA</span>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button @click="logoutForm.visible = false">\u53D6 \u6D88</el-button>\n                        <el-button type="primary" @click="logoutForm.visible = false; logout();">\u786E \u5B9A</el-button>\n                    </span>\n                    </el-dialog>\n            </div>\n        ',
 
-        aside: '\n            <div id="aside">\n                <div class="guide-section">\n                    <div class="guide-entry">\n                        <a href="#/sports" class="guide-entry-renderer" title="\u9996\u9875">\n                            <i class="icon fa fa-home"></i>\n                            <span class="text">\u9996\u9875</span>\n                        </a>\n                    </div>\n                    <div v-if="(loginUsrInfo && loginUsrInfo.name)"  class="guide-entry">\n                        <a href="#/stars" class="guide-entry-renderer" title="\u6536\u85CF">\n                            <i class="icon fa fa-star"></i>\n                            <span class="text">\u6536\u85CF</span>\n                        </a>\n                    </div>\n                </div>\n                <div class="guide-section">\n                    <div v-if="loginUsrInfo && loginUsrInfo.name" class="guide-entry" id="upload-entry" >\n                        <a href="#/compete" class="guide-entry-renderer" title="\u7ADE\u8D5B">\n                            <i class="fa fa-paw icon"></i>\n                            <span class="text">\u7ADE\u8D5B</span>\n                        </a>\n                    </div>\n                </div>\n                <div class="guide-section">\n                    <div v-if="(loginUsrInfo && loginUsrInfo.name)" class="guide-entry">\n                        <a href="#/voteNext" class="guide-entry-renderer" title="\u6295\u7968">\n                            <i class="fa fa-hand-paper-o icon"></i>\n                            <span class="text">\u6295\u7968</span>\n                        </a>\n                    </div>\n                    <div class="guide-entry" id="feedback-entry">\n                        <a href="#/feedback" class="guide-entry-renderer" title="\u53CD\u9988">\n                            <i class="el-icon-service icon"></i>\n                            <span class="text">\u53CD\u9988</span>\n                        </a>\n                    </div>\n                </div>\n                <div class="guide-section" v-if="loginUsrInfo && loginUsrInfo.is_admin == 1">\n                    <div class="guide-entry" id="upload-entry" >\n                        <a href="#/feedbacksAdmin" class="guide-entry-renderer" title="\u53CD\u9988\u5217\u8868">\n                            <i class="fa fa-coffee icon"></i>\n                            <span class="text">\u53CD\u9988\u5217\u8868</span>\n                        </a>\n                    </div>\n                    <div class="guide-entry" id="upload-entry" >\n                        <a href="#/uploadAdmin" class="guide-entry-renderer" title="\u4E0A\u4F20\u89C6\u9891">\n                            <i class="el-icon-upload icon"></i>\n                            <span class="text">\u4E0A\u4F20\u89C6\u9891</span>\n                        </a>\n                    </div>\n                    <div class="guide-entry" id="upload-entry" >\n                        <a href="#/videosAdmin" class="guide-entry-renderer" title="\u89C6\u9891\u5217\u8868">\n                            <i class="fa fa-video-camera icon"></i>\n                            <span class="text">\u89C6\u9891\u5217\u8868</span>\n                        </a>\n                    </div>\n                    <div class="guide-entry" id="upload-entry" >\n                        <a href="#/albumsAdmin" class="guide-entry-renderer" title="\u4E13\u8F91\u5217\u8868">\n                            <i class="fa fa-book icon"></i>\n                            <span class="text">\u4E13\u8F91\u5217\u8868</span>\n                        </a>\n                    </div>\n                    <div class="guide-entry" id="upload-entry" >\n                        <a href="#/sportsAdmin" class="guide-entry-renderer" title="\u8FD0\u52A8\u5217\u8868">\n                            <i class="fa fa-soccer-ball-o icon"></i>\n                            <span class="text">\u8FD0\u52A8\u5217\u8868</span>\n                        </a>\n                    </div>\n                </div>\n                \n                <div id="footer">\n                    <a class="guide-links-primary" href="#/about">\u5173\u4E8E</a>\n                </div>\n                <div id="llc">\n                    <span class="">2018 YiTube</span>\n                </div>\n            </div>\n        ',
+        aside: '\n            <div id="aside">\n                <div class="guide-section">\n                    <div class="guide-entry">\n                        <a href="#/sports" class="guide-entry-renderer" title="\u9996\u9875">\n                            <i class="icon fa fa-home"></i>\n                            <span class="text">\u9996\u9875</span>\n                        </a>\n                    </div>\n                    <div v-if="(loginUsrInfo && loginUsrInfo.name)"  class="guide-entry">\n                        <a href="#/stars" class="guide-entry-renderer" title="\u6536\u85CF">\n                            <i class="icon fa fa-star"></i>\n                            <span class="text">\u6536\u85CF</span>\n                        </a>\n                    </div>\n                </div>\n                <div class="guide-section">\n                    <div v-if="loginUsrInfo && loginUsrInfo.name" class="guide-entry" id="upload-entry" >\n                        <a href="#/compete" class="guide-entry-renderer" title="\u7ADE\u8D5B">\n                            <i class="fa fa-trophy icon"></i>\n                            <span class="text">\u7ADE\u8D5B</span>\n                        </a>\n                    </div>\n                </div>\n                <div class="guide-section">\n                    <div v-if="(loginUsrInfo && loginUsrInfo.name)" class="guide-entry">\n                        <a href="#/voteNext" class="guide-entry-renderer" title="\u6295\u7968">\n                            <i class="fa fa-hand-paper-o icon"></i>\n                            <span class="text">\u6295\u7968</span>\n                        </a>\n                    </div>\n                    <div class="guide-entry" id="feedback-entry">\n                        <a href="#/feedback" class="guide-entry-renderer" title="\u53CD\u9988">\n                            <i class="el-icon-service icon"></i>\n                            <span class="text">\u53CD\u9988</span>\n                        </a>\n                    </div>\n                </div>\n                <div class="guide-section" v-if="loginUsrInfo && loginUsrInfo.is_admin == 1">\n                    <div class="guide-entry" id="upload-entry" >\n                        <a href="#/feedbacksAdmin" class="guide-entry-renderer" title="\u53CD\u9988\u5217\u8868">\n                            <i class="fa fa-coffee icon"></i>\n                            <span class="text">\u53CD\u9988\u5217\u8868</span>\n                        </a>\n                    </div>\n                    <div class="guide-entry" id="upload-entry" >\n                        <a href="#/uploadAdmin" class="guide-entry-renderer" title="\u4E0A\u4F20\u89C6\u9891">\n                            <i class="el-icon-upload icon"></i>\n                            <span class="text">\u4E0A\u4F20\u89C6\u9891</span>\n                        </a>\n                    </div>\n                    <div class="guide-entry" id="upload-entry" >\n                        <a href="#/videosAdmin" class="guide-entry-renderer" title="\u89C6\u9891\u5217\u8868">\n                            <i class="fa fa-video-camera icon"></i>\n                            <span class="text">\u89C6\u9891\u5217\u8868</span>\n                        </a>\n                    </div>\n                    <div class="guide-entry" id="upload-entry" >\n                        <a href="#/albumsAdmin" class="guide-entry-renderer" title="\u4E13\u8F91\u5217\u8868">\n                            <i class="fa fa-book icon"></i>\n                            <span class="text">\u4E13\u8F91\u5217\u8868</span>\n                        </a>\n                    </div>\n                    <div class="guide-entry" id="upload-entry" >\n                        <a href="#/sportsAdmin" class="guide-entry-renderer" title="\u8FD0\u52A8\u5217\u8868">\n                            <i class="fa fa-soccer-ball-o icon"></i>\n                            <span class="text">\u8FD0\u52A8\u5217\u8868</span>\n                        </a>\n                    </div>\n                </div>\n                \n                <div id="footer">\n                    <a class="guide-links-primary" href="#/about">\u5173\u4E8E</a>\n                </div>\n                <div id="llc">\n                    <span class="">2018 YiTube</span>\n                </div>\n            </div>\n        ',
 
         sports: '\n            <div id="album-list">\n                <div class="el-breadcrumb">\n                    <span>\u8FD0\u52A8</span>\n                </div>\n                <ul class="block-list">\n                    <li class="" v-for="sport in sports">\n                        <router-link :to="{path: \'/sports/\'+ sport.id }" :title="sport.name">\n                            <img :src="\'/img/cover/sport/\' + sport.id + \'.jpg\'" class="block-thumb spt-thumb" alt="sport"/>\n                            <p class="clearfix block-info">\n                                <span class="play-count">{{sport.impression}}\u6B21\u89C2\u770B</span>\n                                <span class="update-time">\n                                    <UpdateTime :timestamp="sport.update_time"></UpdateTime>\n                                </span>\n                            </p>\n                        </router-link>\n                    </li>\n                </ul>\n                <el-pagination\n                    layout="prev, pager, next"\n                    :total="total"\n                    :page-size="pageSize"\n                    @current-change="handlePageChange">\n                </el-pagination>\n            </div>\n        ',
 
@@ -10006,90 +10006,33 @@ module.exports = function () {
 				video: null,
 				crumb: {},
 				tags: [],
-				captureParams: {},
+				captureParams: {
+					vId: this.videoId
+				},
 				previewerVisible: false,
 				gifLink: '',
 				gifFullLink: '',
 				shooting: false,
 				like: 0,
-				likeLocking: false
-			};
-			var propsData = this.$options.propsData;
-			var videoId = propsData.videoId;
-
-			d.captureParams.vId = videoId;
-			tools.xhr('/videos/' + videoId, function (resData) {
-				// console.log(resData)
-				if (resData) {
-					d.video = resData;
-					d.captureParams.ext = d.video.video_ext;
-
-					var dayViewLeft = resData.dayViewLeft;
-					if (dayViewLeft) {
-						if (dayViewLeft <= 5) {
-							this.$message({ message: '\u5F53\u5929\u5269\u4F59\u64AD\u653E\u6B21\u6570 ' + (resData.dayViewLeft || 0) + '\u6B21', type: 'warning' });
-						}
-
-						// ***HLS
-						tools.insertScriptTag(1, "../lib/hls.js", { onload: function () {
-								tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), { id: 'hls-frag' });
-
-								vEle.onended = function () {
-									$('.subtitle').text('');
-								};
-							}.bind(this), id: 'hls' });
+				likeLocking: false,
+				newStarForm: { starName: '', visible: false },
+				stars: [],
+				checkList: [],
+				selectedStars: [],
+				starSectionVisible: false,
+				loginUsrInfo: {},
+				rmks: [],
+				remarker: {
+					visible: false,
+					content: '',
+					rules: {
+						content: [{ required: true, message: '内容不能为空' }]
 					}
-				} else {
-					this.$message({
-						dangerouslyUseHTMLString: true,
-						message: '\u5F53\u5929\u5269\u4F59\u64AD\u653E\u6B21\u6570 0\u6B21\uFF0C<br/>\u70B9\u51FB\u53F3\u4E0A\u89D2\u6CE8\u518C\u6216\u767B\u5F55\u67E5\u770B\u66F4\u591A\u89C6\u9891',
-						type: 'warning'
-					});
+				},
+				remarkPlaySetting: {
+					enable: true,
+					all: true
 				}
-			}.bind(this));
-
-			tools.xhr('/navInfo/3/' + videoId, function (resData) {
-				d.crumb = resData[0];
-			});
-
-			tools.xhr('/videoTags/' + videoId, function (resData) {
-				d.tags = resData;
-			});
-
-			// SRT字幕
-			if (1) {
-
-				tools.xhr('/srt/' + videoId, function (resData) {
-					if (!resData) return;
-
-					var playerWrapper = $('#palyer-wrapper');
-
-					tools.attachSubtile(window.vEle, resData, 500, function (subtitle) {
-						playerWrapper.find('.subtitle').text(subtitle).css({});
-					});
-				});
-			}
-
-			d.newStarForm = { starName: '', visible: false };
-			d.stars = [];
-			d.checkList = [];
-			d.selectedStars = [];
-			d.starSectionVisible = false;
-
-			d.loginUsrInfo = {};
-
-			d.rmks = [];
-			d.remarker = {
-				visible: false,
-				content: '',
-				rules: {
-					content: [{ required: true, message: '内容不能为空' }]
-				}
-			};
-
-			d.remarkPlaySetting = {
-				enable: true,
-				all: true
 			};
 
 			return d;
@@ -10097,6 +10040,14 @@ module.exports = function () {
 		template: temp.video,
 		mounted: function mounted() {
 			var t = this;
+
+			this.fetchVideoInfo();
+
+			this.fetchNavInfo();
+
+			this.fetchVideoTags();
+
+			this.bindSubtitle();
 
 			tools.togglePageIE(this);
 
@@ -10126,6 +10077,64 @@ module.exports = function () {
 
 
 		methods: {
+			fetchVideoInfo: function fetchVideoInfo() {
+				console.log(this, this);
+				tools.xhr('/videos/' + this.videoId, function (resData) {
+					// console.log(resData)
+					if (resData) {
+						this.video = resData;
+						this.captureParams.ext = this.video.video_ext;
+
+						var dayViewLeft = resData.dayViewLeft;
+						if (dayViewLeft) {
+							if (dayViewLeft <= 5) {
+								this.$message({ message: '\u5F53\u5929\u5269\u4F59\u64AD\u653E\u6B21\u6570 ' + (resData.dayViewLeft || 0) + '\u6B21', type: 'warning' });
+							}
+
+							// ***HLS
+							tools.insertScriptTag(1, "../lib/hls.js", { onload: function () {
+									tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), { id: 'hls-frag' });
+
+									window.vEle.onended = function () {
+										$('.subtitle').text('');
+									};
+								}.bind(this), id: 'hls' });
+						}
+					} else {
+						this.$message({
+							dangerouslyUseHTMLString: true,
+							message: '\u5F53\u5929\u5269\u4F59\u64AD\u653E\u6B21\u6570 0\u6B21\uFF0C<br/>\u70B9\u51FB\u53F3\u4E0A\u89D2\u6CE8\u518C\u6216\u767B\u5F55\u67E5\u770B\u66F4\u591A\u89C6\u9891',
+							type: 'warning'
+						});
+					}
+				}.bind(this));
+			},
+
+			fetchNavInfo: function fetchNavInfo() {
+				tools.xhr('/navInfo/3/' + this.videoId, function (resData) {
+					this.crumb = resData[0];
+				}.bind(this));
+			},
+
+			fetchVideoTags: function fetchVideoTags() {
+				tools.xhr('/videoTags/' + this.videoId, function (resData) {
+					this.tags = resData;
+				}.bind(this));
+			},
+
+			bindSubtitle: function bindSubtitle() {
+				tools.xhr('/srt/' + this.videoId, function (resData) {
+					if (!resData) return;
+
+					var playerWrapper = $('#palyer-wrapper');
+
+					tools.attachSubtile(window.vEle, resData, 500, function (subtitle) {
+						playerWrapper.find('.subtitle').text(subtitle) /* .css({
+                                                     }) */;
+					});
+				});
+			},
+
 			captureCountdown: function captureCountdown() {
 				var _this = this;
 				var captureBtn = $('#capture-btn');
@@ -10181,7 +10190,7 @@ module.exports = function () {
 					this.shooting = false;
 				}.bind(this));
 
-				vEle.pause();
+				window.vEle.pause();
 			},
 
 			// 点击分享时
@@ -11277,7 +11286,7 @@ module.exports = function () {
 
 			// 确认比赛结果
 			confirmMathcResult: function confirmMathcResult() {
-				this.$confirm('结果无误？', '提示', {
+				this.$confirm('比赛结果无误？', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消'
 					// type: 'warning'

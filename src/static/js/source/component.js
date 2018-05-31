@@ -652,98 +652,35 @@ module.exports = function(){
 				video: null, 
 				crumb: {}, 
 				tags: [], 
-				captureParams: {}, 
+				captureParams: {
+					vId: this.videoId
+				}, 
 				previewerVisible: false,
 				gifLink: '', 
 				gifFullLink: '', 
 				shooting: false,
 				like: 0, 
-				likeLocking: false
-			};
-			let propsData = this.$options.propsData;
-			let videoId = propsData.videoId;
-
-			d.captureParams.vId = videoId;
-			tools.xhr('/videos/' + videoId, function(resData){
-				// console.log(resData)
-				if(resData){
-					d.video = resData;
-					d.captureParams.ext = d.video.video_ext;
-					
-					let dayViewLeft = resData.dayViewLeft;
-					if(dayViewLeft){
-						if(dayViewLeft <= 5){
-							this.$message({message: `当天剩余播放次数 ${resData.dayViewLeft || 0}次`, type: 'warning'});
-						}
-
-						// ***HLS
-						tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
-							tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
-
-							vEle.onended = function(){
-								$('.subtitle').text('');
-							}
-						}.bind(this), id: 'hls'});
+				likeLocking: false,
+				newStarForm: {starName: '', visible: false},
+				stars: [],
+				checkList: [],
+				selectedStars: [],
+				starSectionVisible: false,
+				loginUsrInfo: {},
+				rmks:[],
+				remarker: {
+					visible: false,
+					content: '',
+					rules: {
+						content: [
+							{ required: true, message: '内容不能为空'},
+						]
 					}
-				}else{
-					this.$message({
-						dangerouslyUseHTMLString: true,
-						message: `当天剩余播放次数 0次，<br/>点击右上角注册或登录查看更多视频`, 
-						type: 'warning'
-					});
+				},
+				remarkPlaySetting: {
+					enable: true,
+					all: true
 				}
-
-			}.bind(this));
-
-			tools.xhr('/navInfo/3/' + videoId, function(resData){
-				d.crumb = resData[0];
-			});
-
-			tools.xhr('/videoTags/' + videoId, function(resData){
-				d.tags = resData;
-			});
-			
-			// SRT字幕
-			if(1){
-			
-				tools.xhr('/srt/' + videoId, function(resData){
-					if(!resData)
-						return;
-						
-					let playerWrapper = $('#palyer-wrapper');
-
-					tools.attachSubtile(window.vEle, resData, 500, function(subtitle){
-						playerWrapper.find('.subtitle').text(subtitle).css({
-
-						});
-					});
-					
-				});
-
-			}
-
-			d.newStarForm = {starName: '', visible: false};
-			d.stars = [];
-			d.checkList = [];
-			d.selectedStars = [];
-			d.starSectionVisible = false;
-
-			d.loginUsrInfo = {};
-
-			d.rmks = [];
-			d.remarker = {
-				visible: false,
-				content: '',
-				rules: {
-					content: [
-						{ required: true, message: '内容不能为空'},
-					]
-				}
-			};
-
-			d.remarkPlaySetting = {
-				enable: true,
-				all: true
 			};
 
 			return d;
@@ -751,6 +688,14 @@ module.exports = function(){
 		template: temp.video,
 		mounted() {
 			let t = this;
+
+			this.fetchVideoInfo();
+
+			this.fetchNavInfo();
+			
+			this.fetchVideoTags();
+			
+			this.bindSubtitle();
 
 			tools.togglePageIE(this);
 
@@ -774,11 +719,73 @@ module.exports = function(){
 				t.queryRemark(1);
 			};
 		},
+		
 		beforeDestroy() {
 			this.$bus.off('update-login-info', this.addTodo);
 		},
 
 		methods: {
+			fetchVideoInfo: function(){
+				console.log(this, this)
+				tools.xhr('/videos/' + this.videoId, function(resData){
+					// console.log(resData)
+					if(resData){
+						this.video = resData;
+						this.captureParams.ext = this.video.video_ext;
+						
+						let dayViewLeft = resData.dayViewLeft;
+						if(dayViewLeft){
+							if(dayViewLeft <= 5){
+								this.$message({message: `当天剩余播放次数 ${resData.dayViewLeft || 0}次`, type: 'warning'});
+							}
+	
+							// ***HLS
+							tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
+								tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
+	
+								window.vEle.onended = function(){
+									$('.subtitle').text('');
+								}
+							}.bind(this), id: 'hls'});
+						}
+					}else{
+						this.$message({
+							dangerouslyUseHTMLString: true,
+							message: `当天剩余播放次数 0次，<br/>点击右上角注册或登录查看更多视频`, 
+							type: 'warning'
+						});
+					}
+	
+				}.bind(this));
+			},
+
+			fetchNavInfo: function(){
+				tools.xhr('/navInfo/3/' + this.videoId, function(resData){
+					this.crumb = resData[0];
+				}.bind(this));
+			},
+
+			fetchVideoTags: function(){
+				tools.xhr('/videoTags/' + this.videoId, function(resData){
+					this.tags = resData;
+				}.bind(this));
+			},
+
+			bindSubtitle: function(){
+				tools.xhr('/srt/' + this.videoId, function(resData){
+					if(!resData)
+						return;
+						
+					let playerWrapper = $('#palyer-wrapper');
+
+					tools.attachSubtile(window.vEle, resData, 500, function(subtitle){
+						playerWrapper.find('.subtitle').text(subtitle)/* .css({
+
+						}) */;
+					});
+				});
+			},
+
 			captureCountdown: function(){
 				let _this = this;
 				let captureBtn = $('#capture-btn');
@@ -834,7 +841,7 @@ module.exports = function(){
 					this.shooting = false;
 				}.bind(this));
 
-				vEle.pause();
+				window.vEle.pause();
 			},
 
 			// 点击分享时

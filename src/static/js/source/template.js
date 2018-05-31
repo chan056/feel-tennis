@@ -178,7 +178,7 @@ module.exports = function(){
                 <div class="guide-section">
                     <div v-if="loginUsrInfo && loginUsrInfo.name" class="guide-entry" id="upload-entry" >
                         <a href="#/compete" class="guide-entry-renderer" title="竞赛">
-                            <i class="fa fa-paw icon"></i>
+                            <i class="fa fa-trophy icon"></i>
                             <span class="text">竞赛</span>
                         </a>
                     </div>

@@ -937,7 +937,7 @@ let operations = {
 		}
 	},
 
-	creatVideo: function(res, postObj){
+	createVideo: function(res, postObj){
 		const path = require('path');
 
 		let videoAbsPath = postObj.videoAbsPath;
@@ -965,7 +965,7 @@ let operations = {
 		}.bind(this));
 	},
 
-	creatFeedback: function(res, postObj, req){
+	createFeedback: function(res, postObj, req){
 		let ip = require('client-ip')(req);
 		if(ip == '::1'){
 			ip = '::ffff:127.0.0.1';
@@ -1009,7 +1009,7 @@ let operations = {
 		});
 	},
 
-	creatTag: function(res, postObj){
+	createTag: function(res, postObj){
 		var sql = `INSERT INTO tag 
 			(name, sport_id)
 			VALUES (?, ?)`;
@@ -1022,7 +1022,7 @@ let operations = {
 		});
 	},
 
-	creatAlbum: function(res, postObj){
+	createAlbum: function(res, postObj){
 		var sql = `INSERT INTO album 
 			(sport_id, author_id, name, tag, update_time)
 			VALUES (?, ?, ?, ?, ${+new Date()})`;
@@ -1059,7 +1059,7 @@ let operations = {
 		});
 	},
 
-	creatStar: function(res, postObj){
+	createStar: function(res, postObj){
 		var sql = `INSERT INTO star 
 			(usr_id, name)
 			VALUES (?, ?)`;
@@ -1172,7 +1172,7 @@ let operations = {
 		}
 	},
 
-	creatSport: function(res, postObj, req){
+	createSport: function(res, postObj, req){
 		let sql = `insert into sport (name, update_time) values ('${postObj.name}', ${+new Date()})`;
 
 		conn.query(sql, function(err, result){

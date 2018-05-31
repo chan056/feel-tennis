@@ -407,28 +407,28 @@ const routerConfig = {
     
         '/video': {
             fn: function(req, res){
-                r.post('creatVideo', req, res);
+                r.post('createVideo', req, res);
             },
             limit: {level: 100}
         },
 
         '/sport': {
             fn: function(req, res){
-                r.post('creatSport', req, res);
+                r.post('createSport', req, res);
             },
             limit: {level: 100}
         },
     
         '/tag': {
             fn: function(req, res){
-                r.post('creatTag', req, res);
+                r.post('createTag', req, res);
             },
             limit: {level: 100}
         },
     
         '/album': {
             fn: function(req, res){
-                r.post('creatAlbum', req, res);
+                r.post('createAlbum', req, res);
             },
             limit: {level: 100}
         },
@@ -501,7 +501,7 @@ const routerConfig = {
     
         '/feedback': {
             fn: function(req, res){
-                r.post('creatFeedback', req, res);
+                r.post('createFeedback', req, res);
             },
 
             limit: {level: 100}
@@ -515,7 +515,7 @@ const routerConfig = {
         },
     
         '/star': function(req, res){
-            r.post('creatStar', req, res);
+            r.post('createStar', req, res);
         },
     
         '/star/:starId': {
