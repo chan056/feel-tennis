@@ -10067,7 +10067,7 @@ module.exports = function () {
 
 			function afterLogin() {
 				t.queryVoteComment();
-				t.queryStar(t.queryUsrVideoStars);
+				t.queryStar(t.queryVideoStarsContainTheVideo);
 				t.queryRemark(1);
 			};
 		},
@@ -10347,10 +10347,9 @@ module.exports = function () {
 				}.bind(this));
 			},
 
-			queryUsrVideoStars: function queryUsrVideoStars() {
-				tools.xhr('/queryUsrVideoStars/' + this.videoId, function (res) {
-					var selectedStars = [];
-
+			queryVideoStarsContainTheVideo: function queryVideoStarsContainTheVideo() {
+				tools.xhr('/videoStarsContainTheVideo/' + this.videoId, function (res) {
+					var selectedStars = []; // ['复选框1', '复选框2']
 					res.forEach(function (item) {
 						selectedStars.push(item.name);
 					});
@@ -10370,7 +10369,7 @@ module.exports = function () {
 
 					// 创建之后 添加视频到收藏夹
 					// todo 执行顺序也许有问题，必须在queryStar之后
-					this.starVideo(res, this.queryUsrVideoStars);
+					this.starVideo(res, this.queryVideoStarsContainTheVideo);
 				}.bind(this), 'post', { name: this.newStarForm.starName });
 			},
 

@@ -399,7 +399,7 @@ let operations = {
 		
 	},
 
-	queryUsrVideoStars: function(res, qualification, params){
+	queryVideoStarsContainTheVideo: function(res, qualification, params){
 		let sql = `SELECT
 			us.star_id as id,
 			s.NAME as name
@@ -411,28 +411,30 @@ let operations = {
 		AND us.star_id = s.id
 		AND s.usr_id=${this.usrInfo.usrId}`;
 
-		sql = disposePageSql(sql, params);
+		// sql = disposePageSql(sql, params);
 
 		conn.query(sql, function (err, list, fields) {
 			if (err) return throwError(err, res);
 
-			conn.query(`SELECT
-				count(*) as count
-			FROM
-				usr_video_star AS us
-			JOIN star AS s
-			WHERE
-				us.v_id = ${params.v_id}
-			AND us.star_id = s.id
-			AND s.usr_id=${this.usrInfo.usrId}`, function(err, result){
+			// conn.query(`SELECT
+			// 	count(*) as count
+			// FROM
+			// 	usr_video_star AS us
+			// JOIN star AS s
+			// WHERE
+			// 	us.v_id = ${params.v_id}
+			// AND us.star_id = s.id
+			// AND s.usr_id=${this.usrInfo.usrId}`, function(err, result){
 
-				let json = JSON.stringify({
-					datalist: list,
-					total: result[0].count
-				});
+			// 	let json = JSON.stringify({
+			// 		datalist: list,
+			// 		total: result[0].count
+			// 	});
 
-				res.end(json);
-			})
+			// 	res.end(json);
+			// })
+			let data = JSON.stringify(list)
+			res.end(data);
 		}.bind(this));
 	},
 

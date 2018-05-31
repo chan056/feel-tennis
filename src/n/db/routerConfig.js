@@ -259,10 +259,10 @@ const routerConfig = {
             limit: {level: 10}
         },
     
-        // 当前用户当前视频的收藏的文件夹
-        '/queryUsrVideoStars/:v_id': {
+        // 当前用户当前视频收藏夹
+        '/videoStarsContainTheVideo/:v_id': {
             fn: function(params, res, req){
-                r.query('queryUsrVideoStars', params, res, req);
+                r.query('queryVideoStarsContainTheVideo', params, res, req);
             },
             limit: {level: 10}
         },
