@@ -107,17 +107,13 @@ function screenShot (videoStorePath, tsDir){
             console.log(error);
         }
 
-        let coveSize = require('../constant').videoCoverSize;
+        require('./screenshot')(
+            videoStorePath,
+            path.resolve(tsDir, './cover.jpg'),
+            tool.formatTime(duration/2)
+        );
+    });
 
-        let coverPath = path.resolve(tsDir, './cover.jpg');
-        let screenshotCmd = `ffmpeg -ss ${tool.formatTime(duration/2)} -i ${videoStorePath} -y -f image2 -vframes 1 -s ${coveSize} ${coverPath}`;
-        exec(screenshotCmd, function(err){
-            if(err){
-                console.log(err);
-            }
-        });
-    })
-    
 }
 
 // 动态预览
@@ -130,15 +126,13 @@ function dynamicPreview(videoStorePath, tsDir, vId){
             console.log(error);
         }
 
-        let gifModule = require('./gif');
-
-        gifModule.createDynamicPreview({
+        let gifModule = require('./dynamic_preview')({
             vId: vId,
             st: duration / 2,
             et: duration / 2 + CONSTANTS.dynamicPreview.duration,
             scale: CONSTANTS.dynamicPreview.width,
             output: tsDir + '/d_cover.gif',
-        });
+        })
     })
 }
 

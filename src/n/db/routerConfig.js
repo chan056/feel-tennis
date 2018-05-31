@@ -211,12 +211,33 @@ const routerConfig = {
             // console.log(params);
         },
     
-        '/gifLink': {
+        '/shortVideoLink': {
             fn: function(params, res, req){
-                let createDynamicPreview = require('../ffmpeg/gif.js').createDynamicPreview;
-                createDynamicPreview(params, res, req);
+                require('../ffmpeg/dynamic_preview.js')(params, res, req);
             },
             limit: {level: 10, visits: 3}
+        },
+
+        '/videoScreenshot': {
+            fn: function(params, res, req){
+                
+                let src = global.staticRoot + `/multimedia/pristine_v/${params.vId}${params.ext}`,
+                    filename = `${params.vId}-${+new Date()}`,
+                    relPath = `./multimedia/screenshot/${filename}.jpg`,
+                    dest = require('path').resolve(global.staticRoot, relPath),
+                    st = params.st;
+                require('../ffmpeg/screenshot.js')(src, dest, st, params.size, function(){
+                    let conn = require('./connect.js').conn;
+                    let sql = `insert into usr_screenshot_star (usr_id, screenshot, v_id, type) values (${req.usrInfo.usrId}, '${filename}', ${params.vId}, 2)`;
+                    conn.query(sql, function(err, result){
+                        if(err)
+                            console.log(err);
+                    });
+    
+                    return res.end(relPath);
+                });
+            },
+            limit: {level: 10, visits: 10}
         },
     
         '/srt/:vId': function(params, res, req){

@@ -405,9 +405,11 @@ module.exports = function(){
                     <br class="clr">
                 </div>
                 <div v-if="video">
-                    <input type="button" value="开始截图" @click="captureCountdown()" id="capture-btn" class="el-button el-button--default"/>
-                    <el-button v-if="gifLink && !shooting" @click="preview()">预览截图</el-button>
-                    <el-button v-if="shooting" :loading="true">预览截图</el-button>
+                    <input type="button" value="截取小视频" @click="captureCountdown()" id="capture-btn" class="el-button el-button--default"/>
+                    <el-button v-if="shortVideoLink && !shooting" @click="preview(); previewType=1;">预览小视频</el-button>
+                    <el-button v-if="shooting" :loading="true">截取中...</el-button>
+                    <input type="button" value="截图" @click="screenshot()" id="screenshot-btn" class="el-button el-button--default"/>
+                    <el-button v-if="screenshotLink" @click="preview(); previewType=2;">预览截图</el-button>
                     <el-button @click="remarker.visible = true; this.vEle.pause();">标注</el-button>
                 </div>
     
@@ -431,8 +433,8 @@ module.exports = function(){
                     title="动态截图预览"
                     :visible.sync="previewerVisible"
                     >
-                    <p v-if="gifLink" id="shoot-container">
-                        <img v-bind:src="gifLink" alt="gif"/>
+                    <p id="shoot-container">
+                        <img v-bind:src="[shortVideoLink, screenshotLink][previewType-1]" alt=""/>
                     </p>
                     <span slot="footer" class="dialog-footer">
                         <el-popover
@@ -445,14 +447,14 @@ module.exports = function(){
                             <div id="qrcode-shoot"></div>
                             <button type="button"
                                 class="el-button el-button--default"
-                                v-clipboard:copy="gifFullLink"
+                                v-clipboard:copy="[shortVideoFullLink, screenshotFullLink][previewType-1]"
                                 v-clipboard:success="copySuccess"
                                 v-clipboard:error="">复制链接</button>
                             </button>
                         </el-popover>
                         <el-button v-popover:qrcodePop @click="popShow()">分享</el-button>
     
-                        <a :href="gifLink" download="视频截图.gif">
+                        <a :href="[shortVideoLink, screenshotLink][previewType-1]" download="视频截图.gif">
                             <el-button type="primary" @click="">下载</el-button>
                         </a>
                         

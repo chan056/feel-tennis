@@ -1,6 +1,6 @@
 // res req 只有在用户视频功能中才有
 // 视频上传生成视频预览时没有
-module.exports.createDynamicPreview = function(captureParams, res, req){
+module.exports = function(captureParams, res, req){
     let videoName = captureParams.vId,
         st = captureParams.st,
         et = captureParams.et,
@@ -22,7 +22,7 @@ module.exports.createDynamicPreview = function(captureParams, res, req){
     let path = require('path');
     const exec = require('child_process').exec;
     
-    let dir = path.resolve(__dirname, '../../static');
+    let dir = global.staticRoot;
     let vSouce = dir + `/multimedia/pristine_v/${videoName}${captureParams.ext}`;
     let outputPallete = dir + `/multimedia/gif/palette-${now}.png`;
     let output = captureParams.output;
@@ -46,34 +46,22 @@ module.exports.createDynamicPreview = function(captureParams, res, req){
 
             if(req && res){// 用户截图
                 let conn = require('../db/connect.js').conn;
-                let sql = `insert into usr_screenshot_star (usr_id, screenshot, v_id) values (${req.usrInfo.usrId}, '${gifFilename}', ${videoName})`;
+                let sql = `insert into usr_screenshot_star (usr_id, screenshot, v_id) values (${req.usrInfo.usrId}, '${gifFilename}', ${videoName}), 1`;
                 conn.query(sql, function(err, result){
                     if(err)
                         console.log(err);
                 });
 
-                screenshot();
-
                 return res.end(output[0]);
+
+                require('./screenshot')(
+                    vSouce,
+                    `${dir}/multimedia/gif/${videoName}-${now}.jpg`,
+                    st
+                );
             }
         });
     });
-
-    // 保存gif第一帧
-    // ffmpeg -ss 00:10:00 -i "t.mp4" -y -f image2 -vframes 1 -s 200x100 test.jpg
-    function screenshot(){
-        let filename = dir + `/multimedia/gif/${videoName}-${now}.jpg`;
-        let fileSize = require('../constant').videoCoverSize;
-        let screenshotCmd = `ffmpeg -ss ${st} -i ${vSouce} -y -f image2 -vframes 1 -s ${fileSize} ${filename}`;
-
-        console.log(screenshotCmd);
-        exec(screenshotCmd, function(err){
-            if(err){
-                console.log(err);
-            }
-        });
-    }
-
 
     function responseError(){
         if(res){

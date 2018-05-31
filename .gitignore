@@ -10,6 +10,7 @@ src/n/package-lock.json
 /src/static/js/app.js
 /src/n/ffmpeg/*.mp4
 /src/n/ffmpeg/test.js
+/src/static/multimedia/screenshot/*.*
 
 
 # Logs
@@ -73,3 +74,4 @@ typings/
 src/static/img/cover/album/13.jpg
 src/static/js/app.js
 src/static/js/admin.js
+src/static/multimedia/screenshot/35-1527749868999.jpg

@@ -652,13 +652,18 @@ module.exports = function(){
 				video: null, 
 				crumb: {}, 
 				tags: [], 
+
 				captureParams: {
 					vId: this.videoId
-				}, 
+				},
 				previewerVisible: false,
-				gifLink: '', 
-				gifFullLink: '', 
+				previewType: 1,// 1动态 2静态
+				shortVideoLink: '', 
+				shortVideoFullLink: '',
+				screenshotLink: '',
+				screenshotFullLink: '',
 				shooting: false,
+
 				like: 0, 
 				likeLocking: false,
 				newStarForm: {starName: '', visible: false},
@@ -794,7 +799,6 @@ module.exports = function(){
 				if(!counting){
 					captureBtn.data('counting', true);
 					_this.captureParams.st = _this.getVideoTime();
-					_this.captureParams.vId = _this.videoId;
 
 					countdown();
 				}else{
@@ -807,7 +811,7 @@ module.exports = function(){
 					let t = 10;
 					_this.intervalId = setInterval(function(){
 						t--;
-						captureBtn.val('截图中 ' + t);
+						captureBtn.val('截取中 ' + t);
 
 						if(t == 0){
 							clearCountdown();
@@ -818,20 +822,22 @@ module.exports = function(){
 				function clearCountdown(){
 					clearInterval(_this.intervalId);
 					captureBtn.data('counting', false);
-					captureBtn.val('开始截图');
+					captureBtn.val('截取小视频');
 				}
 			},
 
 			capture: function(){
 				this.captureParams.et = this.getVideoTime();
+				
 				if(this.captureParams.et <= this.captureParams.st){
 					return;
 				}
 
 				this.shooting = true;
 				
-				tools.xhr('/gifLink?' + $.param(this.captureParams), function(resData){
-					this.gifLink = resData;
+				tools.xhr('/shortVideoLink?' + $.param(this.captureParams), function(resData){
+					this.shortVideoLink = resData;
+					this.shortVideoFullLink = location.origin + this.shortVideoLink;
 					this.shooting = false;
 				}.bind(this), null, null, function(ret){ 
 					this.$message.warning({
@@ -844,13 +850,31 @@ module.exports = function(){
 				window.vEle.pause();
 			},
 
+			screenshot: function(){
+				this.captureParams.st = this.getVideoTime();
+				let params = Object.assign({}, this.captureParams);
+				delete params.et;
+				params.size = $(window.vEle).width() + 'x' + $(window.vEle).height();
+
+				tools.xhr('/videoScreenshot?' + $.param(params), function(resData){
+					this.screenshotLink = resData;
+					this.screenshotFullLink = location.origin + this.screenshotLink;
+				}.bind(this), null, null, function(ret){ 
+					this.$message.warning({
+						message: '视频截图出错'
+					});
+				}.bind(this));
+
+				window.vEle.pause();
+			},
+
 			// 点击分享时
 			popShow: function(){
 				tools.insertScriptTag(1, "../lib/qrcode.js", {onload: function(){
-					if(this.gifLink){
-						this.gifFullLink = location.origin + this.gifLink;
+					if(this.shortVideoLink){
+						
 						var qrcode = new QRCode($('#qrcode-shoot').empty()[0], {
-							text: this.gifFullLink,
+							text: this.shortVideoFullLink,
 							width: 128,
 							height: 128,
 							colorDark : "#000000",
@@ -905,7 +929,9 @@ module.exports = function(){
 				this.previewerVisible = true;
 			},
 
-			
+			previewScreenshot: function(){
+
+			},
 			// ==需要重写==
 			// 赞 贬
 			// 新增 移出
