@@ -378,6 +378,7 @@ app {
 }
 #shoot-container > img {
   max-height: 300px;
+  max-width: 100%;
 }
 .time {
   font-size: 13px;

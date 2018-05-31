@@ -220,12 +220,19 @@ const routerConfig = {
 
         '/videoScreenshot': {
             fn: function(params, res, req){
+                const fs = require('fs');
                 
                 let src = global.staticRoot + `/multimedia/pristine_v/${params.vId}${params.ext}`,
                     filename = `${params.vId}-${+new Date()}`,
                     relPath = `./multimedia/screenshot/${filename}.jpg`,
                     dest = require('path').resolve(global.staticRoot, relPath),
                     st = params.st;
+
+                let screenshotFolder = global.staticRoot + '/multimedia/screenshot';
+                if(!fs.existsSync(screenshotFolder)){
+                    fs.mkdirSync(screenshotFolder);
+                }
+
                 require('../ffmpeg/screenshot.js')(src, dest, st, params.size, function(){
                     let conn = require('./connect.js').conn;
                     let sql = `insert into usr_screenshot_star (usr_id, screenshot, v_id, type) values (${req.usrInfo.usrId}, '${filename}', ${params.vId}, 2)`;

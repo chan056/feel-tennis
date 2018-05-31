@@ -1,3 +1,5 @@
-1. 删表usr_star
 
-2. 备注usr_screenshot_star
+==180531
+1. 删表usr_star
+2. usr_screenshot_star
+    新增type 1动态 2静态
