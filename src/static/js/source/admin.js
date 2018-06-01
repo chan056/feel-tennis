@@ -159,7 +159,7 @@ temp.uploadAdmin =  `
             </el-col>
         </el-row>
 
-        <el-dialog v-bind:title="newSportConfig.title" :visible.sync="newSportConfig.visibility" @close="newSportConfig.visibility=true">
+        <el-dialog v-bind:title="newSportConfig.title" :visible.sync="newSportConfig.visibility" @close="sId && (newSportConfig.visibility=true)">
             <el-form class="newTagDialog">
                 <el-form-item label="运动名称">
                     <el-input v-model="newSport.name" auto-complete="off"></el-input>
@@ -176,7 +176,7 @@ temp.uploadAdmin =  `
             </div>
         </el-dialog>
 
-        <el-dialog v-bind:title="albumConfig.title" :visible.sync="albumConfig.visibility" @close="dealCloseDialog">
+        <el-dialog v-bind:title="albumConfig.title" :visible.sync="albumConfig.visibility" @close="aId && (albumConfig.visibility = true)">
             <el-form class="newAlbumDialog">
                 <el-form-item label="运动项目">
                     <el-select v-model="newAlbum.sportId" 
@@ -384,12 +384,6 @@ COMPONENTS.UploadAdmin = {
 		return d;
 	},
 	methods: {
-        dealCloseDialog: function(){
-            if(this.aId){
-                this.albumConfig.visibility = true;
-            }
-        },
-
         backToAlbumList: function(){
             location.href="#/albumsAdmin";
         },
@@ -474,8 +468,8 @@ COMPONENTS.UploadAdmin = {
 		postTag(){
 
 			tools.xhr('/tag', function(){
-				console.log(arguments)
-			}, 'post', this.newTag);
+                this.queryTags();
+			}.bind(this), 'post', this.newTag);
 			
 		},
 

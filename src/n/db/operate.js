@@ -550,29 +550,18 @@ let operations = {
 			v_id = ${ params.vId }
 		AND usr_id = ${ this.usrInfo.usrId } 
 		AND type = ${ params.type }`;
-		
+
 		sql = disposePageSql(sql, params);
 
 		conn.query(sql, function (err, list, fields) {
 			if (err) return throwError(err, res);
 
-			// conn.query(`SELECT
-			// 		count(*) as count
-			// 	FROM
-			// 		usr_screenshot_star
-			// 	WHERE
-			// 		v_id = ${ params.vId }
-			// 	AND usr_id = ${ this.usrInfo.usrId }`, 
+			let json = JSON.stringify({
+				datalist: list,
+				total: list.length
+			});
 
-			// function(err, result){
-
-				let json = JSON.stringify({
-					datalist: list,
-					total: list.length
-				});
-
-				res.end(json);
-			// })
+			res.end(json);
 		}.bind(this));
 	},
 
