@@ -577,21 +577,41 @@ module.exports = function(){
     
         usrVshoots: `
             <div id="" class="main-model">
-                <h2>截图列表</h2>
-                <ul class="block-list" id="video-shoot-list">
-                    <li class="" v-for="shoot in shoots">
-                        <img :data-src="'/multimedia/gif/'+shoot.screenshot" 
-                        :src="'/multimedia/gif/'+shoot.screenshot + '.jpg'" 
+                <h2>动态截图</h2>
+
+                <ul class="block-list" id="dynamic-shoot-list">
+                    <li class="" v-for="shoot in dynamicShoots">
+                        <img 
+                        v-on:mouseover="toggleShow($event.target, shoot.screenshot, 1)" 
+                        v-on:mouseout="toggleShow($event.target, shoot.screenshot, 2)"
+                        :src="'/multimedia/gif/' + shoot.screenshot + '.jpg'" 
                         class="block-thumb video-thumb"
-                        alt="screenshot"/>
+                        alt="loading..."/>
                     </li>
                 </ul>
     
                 <el-pagination
                     layout="prev, pager, next"
-                    :total="total"
+                    :total="dynamicTotal"
                     :page-size="pageSize"
-                    @current-change="handlePageChange">
+                    @current-change="handleDynamicPageChange">
+                </el-pagination>
+
+                <h2>静态截图</h2>
+                <ul class="block-list" id="static-shoot-list">
+                    <li class="" v-for="shoot in staticShoots">
+                        <img
+                        :src="'/multimedia/screenshot/' + shoot.screenshot + '.jpg'"
+                        class="block-thumb video-thumb"
+                        alt="loading..."/>
+                    </li>
+                </ul>
+
+                <el-pagination
+                    layout="prev, pager, next"
+                    :total="staticTotal"
+                    :page-size="pageSize"
+                    @current-change="handleStaticPageChange">
                 </el-pagination>
             </div>
         `,

@@ -9319,7 +9319,7 @@ module.exports = function () {
 
         vStar: '\n            <div id="video-list" class="main-model">\n                <h2>\u89C6\u9891\u5217\u8868</h2>\n                <ul class="block-list video-list">\n                    <li v-for="video in starVideos">\n                        <router-link :to="{path: \'/videos/\'+ video.id }">\n                            <img @mouseover="dynamivePreview($event);" @mouseout="staticPreview($event);" \n                            :src="\'/multimedia/ts/\'+video.id+\'/cover.jpg\'" class="block-thumb" alt="video"/>\n                            <h3 class="block-title video-title ellipsis">\n                                <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>\n                            </h3>\n                        </router-link>\n                    </li>\n                </ul>\n    \n                <el-pagination\n                    layout="prev, pager, next"\n                    :total="total"\n                    :page-size="pageSize"\n                    @current-change="handlePageChange">\n                </el-pagination>\n            </div>\n        ',
 
-        usrVshoots: '\n            <div id="" class="main-model">\n                <h2>\u622A\u56FE\u5217\u8868</h2>\n                <ul class="block-list" id="video-shoot-list">\n                    <li class="" v-for="shoot in shoots">\n                        <img :data-src="\'/multimedia/gif/\'+shoot.screenshot" \n                        :src="\'/multimedia/gif/\'+shoot.screenshot + \'.jpg\'" \n                        class="block-thumb video-thumb"\n                        alt="screenshot"/>\n                    </li>\n                </ul>\n    \n                <el-pagination\n                    layout="prev, pager, next"\n                    :total="total"\n                    :page-size="pageSize"\n                    @current-change="handlePageChange">\n                </el-pagination>\n            </div>\n        ',
+        usrVshoots: '\n            <div id="" class="main-model">\n                <h2>\u52A8\u6001\u622A\u56FE</h2>\n\n                <ul class="block-list" id="dynamic-shoot-list">\n                    <li class="" v-for="shoot in dynamicShoots">\n                        <img \n                        v-on:mouseover="toggleShow($event.target, shoot.screenshot, 1)" \n                        v-on:mouseout="toggleShow($event.target, shoot.screenshot, 2)"\n                        :src="\'/multimedia/gif/\' + shoot.screenshot + \'.jpg\'" \n                        class="block-thumb video-thumb"\n                        alt="loading..."/>\n                    </li>\n                </ul>\n    \n                <el-pagination\n                    layout="prev, pager, next"\n                    :total="dynamicTotal"\n                    :page-size="pageSize"\n                    @current-change="handleDynamicPageChange">\n                </el-pagination>\n\n                <h2>\u9759\u6001\u622A\u56FE</h2>\n                <ul class="block-list" id="static-shoot-list">\n                    <li class="" v-for="shoot in staticShoots">\n                        <img\n                        :src="\'/multimedia/screenshot/\' + shoot.screenshot + \'.jpg\'"\n                        class="block-thumb video-thumb"\n                        alt="loading..."/>\n                    </li>\n                </ul>\n\n                <el-pagination\n                    layout="prev, pager, next"\n                    :total="staticTotal"\n                    :page-size="pageSize"\n                    @current-change="handleStaticPageChange">\n                </el-pagination>\n            </div>\n        ',
 
         datum: '\n            <div>\n                <div style="width: 300px; margin: auto; padding: 10px 20px;">\n                    <el-form ref="datum-form" :rules="datumForm.rules" :model="datumForm.unstableDatum" label-width="80px" >\n                        <el-form-item label="\u6635\u79F0" prop="nickname">\n                            <el-input v-model="datumForm.unstableDatum.nickname" v-bind:disabled="!datumForm.editable"></el-input>\n                        </el-form-item>\n    \n                        <el-form-item label="\u5FAE\u4FE1" prop="wechat">\n                            <el-input type="tel" v-model="datumForm.unstableDatum.wechat" v-bind:disabled="!datumForm.editable"></el-input>\n                        </el-form-item>\n\n                        <el-form-item label="\u624B\u673A" prop="telephone">\n                            <el-input v-model="datumForm.unstableDatum.telephone" v-bind:disabled="!datumForm.editable"></el-input>\n                        </el-form-item>\n    \n                        <el-form-item label="\u7B49\u7EA7" prop="level" @change="showLevelTip()">\n                            <el-select\n                            v-model="datumForm.unstableDatum.level"\n                            placeholder="" \n                            v-bind:disabled="!datumForm.editable">\n                                <el-option\n                                    v-for="level in levels"\n                                    :key="level"\n                                    :label="level"\n                                    :value="level">\n                                </el-option>\n                            </el-select>\n                        </el-form-item>\n    \n                        <el-form-item label="\u72B6\u6001" prop="status">\n                            <el-select\n                            v-model="datumForm.unstableDatum.status"\n                            placeholder="" \n                            v-bind:disabled="!datumForm.editable">\n                                <el-option\n                                    v-for="status in statuses"\n                                    :key="status.id"\n                                    :label="status.name"\n                                    :value="status.id">\n                                </el-option>\n                            </el-select>\n                        </el-form-item>\n    \n                        <el-form-item label="\u6027\u522B" prop="sex">\n                            <el-select\n                            v-model="datumForm.unstableDatum.sex"\n                            placeholder="" \n                            v-bind:disabled="!datumForm.editable">\n                                <el-option\n                                    v-for="sex in sexes"\n                                    :key="sex.id"\n                                    :label="sex.name"\n                                    :value="sex.id">\n                                </el-option>\n                            </el-select>\n                        </el-form-item>\n    \n                        <el-form-item label="\u5934\u50CF" prop="avatar">\n                            <img v-if="!datumForm.editable" :src="datumForm.unstableDatum.avatar" alt="avatar"></img>\n                            <el-upload\n                                v-if="datumForm.editable"\n                                class=""\n                                action="/upload"\n                                :data="{type:\'img\'}"\n                                :on-success="handleUploadSuccess"\n                                v-model="datumForm.unstableDatum.avatar"\n                                >\n                                <el-button size="small" type="primary">\u70B9\u51FB\u4E0A\u4F20</el-button>\n                                <div slot="tip" class="el-upload__tip">\u53EA\u80FD\u4E0A\u4F20jpg/png\u6587\u4EF6\uFF0C\u4E14\u4E0D\u8D85\u8FC7500kb</div>\n                            </el-upload>\n                            <div v-if="datumForm.editable" class="default-avatar-list">\n                                <img @click="selectDefaultAvatar($event)" src="/img/avatar/default/male.png" alt="default male"/>\n                                <img @click="selectDefaultAvatar($event)" src="/img/avatar/default/female.png" alt="default female"/>\n                            </div>\n                        </el-form-item>\n    \n                        <el-form-item>\n                            <el-button  type="primary" @click="datumForm.editable=true;" v-if="!datumForm.editable">\u7F16\u8F91</el-button>\n                            <el-button  type="primary" @click="submitForm(\'datum-form\')" v-if="datumForm.editable">\u786E\u8BA4</el-button>\n                            <el-button  type="primary" @click="datumForm.editable=false; cancelUpdateUsrDatum()" v-if="datumForm.editable">\u53D6\u6D88</el-button>\n                        </el-form-item>\n                    </el-form>\n                </div>\n            </div>\n        ',
 
@@ -10011,7 +10011,7 @@ module.exports = function () {
 					vId: this.videoId
 				},
 				previewerVisible: false,
-				previewType: 1,
+				previewType: 1, // 1动态 2静态
 				shortVideoLink: '',
 				shortVideoFullLink: '',
 				screenshotLink: '',
@@ -11169,8 +11169,10 @@ module.exports = function () {
 		data: function data() {
 			// console.log(this.$route.query.vId)
 			var d = {
-				shoots: [],
-				total: 0,
+				dynamicShoots: [],
+				dynamicTotal: 0,
+				staticShoots: [],
+				staticTotal: 0,
 				pageSize: CONSTANT.PAGESIZE
 			};
 
@@ -11180,33 +11182,41 @@ module.exports = function () {
 		template: temp.usrVshoots,
 
 		methods: {
-			fetchVideoShoot: function fetchVideoShoot(pageNum) {
+			fetchVideoShoot: function fetchVideoShoot(pageNum, type) {
 				tools.xhr('/usrVshoot?vId=' + this.$route.query.vId, function (resData) {
-					this.shoots = resData.datalist;
-					this.total = resData.total;
+					if (type == 1) {
+						this.dynamicShoots = resData.datalist;
+						this.dynamicTotal = resData.total;
+					} else if (type == 2) {
+						this.staticShoots = resData.datalist;
+						this.staticTotal = resData.total;
+					}
 				}.bind(this), 'get', {
 					pageNum: pageNum,
-					pageSize: this.pageSize
+					pageSize: this.pageSize,
+					type: type
 				});
 			},
 
-			handlePageChange: function handlePageChange(i) {
-				this.fetchVideoShoot(i - 1);
+			toggleShow: function toggleShow(t, screenshot, status) {
+				var ext = ['gif', 'jpg'][status - 1];
+				t.src = '/multimedia/gif/' + screenshot + '.' + ext;
+			},
+
+			handleDynamicPageChange: function handleDynamicPageChange(i) {
+				this.fetchVideoShoot(i - 1, 1);
+			},
+
+			handleStaticPageChange: function handleStaticPageChange(i) {
+				this.fetchVideoShoot(i - 1, 2);
 			}
 		},
 
 		mounted: function mounted() {
-			this.fetchVideoShoot(0);
+			this.fetchVideoShoot(0, 1);
+			this.fetchVideoShoot(0, 2);
 
 			tools.togglePageIE(this);
-
-			$('#video-shoot-list').on('mouseover click', '.video-thumb', function () {
-				var src = $(this).data('src');
-				this.src = src + '.gif';
-			}).on('mouseout', function () {
-				// console.log(this)
-				// this.src = src + '.jpg';
-			});
 		}
 	};
 

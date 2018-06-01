@@ -46,13 +46,13 @@ module.exports = function(captureParams, res, req){
 
             if(req && res){// 用户截图
                 let conn = require('../db/connect.js').conn;
-                let sql = `insert into usr_screenshot_star (usr_id, screenshot, v_id) values (${req.usrInfo.usrId}, '${gifFilename}', ${videoName}), 1`;
+                let sql = `insert into usr_screenshot_star (usr_id, screenshot, v_id, type) values (${req.usrInfo.usrId}, '${gifFilename}', ${videoName}, 1)`;
                 conn.query(sql, function(err, result){
                     if(err)
                         console.log(err);
                 });
 
-                return res.end(output[0]);
+                res.end(output[0]);
 
                 require('./screenshot')(
                     vSouce,

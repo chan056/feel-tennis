@@ -1845,8 +1845,10 @@ module.exports = function(){
 		data: function () {
 			// console.log(this.$route.query.vId)
 			var d = {
-				shoots: [],
-				total: 0,
+				dynamicShoots: [],
+				dynamicTotal: 0,
+				staticShoots: [],
+				staticTotal: 0,
 				pageSize: CONSTANT.PAGESIZE
 			};
 
@@ -1856,33 +1858,41 @@ module.exports = function(){
 		template: temp.usrVshoots,
 
 		methods: {
-			fetchVideoShoot: function(pageNum){
+			fetchVideoShoot: function(pageNum, type){
 				tools.xhr('/usrVshoot?vId=' + this.$route.query.vId, function(resData){
-					this.shoots = resData.datalist;
-					this.total = resData.total;
+					if(type == 1){
+						this.dynamicShoots = resData.datalist;
+						this.dynamicTotal = resData.total;
+					}else if(type == 2){
+						this.staticShoots = resData.datalist;
+						this.staticTotal = resData.total;
+					}
 				}.bind(this),'get',{
 					pageNum: pageNum,
-					pageSize: this.pageSize
+					pageSize: this.pageSize,
+					type: type
 				});
 			},
 
-			handlePageChange: function(i){
-				this.fetchVideoShoot(i-1);
+			toggleShow: function(t, screenshot, status){
+				let ext = ['gif', 'jpg'][status-1];
+				t.src = `/multimedia/gif/${screenshot}.${ext}`
+			},
+
+			handleDynamicPageChange: function(i){
+				this.fetchVideoShoot(i-1, 1);
+			},
+
+			handleStaticPageChange: function(i){
+				this.fetchVideoShoot(i-1, 2);
 			},
 		},
 
 		mounted: function(){
-			this.fetchVideoShoot(0);
+			this.fetchVideoShoot(0, 1);
+			this.fetchVideoShoot(0, 2);
 
 			tools.togglePageIE(this);
-
-			$('#video-shoot-list').on('mouseover click', '.video-thumb', function(){
-				let src = $(this).data('src');
-				this.src = src + '.gif';
-			}).on('mouseout', function(){
-				// console.log(this)
-				// this.src = src + '.jpg';
-			});
 		}
 	}
 
