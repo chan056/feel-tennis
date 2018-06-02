@@ -741,23 +741,20 @@ let operations = {
 	},
 
 	queryPageVideos: function(res, qualification, params){
-		var sql = `SELECT * from video order by update_time desc`;
+		var sql = `SELECT * from video order by id desc`;
 
 		sql = disposePageSql(sql, params);
 
 		conn.query(sql, function(err, list, fields){
 			if(err)
-				console.log(err.sql, err.sqlMessage) ;
-			
-			conn.query('select count(*) as count from video', function(err, result){
+				console.log(err) ;
 
 				let json = JSON.stringify({
 					datalist: list,
-					total: result[0].count
+					total: list.length
 				});
 
 				res.end(json);
-			})
 		});
 	},
 
