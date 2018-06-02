@@ -747,14 +747,17 @@ let operations = {
 
 		conn.query(sql, function(err, list, fields){
 			if(err)
-				console.log(err) ;
+				console.log(err.sql, err.sqlMessage) ;
+			
+			conn.query('select count(*) as count from video', function(err, result){
 
 				let json = JSON.stringify({
 					datalist: list,
-					total: list.length
+					total: result[0].count
 				});
 
 				res.end(json);
+			})
 		});
 	},
 
