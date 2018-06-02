@@ -913,11 +913,11 @@ let operations = {
 				let videoGenerator = require('../ffmpeg/generate_video');
 				fs.renameSync(videoAbsPath, videoStorePath);// 用于生成gif
 
-				videoGenerator.watermark(videoStorePath, function(){
+				// videoGenerator.watermark(videoStorePath, function(){
 					videoGenerator.execM3U(videoStorePath, tsDir);
 					videoGenerator.screenShot(videoStorePath, tsDir);
 					videoGenerator.dynamicPreview(videoStorePath, tsDir, vId);
-				});
+				// });
 
 				subtitleAbsPath && videoGenerator.storeSubtitle(subtitleAbsPath, tsDir);
 			})
