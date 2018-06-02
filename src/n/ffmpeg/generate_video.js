@@ -52,6 +52,10 @@ function execM3U(videoStorePath, tsDir){
                 console.error('error: ' + error);
                 return;
             }
+
+            if(i == 720){
+                console.log(`DONE//${videoStorePath}`)
+            }
         });
     }
 }
