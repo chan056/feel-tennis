@@ -16,6 +16,7 @@ module.exports.dynamicPreview = dynamicPreview;
 module.exports.watermark = watermark;
 
 function execM3U(videoStorePath, tsDir){
+    console.log(`M3U//${tsDir}`);
     let multiResolution = {
         360: {scaleW: 640, scaleH: 360, bv: 800, maxrate: 856, bufsize: 1200, ba: 96},
         480: {scaleW: 842, scaleH: 480, bv: 1400, maxrate: 1498, bufsize: 2100, ba: 128},
