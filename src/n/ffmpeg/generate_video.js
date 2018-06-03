@@ -31,7 +31,7 @@ function execM3U(videoStorePath, tsDir){
     
     fs.readFile(sourcePlaylist, (err, data) => {
         fs.writeFile(targetPlaylist, data, (err) => {
-            if (err) throw err;
+            if (err) console.log(err);
             // console.log('The file has been saved!');
         });
     });
@@ -46,9 +46,9 @@ function execM3U(videoStorePath, tsDir){
 
         // console.log(cmd)
 
-        exec(cmd, function(error, stdout, stderr){
+        exec(cmd,{maxBuffer: 1024 * 1024 * 400}, function(error, stdout, stderr){
             if(error) {
-                return console.error('error: ' + error);
+                return console.error(error);
             }
         });
     }
