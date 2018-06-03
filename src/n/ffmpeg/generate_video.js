@@ -36,20 +36,28 @@ function execM3U(videoStorePath, tsDir){
         });
     });
 
-    for(let i in multiResolution){
-        let resolution = multiResolution[i];
+    // for(let i in multiResolution){
+    //     let resolution = multiResolution[i];
 
+    //     cut(resolution);
+    // }
+
+    cut(multiResolution['480'], function(){
+        cut(multiResolution['720']);
+    });
+
+    function cut(resolution, fn){
         let tsFile = path.resolve(tsDir, `./${i}p_%03d.ts`);
         let m3u8File = path.resolve(tsDir, `./${i}p.m3u8`);
 
         let cmd = `ffmpeg -hide_banner -y -i ${videoStorePath} -vf scale=w=${resolution.scaleW}:h=${resolution.scaleH}:force_original_aspect_ratio=decrease -c:a aac -ar 48000 -c:v h264 -profile:v main -crf 20 -sc_threshold 0 -g 48 -keyint_min 48 -hls_time 4 -hls_playlist_type vod -b:v ${resolution.bv}k -maxrate ${resolution.maxrate}k -bufsize ${resolution.bufsize}k -b:a ${resolution.ba}k -hls_segment_filename ${tsFile} ${m3u8File}`;
 
-        // console.log(cmd)
-
-        exec(cmd,{maxBuffer: 1024 * 1024 * 400}, function(error, stdout, stderr){
+        exec(cmd, {maxBuffer: 1024 * 1024 * 1024}, function(error, stdout, stderr){
             if(error) {
                 return console.error(error);
             }
+
+            fn && fn();
         });
     }
 }
