@@ -16,7 +16,6 @@ module.exports.dynamicPreview = dynamicPreview;
 module.exports.watermark = watermark;
 
 function execM3U(videoStorePath, tsDir){
-    console.log(`M3U//${tsDir}`);
     let multiResolution = {
         360: {scaleW: 640, scaleH: 360, bv: 800, maxrate: 856, bufsize: 1200, ba: 96},
         480: {scaleW: 842, scaleH: 480, bv: 1400, maxrate: 1498, bufsize: 2100, ba: 128},
@@ -51,25 +50,8 @@ function execM3U(videoStorePath, tsDir){
             if(error) {
                 return console.error('error: ' + error);
             }
-
-            console.log(`DONE`)
         });
     }
-}
-
-// 生成视频封面
-function generateVideoCover(videoStorePath, tsDir){
-    let vDurationCmd = `coder$ ffprobe -show_format ${videoStorePath} | sed -n '/duration/s/.*=//p'`;
-    let screenshotCmd = `ffmpeg -ss 00:10:00 -i ${videoStorePath} -y -f image2 -vframes 1 -s ${require('../constant').videoCoverSize} cover.jpg`;
-
-    exec(vDurationCmd, function(error, out){
-        if(error){
-            console.log(error);
-        }
-
-        console.log(out)
-    })
-
 }
 
 function storeSubtitle(subtitleAbsPath, tsDir){
