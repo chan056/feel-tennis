@@ -42,13 +42,14 @@ function execM3U(videoStorePath, tsDir){
     //     cut(resolution);
     // }
 
-    cut(multiResolution['480'], function(){
-        cut(multiResolution['720']);
+    cutVideo(480, function(){
+        cutVideo(720);
     });
 
-    function cut(resolution, fn){
-        let tsFile = path.resolve(tsDir, `./${i}p_%03d.ts`);
-        let m3u8File = path.resolve(tsDir, `./${i}p.m3u8`);
+    function cutVideo(videoWidth, fn){
+        resolution = multiResolution[videoWidth]
+        let tsFile = path.resolve(tsDir, `./${videoWidth}p_%03d.ts`);
+        let m3u8File = path.resolve(tsDir, `./${videoWidth}p.m3u8`);
 
         let cmd = `ffmpeg -hide_banner -y -i ${videoStorePath} -vf scale=w=${resolution.scaleW}:h=${resolution.scaleH}:force_original_aspect_ratio=decrease -c:a aac -ar 48000 -c:v h264 -profile:v main -crf 20 -sc_threshold 0 -g 48 -keyint_min 48 -hls_time 4 -hls_playlist_type vod -b:v ${resolution.bv}k -maxrate ${resolution.maxrate}k -bufsize ${resolution.bufsize}k -b:a ${resolution.ba}k -hls_segment_filename ${tsFile} ${m3u8File}`;
 
