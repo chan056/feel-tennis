@@ -47,7 +47,7 @@ function execM3U(videoStorePath, tsDir){
 
         // console.log(cmd)
 
-        exec(cmd, {maxBuffer: 1024 * 1024* 50}, function(error, stdout, stderr){
+        exec(cmd, function(error, stdout, stderr){
             if(error) {
                 return console.error('error: ' + error);
             }
