@@ -47,16 +47,18 @@ function execM3U(videoStorePath, tsDir){
 
         // console.log(cmd)
 
-        exec(cmd, function(error, stdout, stderr){
-            if(error) {
-                console.error('error: ' + error);
-                return;
-            }
-
-            if(i == 720){
-                console.log(`DONE//${videoStorePath}`)
-            }
-        });
+        (function(I){
+            exec(cmd, {maxBuffer: 1024 * 1024}, function(error, stdout, stderr){
+                if(error) {
+                    console.error('error: ' + error);
+                    return;
+                }
+    
+                if(I == 720){
+                    console.log(`DONE//${videoStorePath}`)
+                }
+            });
+        })(i)
     }
 }
 
