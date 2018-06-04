@@ -616,13 +616,30 @@ let operations = {
 				ull.last_login_city = '${city}'
 			AND ud.usr_id = ull.usr_id`;
 
-		conn.query(sql, function (err, result, fields) {
-			if (err) return throwError(err, res);
+		let bSql = `SELECT usr_id FROM compete_black WHERE recorder_id = ${this.usrInfo.usrId} GROUP BY usr_id`;
+		conn.query(bSql, function(err, competeBlacks){
+			
+			let blackIds = [];
+			competeBlacks.forEach(function(black){
+				blackIds.push(black.usr_id);
+			});
 
-			if(result){
-				result = JSON.stringify(result);
-				res.end(result);
-			}
+			conn.query(sql, function (err, players, fields) {
+				if (err) return throwError(err, res);
+	
+				if(players){
+					if(blackIds.length){
+						players.forEach(function(p){
+							if(blackIds.indexOf(p.usr_id) > -1){
+								p.isBlack = true;
+							}
+						});
+					}
+
+					players = JSON.stringify(players);
+					res.end(players);
+				}
+			});
 		});
 	},
 

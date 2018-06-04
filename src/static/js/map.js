@@ -50,7 +50,7 @@
     
     map.addEventListener("click", function(e){        
         var pt = e.point;
-        console.log(pt);
+        // console.log(pt);
 
         geoc.getLocation(pt, function(rs){
             var addComp = rs.addressComponents;
@@ -83,7 +83,22 @@
             imgLoader.empty();
 
             res.forEach(function(usr){
-                var player = [usr.nickname, usr.level, `${usr.win}胜${usr.lose}负${usr.tie}平`];
+                
+                var playerInfo = [
+                    usr.nickname, 
+                    usr.level, 
+                    `${usr.win}胜${usr.lose}负${usr.tie}平`,
+                ];
+
+                if(usr.like + usr.unlike){
+                    var feedback = (usr.like / (usr.like + usr.unlike)*100).toFixed(2) + '%';
+                    playerInfo.push(`好评率${feedback}`)
+                }
+
+                if(usr.isBlack){
+                    playerInfo.unshift('<黑名单玩家>')
+                }
+
                 var avatar = usr.avatar;
                 var sex = usr.sex;
                 if(!avatar){
@@ -106,11 +121,17 @@
 
                     var coords = {lng: lastLoginCoords[0], lat: lastLoginCoords[1]};
             
-                    var mk = new BMap.Marker(coords, {icon: avatarIcon, title: '编号：'+ usr.usr_id});
+                    var mk = new BMap.Marker(coords, {
+                        icon: avatarIcon, 
+                        title: '编号：'+ usr.usr_id
+                        // enableDragging//允许拖拽
+                    });
+
                     map.addOverlay(mk);
+
                     usr.is_self && mk.setAnimation(BMAP_ANIMATION_BOUNCE); // 跳动 //BMAP_ANIMATION_DROP
             
-                    var label = new BMap.Label(player.join('<br/>'), {
+                    var label = new BMap.Label(playerInfo.join('<br/>'), {
                         position : coords,
                         offset   : new BMap.Size(0, 0)
                     });
@@ -143,9 +164,19 @@
                     if(!usr.is_self){
                         var matchingUsrIds = collectMatchingUsrs();
                         if(matchingUsrIds.indexOf(usr.usr_id) == -1){// 非交战
-                            if(usr.status == 1 ){// 接收对战
+                            if(usr.status == 1 ){// 接受交战
                                 var menu = new BMap.MenuItem('交战',function(e,ee,marker){
-                                    window.foundMatch(usr.usr_id);
+                                    if(usr.isBlack){
+                                        Vue.prototype.$confirm('该玩家在您的黑名单', '提示', {
+                                            confirmButtonText: '确定',
+                                            cancelButtonText: '取消',// 取消黑名单todo
+                                            type: 'warning'
+                                        }).then(function(){
+                                            window.foundMatch(usr.usr_id);
+                                        });
+                                    }else{
+                                        window.foundMatch(usr.usr_id);
+                                    }
                                 }.bind(mk));
                                 markerMenu.addItem(menu);
                             }

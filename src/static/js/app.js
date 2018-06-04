@@ -10098,7 +10098,6 @@ module.exports = function () {
 
 		methods: {
 			fetchVideoInfo: function fetchVideoInfo() {
-				console.log(this, this);
 				tools.xhr('/videos/' + this.videoId, function (resData) {
 					// console.log(resData)
 					if (resData) {
@@ -11127,7 +11126,6 @@ module.exports = function () {
 	COMPONENTS.Vstar = {
 		props: ['vStarId'],
 		data: function data() {
-			console.log(this.vStarId);
 			var d = {
 				starVideos: [],
 				total: 0,
@@ -11272,26 +11270,28 @@ module.exports = function () {
 					return;
 				}
 
-				if (this.matches.length >= 1) {
-					this.$message({
+				var t = this;
+
+				if (t.matches.length >= 1) {
+					t.$message({
 						message: '请先关闭之前的比赛',
 						type: 'warning'
 					});
 				} else {
-					this.$confirm('确定发起挑战？', '提示', {
+					t.$confirm('确定发起挑战？', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
 						type: 'warning'
 					}).then(function () {
 						tools.xhr('/match', function (res) {
-							this.fetchRelatedMatches();
-							this.$message({
+							t.fetchRelatedMatches();
+							t.$message({
 								message: '比赛发起成功',
 								type: 'success'
 								// duration: 0
 							});
 							refreshMapPlayer();
-						}.bind(this), 'post', {
+						}, 'post', {
 							defenseId: defenseId
 						});
 					}).catch(function () {});
