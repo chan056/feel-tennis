@@ -9393,84 +9393,86 @@ module.exports = function () {
 	var COMPONENTS = {};
 
 	COMPONENTS.HeaderComponent = {
-		el: 'app-header',
+		// el: 'app-header',
 
 		template: temp.header,
 
-		data: {
-			searchForm: {
-				name: ''
-			},
+		data: function data() {
+			return {
+				searchForm: {
+					name: ''
+				},
 
-			searchFormRules: {
-				name: [
-				//   { required: true, message: ' '/* , trigger: 'blur'  */},
-				{ min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' }]
-			},
+				searchFormRules: {
+					name: [
+					//   { required: true, message: ' '/* , trigger: 'blur'  */},
+					{ min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' }]
+				},
 
-			registForm: {
-				formLabelWidth: '100px',
-				visible: false,
-				name: '',
-				psw: '',
-				email: ''
-			},
+				registForm: {
+					formLabelWidth: '100px',
+					visible: false,
+					name: '',
+					psw: '',
+					email: ''
+				},
 
-			registFormRule: {
-				name: [{ required: true, message: '请输入用户名', trigger: 'blur' }, { min: 5, max: 30, message: '长度在 5-30', trigger: 'blur' }, { validator: function validator(rule, value, callback) {
-						tools.xhr('/checkUsernameExist?name=' + value, function (d) {
-							if (d) {
-								return callback(new Error('用户名已存在'));
-							} else {
-								return callback();
-							}
-						});
-					}, trigger: 'blur' }],
-				psw: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-				email: [{ type: 'email', required: true, message: '请输入正确格式邮箱', trigger: 'change' }, { validator: function validator(rule, value, callback) {
-						tools.xhr('/checkEmailExist?email=' + value, function (d) {
-							if (d) {
-								return callback(new Error('邮箱已存在'));
-							} else {
-								return callback();
-							}
-						});
-					}, trigger: 'blur' }],
-				captcha: [{ required: true, message: '请输入计算结果', trigger: 'blur' }]
-			},
+				registFormRule: {
+					name: [{ required: true, message: '请输入用户名', trigger: 'blur' }, { min: 5, max: 30, message: '长度在 5-30', trigger: 'blur' }, { validator: function validator(rule, value, callback) {
+							tools.xhr('/checkUsernameExist?name=' + value, function (d) {
+								if (d) {
+									return callback(new Error('用户名已存在'));
+								} else {
+									return callback();
+								}
+							});
+						}, trigger: 'blur' }],
+					psw: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+					email: [{ type: 'email', required: true, message: '请输入正确格式邮箱', trigger: 'change' }, { validator: function validator(rule, value, callback) {
+							tools.xhr('/checkEmailExist?email=' + value, function (d) {
+								if (d) {
+									return callback(new Error('邮箱已存在'));
+								} else {
+									return callback();
+								}
+							});
+						}, trigger: 'blur' }],
+					captcha: [{ required: true, message: '请输入计算结果', trigger: 'blur' }]
+				},
 
-			loginForm: {
-				formLabelWidth: '100px',
-				visible: false,
-				name: '',
-				psw: ''
-			},
+				loginForm: {
+					formLabelWidth: '100px',
+					visible: false,
+					name: '',
+					psw: ''
+				},
 
-			resetPswForm: {
-				formLabelWidth: '100px',
-				visible: false,
-				opsw: '',
-				npsw: '',
-				rules: {
-					name: [{ required: true, message: '请输入用户名', trigger: 'blur' }]
-				}
-			},
+				resetPswForm: {
+					formLabelWidth: '100px',
+					visible: false,
+					opsw: '',
+					npsw: '',
+					rules: {
+						name: [{ required: true, message: '请输入用户名', trigger: 'blur' }]
+					}
+				},
 
-			retrievePswForm: {
-				formLabelWidth: '100px',
-				visible: false,
-				npsw: '',
-				rules: {
-					name: [{ required: true, message: '请输入新密码', trigger: 'blur' }]
-				}
-			},
+				retrievePswForm: {
+					formLabelWidth: '100px',
+					visible: false,
+					npsw: '',
+					rules: {
+						name: [{ required: true, message: '请输入新密码', trigger: 'blur' }]
+					}
+				},
 
-			logoutForm: {
-				visible: false
-			},
+				logoutForm: {
+					visible: false
+				},
 
-			loginUsrInfo: {},
-			inmails: []
+				loginUsrInfo: {},
+				inmails: []
+			};
 		},
 
 		methods: {
@@ -9839,12 +9841,14 @@ module.exports = function () {
 	};
 
 	COMPONENTS.AsideComponent = {
-		el: 'app-aside',
+		// el: 'app-aside',
 
 		template: temp.aside,
 
-		data: {
-			loginUsrInfo: {}
+		data: function data() {
+			return {
+				loginUsrInfo: {}
+			};
 		},
 
 		created: function created() {
@@ -11531,28 +11535,28 @@ module.exports = function () {
 		path: '/',
 		redirect: '/sports'
 	}, {
-		path: '/sports',
+		path: 'sports',
 		component: COMPONENTS.Sports,
 		meta: { title: '首页' }
 	}, {
-		path: '/sports/:sportId',
+		path: 'sports/:sportId',
 		component: COMPONENTS.AlbumList,
 		meta: { title: '专辑列表' },
 		props: function props(route) {
 			return { sportId: route.params.sportId };
 		}
 	}, {
-		path: '/albums/:albumId',
+		path: 'albums/:albumId',
 		component: COMPONENTS.Album,
 		props: true,
 		meta: { title: '视频列表' }
 	}, {
-		path: '/videos/:videoId',
+		path: 'videos/:videoId',
 		component: COMPONENTS.Video,
 		meta: { title: '视频' },
 		props: true
 	}, {
-		path: '/searchedvideos',
+		path: 'searchedvideos',
 		component: COMPONENTS.searchedvideos,
 		meta: { title: '视频列表' },
 		beforeRouteUpdate: function beforeRouteUpdate(to, from, next) {
@@ -11560,35 +11564,35 @@ module.exports = function () {
 			next();
 		}
 	}, {
-		path: '/datum',
+		path: 'datum',
 		component: COMPONENTS.Datum
 	}, {
-		path: '/voteNext',
+		path: 'voteNext',
 		component: COMPONENTS.VoteNext
 	}, {
-		path: '/feedback',
+		path: 'feedback',
 		component: COMPONENTS.Feedback
 	}, {
-		path: '/about',
+		path: 'about',
 		component: COMPONENTS.About
 	}, {
-		path: '/emailConfirm',
+		path: 'emailConfirm',
 		component: COMPONENTS.EmailConfirm
 	}, {
-		path: '/retrievePsw',
+		path: 'retrievePsw',
 		component: COMPONENTS.RetrievePsw
 	}, {
-		path: '/stars',
+		path: 'stars',
 		component: COMPONENTS.Stars
 	}, {
-		path: '/vStar/:vStarId',
+		path: 'vStar/:vStarId',
 		component: COMPONENTS.Vstar,
 		props: true
 	}, {
-		path: '/usrVshoots',
+		path: 'usrVshoots',
 		component: COMPONENTS.UsrVshoots
 	}, {
-		path: '/compete',
+		path: 'compete',
 		component: COMPONENTS.Compete
 	}];
 

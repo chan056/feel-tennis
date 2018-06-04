@@ -2,100 +2,102 @@ module.exports = function(){
 	var COMPONENTS = {};
 
 	COMPONENTS.HeaderComponent = {
-		el: 'app-header',
+		// el: 'app-header',
 
 		template: temp.header,
 
-		data: {
-			searchForm: {
-				name: '',
-			},
-
-			searchFormRules: {
-				name: [
-				//   { required: true, message: ' '/* , trigger: 'blur'  */},
-					{ min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' }
-				],
-			},
-
-			registForm: {
-				formLabelWidth:'100px',
-				visible: false,
-				name: '',
-				psw: '',
-				email: ''
-			},
-
-			registFormRule: {
-				name: [
-					{ required: true, message: '请输入用户名', trigger: 'blur' },
-					{ min: 5, max: 30, message: '长度在 5-30', trigger: 'blur' },
-					{ validator: function(rule, value, callback){
-						tools.xhr('/checkUsernameExist?name=' + value, function(d){
-							if(d){
-								return callback(new Error('用户名已存在'));
-							}else{
-								return callback();
-							}
-						});
-					}, trigger: 'blur'}
-				],
-				psw: [
-					{ required: true, message: '请输入密码', trigger: 'blur' },
-				],
-				email: [
-					{ type: 'email', required: true, message: '请输入正确格式邮箱', trigger: 'change' },
-					{ validator: function(rule, value, callback){
-						tools.xhr('/checkEmailExist?email=' + value, function(d){
-							if(d){
-								return callback(new Error('邮箱已存在'));
-							}else{
-								return callback();
-							}
-						});
-					}, trigger: 'blur'}
-				],
-				captcha: [
-					{ required: true, message: '请输入计算结果', trigger: 'blur' },
-				]
-			},
-
-			loginForm: {
-				formLabelWidth: '100px',
-				visible: false,
-				name: '',
-				psw: ''
-			},
-
-			resetPswForm: {
-				formLabelWidth: '100px',
-				visible: false,
-				opsw: '',
-				npsw: '',
-				rules: {
+		data: function(){
+			return  {
+				searchForm: {
+					name: '',
+				},
+	
+				searchFormRules: {
 					name: [
-						{required: true, message: '请输入用户名', trigger: 'blur' },
-					]
-				}
-			},
-
-			retrievePswForm: {
-				formLabelWidth: '100px',
-				visible: false,
-				npsw: '',
-				rules: {
+					//   { required: true, message: ' '/* , trigger: 'blur'  */},
+						{ min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' }
+					],
+				},
+	
+				registForm: {
+					formLabelWidth:'100px',
+					visible: false,
+					name: '',
+					psw: '',
+					email: ''
+				},
+	
+				registFormRule: {
 					name: [
-						{required: true, message: '请输入新密码', trigger: 'blur' },
+						{ required: true, message: '请输入用户名', trigger: 'blur' },
+						{ min: 5, max: 30, message: '长度在 5-30', trigger: 'blur' },
+						{ validator: function(rule, value, callback){
+							tools.xhr('/checkUsernameExist?name=' + value, function(d){
+								if(d){
+									return callback(new Error('用户名已存在'));
+								}else{
+									return callback();
+								}
+							});
+						}, trigger: 'blur'}
+					],
+					psw: [
+						{ required: true, message: '请输入密码', trigger: 'blur' },
+					],
+					email: [
+						{ type: 'email', required: true, message: '请输入正确格式邮箱', trigger: 'change' },
+						{ validator: function(rule, value, callback){
+							tools.xhr('/checkEmailExist?email=' + value, function(d){
+								if(d){
+									return callback(new Error('邮箱已存在'));
+								}else{
+									return callback();
+								}
+							});
+						}, trigger: 'blur'}
+					],
+					captcha: [
+						{ required: true, message: '请输入计算结果', trigger: 'blur' },
 					]
-				}
-			},
-
-			logoutForm: {
-				visible: false
-			},
-
-			loginUsrInfo: {},
-			inmails: []
+				},
+	
+				loginForm: {
+					formLabelWidth: '100px',
+					visible: false,
+					name: '',
+					psw: ''
+				},
+	
+				resetPswForm: {
+					formLabelWidth: '100px',
+					visible: false,
+					opsw: '',
+					npsw: '',
+					rules: {
+						name: [
+							{required: true, message: '请输入用户名', trigger: 'blur' },
+						]
+					}
+				},
+	
+				retrievePswForm: {
+					formLabelWidth: '100px',
+					visible: false,
+					npsw: '',
+					rules: {
+						name: [
+							{required: true, message: '请输入新密码', trigger: 'blur' },
+						]
+					}
+				},
+	
+				logoutForm: {
+					visible: false
+				},
+	
+				loginUsrInfo: {},
+				inmails: []
+			}
 		},
 
 		methods: {
@@ -473,12 +475,14 @@ module.exports = function(){
 	};
 
 	COMPONENTS.AsideComponent = {
-		el: 'app-aside',
+		// el: 'app-aside',
 
 		template: temp.aside,
 
-		data: {
-			loginUsrInfo: {}
+		data: function(){
+			return {
+				loginUsrInfo: {}
+			}
 		},
 
 		created: function(){

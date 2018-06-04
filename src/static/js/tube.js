@@ -1,23 +1,40 @@
 
-$(function(){
+$(function () {
+	let AppHeader = COMPONENTS.HeaderComponent,
+		AppAside = COMPONENTS.AsideComponent;
 
-	var navInstance = new Vue(COMPONENTS.HeaderComponent);
+		const GlobalSetting = {
+		template: `
+			<div>
+				<AppHeader/>
+				<div id="root-container">
+					<AppAside/>
+					<div id="main">
+						<router-view id="main-router-view" class="view"></router-view>
+					</div>
+					<br class="clr">
+				</div>
+			</div>
+		`,
+		components: {
+			AppHeader,
+			AppAside
+		}
+	}
 
-	var asideInstance = new Vue(COMPONENTS.AsideComponent);
+	const router = new VueRouter({
+		// mode: 'history',
+		routes: [
+			{
+				path: '/',
+				component: GlobalSetting,
+				children: routeConfig
+			}
+		]
+	})
 
-	var mainRouter = new VueRouter({
-		routes: routeConfig
-	});
-	
-	mainRouter.beforeEach(function (to, from, next) {
-		console.log(from.fullPath, '==>', to.fullPath);
-		next();
-	});
-	
-	var mainInstance = new Vue({
-		router: mainRouter
-	});
-
-	mainInstance.$mount('#main-router-view');
-
+	new Vue({
+		router,
+		el: '#app'
+	})
 });

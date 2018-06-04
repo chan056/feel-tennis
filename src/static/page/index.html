@@ -32,16 +32,9 @@
 	</head>
 
 	<body>
-		<app>
-			<app-header></app-header>
-			<div id="root-container">
-				<app-aside></app-aside>
-				<div id="main">
-					<router-view id="main-router-view" class="view"></router-view>
-				</div>
-				<br class="clr">
-			</div>
-		</app>
+		<div id="app">
+			<router-view></router-view>
+		</div>
 
 		<script src="../lib/v.js"></script>
 		<script src="../lib/vue-bus.js"></script>

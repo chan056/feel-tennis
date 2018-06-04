@@ -5,12 +5,12 @@ module.exports = function(){
 			redirect: '/sports' 
 		},
 		{ 
-			path: '/sports', 
+			path: 'sports', 
 			component: COMPONENTS.Sports, 
 			meta: {title: '首页'},
 		},
 		{ 
-			path: '/sports/:sportId', 
+			path: 'sports/:sportId', 
 			component: COMPONENTS.AlbumList,
 			meta: {title: '专辑列表'},
 			props: function(route){
@@ -18,19 +18,19 @@ module.exports = function(){
 			},
 		},
 		{ 
-			path: '/albums/:albumId', 
+			path: 'albums/:albumId', 
 			component: COMPONENTS.Album, 
 			props: true, 
 			meta: {title: '视频列表'},
 		},
 		{ 
-			path: '/videos/:videoId', 
+			path: 'videos/:videoId', 
 			component: COMPONENTS.Video, 
 			meta: {title: '视频'},
 			props: true,
 		},
 		{ 
-			path: '/searchedvideos', 
+			path: 'searchedvideos', 
 			component: COMPONENTS.searchedvideos, 
 			meta: {title: '视频列表'},
 			beforeRouteUpdate(to, from, next) {
@@ -39,44 +39,44 @@ module.exports = function(){
 			}
 		},
 		{ 
-			path: '/datum', 
+			path: 'datum', 
 			component: COMPONENTS.Datum
 		},
 		{ 
-			path: '/voteNext', 
+			path: 'voteNext', 
 			component: COMPONENTS.VoteNext
 		},
 		{ 
-			path: '/feedback', 
+			path: 'feedback', 
 			component: COMPONENTS.Feedback,
 		},                                                                                                                                                               
 		{ 
-			path: '/about',
+			path: 'about',
 			component: COMPONENTS.About,
 		},
 		{ 
-			path: '/emailConfirm', 
+			path: 'emailConfirm', 
 			component: COMPONENTS.EmailConfirm
 		},
 		{ 
-			path: '/retrievePsw', 
+			path: 'retrievePsw', 
 			component: COMPONENTS.RetrievePsw
 		},
 		{ 
-			path: '/stars', 
+			path: 'stars', 
 			component: COMPONENTS.Stars
 		},
 		{ 
-			path: '/vStar/:vStarId', 
+			path: 'vStar/:vStarId', 
 			component: COMPONENTS.Vstar,
 			props: true,
 		},
 		{ 
-			path: '/usrVshoots', 
+			path: 'usrVshoots', 
 			component: COMPONENTS.UsrVshoots,
 		},
 		{ 
-			path: '/compete', 
+			path: 'compete', 
 			component: COMPONENTS.Compete,
 		},
 	];
