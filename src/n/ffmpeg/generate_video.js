@@ -36,14 +36,10 @@ function execM3U(videoStorePath, tsDir){
         });
     });
 
-    // for(let i in multiResolution){
-    //     let resolution = multiResolution[i];
-
-    //     cut(resolution);
-    // }
-
     cutVideo(480, function(){
-        cutVideo(720);
+        cutVideo(720, function(){
+            
+        });
     });
 
     function cutVideo(videoWidth, fn){
@@ -73,22 +69,6 @@ function storeSubtitle(subtitleAbsPath, tsDir){
         require('../tools').convertSrt2vtt(tsDir);
     });
 
-    // function convertSrt2vtt(srtPath){
-    //     var fs = require('fs');
-    //     var srt2vtt = require('srt2vtt');
-
-    //     fs.exists(srtPath, function(doExist){
-    //         if(doExist){
-    //             var srtData = fs.readFileSync(srtPath);
-    //             srt2vtt(srtData, function(err, vttData) {
-    //                 if (err) throw new Error(err);
-        
-    //                 var storePos = path.resolve(tsDir, 'subtitle.vtt');
-    //                 fs.writeFileSync(storePos, vttData);
-    //             });
-    //         }
-    //     })
-    // }
 }
 
 function screenShot (videoStorePath, tsDir){
@@ -132,13 +112,16 @@ function dynamicPreview(videoStorePath, tsDir, vId){
 // 水印
 function watermark (videoStorePath, fn){
     let videoStorePathObj = path.parse(videoStorePath);
-    let outputVideoPath = path.dirname(videoStorePath) + `/${videoStorePathObj.name}.copy${videoStorePathObj.ext}`;
+    let outputVideoPath = path.resolve(
+        path.dirname(videoStorePath),
+        `${videoStorePathObj.name}.copy${videoStorePathObj.ext}`
+    );
 
     if(fs.existsSync(outputVideoPath)) {  
         fs.unlinkSync(outputVideoPath);  
     }
 
-    let logo = path.resolve(__dirname, '../../static/img/site.jpg');
+    let logo = path.resolve(global.staticRoot, './img/site.jpg');
 
     let cmd =  `ffmpeg -i ${videoStorePath} -framerate 30000/1001 -loop 1 -i ${logo} -filter_complex "[1:v] fade=out:st=30:d=1:alpha=1 [ov]; [0:v][ov] overlay=W-w-35:35 [v]" -map "[v]" -map 0:a -c:v libx264 -c:a copy -shortest ${outputVideoPath}`;
 
@@ -155,3 +138,18 @@ function watermark (videoStorePath, fn){
         fn && fn();
     })
 }
+
+// 随机打水印
+// fs.readdir(tsDir, function(err, files){
+//     let tss = 0;
+//     files.forEach(function(file){
+//         if(file.split('.').pop() == 'ts'){
+//             tss++;
+//         }
+//     });
+
+//     const R = Math.floor(Math.random() * tss/2);
+//     console.log(tss, R);
+//     watermark(path.resolve(tsDir, path.resolve(tsDir, `480p_00${R}.ts`)));
+//     watermark(path.resolve(tsDir, path.resolve(tsDir, `720p_00${R}.ts`)));
+// })

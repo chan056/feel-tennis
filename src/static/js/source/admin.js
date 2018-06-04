@@ -117,6 +117,7 @@ temp.uploadAdmin =  `
                     :on-preview="handlePreview"
                     :on-remove="handleVideoRemove"
                     :on-success="handleVideoSuccess"
+                    :before-upload="handleBeforeUpload"
                     :limit="1"
                     :on-exceed="handleExceed"
                     :file-list="videoFileList"
@@ -337,6 +338,7 @@ COMPONENTS.UploadAdmin = {
             SO: {
                 albumId: '',
                 headline: '',
+                headlineEng: '',
                 tag: '',
                 videoAbsPath: '',
                 subtitleAbsPath: ''
@@ -413,9 +415,13 @@ COMPONENTS.UploadAdmin = {
 			// this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
 		},
 		handleVideoSuccess(res){
-			// console.log(res);
             this.SO.videoAbsPath = res.absPath;
-		},
+            
+        },
+        handleBeforeUpload(file){
+            this.SO.headlineEng = file.name.split(/\./).shift();
+            console.log(arguments)
+        },
 
 		handleSubtitleSuccess(res){
 			this.SO.subtitleAbsPath = res.absPath;
