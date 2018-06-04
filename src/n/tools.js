@@ -109,9 +109,9 @@ function scaleImage(source, dest, imgSize, fn){
 	imgSize = imgSize || require('./constant').videoCoverSize.split('x');
 
 	if(imgSize.constructor === Array){
-		cmd = `ffmpeg -i ${source} -vf scale=${imgSize[0]}:${imgSize[1]} ${dest} -y`;
+		cmd = `ffmpeg -i "${source}" -vf scale=${imgSize[0]}:${imgSize[1]} ${dest} -y`;
 	}else if(imgSize.constructor === Number){
-		cmd = `ffmpeg -i ${source} -vf scale=${imgSize}:-1 ${dest} -y`;
+		cmd = `ffmpeg -i "${source}" -vf scale=${imgSize}:-1 ${dest} -y`;
 	}
 
 	exec(cmd, function(err){

@@ -83,7 +83,7 @@
             imgLoader.empty();
 
             res.forEach(function(usr){
-                var player = [usr.nickname, usr.level, `${usr.win}胜${usr.lose}负`];
+                var player = [usr.nickname, usr.level, `${usr.win}胜${usr.lose}负${usr.tie}平`];
                 var avatar = usr.avatar;
                 var sex = usr.sex;
                 if(!avatar){
