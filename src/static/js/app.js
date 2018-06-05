@@ -9380,14 +9380,15 @@ module.exports = function () {
     });
 
     Vue.component('AppGuide', {
+        // v-bind="guideRoutes"// 传入guideRoutes所有属性 如 fundSteps
         data: function data() {
             return {
                 guideDialogVisible: false,
 
+                routName: '',
                 route: null,
                 routeIndex: 0,
                 routeTitle: '',
-                routName: '',
                 fundSteps: [{
                     selector: '[title=投币]',
 
@@ -9402,7 +9403,7 @@ module.exports = function () {
             };
         },
 
-        template: '\n            <div v-show="guideDialogVisible">\n                <i id="guide-cursor" class="fa fa-hand-o-left"></i>\n\n                <el-dialog\n                    id="guide-dialog"\n                    :title="routeTitle"\n                    :visible="guideDialogVisible"\n                    :close-on-click-modal="false"\n                    :close-on-press-escape="false"\n                    :show-close="false"\n                    width="30%"\n                    center\n                    >\n\n                    <span v-html="route?route[routeIndex].lines: \'\'"></span>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button @click="guideDialogVisible = false">\u8DF3\u8FC7\u5F15\u5BFC</el-button>\n                        <el-button type="primary" @click="onNext">\u4E0B\u4E00\u6B65</el-button>\n                    </span>\n                </el-dialog>\n            </div>\n        ',
+        template: '\n            <div v-if="guideDialogVisible">\n                <i id="guide-cursor" class="fa fa-hand-o-left"></i>\n\n                <el-dialog\n                    id="guide-dialog"\n                    :title="routeTitle"\n                    :visible="guideDialogVisible"\n                    :close-on-click-modal="false"\n                    :close-on-press-escape="false"\n                    :show-close="false"\n                    width="30%"\n                    center\n                    >\n\n                    <span v-html="route?route[routeIndex].lines: \'\'"></span>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button @click="guideDialogVisible = false">\u8DF3\u8FC7\u5F15\u5BFC</el-button>\n                        <el-button type="primary" @click="onNext">\u4E0B\u4E00\u6B65</el-button>\n                    </span>\n                </el-dialog>\n            </div>\n        ',
 
         mounted: function mounted() {
             // if(!window.localStorage.guided){
@@ -9413,10 +9414,10 @@ module.exports = function () {
             $("[title=投币]").one('click', function () {
                 t.guideDialogVisible = true;
 
-                setTimeout(function () {
-                    t.routeTitle = '资助入口';
-                    t.routName = 'fundSteps';
+                t.routeTitle = '资助入口';
+                t.routName = 'fundSteps';
 
+                setTimeout(function () {
                     t.guide();
                 }, 100);
             });
@@ -9426,7 +9427,14 @@ module.exports = function () {
         methods: {
             onNext: function onNext() {
                 this.routeIndex++;
-                this.guide();
+                if (this.routeIndex < this.route.length) {
+                    this.guide();
+                } else {
+                    this.routName = '';
+                    this.route = null;
+                    this.routeIndex = 0;
+                    this.routeTitle = '';
+                }
             },
 
             guide: function guide() {
@@ -9449,11 +9457,10 @@ module.exports = function () {
                 var cursorSize = {
                     w: t.guideCursor.width(),
                     h: t.guideCursor.height()
-                };
 
-                console.log(mileStone.direction);
-                // ↓←↑→
-                switch (mileStone.direction) {
+                    // console.log(mileStone.direction)
+                    // ↓←↑→
+                };switch (mileStone.direction) {
                     case 'down':
                         translation = {
                             top: -cursorSize.h,

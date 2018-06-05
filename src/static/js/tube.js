@@ -3,7 +3,12 @@ $(function () {
 	let AppHeader = COMPONENTS.HeaderComponent,
 		AppAside = COMPONENTS.AsideComponent;
 
-		const GlobalSetting = {
+	const GlobalSetting = {
+		data: function(){
+			return {
+				guideRoutes: {}
+			}
+		},
 		template: `
 			<div>
 				<AppHeader/>
@@ -14,7 +19,7 @@ $(function () {
 					</div>
 					<br class="clr">
 				</div>
-				<AppGuide/>
+				<AppGuide v-bind="guideRoutes"/>
 			</div>
 		`,
 		components: {

@@ -33,6 +33,7 @@ module.exports = function(){
     });
 
     Vue.component('AppGuide',{
+        // v-bind="guideRoutes"// 传入guideRoutes所有属性 如 fundSteps
         data: function(){
             return {
                 guideDialogVisible: false,
@@ -70,7 +71,7 @@ module.exports = function(){
         },
 
         template: `
-            <div v-show="guideDialogVisible">
+            <div v-if="guideDialogVisible">
                 <i id="guide-cursor" class="fa fa-hand-o-left"></i>
 
                 <el-dialog
@@ -101,7 +102,7 @@ module.exports = function(){
 
                 $("[title=投币]").one('click', function(){
                     t.guideDialogVisible = true;
-                    
+
                     t.routeTitle = '资助入口';
                     t.routName = 'fundSteps'
 
