@@ -526,3 +526,14 @@ app {
   -webkit-user-select: none;
   user-select: none;
 }
+#guide-cursor {
+  position: absolute;
+  left: 100px;
+  top: 100px;
+  z-index: 3000;
+  color: #efdb74;
+  font-size: 3rem;
+}
+#guide-dialog .el-dialog__body {
+  text-align: center;
+}

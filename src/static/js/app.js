@@ -9378,6 +9378,119 @@ module.exports = function () {
             };
         }
     });
+
+    Vue.component('AppGuide', {
+        data: function data() {
+            return {
+                guideDialogVisible: false,
+
+                route: null,
+                routeIndex: 0,
+                routeTitle: '',
+                routName: '',
+                fundSteps: [{
+                    selector: '[title=投币]',
+
+                    lines: '\n                            \u7AD9\u957F\u8981\u642D\u5EFA\u7F51\u7AD9\u3001\u6536\u96C6\u5E76\u7FFB\u8BD1\u89C6\u9891,<br/>\n                            \u9700\u8981\u6781\u5927\u7684\u7CBE\u529B\u6295\u5165,<br/>\n                            \u5982\u679C\u559C\u6B22\u8FD9\u4E2A\u5E73\u53F0\u8BF7\u652F\u6301\u6211\u4EEC<br/>\n                            <i class="fa fa-handshake-o"></i>\n                        ',
+                    direction: 'up'
+                }, {
+                    selector: '[title=投币]',
+
+                    lines: '\n                            \u7AD9\u957F\u8981\u642D\u5EFA\u7F51\u7AD9\u3001\u6536\u96C6\u5E76\u7FFB\u8BD1\u89C6\u9891,<br/>\n                            \u9700\u8981\u6781\u5927\u7684\u7CBE\u529B\u6295\u5165,<br/>\n                            \u5982\u679C\u559C\u6B22\u8FD9\u4E2A\u5E73\u53F0\u8BF7\u652F\u6301\u6211\u4EEC<br/>\n                            <i class="fa fa-handshake-o"></i>\n                        ',
+                    direction: 'left'
+                }]
+            };
+        },
+
+        template: '\n            <div v-show="guideDialogVisible">\n                <i id="guide-cursor" class="fa fa-hand-o-left"></i>\n\n                <el-dialog\n                    id="guide-dialog"\n                    :title="routeTitle"\n                    :visible="guideDialogVisible"\n                    :close-on-click-modal="false"\n                    :close-on-press-escape="false"\n                    :show-close="false"\n                    width="30%"\n                    center\n                    >\n\n                    <span v-html="route?route[routeIndex].lines: \'\'"></span>\n                    <span slot="footer" class="dialog-footer">\n                        <el-button @click="guideDialogVisible = false">\u8DF3\u8FC7\u5F15\u5BFC</el-button>\n                        <el-button type="primary" @click="onNext">\u4E0B\u4E00\u6B65</el-button>\n                    </span>\n                </el-dialog>\n            </div>\n        ',
+
+        mounted: function mounted() {
+            // if(!window.localStorage.guided){
+            var t = this;
+
+            window.localStorage.guided = 1;
+
+            $("[title=投币]").one('click', function () {
+                t.guideDialogVisible = true;
+
+                setTimeout(function () {
+                    t.routeTitle = '资助入口';
+                    t.routName = 'fundSteps';
+
+                    t.guide();
+                }, 100);
+            });
+            // }
+        },
+
+        methods: {
+            onNext: function onNext() {
+                this.routeIndex++;
+                this.guide();
+            },
+
+            guide: function guide() {
+                var t = this;
+
+                t.route = t[t.routName];
+                t.guideCursor = $('#guide-cursor');
+
+                var mileStone = t.route[t.routeIndex];
+                var selector = mileStone.selector;
+                var offset = void 0;
+                var translation = {};
+
+                if (typeof selector == 'string') {
+                    offset = $(selector).offset();
+                }
+
+                t.guideCursor.attr('class', 'fa fa-hand-o-' + mileStone.direction);
+
+                var cursorSize = {
+                    w: t.guideCursor.width(),
+                    h: t.guideCursor.height()
+                };
+
+                console.log(mileStone.direction);
+                // ↓←↑→
+                switch (mileStone.direction) {
+                    case 'down':
+                        translation = {
+                            top: -cursorSize.h,
+                            left: (offset.width - cursorSize.w) / 2
+                        };
+                        break;
+                    case 'left':
+                        translation = {
+                            top: (offset.height - cursorSize.h) / 2,
+                            left: cursorSize.w
+                        };
+                        break;
+
+                    case 'up':
+                        translation = {
+                            top: offset.height,
+                            left: (offset.width - cursorSize.w) / 2
+                        };
+                        break;
+
+                    case 'right':
+                        translation = {
+                            top: (offset.height - cursorSize.h) / 2,
+                            left: -cursorSize.width
+                        };
+                        break;
+                }
+
+                var pos = {
+                    left: offset.left + translation.left,
+                    top: offset.top + translation.top
+                };
+
+                t.guideCursor.css(pos);
+            }
+        }
+    });
 };
 
 /***/ }),

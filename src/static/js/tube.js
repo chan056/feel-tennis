@@ -14,6 +14,7 @@ $(function () {
 					</div>
 					<br class="clr">
 				</div>
+				<AppGuide/>
 			</div>
 		`,
 		components: {
