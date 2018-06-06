@@ -32,41 +32,19 @@ module.exports = function(){
         }
     });
 
+    let guideRoute = require('./guide_routes.js');
+
     Vue.component('AppGuide',{
         // v-bind="guideRoutes"// 传入guideRoutes所有属性 如 fundSteps
         data: function(){
             return {
                 guideDialogVisible: false,
 
-                routName: '',
+                routeName: '',
                 route: null,
                 routeIndex : 0,
                 routeTitle: '',
-                fundSteps: [
-                    {
-                        selector: '[title=投币]', 
-                        
-                        lines: `
-                            站长要搭建网站、收集并翻译视频,<br/>
-                            需要极大的精力投入,<br/>
-                            如果喜欢这个平台请支持我们<br/>
-                            <i class="fa fa-handshake-o"></i>
-                        `,
-                        direction: 'up'
-                    },
-
-                    {
-                        selector: '[title=投币]', 
-                        
-                        lines: `
-                            站长要搭建网站、收集并翻译视频,<br/>
-                            需要极大的精力投入,<br/>
-                            如果喜欢这个平台请支持我们<br/>
-                            <i class="fa fa-handshake-o"></i>
-                        `,
-                        direction: 'left'
-                    }
-                ],
+                routes: guideRoute,
             }
         },
 
@@ -95,45 +73,80 @@ module.exports = function(){
         `,
 
         mounted: function(){
+            const t = this;
+            
             // if(!window.localStorage.guided){
-                const t = this;
                 
                 window.localStorage.guided = 1;
 
-                $("[title=投币]").one('click', function(){
+                $("#guide-fund-1").one('click', function(){
                     t.guideDialogVisible = true;
 
-                    t.routeTitle = '资助入口';
-                    t.routName = 'fundSteps'
+                    t.routeTitle = '资助';
+                    t.routeName = 'fund';
 
                     setTimeout(function(){
                         t.guide();
                     }, 100)
                 })
             // }
+
+            $("#guide-compete-1").one('click', function(e){
+                t.guideDialogVisible = true;
+
+                t.routeTitle = '竞赛';
+                t.routeName = 'compete';
+
+                setTimeout(function(){
+                    t.guide();
+                }, 100)
+
+                return false;
+            })
+
+            $('body').one('click', '.video-thumb', function(){
+                t.guideDialogVisible = true;
+
+                t.routeTitle = '视频播放';
+                t.routeName = 'video';
+
+                setTimeout(function(){
+                    t.guide();
+                }, 100)
+            });
         },
 
         methods: {
             onNext: function(){
+                let routeStep = this.route[this.routeIndex];
+                routeStep.trigger && $(routeStep.selector).trigger('click');
+
                 this.routeIndex ++;
                 if(this.routeIndex < this.route.length){
                     this.guide();
                 }else{
-                    this.routName ='';
+                    this.routeName ='';
                     this.route = null;
                     this.routeIndex = 0;
                     this.routeTitle ='';
+                    this.guideDialogVisible = false;
                 }
             },
 
             guide: function(){
                 const t = this;
 
-                t.route = t[t.routName];
+                t.route = t['routes'][t.routeName];
+
+                let routeStep = t.route[t.routeIndex];
+                let selector = routeStep.selector;
+                if(!selector){
+                    t.guideCursor.hide();
+                    return;
+                }
+                    
                 t.guideCursor = $('#guide-cursor');
 
-                let mileStone = t.route[t.routeIndex];
-                let selector = mileStone.selector;
                 let offset;
                 let translation = {};
 
@@ -141,16 +154,16 @@ module.exports = function(){
                     offset = $(selector).offset();
                 }
 
-                t.guideCursor.attr('class', 'fa fa-hand-o-' + mileStone.direction)
+                t.guideCursor.attr('class', 'fa fa-hand-o-' + routeStep.direction)
 
                 let cursorSize = {
                     w: t.guideCursor.width(),
                     h: t.guideCursor.height()
                 }
                 
-                // console.log(mileStone.direction)
+                // console.log(routeStep.direction)
                 // ↓←↑→
-                switch (mileStone.direction) {
+                switch (routeStep.direction) {
                     case 'down':
                         translation = {
                             top: -cursorSize.h,
@@ -160,7 +173,7 @@ module.exports = function(){
                     case 'left':
                         translation = {
                             top: (offset.height - cursorSize.h)/2,
-                            left: cursorSize.w
+                            left: offset.width
                         };
                         break;
                     
@@ -184,7 +197,8 @@ module.exports = function(){
                     top: offset.top + translation.top
                 }
 
-                t.guideCursor.css(pos)
+                t.guideCursor.css(pos);
+
             }
         }
     })

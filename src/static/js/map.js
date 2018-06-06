@@ -95,9 +95,6 @@
                     playerInfo.push(`好评率${feedback}`)
                 }
 
-                if(usr.isBlack){
-                    playerInfo.unshift('<黑名单玩家>')
-                }
 
                 var avatar = usr.avatar;
                 var sex = usr.sex;
@@ -130,8 +127,14 @@
                     map.addOverlay(mk);
 
                     usr.is_self && mk.setAnimation(BMAP_ANIMATION_BOUNCE); // 跳动 //BMAP_ANIMATION_DROP
-            
-                    var label = new BMap.Label(playerInfo.join('<br/>'), {
+                    if(usr.isBlack){
+                        playerInfo.unshift('<黑名单玩家>')
+                    }
+                    var label = new BMap.Label((`
+                        <div class="${usr.isBlack? 'black-player': ''}">
+                            ${playerInfo.join('<br/>')}
+                        </div>
+                    `), {
                         position : coords,
                         offset   : new BMap.Size(0, 0)
                     });

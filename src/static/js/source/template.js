@@ -66,7 +66,7 @@ module.exports = function(){
                             <img class="pay-code" src="/img/wechat.jpeg" alt="微信" title="微信">
                         </el-popover>
                         
-                        <i v-popover:paycode class="fa fa-money item" title="投币"></i>
+                        <i v-popover:paycode class="fa fa-money item" title="投币" id="guide-fund-1"></i>
                     </el-col>
                 </el-row>
     
@@ -176,8 +176,8 @@ module.exports = function(){
                     </div>
                 </div>
                 <div class="guide-section">
-                    <div v-if="loginUsrInfo && loginUsrInfo.name" class="guide-entry" id="upload-entry" >
-                        <a href="#/compete" class="guide-entry-renderer" title="竞赛">
+                    <div v-show="loginUsrInfo && loginUsrInfo.name" class="guide-entry" id="upload-entry" >
+                        <a href="#/compete" class="guide-entry-renderer" title="竞赛" id="guide-compete-1">
                             <i class="fa fa-trophy icon"></i>
                             <span class="text">竞赛</span>
                         </a>
@@ -374,7 +374,7 @@ module.exports = function(){
                         </li>
                         <li id="share-btn"><i class="fa fa-share"></i>分享</li>
                         <li id="enshrine-btn">
-                            <i class="fa fa-plus" @click.stop="diplayStarSection();"></i>
+                            <i class="fa fa-plus" @click.stop="diplayStarSection();" id="star-btn"></i>
                             <div id="star-section" class="hidden" @click.stop>
                                 <h5>添加到...</h5>
                                 <el-checkbox-group
@@ -411,7 +411,7 @@ module.exports = function(){
                     <el-button v-if="shooting" :loading="true">截取中...</el-button>
                     <input type="button" value="截图" @click="screenshot()" id="screenshot-btn" class="el-button el-button--default"/>
                     <el-button v-if="screenshotLink" @click="preview(); previewType=2;">预览截图</el-button>
-                    <el-button @click="remarker.visible = true; this.vEle.pause();">标注</el-button>
+                    <el-button @click="remarker.visible = true; this.vEle.pause();" id="mark-btn">标注</el-button>
                 </div>
     
                 <div id="remark-wrapper" v-if="video">

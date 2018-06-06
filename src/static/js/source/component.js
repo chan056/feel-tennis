@@ -2114,7 +2114,7 @@ module.exports = function(){
 						this.defenseDialogVisible = true;
 					}else{
 						this.$message({
-							message: '等待对方应答',
+							message: '等待对方应战',
 							type: 'info'
 						});
 					}
