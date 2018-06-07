@@ -29,7 +29,8 @@ module.exports = {
         {
             lines: `
                 右键其他用户头像,<br/>
-                可以发起挑战
+                可以发起挑战,<br/>
+                等待对手应战，可获取对方联系方式
             `,
         }
     ],
@@ -46,14 +47,14 @@ module.exports = {
             lines: `
                 可以截取小视频，会出现在你的收藏夹
             `,
-            direction: 'up'
+            direction: 'down'
         },
         {
             selector: '#mark-btn',
             lines: `
                 可以在这留言
             `,
-            direction: 'up'
+            direction: 'down'
         },
         
         {
@@ -61,7 +62,7 @@ module.exports = {
             lines: `
                 将视频添加到你的收藏夹
             `,
-            direction: 'up'
+            direction: 'down'
         },
     ]
 }

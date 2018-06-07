@@ -402,6 +402,8 @@ module.exports = function(){
 				this.retrievePswCode = retrievePswCode;
 				this.retrievePswForm.visible = true;
 			}
+
+			
 		},
 
 		created: function(){
@@ -413,8 +415,11 @@ module.exports = function(){
 			}
 
 			this.$bus.on('update-inmails', function(){
-				console.log('update-inmails');
 				this.fetchInmails();
+			}.bind(this));
+
+			this.$bus.on('trigger-login', function(){
+				this.handlerLogin();
 			}.bind(this));
 		},
 
@@ -843,10 +848,6 @@ module.exports = function(){
 					this.shortVideoFullLink = location.origin + this.shortVideoLink;
 					this.shooting = false;
 				}.bind(this), null, null, function(ret){ 
-					this.$message.warning({
-						message: '视频截图出错'
-					});
-					
 					this.shooting = false;
 				}.bind(this));
 
@@ -862,11 +863,7 @@ module.exports = function(){
 				tools.xhr('/videoScreenshot?' + $.param(params), function(resData){
 					this.screenshotLink = resData;
 					this.screenshotFullLink = location.origin + this.screenshotLink;
-				}.bind(this), null, null, function(ret){ 
-					this.$message.warning({
-						message: '视频截图出错'
-					});
-				}.bind(this));
+				}.bind(this), null, null);
 
 				window.vEle.pause();
 			},
