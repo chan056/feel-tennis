@@ -527,6 +527,7 @@ app {
   user-select: none;
 }
 #guide-cursor {
+  display: none;
   position: absolute;
   left: 100px;
   top: 100px;

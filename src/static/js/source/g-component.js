@@ -139,14 +139,15 @@ module.exports = function(){
                 t.route = t['routes'][t.routeName];
 
                 let routeStep = t.route[t.routeIndex];
+                t.guideCursor = $('#guide-cursor');
                 let selector = routeStep.selector;
                 if(!selector){
                     t.guideCursor.hide();
                     return;
+                }else{
+                    t.guideCursor.show();
                 }
                     
-                t.guideCursor = $('#guide-cursor');
-
                 let offset;
                 let translation = {};
 

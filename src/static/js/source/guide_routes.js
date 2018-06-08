@@ -45,7 +45,7 @@ module.exports = {
         {
             selector: '#capture-btn',
             lines: `
-                可以截取小视频，会出现在你的收藏夹
+                可以截取小视频，会出现在左侧收藏夹
             `,
             direction: 'down'
         },
