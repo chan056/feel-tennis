@@ -74,46 +74,45 @@ module.exports = function(){
 
         mounted: function(){
             const t = this;
-            
-            // if(!window.localStorage.guided){
-                
-                window.localStorage.guided = 1;
 
-                $("#guide-fund-1").one('click', function(){
+            const guideEvtInfo = guideRoute.evtInfo;
+
+            guideEvtInfo.forEach((item)=>{
+                bidnGuideEvent(item);
+            });
+
+            function bidnGuideEvent(item){
+                let guider = getGuider();
+                if(guider.indexOf(item.name) == -1){
+                    if(item.delegator){
+                        $(item.delegator).one('click', item.tar, evt);
+                    }else{
+                        $(item.tar).one('click', evt);
+                    }
+                }
+
+                function evt(){
                     t.guideDialogVisible = true;
 
-                    t.routeTitle = '资助';
-                    t.routeName = 'fund';
+                    t.routeTitle = item.title;
+                    t.routeName = item.name;
 
                     setTimeout(function(){
                         t.guide();
                     }, 100)
-                })
-            // }
 
-            $("#guide-compete-1").one('click', function(e){
-                t.guideDialogVisible = true;
+                    let guider = getGuider();
+                    guider.push(item.name)
+                    guider = JSON.stringify(guider);
+                    window.localStorage.guider = guider;
+                }
 
-                t.routeTitle = '竞赛';
-                t.routeName = 'compete';
-
-                setTimeout(function(){
-                    t.guide();
-                }, 100)
-
-                return false;
-            })
-
-            $('body').one('click', '.video-thumb', function(){
-                t.guideDialogVisible = true;
-
-                t.routeTitle = '视频播放';
-                t.routeName = 'video';
-
-                setTimeout(function(){
-                    t.guide();
-                }, 100)
-            });
+                function getGuider(){
+                    let guider = window.localStorage.guider || JSON.stringify([]);
+                    guider = JSON.parse(guider); 
+                    return guider;
+                }
+            }
         },
 
         methods: {
@@ -141,7 +140,7 @@ module.exports = function(){
                 let routeStep = t.route[t.routeIndex];
                 t.guideCursor = $('#guide-cursor');
                 let selector = routeStep.selector;
-                if(!selector){
+                if(!routeStep.direction){
                     t.guideCursor.hide();
                     return;
                 }else{

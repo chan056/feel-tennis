@@ -22,7 +22,6 @@ module.exports = {
                 你可以在这找到志趣相投、水平相近的伙伴,<br/>
                 一起打球、一起交流
             `,
-            direction: 'left',
             trigger: true
         },
 
@@ -64,5 +63,22 @@ module.exports = {
             `,
             direction: 'down'
         },
-    ]
+    ],
+
+    evtInfo: [{
+        title: '资助',
+        name: 'fund',
+        tar: '#guide-fund-1',
+        delegator: '',
+    },{
+        title: '竞赛',
+        name: 'compete',
+        tar: '#guide-compete-1',
+        delegator: ''
+    },{
+        title: '视频播放',
+        name: 'video',
+        tar: '.video-thumb',
+        delegator: 'body'
+    }]
 }
