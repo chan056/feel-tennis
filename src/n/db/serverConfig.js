@@ -46,34 +46,7 @@ module.exports = function(req, res) {
 		}
 
 		function serveStatic(){
-			/* fs.readFile(realPath, "binary", function(err, file) {
-				if (err) {
-					res.writeHead(500, {
-						'Content-Type': 'text/plain'
-					});
-					console.log(err);
-					res.end();
-				} else {
-					res.writeHead(200, {
-						'Content-Type': contentType,
-						'Cache-Control': 'max-age=3600'
-					});
-			
-					// 所有的静态资源添加同域限制 todo
-					if(ext == 'm3u8'){
-						let referer = req.headers.referer;
-						referer = path.basename(referer);
-			
-						if(constants.whiteList.indexOf(referer) == -1){
-							return res.end();
-						}
-					}
-			
-					res.write(file, "binary");
-					res.end();
-				}
-			}); */
-
+			// 域名限制
 			if(ext == 'm3u8' || ext == 'mp4'){
 				let referer = req.headers.referer || '';
 				if(!referer)
@@ -88,6 +61,7 @@ module.exports = function(req, res) {
 				}
 			}
 
+			// gzip压缩
 			var zlib = require('zlib');
 			var file = fs.createReadStream(realPath);
 			var acceptEncoding = req.headers['accept-encoding'];
@@ -104,7 +78,7 @@ module.exports = function(req, res) {
 
 			res.writeHead(200, {
 				'Content-Type': contentType,
-				// 'Cache-Control': 'max-age=3600'
+				'Cache-Control': 'max-age=3600'
 			});
 
 			res.pipe(file);

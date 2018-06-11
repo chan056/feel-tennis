@@ -123,6 +123,7 @@ img {
 }
 body {
   min-width: 600px;
+  font-size: 1.4rem;
   font-family: "Arial", "Microsoft YaHei", "黑体", "宋体", "sans-serif;";
 }
 #main {
