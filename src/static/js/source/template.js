@@ -372,7 +372,7 @@ module.exports = function(){
                             <i v-bind:class="{ 'fa-thumbs-down': like==-1, 'fa': 1, 'fa-thumbs-o-down': 1}"></i>
                             <em>{{video.degrade_time}}</em>
                         </li>
-                        <li id="share-btn"><i class="fa fa-share"></i>分享</li>
+                        <li id="share-btn"><i class="fa fa-share"></i></li>
                         <li id="enshrine-btn">
                             <i class="fa fa-plus" @click.stop="diplayStarSection();" id="star-btn"></i>
                             <div id="star-section" class="hidden" @click.stop>
@@ -619,8 +619,8 @@ module.exports = function(){
     
         datum: `
             <div>
-                <div style="width: 300px; margin: auto; padding: 10px 20px;">
-                    <el-form ref="datum-form" :rules="datumForm.rules" :model="datumForm.unstableDatum" label-width="80px" >
+                <div style="margin: auto; padding: 10px 20px;">
+                    <el-form ref="datum-form" :rules="datumForm.rules" :model="datumForm.unstableDatum" label-width="8rem" >
                         <el-form-item label="昵称" prop="nickname">
                             <el-input v-model="datumForm.unstableDatum.nickname" v-bind:disabled="!datumForm.editable"></el-input>
                         </el-form-item>
@@ -707,8 +707,8 @@ module.exports = function(){
     
         voteNext: `
             <div>
-                <div style="width: 300px; margin: auto; padding: 10px 20px;">
-                    <el-form ref="vote-next-form" :rules="voteNextFormRules" :model="voteNextForm" label-width="80px" >
+                <div>
+                    <el-form ref="vote-next-form" :rules="voteNextFormRules" :model="voteNextForm" label-width="8rem" >
                         <el-form-item label="运动">
                             <el-select
                             v-model="voteNextForm.sport"
@@ -754,18 +754,18 @@ module.exports = function(){
                         </el-form-item>
     
                         <el-form-item>
-                            <el-button class="fr" type="primary" @click="submitForm('vote-next-form')">发送</el-button>
-                            <el-button class="fr" style="margin-right: 10px;" @click="resetForm('vote-next-form')">重置</el-button>
+                            <el-button class="" type="primary" @click="submitForm('vote-next-form')">发送</el-button>
+                            <el-button class="" style="margin-right: 10px;" @click="resetForm('vote-next-form')">重置</el-button>
                         </el-form-item>
     
                         <el-form-item>
-                            <el-button class="fr" type="primary" @click="fetchVoteResult()">投票结果</el-button>
+                            <el-button class="" type="primary" @click="fetchVoteResult()">投票结果</el-button>
     
                         </el-form-item>
                         
                     </el-form>
                 </div>
-                <div style="width:75%;" id="chart-container">
+                <div id="chart-container">
                     <canvas id="myChart"></canvas>
                 </div>
             </div>
@@ -778,7 +778,7 @@ module.exports = function(){
                     <i class="fr el-icon-back" @click="goback()" style="cursor: pointer;"></i>
                 </h2>
     
-                <el-form ref="feedback-form" :rules="rules" :model="form" label-width="80px" >
+                <el-form ref="feedback-form" :rules="rules" :model="form" label-width="8rem" >
                     <el-form-item label="" label-width="0" prop="desc">
                         <el-input type="textarea" v-model="form.desc"></el-input>
                     </el-form-item>

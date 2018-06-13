@@ -22,7 +22,7 @@
     font-size: 1.4rem;
   }
   .el-dialog__title {
-    font-size: 2.1rem !important;
+    font-size: 2rem !important;
   }
   .el-form-item__error {
     font-size: 1.2rem;
@@ -36,5 +36,12 @@
   }
   .el-checkbox__label {
     font-size: 1.2rem;
+  }
+  .el-input__inner {
+    height: 3rem;
+  }
+  .el-form-item__label {
+    font-size: 1.4rem;
+    padding-right: 1.2rem!important;
   }
 }

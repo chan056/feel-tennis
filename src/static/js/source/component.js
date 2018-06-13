@@ -1360,7 +1360,7 @@ module.exports = function(){
 			d.config = {
 				type: 'line',
 				data: {
-					labels: ["1", "2", "3", "4", "5", "6"],// 前6名
+					labels: ["1", "2", "3", "4", "5", "6"],// 前3名
 					datasets: [
 						{
 							label: '技术',
@@ -1527,7 +1527,10 @@ module.exports = function(){
 
 				this.config.data.datasets[0].data = skillData[1];
 				this.config.data.datasets[1].data = playerData[1];
-
+				// Chart.defaults.global.defaultFontColor = 'red';
+				Chart.defaults.global.defaultFontSize = 24;
+				Chart.defaults.global.defaultFontStyle = 'bold';
+				
 
 				if(!this.chartInstance){
 					this.chartInstance = new Chart(ctx, this.config);
