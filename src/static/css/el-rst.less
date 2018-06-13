@@ -1,12 +1,12 @@
 .el-breadcrumb{
-    span{font-size: 24px;}
+    span{font-size: 2rem;}
 }
   
-.el-pagination{margin: 30px 0;}
+.el-pagination{margin: 3rem 0;}
 
 
 @media screen and (max-width: 1000px) {
-	@fz: 24px;
+	@fz: 1.4rem;
 	.el-pager li{
 		font-size: @fz;
 	}
@@ -19,13 +19,16 @@
 		font-size: @fz;
 	}
 
-	.el-breadcrumb{
-		span{font-size: 40px;}
-	}
-
-	.el-button{font-size: @fz;}
+	.el-button, .el-textarea{font-size: @fz;}
 
 	.el-input{font-size: @fz;}
 
 	.el-dialog__title{font-size: @fz * 1.5 !important;}
+
+	.el-form-item__error{font-size: 1.2rem;}
+	.el-form-item{margin-bottom: 2rem;}
+	// .el-table{font-size: @fz;}
+
+	.el-upload__tip, .el-upload__text{font-size: 1.2rem!important;}
+	.el-checkbox__label{font-size: 1.2rem;}
 }

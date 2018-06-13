@@ -1,6 +1,6 @@
 @media screen and (max-width: 1000px) {
-  app {
-    font-size: 24px;
+  html {
+    font-size: 20px;
   }
   #header #logo img {
     width: 80px;
@@ -19,7 +19,7 @@
     display: none;
   }
   #header .el-icon-search {
-    font-size: 24px;
+    font-size: 1.4rem;
   }
   #header [class^=el-icon-],
   #header .fa {
@@ -38,6 +38,6 @@
     width: 500px;
   }
   .el-form-item__label {
-    font-size: 24px;
+    font-size: 1.4rem;
   }
 }

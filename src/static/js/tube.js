@@ -25,6 +25,10 @@ $(function () {
 		components: {
 			AppHeader,
 			AppAside
+		},
+
+		mounted(){
+			$(window).trigger('resize');
 		}
 	}
 

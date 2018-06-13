@@ -1566,7 +1566,7 @@ let operations = {
 
 				if(offenseUsrId == usrId){
 					if(NOW - offenseTime < ONEDAY){
-						res.statusCode = 400;
+						res.statusCode = 399;
 						res.statusMessage = 'should mark later';
 						return res.end();
 					}
@@ -1583,7 +1583,7 @@ let operations = {
 					offenseDefense = defenseRes * offenseRes;
 				}else if(defenseUsrId == usrId){
 					if(NOW - defenseTime < ONEDAY){
-						res.statusCode = 400;
+						res.statusCode = 399;
 						res.statusMessage = 'should mark later';
 						return res.end();
 					}
@@ -1603,7 +1603,7 @@ let operations = {
 				if(doMatchClose){
 					// 双方互评，评价结果有误
 					if(offenseDefense != 2 && offenseDefense != 9){
-						res.statusCode = 401;
+						res.statusCode = 398;
 						res.statusMessage = 'match result error';
 
 						if(offenseUsrId == usrId){

@@ -11,5 +11,9 @@ module.exports = function(){
         if(W.width() < 1000){
             $('#root-container').addClass('brief');
         }
-    }).trigger('resize');
+    });
+    
+    // setTimeout(()=>{
+    //     W.trigger('resize');
+    // },1000)
 }

@@ -93,32 +93,43 @@ img {
   overflow: hidden;
 }
 .el-breadcrumb span {
-  font-size: 24px;
+  font-size: 2rem;
 }
 .el-pagination {
-  margin: 30px 0;
+  margin: 3rem 0;
 }
 @media screen and (max-width: 1000px) {
   .el-pager li {
-    font-size: 24px;
+    font-size: 1.4rem;
   }
   .el-pagination .el-icon {
-    font-size: 24px !important;
+    font-size: 1.4rem !important;
   }
   .el-dropdown-menu__item {
-    font-size: 24px;
+    font-size: 1.4rem;
   }
-  .el-breadcrumb span {
-    font-size: 40px;
-  }
-  .el-button {
-    font-size: 24px;
+  .el-button,
+  .el-textarea {
+    font-size: 1.4rem;
   }
   .el-input {
-    font-size: 24px;
+    font-size: 1.4rem;
   }
   .el-dialog__title {
-    font-size: 36px !important;
+    font-size: 2.1rem !important;
+  }
+  .el-form-item__error {
+    font-size: 1.2rem;
+  }
+  .el-form-item {
+    margin-bottom: 2rem;
+  }
+  .el-upload__tip,
+  .el-upload__text {
+    font-size: 1.2rem!important;
+  }
+  .el-checkbox__label {
+    font-size: 1.2rem;
   }
 }
 body {
@@ -289,7 +300,7 @@ app {
 }
 .tags .el-tag {
   margin-right: 10px;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
 }
 .tags a {
   text-decoration: none;
@@ -334,9 +345,6 @@ app {
   background-color: transparent;
   transition: .7s ease 0s;
 }
-#capture-btn {
-  width: 120px;
-}
 #enshrine-btn {
   position: relative;
 }
@@ -360,7 +368,7 @@ app {
   overflow-x: hidden;
 }
 #stared-list .star {
-  padding-bottom: 10px;
+  padding: .7rem 0;
 }
 #remark-wrapper {
   height: 200px;
@@ -402,7 +410,7 @@ app {
 }
 #about pre {
   white-space: pre-line;
-  font-size: 14px;
+  font-size: 1.4rem;
 }
 #regist-btn {
   display: none;

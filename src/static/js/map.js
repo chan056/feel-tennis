@@ -140,16 +140,18 @@
                     });
             
                     label.setStyle({
-                        fontSize : "12px",
-                        lineHeight : "20px",
+                        fontSize : "1.2rem",
+                        lineHeight : "2rem",
                         fontFamily:"微软雅黑",
                         transform: "translate(-50%, -50%)",
                         borderColor: "#000"
                     });
             
                     mk.addEventListener("click", function(){
+                        // console.log('mark clicked', label)
                         map.removeOverlay(label); 
-                        map.addOverlay(label); 
+                        map.addOverlay(label);
+                        // label.setStyle({ display: 'block'})
                     });
             
                     mk.addEventListener("mouseover", function(){

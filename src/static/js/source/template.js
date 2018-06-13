@@ -466,8 +466,8 @@ module.exports = function(){
                 <el-dialog 
                     title="标注"
                     :visible.sync="remarker.visible"
-                    width="30%">
-                    <el-form ref="remarkerForm" :rules="remarker.rules" label-width="80px" :model="remarker">
+                    >
+                    <el-form ref="remarkerForm" :rules="remarker.rules" :model="remarker">
                         <el-form-item label="内容" prop="content">
                             <el-input type="textarea" autosize v-model="remarker.content"></el-input>
                         </el-form-item>

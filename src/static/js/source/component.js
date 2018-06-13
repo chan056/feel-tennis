@@ -2037,12 +2037,12 @@ module.exports = function(){
 					result: this.matchResult,
 				}, function(res){
 					// console.log(res);
-					if(res.status == 400){
+					if(res.status == 399){
 						this.$message({
 							message: '一天后才可以提交比赛结果',
 							type: 'warning'
 						});
-					}else if(res.status == 401){
+					}else if(res.status == 398){
 						let opponentRes = '';
 						this.options.forEach(function(){
 							if(arguments[0].value == res.data){
