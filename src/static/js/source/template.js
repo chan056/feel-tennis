@@ -60,7 +60,7 @@ module.exports = function(){
                             ref="paycode"
                             placement="top-start"
                             title=""
-                            width="100"
+                            width="200"
                             trigger="hover">
                             <img class="pay-code" src="/img/ali.jpeg" alt="支付宝" title="支付宝">
                             <img class="pay-code" src="/img/wechat.jpeg" alt="微信" title="微信">
@@ -148,7 +148,7 @@ module.exports = function(){
                 <el-dialog
                     title="登出"
                     :visible.sync="logoutForm.visible"
-                    width="30%"
+                    width="500px"
                     :before-close="beforeLogout">
                     <span>确认登出</span>
                     <span slot="footer" class="dialog-footer">
@@ -892,7 +892,7 @@ module.exports = function(){
                 title="提示"
                 :visible.sync="matchResultdialogVisible"
                 :append-to-body="true"
-                width="30%"
+                width="500px"
                 >
                     <span>确认无误？</span>
                     <span slot="footer" class="dialog-footer">
@@ -905,7 +905,7 @@ module.exports = function(){
                 title="提示"
                 :visible.sync="defenseDialogVisible"
                 :append-to-body="true"
-                width="30%"
+                width="500px"
                 >
                     <span>是否应战？</span>
                     <span slot="footer" class="dialog-footer">
@@ -922,7 +922,7 @@ module.exports = function(){
                 :close-on-press-escape="false"
                 :show-close="false"
                 :custom-class="'evaluate-container'"
-                width="30%"
+                width="500px"
                 >
                     <div>
                         <i v-bind:class="{'thumb-up': true, fa:true, 'fa-thumbs-o-up': (grade != 1), 'fa-thumbs-up': (grade == 1)}" @click="grade=1"></i>

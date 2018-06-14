@@ -59,7 +59,7 @@ module.exports = function(){
                     :close-on-click-modal="false"
                     :close-on-press-escape="false"
                     :show-close="false"
-                    width="30%"
+                    width="500px"
                     center
                     >
 

@@ -143,6 +143,10 @@ img {
     font-size: 1.4rem;
     padding-right: 1.2rem!important;
   }
+  .el-dialog__body {
+    font-size: 1.4rem;
+    line-height: 1.5em;
+  }
 }
 body {
   min-width: 600px;
@@ -290,7 +294,7 @@ app {
   margin-top: 20px;
 }
 .pay-code {
-  width: 100px;
+  width: 100%;
 }
 .block-list .block-thumb {
   display: block;

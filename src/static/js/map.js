@@ -147,32 +147,53 @@
                         borderColor: "#000"
                     });
             
-                    mk.addEventListener("click", function(){
-                        // console.log('mark clicked', label)
-                        map.removeOverlay(label); 
-                        map.addOverlay(label);
-                        // label.setStyle({ display: 'block'})
-                    });
+                    if(window.isMobile){
+                        mk.addEventListener("click", function(){
+                            if(label.isVisible()){
+                                map.removeOverlay(label); 
+                            }else{
+                                map.addOverlay(label);
+                            }
+                        });
+
+                        
+                    }else{
+                        mk.addEventListener("mouseover", function(){
+                            map.removeOverlay(label); 
+                            map.addOverlay(label); 
+                        });
+                
+                        mk.addEventListener("mouseout", function(){
+                            map.removeOverlay(label); 
+                        });
+                    }
             
-                    mk.addEventListener("mouseover", function(){
-                        map.removeOverlay(label); 
-                        map.addOverlay(label); 
-                    });
-            
-                    mk.addEventListener("mouseout", function(){
-                        map.removeOverlay(label); 
-                    });
-            
-                    var markerMenu = new BMap.ContextMenu();
                     
                     // 绑定菜单
                     if(!usr.is_self){
                         var matchingUsrIds = collectMatchingUsrs();
                         if(matchingUsrIds.indexOf(usr.usr_id) == -1){// 非交战
                             if(usr.status == 1 ){// 接受交战
-                                var menu = new BMap.MenuItem('交战',function(e,ee,marker){
+                                if(window.isMobile){
+                                    mk.addEventListener("dblclick", function(e){
+                                        challenge();
+
+                                        e.domEvent.cancelBubble = true;
+                                    });
+                                }else{
+                                    var markerMenu = new BMap.ContextMenu();
+
+                                    var menu = new BMap.MenuItem('交战',function(e,ee,marker){
+                                        challenge();
+                                    }.bind(mk));
+                                    
+                                    markerMenu.addItem(menu);
+                                    mk.addContextMenu(markerMenu);
+                                }
+
+                                function challenge(){
                                     if(usr.isBlack){
-                                        Vue.prototype.$confirm('该玩家在您的黑名单', '提示', {
+                                        Vue.prototype.$confirm('该玩家在您的黑名单,确定发起挑战？', '提示', {
                                             confirmButtonText: '确定',
                                             cancelButtonText: '取消',// 取消黑名单todo
                                             type: 'warning'
@@ -182,13 +203,10 @@
                                     }else{
                                         window.foundMatch(usr.usr_id);
                                     }
-                                }.bind(mk));
-                                markerMenu.addItem(menu);
+                                }
                             }
                         }
                     }
-                    
-                    mk.addContextMenu(markerMenu);
                 };
             });
         });

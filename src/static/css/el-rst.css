@@ -44,4 +44,8 @@
     font-size: 1.4rem;
     padding-right: 1.2rem!important;
   }
+  .el-dialog__body {
+    font-size: 1.4rem;
+    line-height: 1.5em;
+  }
 }
