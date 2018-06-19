@@ -963,13 +963,21 @@ module.exports = function(){
                             </el-input>
 
                             <ul id="line-editor">
-                                <li>
-                                    <div class="time-label"></div>
-                                    <div class="timed-line-box"></div>
-                                    <div class="timed-line-btns">
-                                        <i class="delete-segment-button"></i>
-                                        <i class="add-segment-button"></i>
-                                    </div>
+                                <li v-for="(caption, index) in captions">
+                                    <el-row :data-caption="JSON.stringify(caption)">
+                                        <el-col :span="4" class="time-label">
+                                            <p class="line-start-time" :data-st="caption.startTime">{{formatMS(caption.startTime)}}</p>
+                                            <p class="line-start-time" :data-et="caption.endTime">{{formatMS(caption.endTime)}}</p>
+                                        </el-col>
+                                        <el-col :span="16" class="timed-line-box">
+                                            {{caption.text}}
+                                        </el-col>
+                                        <el-col :span="4" class="timed-line-btns">
+                                            <i class="delete-segment-button fa fa-minus"></i>
+                                            <br/>
+                                            <i class="add-segment-button fa fa-plus"></i>
+                                        </el-col>
+                                    </el-row>
                                 </li>
                             </ul>
                         </div>

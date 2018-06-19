@@ -2180,6 +2180,9 @@ module.exports = function(){
 		data: function () {
 			var d = {
 				MAPINDEX: 1000,
+				captions: [],
+				formatMS: tools.formatMS
+
 			};
 
 			return d;
@@ -2221,8 +2224,14 @@ module.exports = function(){
 
 						}) */;
 					});
-				});
+
+					this.listCaptions(resData);
+				}.bind(this));
 			},
+
+			listCaptions: function(captions){
+				this.captions = captions;
+			}
 		},
 
 		mounted: function(){
@@ -2237,7 +2246,7 @@ module.exports = function(){
 				let duration = t.duration;
 				if(duration){
 					let sl = $(this).scrollLeft();
-					t.currentTime = (sl/timeLineLength * duration).toFixed(2);
+					t.currentTime = (sl/timeLineLength * duration).toFixed(1);
 				}
 			})
 		}

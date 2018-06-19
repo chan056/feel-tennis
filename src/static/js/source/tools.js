@@ -201,8 +201,36 @@ let tools = {
         return '';
     },
 
+    // 9000 0:09.0
+    // 毫秒转化时分秒
+    // 精确到0.1秒
+    // 0补齐 左侧第一位0省略
+    
+    formatMS: function(ms){
+
+        let secondMS = 1000;
+        let minuteMs = 60 * secondMS;
+        
+        let s = '';
+
+        if(ms){
+            let minute = Math.floor(ms / minuteMs);
+
+            let minuteSecond = ms % minuteMs;
+
+            let second = (minuteSecond / secondMS).toFixed(1);
+            if(second < 10)
+                second = '0' + second;
+
+            return `${minute}:${second}`;
+        }
+
+        return '';
+    },
+
     togglePageIE: function(t){
 		BrowserDetect.init({ie: '*'}, function(){
+            // IE9
 			$(window).off('hashchange.ieHack').on('hashchange.ieHack', function(){
 				var currentPath = window.location.hash.slice(1);
 				if (this.$route.path !== currentPath) {

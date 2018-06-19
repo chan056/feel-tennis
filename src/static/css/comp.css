@@ -569,3 +569,8 @@ app {
   overflow-x: auto;
   overflow-y: hidden;
 }
+.timedtext-content #line-editor {
+  height: 500px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
