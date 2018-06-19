@@ -962,24 +962,28 @@ module.exports = function(){
                                 >
                             </el-input>
 
-                            <ul id="line-editor">
-                                <li v-for="(caption, index) in captions">
-                                    <el-row :data-caption="JSON.stringify(caption)">
-                                        <el-col :span="4" class="time-label">
-                                            <p class="line-start-time" :data-st="caption.startTime">{{formatMS(caption.startTime)}}</p>
-                                            <p class="line-start-time" :data-et="caption.endTime">{{formatMS(caption.endTime)}}</p>
-                                        </el-col>
-                                        <el-col :span="16" class="timed-line-box">
-                                            {{caption.text}}
-                                        </el-col>
-                                        <el-col :span="4" class="timed-line-btns">
-                                            <i class="delete-segment-button fa fa-minus"></i>
-                                            <br/>
-                                            <i class="add-segment-button fa fa-plus"></i>
-                                        </el-col>
-                                    </el-row>
-                                </li>
-                            </ul>
+                            <div id="line-editor">
+                                <el-row v-for="(caption, index) in captions" :data-caption="JSON.stringify(caption)" class="caption-line">
+                                    <el-col :span="4" class="time-label">
+                                        <p class="line-start-time" :data-st="caption.startTime">{{formatMS(caption.startTime)}}</p>
+                                        <p class="line-start-time" :data-et="caption.endTime">{{formatMS(caption.endTime)}}</p>
+                                    </el-col>
+                                    <el-col :span="16" class="timed-line-box">
+                                        <p class="caption-text">{{caption.text}}</p>
+                                        <el-input
+                                        type="textarea"
+                                        :rows="2"
+                                        placeholder="请输入字幕"
+                                        v-model="caption.text">
+                                        </el-input>
+                                    </el-col>
+                                    <el-col :span="4" class="timed-line-btns">
+                                        <i class="delete-segment-button fa fa-minus"></i>
+                                        <br/>
+                                        <i class="add-segment-button fa fa-plus"></i>
+                                    </el-col>
+                                </el-row>
+                            </div>
                         </div>
                     </el-col>
                     <el-col :span="12">
@@ -993,7 +997,7 @@ module.exports = function(){
                         </div>
 
                         <div id="timeline">
-                            <canvas width="1000" height="100%" />
+                            <canvas width="1000" height="100" />
                         </div>
                     </div>
                     </el-col>

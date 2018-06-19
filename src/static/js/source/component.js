@@ -2179,7 +2179,6 @@ module.exports = function(){
 		props: ['videoId'],
 		data: function () {
 			var d = {
-				MAPINDEX: 1000,
 				captions: [],
 				formatMS: tools.formatMS
 
@@ -2231,6 +2230,11 @@ module.exports = function(){
 
 			listCaptions: function(captions){
 				this.captions = captions;
+			},
+
+			lineClickHandler: function(e){
+console.log(e)
+				
 			}
 		},
 
@@ -2246,9 +2250,19 @@ module.exports = function(){
 				let duration = t.duration;
 				if(duration){
 					let sl = $(this).scrollLeft();
-					t.currentTime = (sl/timeLineLength * duration).toFixed(1);
+					t.currentTime = (sl/timeLineLength * duration)/* .toFixed(1) */;
 				}
 			})
+
+			$('#line-editor').on('click', '.caption-line', function(){
+				$(this).addClass('selected').siblings().removeClass('selected');
+
+				let caption = $(this).data('caption');
+
+				let st = caption.startTime;
+				console.log(st/1000);
+				t.currentTime = st/1000;
+			});
 		}
 	}
 

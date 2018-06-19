@@ -569,8 +569,43 @@ app {
   overflow-x: auto;
   overflow-y: hidden;
 }
+.timedtext-content #timeline canvas {
+  background-color: rebeccapurple;
+}
+.timedtext-content .el-textarea {
+  display: none;
+}
 .timedtext-content #line-editor {
   height: 500px;
   overflow-x: hidden;
   overflow-y: auto;
+}
+.timedtext-content .caption-line {
+  min-height: 60px;
+  padding: .5rem;
+}
+.timedtext-content .caption-line:hover {
+  background-color: #f8f8f8;
+}
+.timedtext-content .caption-line:hover .fa {
+  display: block;
+}
+.timedtext-content .caption-line.selected {
+  background-color: #def;
+}
+.timedtext-content .caption-line.selected .fa {
+  display: block;
+}
+.timedtext-content .caption-line.selected .timed-line-box .el-textarea {
+  display: block;
+}
+.timedtext-content .caption-line.selected .caption-text {
+  display: none;
+}
+.timedtext-content .fa {
+  cursor: pointer;
+  display: none;
+}
+.timedtext-content .timed-line-btns {
+  padding-left: 1rem;
 }

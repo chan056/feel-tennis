@@ -388,7 +388,24 @@ app{font-size: 14px;}
     min-height: 30px;
     overflow-x: auto;
     overflow-y: hidden;
+    canvas{background-color: rebeccapurple;}
   }
+  .el-textarea{display: none;}
 
   #line-editor{height: 500px; overflow-x: hidden; overflow-y: auto;}
+  .caption-line{min-height: 60px; padding: .5rem;}
+  .caption-line:hover{
+    background-color: #f8f8f8;
+    .fa{display: block;}
+  }
+
+  .caption-line.selected{
+    background-color: #def;
+    .fa{display: block;}
+    .timed-line-box .el-textarea{display: block;}
+    .caption-text{display: none;}
+  }
+
+  .fa{cursor: pointer; display: none;}
+  .timed-line-btns{padding-left: 1rem;}
 }
