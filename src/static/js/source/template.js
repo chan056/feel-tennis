@@ -351,10 +351,8 @@ module.exports = function(){
                         <router-link :to="{path: '/searchedvideos?tagId=' + tag.id}">{{tag.name}}</router-link>
                     </el-tag>
                 </div>
-                <div id="palyer-wrapper">
-
-                    <video id="video" controls="controls" height="400">
-                        <!--<track kind="subtitles" :src="'/multimedia/ts/'+videoId+'/subtitle.vtt'" srclang="zh" label="中文" default >-->
+                <div id="player-wrapper">
+                    <video id="video" controls="controls" height="400" x5-playsinline="" playsinline="" webkit-playsinline="">
                         请使用现代浏览器，如Chrome Firefox Safari Edge
                     </video>
 
@@ -363,6 +361,7 @@ module.exports = function(){
                 </div>
                 <div v-if="video" id="usr-operation-desk">
                     <div class="fl">{{video.impression}}次观看</div>
+                    <a class="fl" :href="'#/translator/' + videoId">翻译？</a>
                     <ul class="fr block-list ovv">
                         <li id="support-btn" @click="vote(1)">
                             <i v-bind:class="{ 'fa-thumbs-up': like==1, 'fa': 1, 'fa-thumbs-o-up': 1}"></i>
@@ -944,6 +943,55 @@ module.exports = function(){
             <div id="baidu-map"></div>
             <div id="img-loader"></div>
         </div>`,
+
+        translator: `<div>
+            <div class="captions-editor-nav">
+                <h4 class="fl captions-editor-nav-captions">视频标题</h4>
+                <el-button class="fr" type="primary" @click="">退出</el-button>
+                <br class="clr"/>
+            </div>
+            <div class="alert-info"></div>
+            <div class="timedtext-content">
+                <el-row>
+                    <el-col :span="12">
+                        <div id="captions-options-area">
+                            <el-input
+                                type="textarea"
+                                :rows="2"
+                                placeholder="请输入内容"
+                                >
+                            </el-input>
+
+                            <ul id="line-editor">
+                                <li>
+                                    <div class="time-label"></div>
+                                    <div class="timed-line-box"></div>
+                                    <div class="timed-line-btns">
+                                        <i class="delete-segment-button"></i>
+                                        <i class="add-segment-button"></i>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </el-col>
+                    <el-col :span="12">
+                        <div id="captions-player-colimn">
+                        <div id="player-wrapper">
+                            <video id="video" controls="controls" height="400" x5-playsinline="" playsinline="" webkit-playsinline="">
+                                请使用现代浏览器，如Chrome Firefox Safari Edge
+                            </video>
+        
+                            <p class="subtitle"></p>
+                        </div>
+
+                        <div id="timeline">
+                            <canvas width="1000" height="100%" />
+                        </div>
+                    </div>
+                    </el-col>
+                </el-row>
+            </div>
+        </div>`
     };
 
     window.temp = temp;

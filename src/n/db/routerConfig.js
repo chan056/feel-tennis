@@ -46,6 +46,10 @@ const routerConfig = {
             r.query('queryVideo', params, res, req);
         },
 
+        '/videos/:id/translatorInfo': function(params, res, req){
+            r.query('queryVideoTranslatorInfo', params, res, req);
+        },
+
         '/albumInfo/:id': function(params, res, req){
             r.query('queryAlbumInfo', params, res, req);
         },

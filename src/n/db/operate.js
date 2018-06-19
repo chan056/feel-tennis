@@ -244,6 +244,16 @@ let operations = {
 		}
 	},
 
+	queryVideoTranslatorInfo: function(res, qualification, params) {
+		conn.query('SELECT duration from video' + qualification, function (err, result, fields) {
+			if (err) return throwError(err, res);
+
+			result = JSON.stringify(result);
+
+			res.end(result)
+		});
+	},
+
 	queryMakers: function(res, qualification, params) {
 		conn.query('SELECT * from maker' + qualification, function (err, result, fields) {
 			if (err) return throwError(err, res);
@@ -931,9 +941,15 @@ let operations = {
 				fs.renameSync(videoAbsPath, videoStorePath);// 用于生成gif
 
 				// videoGenerator.watermark(videoStorePath, function(){
-					videoGenerator.execM3U(videoStorePath, tsDir);
-					videoGenerator.screenShot(videoStorePath, tsDir);
-					videoGenerator.dynamicPreview(videoStorePath, tsDir, vId);
+				videoGenerator.execM3U(videoStorePath, tsDir);
+				videoGenerator.screenShot(videoStorePath, tsDir);
+				videoGenerator.dynamicPreview(videoStorePath, tsDir, vId, function(duration){
+					let sql = `update video set duration=${duration} where id=${vId}`;
+					conn.query(sql, function(err, result){
+						if (err) 
+							return console.log(err);
+					})
+				});
 				// });
 
 				subtitleAbsPath && videoGenerator.storeSubtitle(subtitleAbsPath, tsDir);

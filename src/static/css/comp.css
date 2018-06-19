@@ -327,12 +327,12 @@ app {
 #login-dialog .btns {
   padding-left: 100px;
 }
-#palyer-wrapper {
+#player-wrapper {
   display: inline-block;
   position: relative;
   max-width: 800px;
 }
-#palyer-wrapper .subtitle {
+#player-wrapper .subtitle {
   position: absolute;
   width: 100%;
   bottom: 30px;
@@ -563,4 +563,9 @@ app {
 }
 #guide-dialog .el-dialog__body {
   text-align: center;
+}
+.timedtext-content #timeline {
+  min-height: 30px;
+  overflow-x: auto;
+  overflow-y: hidden;
 }

@@ -752,14 +752,7 @@ module.exports = function(){
 								this.$message({message: `当天剩余播放次数 ${resData.dayViewLeft || 0}次`, type: 'warning'});
 							}
 	
-							// ***HLS
-							tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
-								tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
-	
-								window.vEle.onended = function(){
-									$('.subtitle').text('');
-								}
-							}.bind(this), id: 'hls'});
+							this.bindVideo();
 						}
 					}else{
 						this.$message({
@@ -784,12 +777,22 @@ module.exports = function(){
 				}.bind(this));
 			},
 
+			bindVideo: function(){
+				tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
+					tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
+
+					window.vEle.onended = function(){
+						$('.subtitle').text('');
+					}
+				}.bind(this), id: 'hls'});
+			},
+
 			bindSubtitle: function(){
 				tools.xhr('/srt/' + this.videoId, function(resData){
 					if(!resData)
 						return;
 						
-					let playerWrapper = $('#palyer-wrapper');
+					let playerWrapper = $('#player-wrapper');
 
 					tools.attachSubtile(window.vEle, resData, 500, function(subtitle){
 						playerWrapper.find('.subtitle').text(subtitle)/* .css({
@@ -2169,6 +2172,74 @@ module.exports = function(){
 
 		created: function(){
 			this.checkUsrDatumIntegrity();
+		}
+	},
+
+	COMPONENTS.Translator = {
+		props: ['videoId'],
+		data: function () {
+			var d = {
+				MAPINDEX: 1000,
+			};
+
+			return d;
+		},
+
+		template: temp.translator,
+
+		methods: {
+			fetchRelatedMatches: function (){
+				tools.xhr('/relatedMatches', function(res){
+					this.matches = res;
+					window.matches = Object.assign([], res);
+				}.bind(this));
+			},
+
+			bindVideo: function(){
+				tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
+					tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
+
+					this.vEle.onended = function(){
+						$('.subtitle').text('');
+					}
+
+					this.vEle.onload = function(){
+						this.duration = this.vEle.duration;
+					}
+				}.bind(this), id: 'hls'});
+			},
+
+			bindSubtitle: function(){
+				tools.xhr('/srt/' + this.videoId, function(resData){
+					if(!resData)
+						return;
+						
+					let playerWrapper = $('#player-wrapper');
+
+					tools.attachSubtile(this.vEle, resData, 500, function(subtitle){
+						playerWrapper.find('.subtitle').text(subtitle)/* .css({
+
+						}) */;
+					});
+				});
+			},
+		},
+
+		mounted: function(){
+			let t = this.vEle = $('video')[0];
+			let timeLineLength = 1000;
+
+			tools.togglePageIE(this);
+			this.bindVideo();
+			this.bindSubtitle();
+
+			$('#timeline').on("scroll", function(){
+				let duration = t.duration;
+				if(duration){
+					let sl = $(this).scrollLeft();
+					t.currentTime = (sl/timeLineLength * duration).toFixed(2);
+				}
+			})
 		}
 	}
 

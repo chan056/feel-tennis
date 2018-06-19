@@ -90,7 +90,7 @@ function screenShot (videoStorePath, tsDir){
 }
 
 // 动态预览
-function dynamicPreview(videoStorePath, tsDir, vId){
+function dynamicPreview(videoStorePath, tsDir, vId, fn){
     let vDurationCmd = `ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 ${videoStorePath}`;
     let CONSTANTS = require('../constant');
 
@@ -106,6 +106,8 @@ function dynamicPreview(videoStorePath, tsDir, vId){
             scale: CONSTANTS.dynamicPreview.width,
             output: tsDir + '/d_cover.gif',
         })
+
+        fn && fn(duration)
     })
 }
 

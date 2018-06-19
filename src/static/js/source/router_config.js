@@ -79,6 +79,11 @@ module.exports = function(){
 			path: 'compete', 
 			component: COMPONENTS.Compete,
 		},
+		{ 
+			path: 'translator/:videoId', 
+			component: COMPONENTS.Translator,
+			props: true,
+		},
 	];
 
 	window.routeConfig = routeConfig;

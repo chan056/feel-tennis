@@ -3,3 +3,8 @@
 1. 删表usr_star
 2. usr_screenshot_star
     新增type 1动态 2静态
+    
+
+==180619
+    translated 是否被翻译
+    duration 视频时长
