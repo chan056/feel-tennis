@@ -590,7 +590,14 @@ const routerConfig = {
                 r.post('competeEvaluate', req, res, pathParams);
             },
             limit: {level: 10}
-        }
+        },
+
+        '/srt/:vId': {
+            fn: function(req, res, pathParams){
+                r.post('createCaption', req, res, pathParams);
+            },
+            limit: {level: 10}
+        },
     },
 
     // ============put update完整资源=============

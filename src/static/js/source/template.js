@@ -948,6 +948,7 @@ module.exports = function(){
             <div class="captions-editor-nav">
                 <h4 class="fl captions-editor-nav-captions">视频标题</h4>
                 <el-button class="fr" type="primary" @click="">退出</el-button>
+                <el-button class="fr" type="primary" @click="saveSrt">保存</el-button>
                 <br class="clr"/>
             </div>
             <div class="alert-info"></div>

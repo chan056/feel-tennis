@@ -2232,6 +2232,13 @@ module.exports = function(){
 				this.captions = captions;
 			},
 
+			saveSrt: function(){
+				tools.xhr('/srt/' + this.videoId, function(resData){
+					console.log('字幕上传成功')
+				}.bind(this), 'post', {
+					srtArr: this.captions,
+				});
+			}
 		},
 
 		mounted: function(){

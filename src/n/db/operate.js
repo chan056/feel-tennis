@@ -1276,6 +1276,21 @@ let operations = {
 		}.bind(this));
 	},
 
+	createCaption: function(res, postObj, req){
+		let toSrt = require('../srtParser.js').toSrt;
+		toSrt(postObj.vId, postObj.srtArr);
+		res.end();
+
+		// let sql = `insert into sport (name, update_time) values ('${postObj.name}', ${+new Date()})`;
+
+		// conn.query(sql, function(err, result){
+		// 	if(err)
+		// 		console.log(err);
+
+		// 	res.end();
+		// });
+	},
+
 	// ===============PATCH================
 	voteVideo: function(res, patchObj){
 		let voteType = patchObj.type;

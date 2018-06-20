@@ -41,5 +41,14 @@ module.exports = {
         }
     },
 
-    
+    toSrt: function(vId, arr){
+        var parser = require('subtitles-parser');
+        var fs = require('fs');
+        var path = require('path');
+        var dir = path.resolve(__dirname, '../static/multimedia/ts/');
+        var srtPath = path.resolve(dir, `./${vId}/subtitle.${vId}`);
+
+        var srt = parser.toSrt(arr);
+        fs.writeFileSync(srtPath, srt);
+    }
 }
