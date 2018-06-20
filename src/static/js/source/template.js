@@ -971,10 +971,11 @@ module.exports = function(){
                                     <el-col :span="16" class="timed-line-box">
                                         <p class="caption-text">{{caption.text}}</p>
                                         <el-input
-                                        type="textarea"
-                                        :rows="2"
-                                        placeholder="请输入字幕"
-                                        v-model="caption.text">
+                                            class="caption-ipt"
+                                            type="textarea"
+                                            :rows="2"
+                                            placeholder="请输入字幕"
+                                            v-model="caption.text">
                                         </el-input>
                                     </el-col>
                                     <el-col :span="4" class="timed-line-btns">

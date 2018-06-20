@@ -399,11 +399,19 @@ app{font-size: 14px;}
     .fa{display: block;}
   }
 
-  .caption-line.selected{
-    background-color: #def;
-    .fa{display: block;}
-    .timed-line-box .el-textarea{display: block;}
-    .caption-text{display: none;}
+  .caption-line{
+    &.selected{
+      background-color: #def;
+      .fa{display: block;}
+      
+    }
+
+    &.focused{
+      .caption-ipt{display: block;}
+      .caption-text{display: none;}
+    }
+
+    .caption-text{min-height: 40px; cursor: text;}
   }
 
   .fa{cursor: pointer; display: none;}

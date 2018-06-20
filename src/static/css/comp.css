@@ -596,11 +596,15 @@ app {
 .timedtext-content .caption-line.selected .fa {
   display: block;
 }
-.timedtext-content .caption-line.selected .timed-line-box .el-textarea {
+.timedtext-content .caption-line.focused .caption-ipt {
   display: block;
 }
-.timedtext-content .caption-line.selected .caption-text {
+.timedtext-content .caption-line.focused .caption-text {
   display: none;
+}
+.timedtext-content .caption-line .caption-text {
+  min-height: 40px;
+  cursor: text;
 }
 .timedtext-content .fa {
   cursor: pointer;

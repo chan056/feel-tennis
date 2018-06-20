@@ -2232,10 +2232,6 @@ module.exports = function(){
 				this.captions = captions;
 			},
 
-			lineClickHandler: function(e){
-console.log(e)
-				
-			}
 		},
 
 		mounted: function(){
@@ -2255,14 +2251,22 @@ console.log(e)
 			})
 
 			$('#line-editor').on('click', '.caption-line', function(){
-				$(this).addClass('selected').siblings().removeClass('selected');
+				if($(this).is('.selected')){
+					return;
+				}
+				$(this).addClass('selected focused').siblings().removeClass('selected focused');
+				$(this).find('.caption-ipt .el-textarea__inner').focus();
 
 				let caption = $(this).data('caption');
 
 				let st = caption.startTime;
-				console.log(st/1000);
 				t.currentTime = st/1000;
-			});
+			}).on('blur', '.caption-ipt .el-textarea__inner', function(){
+				$(this).parents('.caption-line').removeClass('focused');
+			}).on('click', '.caption-text', function(){
+				$(this).parents('.caption-line').addClass('focused');
+				$(this).siblings('.caption-ipt').find('.el-textarea__inner').focus();
+			});;
 		}
 	}
 

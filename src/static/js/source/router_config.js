@@ -49,7 +49,7 @@ module.exports = function(){
 		{ 
 			path: 'feedback', 
 			component: COMPONENTS.Feedback,
-		},                                                                                                                                                               
+		},
 		{ 
 			path: 'about',
 			component: COMPONENTS.About,
