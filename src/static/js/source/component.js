@@ -2266,7 +2266,11 @@ module.exports = function(){
 			}).on('click', '.caption-text', function(){
 				$(this).parents('.caption-line').addClass('focused');
 				$(this).siblings('.caption-ipt').find('.el-textarea__inner').focus();
-			});;
+			}).on('click', '.line-start-time', function(){
+
+			}).on('click', '.line-end-time', function(){
+				
+			})
 		}
 	}
 

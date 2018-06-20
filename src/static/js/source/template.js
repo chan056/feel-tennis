@@ -966,7 +966,7 @@ module.exports = function(){
                                 <el-row v-for="(caption, index) in captions" :data-caption="JSON.stringify(caption)" class="caption-line">
                                     <el-col :span="4" class="time-label">
                                         <p class="line-start-time" :data-st="caption.startTime">{{formatMS(caption.startTime)}}</p>
-                                        <p class="line-start-time" :data-et="caption.endTime">{{formatMS(caption.endTime)}}</p>
+                                        <p class="line-end-time" :data-et="caption.endTime">{{formatMS(caption.endTime)}}</p>
                                     </el-col>
                                     <el-col :span="16" class="timed-line-box">
                                         <p class="caption-text">{{caption.text}}</p>
