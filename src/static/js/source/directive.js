@@ -8,7 +8,7 @@ module.exports = function(){
                 startL = matchNumber(el.css('left'))
             })
 
-            const rid = Math.random().toString().split('.')[1];
+            const rid = '.' + Math.random().toString().split('.')[1];
             
             $(window).on('mousemove' + rid, function(e){
                 let xDistance = e.clientX - st.x;
