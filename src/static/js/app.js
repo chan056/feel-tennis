@@ -3807,7 +3807,7 @@ eval("\n\nvar CONSTANT = {\n    erroMsg: {\n        401: '请登录后操作',\n
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\nmodule.exports = function () {\n    Vue.directive('draggable', {\n        inserted: function inserted(el) {\n            console.log();\n\n            el = $(el);\n            el.on('mousedown', function () {\n                console.log('mousedown');\n                console.log(el);\n            });\n\n            $(window).on('mousemove', function () {});\n        }\n    });\n};\n\n//# sourceURL=webpack:///./src/static/js/source/directive.js?");
+eval("\n\nmodule.exports = function () {\n            Vue.directive('draggable', {\n                        inserted: function inserted(el) {\n                                    console.log();\n\n                                    el = $(el);\n                                    el.on('mousedown', function (e) {\n                                                console.log(e);\n                                    });\n\n                                    $(window).on('mousemove', function () {});\n\n                                    $(window).on('mouseup', function () {});\n                        }\n            });\n};\n\n//# sourceURL=webpack:///./src/static/js/source/directive.js?");
 
 /***/ }),
 
