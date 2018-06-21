@@ -2284,6 +2284,10 @@ module.exports = function(){
 						let curLine = $('#line-editor').find('.caption-line').eq(i);
 						curLine.addClass('current-line').siblings().removeClass('current-line');
 						// curLine[0].scrollIntoView(true)
+
+						// todo
+						// currentLine.marginTop < lineBox.scrollTop || currentLine.marginTop > lineBox.scrollTop + lineBox.height
+						// lineBox.scrollTop = currentLine.marginTop || lineBox.scrollTop = currentLine.marginTop - (lineBox.height - line.height)
 						break;
 					}
 				}
@@ -2312,6 +2316,7 @@ module.exports = function(){
 
 				let duration = t.duration;
 				if(duration){
+					// _.debounce
 					let sl = $(this).scrollLeft();
 					// 修改视频时间
 					vEle.currentTime = (sl / t.timeLineLength * duration);
@@ -2324,7 +2329,7 @@ module.exports = function(){
 					return;
 				}
 				$(this).addClass('selected current-line').siblings().removeClass('selected current-line');
-				$(this).find('.caption-ipt .el-textarea__inner').focus();
+				// $(this).find('.caption-ipt .el-textarea__inner').focus();
 
 				let caption = $(this).data('caption');
 

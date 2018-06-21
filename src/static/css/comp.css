@@ -565,6 +565,7 @@ app {
   text-align: center;
 }
 .timedtext-content #timeline {
+  position: relative;
   min-height: 30px;
   overflow-x: auto;
   overflow-y: hidden;
@@ -620,4 +621,36 @@ app {
 }
 .timedtext-content .timed-line-btns {
   padding-left: 1rem;
+}
+.timedtext-content #time-scale {
+  cursor: ew-resize;
+}
+.timedtext-content .playhead {
+  position: absolute;
+  left: 100px;
+  top: 0;
+}
+.timedtext-content .playhead .playhead-needle {
+  height: 80px;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  width: 1px;
+  background-color: #cc181e;
+}
+.timedtext-content .playhead .playhead-handle {
+  cursor: pointer;
+  height: 20px;
+  left: -10px;
+  position: absolute;
+  top: 60px;
+  width: 20px;
+}
+.timedtext-content .playhead .playhead-triangle {
+  margin-top: 10px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #cc181e;
 }

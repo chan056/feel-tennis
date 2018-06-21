@@ -994,13 +994,18 @@ module.exports = function(){
                             <video id="video" controls="controls" height="400" x5-playsinline="" playsinline="" webkit-playsinline="">
                                 请使用现代浏览器，如Chrome Firefox Safari Edge
                             </video>
-        
+
                             <p class="subtitle"></p>
                         </div>
 
-                        {{duration}}
                         <div id="timeline">
                             <TimeScale v-if="duration" :duration="duration" />
+                            <div class="playhead" v-draggable>
+                                <div class="playhead-needle"></div>
+                                <div class="playhead-handle">
+                                    <div class="playhead-triangle"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     </el-col>
