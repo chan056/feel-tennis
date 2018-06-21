@@ -2179,9 +2179,12 @@ module.exports = function(){
 		props: ['videoId'],
 		data: function () {
 			var d = {
+				vEle: null,
+				duration: 0,
+				timeLineLength: 0,
 				captions: [],
-				formatMS: tools.formatMS
-
+				updateType: 0,
+				formatMS: tools.formatMS,
 			};
 
 			return d;
@@ -2198,17 +2201,46 @@ module.exports = function(){
 			},
 
 			bindVideo: function(){
+				let t = this;
 				tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
-					tools.insertScriptTag(2, FRAGMENTS.attachVideo(this.videoId), {id: 'hls-frag'});
+					tools.insertScriptTag(2, FRAGMENTS.attachVideo(t.videoId), {id: 'hls-frag'});
 
-					this.vEle.onended = function(){
+					t.vEle.onended = function(){
 						$('.subtitle').text('');
 					}
 
-					this.vEle.onload = function(){
-						this.duration = this.vEle.duration;
+					t.vEle.oncanplay= function(){
+						t.duration = t.vEle.duration;
+
+						t.$nextTick(function () {
+							t.timeLineLength = $('#time-scale').width();
+						})
+
+						// setTimeout(()=>{
+						// 	console.log($('#time-scale').width())
+						// }, 100)
 					}
-				}.bind(this), id: 'hls'});
+
+					// type 
+					// 1 左侧点击	
+					// 2 右下角点击
+					// 3 拖动针头
+					t.vEle.ontimeupdate= function(){
+						if(!t.updateType){
+							t.scrollTimeline();
+							t.positionLine();
+						}if(t.updateType == 1){
+							t.scrollTimeline();
+							setTimeout(()=>{// 用于标识通过左侧的点击引起的滚动
+								t.updateType = 0;
+							}, 100);
+						}else if(t.updateType == 2){
+							t.positionLine();
+							t.updateType = 0;
+						}else if(t.updateType == 3){
+						}
+					}
+				}, id: 'hls'});
 			},
 
 			bindSubtitle: function(){
@@ -2238,22 +2270,52 @@ module.exports = function(){
 				}.bind(this), 'post', {
 					srtArr: this.captions,
 				});
+			},
+
+			// 定位当前行
+			positionLine: function(){
+				let currentTime = this.vEle.currentTime;
+				let captions = this.captions;
+				for(let i=0; i<captions.length; i++){
+					let caption = captions[i];
+
+					if(currentTime> caption.startTime / 1000 && currentTime < caption.endTime / 1000){
+						console.log(caption, i);
+						let curLine = $('#line-editor').find('.caption-line').eq(i);
+						curLine.addClass('current-line').siblings().removeClass('current-line');
+						// curLine[0].scrollIntoView(true)
+						break;
+					}
+				}
+			},
+
+			// 滚动时间轴
+			scrollTimeline: function(){
+				let timePass = this.vEle.currentTime / this.duration * this.timeLineLength;
+				$('#timeline').scrollLeft(timePass)
 			}
 		},
 
 		mounted: function(){
-			let t = this.vEle = $('video')[0];
-			let timeLineLength = 1000;
+			let t = this;
+			let vEle = this.vEle = $('video')[0];
 
 			tools.togglePageIE(this);
 			this.bindVideo();
 			this.bindSubtitle();
 
 			$('#timeline').on("scroll", function(){
+				// console.log(t.updateType, 'trigger scroll')
+				if(t.updateType == 1){
+					return
+				}
+
 				let duration = t.duration;
 				if(duration){
 					let sl = $(this).scrollLeft();
-					t.currentTime = (sl/timeLineLength * duration)/* .toFixed(1) */;
+					// 修改视频时间
+					vEle.currentTime = (sl / t.timeLineLength * duration);
+					t.updateType = 2;
 				}
 			})
 
@@ -2261,13 +2323,15 @@ module.exports = function(){
 				if($(this).is('.selected')){
 					return;
 				}
-				$(this).addClass('selected focused').siblings().removeClass('selected focused');
+				$(this).addClass('selected current-line').siblings().removeClass('selected current-line');
 				$(this).find('.caption-ipt .el-textarea__inner').focus();
 
 				let caption = $(this).data('caption');
 
-				let st = caption.startTime;
-				t.currentTime = st/1000;
+				let st = caption.startTime / 1000;
+				// 修改视频时间
+				vEle.currentTime = st;
+				t.updateType = 1;
 			}).on('blur', '.caption-ipt .el-textarea__inner', function(){
 				$(this).parents('.caption-line').removeClass('focused');
 			}).on('click', '.caption-text', function(){
@@ -2278,7 +2342,7 @@ module.exports = function(){
 			}).on('click', '.line-end-time', function(){
 				
 			})
-		}
+		},
 	}
 
 	window.COMPONENTS = COMPONENTS;

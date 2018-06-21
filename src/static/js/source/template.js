@@ -998,8 +998,9 @@ module.exports = function(){
                             <p class="subtitle"></p>
                         </div>
 
+                        {{duration}}
                         <div id="timeline">
-                            <canvas width="1000" height="100" />
+                            <TimeScale v-if="duration" :duration="duration" />
                         </div>
                     </div>
                     </el-col>

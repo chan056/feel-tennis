@@ -2,7 +2,7 @@
 // <script src="../js/tools.js"></script>
 
 // <script src="../js/template.js"></script>
-// <script src="../js/g-component.js"></script>
+// <script src="../js/global_component.js"></script>
 // <script src="../js/component.js"></script>
 // <script src="../js/fragment.js"></script>
 // <script src="../js/router_config.js"></script>
@@ -14,7 +14,7 @@ require('./constant.js');
 require('./tools.js');
 
 var template = require('./template.js');
-var gComponent = require('./g-component.js');
+var gComponent = require('./global_component.js');
 var component = require('./component.js');
 var fragment = require('./fragment.js');
 var routeConfig = require('./router_config.js');

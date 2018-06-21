@@ -202,4 +202,42 @@ module.exports = function(){
             }
         }
     })
+
+    Vue.component('TimeScale', {
+        template: '<canvas id="time-scale" height=80></canvas>',
+        props: ['duration'],
+        mounted: function(){
+            var c = document.querySelector('#time-scale');
+            var context = c.getContext('2d');
+            context.lineWidth = 1;          //设置线宽状态
+            context.strokeStyle = "#222" ;  //设置线的颜色状态
+
+            var duration = this.duration;
+            var totalIndex = duration * 10;// 0 -> 1000
+            var intervalX = 6;
+            var short = 5;
+            var tall = 10;
+
+            c.width = totalIndex * intervalX;
+
+            for(var i=0; i <=totalIndex; i ++){
+                drawLine(i)
+            }
+
+            function drawLine(scaleIndex){
+                context.moveTo (intervalX * scaleIndex,0);       //设置起点状态
+                context.lineTo (intervalX * scaleIndex, scaleIndex%5?short:tall);       //设置末端状态
+                context.stroke();  
+
+                if(!(scaleIndex % 10)){
+                    var second = scaleIndex / 10;
+                    context.fillText(
+                        second, 
+                        intervalX *scaleIndex - second.toString().length / 2 * 6,// 6=>1个数字的宽度 
+                        20
+                    )
+                }
+            }
+        }
+    });
 }
