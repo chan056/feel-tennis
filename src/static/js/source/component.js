@@ -2185,6 +2185,7 @@ module.exports = function(){
 				captions: [],
 				updateType: 0,
 				formatMS: tools.formatMS,
+				timeOffset: 0
 			};
 
 			return d;
@@ -2224,9 +2225,8 @@ module.exports = function(){
 					// type 
 					// 1 左侧点击	
 					// 2 右下角点击
-					// 3 拖动针头
 					t.vEle.ontimeupdate= function(){
-						if(!t.updateType){
+						if(!t.updateType){// 拖动视频时间
 							t.scrollTimeline();
 							t.positionLine();
 						}if(t.updateType == 1){
@@ -2237,7 +2237,6 @@ module.exports = function(){
 						}else if(t.updateType == 2){
 							t.positionLine();
 							t.updateType = 0;
-						}else if(t.updateType == 3){
 						}
 					}
 				}, id: 'hls'});
@@ -2280,7 +2279,7 @@ module.exports = function(){
 					let caption = captions[i];
 
 					if(currentTime> caption.startTime / 1000 && currentTime < caption.endTime / 1000){
-						console.log(caption, i);
+						// console.log(caption, i);
 						let curLine = $('#line-editor').find('.caption-line').eq(i);
 						curLine.addClass('current-line').siblings().removeClass('current-line');
 						// curLine[0].scrollIntoView(true)
@@ -2295,8 +2294,16 @@ module.exports = function(){
 
 			// 滚动时间轴
 			scrollTimeline: function(){
-				let timePass = this.vEle.currentTime / this.duration * this.timeLineLength;
+				let timePass = (this.vEle.currentTime - this.timeOffset) / this.duration * this.timeLineLength;
 				$('#timeline').scrollLeft(timePass)
+			},
+
+			// 
+			handlerMovingNeedle: function(left){
+				this.timeOffset = left/this.timeLineLength*this.duration;
+				console.log(this.timeOffset)
+				// this.updateType = 2;
+				$('#timeline').triggerHandler('scroll');
 			}
 		},
 
@@ -2319,8 +2326,9 @@ module.exports = function(){
 					// _.debounce
 					let sl = $(this).scrollLeft();
 					// 修改视频时间
-					vEle.currentTime = (sl / t.timeLineLength * duration);
+					vEle.currentTime = (sl / t.timeLineLength * duration) + t.timeOffset;
 					t.updateType = 2;
+
 				}
 			})
 
@@ -2334,9 +2342,22 @@ module.exports = function(){
 				let caption = $(this).data('caption');
 
 				let st = caption.startTime / 1000;
+				
 				// 修改视频时间
 				vEle.currentTime = st;
 				t.updateType = 1;
+
+				// 指针处于时间轴容器中间
+				let halfTimeOffset = $('#timeline').width() / t.timeLineLength * t.duration / 2;
+				if(st > halfTimeOffset){
+					t.timeOffset = halfTimeOffset;
+				}else{
+					t.timeOffset = st;
+				}
+
+				$('.playhead').css({
+					left: t.timeOffset/halfTimeOffset/2 * $('#timeline').width()
+				})
 			}).on('blur', '.caption-ipt .el-textarea__inner', function(){
 				$(this).parents('.caption-line').removeClass('focused');
 			}).on('click', '.caption-text', function(){

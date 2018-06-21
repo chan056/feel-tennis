@@ -384,8 +384,9 @@ app{font-size: 14px;}
 
 // 翻译
 .timedtext-content{
+  -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none; // 影响拖拽needle
+  .rel{position: relative; overflow: hidden;}
   #timeline{
-    position: relative;
     min-height: 30px;
     overflow-x: auto;
     overflow-y: hidden;
@@ -426,7 +427,7 @@ app{font-size: 14px;}
 
   .playhead{
     position: absolute;
-    left: 100px;
+    left: 0;
     top: 0;
 
     .playhead-needle{

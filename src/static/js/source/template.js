@@ -998,12 +998,14 @@ module.exports = function(){
                             <p class="subtitle"></p>
                         </div>
 
-                        <div id="timeline">
-                            <TimeScale v-if="duration" :duration="duration" />
-                            <div class="playhead" v-draggable>
-                                <div class="playhead-needle"></div>
-                                <div class="playhead-handle">
-                                    <div class="playhead-triangle"></div>
+                        <div class="rel">
+                            <div id="timeline">
+                                <TimeScale v-if="duration" :duration="duration" />
+                                <div class="playhead" v-draggable="{type: 'child', fn: handlerMovingNeedle}">
+                                    <div class="playhead-needle"></div>
+                                    <div class="playhead-handle">
+                                        <div class="playhead-triangle"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

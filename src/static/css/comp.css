@@ -564,8 +564,17 @@ app {
 #guide-dialog .el-dialog__body {
   text-align: center;
 }
-.timedtext-content #timeline {
+.timedtext-content {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.timedtext-content .rel {
   position: relative;
+  overflow: hidden;
+}
+.timedtext-content #timeline {
   min-height: 30px;
   overflow-x: auto;
   overflow-y: hidden;
@@ -627,7 +636,7 @@ app {
 }
 .timedtext-content .playhead {
   position: absolute;
-  left: 100px;
+  left: 0;
   top: 0;
 }
 .timedtext-content .playhead .playhead-needle {
