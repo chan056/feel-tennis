@@ -238,7 +238,11 @@ let tools = {
 				}
 			}.bind(t))
 		})
-	}
+    },
+    
+    matchNumber: function (str){
+        return Number(str.match(/\d+(\.\d+)?/)[0]) || 0
+    }
 };
 
 window.tools = tools;

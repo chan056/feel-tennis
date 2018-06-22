@@ -2180,12 +2180,19 @@ module.exports = function(){
 		data: function () {
 			var d = {
 				vEle: null,
+				curCaptionBlock: null,
+				waveContainerWidth: 0,
 				duration: 0,
 				timeLineLength: 0,
 				captions: [],
 				updateType: 0,
+				timeOffset: 0,
+
+				captionBlockLeftBoundryScope:{},
+				captionBlockRightBoundryScope:{},
+
 				formatMS: tools.formatMS,
-				timeOffset: 0
+
 			};
 
 			return d;
@@ -2298,37 +2305,104 @@ module.exports = function(){
 				$('#timeline').scrollLeft(timePass)
 			},
 
-			// 
-			handlerMovingNeedle: function(left){
-				this.timeOffset = left/this.timeLineLength*this.duration;
-				console.log(this.timeOffset)
-				// this.updateType = 2;
+			// 拖动“针头”
+			handlerMovingNeedle: function(pos){
+				this.timeOffset = pos / this.timeLineLength*this.duration;
 				$('#timeline').triggerHandler('scroll');
+			},
+
+			// 拖动block dragger
+			handlerMovingCaptionBlockLeftDragger: function(pos){
+				let curCaptionBlock = this.curCaptionBlock;
+				let curCaptionBlockLeftBoundry = tools.matchNumber(curCaptionBlock.css('left'));
+				let curCaptionBlockRightBoundry = curCaptionBlockLeftBoundry + curCaptionBlock.width();
+
+				let prevCaptinBlock = curCaptionBlock.prev('.caption-block').length? curCaptionBlock.prev('.caption-block') : null;
+				let prevCaptionBlockLeftBoundry = tools.matchNumber(prevCaptinBlock.css('left'));
+				let prevCaptionBlockRightBoundry = prevCaptionBlockLeftBoundry + prevCaptinBlock.width();
+
+				curCaptionBlock.css('left', pos).width(curCaptionBlockRightBoundry-pos);
+
+				if(pos < prevCaptionBlockRightBoundry){
+					prevCaptinBlock.width(pos - prevCaptionBlockLeftBoundry)
+				}
+			},
+			handlerMovingCaptionBlockRightDragger: function(pos){
+				let curCaptionBlock = this.curCaptionBlock;
+				let curCaptionBlockLeftBoundry = tools.matchNumber(curCaptionBlock.css('left'));
+				let curCaptionBlockRightBoundry = curCaptionBlockLeftBoundry + curCaptionBlock.width();
+
+				let nextCaptinBlock = curCaptionBlock.next('.caption-block').length? curCaptionBlock.next('.caption-block') : null;
+				let nextCaptionBlockLeftBoundry = tools.matchNumber(nextCaptinBlock.css('left'));
+				let nextCaptionBlockRightBoundry = nextCaptionBlockLeftBoundry + nextCaptinBlock.width();
+
+				curCaptionBlock.width(pos - curCaptionBlockLeftBoundry);
+
+				if(pos > nextCaptionBlockLeftBoundry){
+					nextCaptinBlock.width(nextCaptionBlockRightBoundry - pos).css('left', pos)
+				}
 			}
 		},
 
 		mounted: function(){
 			let t = this;
 			let vEle = this.vEle = $('video')[0];
+			t.waveContainerWidth = $('#timeline').width();
 
 			tools.togglePageIE(this);
 			this.bindVideo();
 			this.bindSubtitle();
 
 			$('#timeline').on("scroll", function(){
-				// console.log(t.updateType, 'trigger scroll')
-				if(t.updateType == 1){
+				let sl = $(this).scrollLeft();
+				$('#playhead-container').css('left', sl);
+
+				if(t.updateType == 1){//左侧点击引起的scroll事件
 					return
 				}
 
 				let duration = t.duration;
 				if(duration){
 					// _.debounce
-					let sl = $(this).scrollLeft();
+					
 					// 修改视频时间
 					vEle.currentTime = (sl / t.timeLineLength * duration) + t.timeOffset;
 					t.updateType = 2;
 
+				}
+			}).on('mouseover click', '.caption-block', function(e){
+				// console.log(e);
+				// e.type
+				let block = $(e.target);
+				t.curCaptionBlock = block;
+				
+				let blockLeft = tools.matchNumber(block.css('left')),
+					blockWidth = block.width(),
+					blockRight = blockLeft + blockWidth;
+
+				$('.caption-block-dragger-min').css('left', blockLeft);
+				$('.caption-block-dragger-max').css('left', blockRight);
+
+				// min: prevBlock.left+30  max: nextBlock.right - 30
+				let prevBlock = block.prev('.caption-block'),
+					nextBlock = block.next('.caption-block');
+
+				const blockMinWidth = 30;
+
+				if(prevBlock.length){
+					t.captionBlockLeftBoundryScope.min = tools.matchNumber(prevBlock.css('left')) + blockMinWidth;
+				}else{
+					t.captionBlockLeftBoundryScope.min = 0;
+				}
+
+				t.captionBlockLeftBoundryScope.max = blockLeft + blockWidth - blockMinWidth;
+
+				t.captionBlockRightBoundryScope.min = blockLeft + blockMinWidth;
+
+				if(nextBlock.length){
+					t.captionBlockRightBoundryScope.max = tools.matchNumber(nextBlock.css('left')) + nextBlock.width() - blockMinWidth;
+				}else{
+					t.captionBlockRightBoundryScope.max = t.timeLineLength;
 				}
 			})
 

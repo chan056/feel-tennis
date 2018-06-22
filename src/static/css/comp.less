@@ -387,6 +387,7 @@ app{font-size: 14px;}
   -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none; // 影响拖拽needle
   .rel{position: relative; overflow: hidden;}
   #timeline{
+    position: relative;
     min-height: 30px;
     overflow-x: auto;
     overflow-y: hidden;
@@ -425,7 +426,10 @@ app{font-size: 14px;}
 
   #time-scale{cursor: ew-resize;}
 
+  #playhead-container{width: 100%; height: 100px; overflow: hidden; position: absolute; top: 0; pointer-events: none;}
+
   .playhead{
+    pointer-events: auto;
     position: absolute;
     left: 0;
     top: 0;
@@ -455,4 +459,8 @@ app{font-size: 14px;}
       border-bottom: 10px solid #cc181e;
     }
   }
+
+  .caption-block{position: absolute; top: 20px; height: 60px; box-sizing: border-box; border: 1px solid;}
+
+  .caption-block-dragger{position: absolute; left: -100px; top: 20px; height: 80px; width: 20px; background-color: #333;}
 }

@@ -575,6 +575,7 @@ app {
   overflow: hidden;
 }
 .timedtext-content #timeline {
+  position: relative;
   min-height: 30px;
   overflow-x: auto;
   overflow-y: hidden;
@@ -634,7 +635,16 @@ app {
 .timedtext-content #time-scale {
   cursor: ew-resize;
 }
+.timedtext-content #playhead-container {
+  width: 100%;
+  height: 100px;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+}
 .timedtext-content .playhead {
+  pointer-events: auto;
   position: absolute;
   left: 0;
   top: 0;
@@ -662,4 +672,19 @@ app {
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-bottom: 10px solid #cc181e;
+}
+.timedtext-content .caption-block {
+  position: absolute;
+  top: 20px;
+  height: 60px;
+  box-sizing: border-box;
+  border: 1px solid;
+}
+.timedtext-content .caption-block-dragger {
+  position: absolute;
+  left: -100px;
+  top: 20px;
+  height: 80px;
+  width: 20px;
+  background-color: #333;
 }

@@ -997,11 +997,19 @@ module.exports = function(){
 
                             <p class="subtitle"></p>
                         </div>
+                        <div id="timeline">
+                            <TimeScale v-if="duration" :duration="duration" />
+                            
+                            <div v-for="(caption, index) in captions" v-if="duration && timeLineLength" class="caption-block" 
+                                v-bind:style="{left: caption.startTime/1000/duration*timeLineLength+'px', width: (caption.endTime-caption.startTime)/1000/duration*timeLineLength+'px'}"
+                                >
+                            </div>
 
-                        <div class="rel">
-                            <div id="timeline">
-                                <TimeScale v-if="duration" :duration="duration" />
-                                <div class="playhead" v-draggable="{type: 'child', fn: handlerMovingNeedle}">
+                            <div class="caption-block-dragger caption-block-dragger-min" v-draggable="{boundry: captionBlockLeftBoundryScope, fn: handlerMovingCaptionBlockLeftDragger}"></div>
+                            <div class="caption-block-dragger caption-block-dragger-max" v-draggable="{boundry: captionBlockRightBoundryScope, fn: handlerMovingCaptionBlockRightDragger}"></div>
+
+                            <div id="playhead-container">
+                                <div v-if="waveContainerWidth" class="playhead" v-draggable="{max: waveContainerWidth, fn: handlerMovingNeedle}">
                                     <div class="playhead-needle"></div>
                                     <div class="playhead-handle">
                                         <div class="playhead-triangle"></div>
