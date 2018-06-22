@@ -684,7 +684,8 @@ app {
   position: absolute;
   left: -100px;
   top: 20px;
-  height: 80px;
+  height: 60px;
   width: 20px;
   background-color: #333;
+  margin-left: -10px;
 }

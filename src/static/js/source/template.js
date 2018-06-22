@@ -1005,11 +1005,11 @@ module.exports = function(){
                                 >
                             </div>
 
-                            <div class="caption-block-dragger caption-block-dragger-min" v-draggable="{boundry: captionBlockLeftBoundryScope, fn: handlerMovingCaptionBlockLeftDragger}"></div>
-                            <div class="caption-block-dragger caption-block-dragger-max" v-draggable="{boundry: captionBlockRightBoundryScope, fn: handlerMovingCaptionBlockRightDragger}"></div>
+                            <div class="caption-block-dragger caption-block-dragger-min" v-draggable="{boundry: captionBlockLeftBoundryScope, draggingFn: handlerMovingCaptionBlockLeftDragger, draggingSign: draggingSign}"></div>
+                            <div class="caption-block-dragger caption-block-dragger-max" v-draggable="{boundry: captionBlockRightBoundryScope, draggingFn: handlerMovingCaptionBlockRightDragger, draggingSign: draggingSign}"></div>
 
                             <div id="playhead-container">
-                                <div v-if="waveContainerWidth" class="playhead" v-draggable="{max: waveContainerWidth, fn: handlerMovingNeedle}">
+                                <div v-if="waveContainerWidth" class="playhead" v-draggable="{max: waveContainerWidth, draggingFn: handlerMovingNeedle, draggingSign: draggingSign}">
                                     <div class="playhead-needle"></div>
                                     <div class="playhead-handle">
                                         <div class="playhead-triangle"></div>

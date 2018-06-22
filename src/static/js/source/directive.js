@@ -1,26 +1,27 @@
 module.exports = function(){
     Vue.directive('draggable', {
         inserted: function (el, binding) {
-            // console.log(binding.value)
             el = $(el);
             let startX;
             let startL;
             const rid = '.' + Math.random().toString().split('.')[1];
 
-            console.log(binding.value)
+            let bindingValue = binding.value;
+            let draggingSign = bindingValue.draggingSign;
 
             el.on('mousedown', function(e){
                 startX =  e.clientX
                 startL = tools.matchNumber(el.css('left'));
+                draggingSign.status = true;
 
                 let maxL, minL;
 
-                if(binding.value.boundry){
-                    maxL = binding.value.boundry.max;
-                    minL = binding.value.boundry.min;
+                if(bindingValue.boundry){
+                    maxL = bindingValue.boundry.max;
+                    minL = bindingValue.boundry.min;
                 }else{
-                    maxL = binding.value.max;
-                    minL = binding.value.min || 0;
+                    maxL = bindingValue.max;
+                    minL = bindingValue.min || 0;
                 }
 
                 $(window).on('mousemove' + rid, function(e){
@@ -37,13 +38,14 @@ module.exports = function(){
                         'left': endL
                     })
 
-                    if(binding.value.fn){
-                        binding.value.fn(endL);
+                    if(bindingValue.draggingFn){
+                        bindingValue.draggingFn(endL);
                     }
                 })
 
                 $(window).on('mouseup' + rid, function(){
                     $(window).off('mousemove' + rid).off('mouseup' + rid);
+                    draggingSign.status = false;
                 })
             })
         }

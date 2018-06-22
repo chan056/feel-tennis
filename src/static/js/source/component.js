@@ -2190,6 +2190,7 @@ module.exports = function(){
 
 				captionBlockLeftBoundryScope:{},
 				captionBlockRightBoundryScope:{},
+				draggingSign: {status: false},
 
 				formatMS: tools.formatMS,
 
@@ -2318,12 +2319,12 @@ module.exports = function(){
 				let curCaptionBlockRightBoundry = curCaptionBlockLeftBoundry + curCaptionBlock.width();
 
 				let prevCaptinBlock = curCaptionBlock.prev('.caption-block').length? curCaptionBlock.prev('.caption-block') : null;
-				let prevCaptionBlockLeftBoundry = tools.matchNumber(prevCaptinBlock.css('left'));
-				let prevCaptionBlockRightBoundry = prevCaptionBlockLeftBoundry + prevCaptinBlock.width();
+				let prevCaptionBlockLeftBoundry = prevCaptinBlock? tools.matchNumber(prevCaptinBlock.css('left')): 0;
+				let prevCaptionBlockRightBoundry = prevCaptinBlock? prevCaptionBlockLeftBoundry + prevCaptinBlock.width() : 0;
 
 				curCaptionBlock.css('left', pos).width(curCaptionBlockRightBoundry-pos);
 
-				if(pos < prevCaptionBlockRightBoundry){
+				if(pos < prevCaptionBlockRightBoundry && prevCaptinBlock){
 					prevCaptinBlock.width(pos - prevCaptionBlockLeftBoundry)
 				}
 			},
@@ -2333,12 +2334,12 @@ module.exports = function(){
 				let curCaptionBlockRightBoundry = curCaptionBlockLeftBoundry + curCaptionBlock.width();
 
 				let nextCaptinBlock = curCaptionBlock.next('.caption-block').length? curCaptionBlock.next('.caption-block') : null;
-				let nextCaptionBlockLeftBoundry = tools.matchNumber(nextCaptinBlock.css('left'));
-				let nextCaptionBlockRightBoundry = nextCaptionBlockLeftBoundry + nextCaptinBlock.width();
+				let nextCaptionBlockLeftBoundry = nextCaptinBlock? tools.matchNumber(nextCaptinBlock.css('left')): this.timeLineLength;
+				let nextCaptionBlockRightBoundry = nextCaptinBlock? nextCaptionBlockLeftBoundry + nextCaptinBlock.width(): this.timeLineLength;
 
 				curCaptionBlock.width(pos - curCaptionBlockLeftBoundry);
 
-				if(pos > nextCaptionBlockLeftBoundry){
+				if(pos > nextCaptionBlockLeftBoundry && nextCaptinBlock){
 					nextCaptinBlock.width(nextCaptionBlockRightBoundry - pos).css('left', pos)
 				}
 			}
@@ -2371,6 +2372,9 @@ module.exports = function(){
 
 				}
 			}).on('mouseover click', '.caption-block', function(e){
+				if(t.draggingSign.status){// 拖动操作
+					return;
+				}
 				// console.log(e);
 				// e.type
 				let block = $(e.target);
