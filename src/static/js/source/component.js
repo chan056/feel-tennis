@@ -2289,6 +2289,8 @@ module.exports = function(){
 						// console.log(caption, i);
 						curLine = lineBox.find('.caption-line').eq(i);
 						curLine.addClass('current-line').siblings().removeClass('current-line');
+
+						$('.caption-block').eq(i).addClass('current').siblings('.caption-block').removeClass('current');
 						// curLine[0].scrollIntoView(true)
 
 						// currentLine.marginTop < lineBox.scrollTop || currentLine.marginTop > lineBox.scrollTop + lineBox.height - curLineHeight
@@ -2400,8 +2402,13 @@ module.exports = function(){
 				}
 			},
 
-			timeToPos: function(time){
-				return time / this.duration * this.timeLineLength;
+			timeToPos: function(time, isMilli){
+				let pos = time / this.duration * this.timeLineLength;
+				if(isMilli){
+					return pos / 1000;
+				}else{
+					return pos;
+				}
 			}
 		},
 
@@ -2436,8 +2443,7 @@ module.exports = function(){
 				if(t.draggingSign.status){// 拖动操作
 					return;
 				}
-				// console.log(e);
-				// e.type
+
 				let block = $(e.target);
 				t.curCaptionBlock = block;
 				
@@ -2473,7 +2479,7 @@ module.exports = function(){
 				if(e.type == 'click'){
 					let index = $('.caption-block').index(block);
 					$('.caption-line').eq(index).find('.caption-text').trigger('click', {isTrigger: true});
-
+					$(this).addClass('current').siblings().removeClass('current');
 				}
 			}).on('mouseleave', '.caption-block', function(e){
 				if(!$(e.relatedTarget).is('.caption-block-dragger')){
@@ -2482,11 +2488,20 @@ module.exports = function(){
 			})
 
 			$('#line-editor').on('click', '.caption-line', function(){
+
 				if($(this).is('.selected')){
 					return;
 				}
+
+				// let index= $('.caption-line').index(this);
+
+				// console.log('click caption-line' + (+new Date()))
 				$(this).addClass('selected current-line').siblings().removeClass('selected current-line');
-				// $(this).find('.caption-ipt .el-textarea__inner').focus();
+
+				// 通过点击时间轴上的“字幕块”
+				if(arguments[1] && arguments[1].isTrigger){
+					return;
+				}
 
 				let caption = $(this).data('caption');
 
@@ -2507,15 +2522,106 @@ module.exports = function(){
 				$('.playhead').css({
 					left: t.timeOffset/halfTimeOffset/2 * t.waveContainerWidth
 				})
+
+				// $('.caption-block').addClass('selected');
 			}).on('blur', '.caption-ipt .el-textarea__inner', function(){
 				$(this).parents('.caption-line').removeClass('focused');
+				$(this).focus();
 			}).on('click', '.caption-text', function(){
 				$(this).parents('.caption-line').addClass('focused');
 				$(this).siblings('.caption-ipt').find('.el-textarea__inner').focus();
-			}).on('click', '.line-start-time', function(){
-
-			}).on('click', '.line-end-time', function(){
+			}).on('click', '.delete-segment-button', function(e){
+				let curLine = $(this).parents('.caption-line').eq(0);
+				let index = $('.caption-line').index(curLine);
+				t.captions.splice(index, 1);
 				
+				curLine.removeClass('selected current-line');
+			}).on('click', '.add-segment-button', function(e){
+				let curLine = $(this).parents('.caption-line').eq(0);
+				let index = $('.caption-line').index(curLine);
+
+				curLine.removeClass('selected current-line');
+
+				// 优先往后加 最长时间为2秒
+				// 后方间隙不够（小于0.5秒），
+				// 往前，0.5-2秒
+				// 移动指针到拼接位置
+				// 选中当前行
+
+				let nextCaptionLine = curLine.next('.caption-line');
+				let prevCaptionLine = curLine.prev('.caption-line');
+
+				let prevLineData = {},
+					nextLineData = {};
+
+				let curLineData = curLine.data('caption');
+				if(prevCaptionLine.length){
+					prevLineData = prevCaptionLine.data('caption');
+				}
+				if(nextCaptionLine.length){
+					nextLineData = nextCaptionLine.data('caption');
+				}
+
+				let newLineLength = 0;
+				let newLineLocation = 0;// 1代表往后添加 2代表往前
+				let newLineStartTime = 0,
+					newLineEndTime = 0;
+				
+				let nextTimeGap = (nextLineData.startTime || t.duration * 1000) - curLineData.endTime;
+				if(nextTimeGap > 2000){
+					newLineLength = 2;
+					newLineLocation = 1;
+				}else if(nextTimeGap > 500){
+					newLineLength = nextTimeGap / 1000;
+					newLineLocation = 1;
+				}else{
+					let prevTimeGap = curLineData.startTime - (prevLineData.endTime || 0)
+					if(prevTimeGap > 2000){
+						newLineLength = 2;
+						newLineLocation = 2;
+					}else if(prevTimeGap > 500){
+						newLineLength = prevTimeGap / 1000;
+						newLineLocation = 2;
+					}
+				}
+
+				let captions = t.captions;
+				let newLineData = {};
+
+				if(newLineLength){
+					let needlePos = 0;
+
+					if(newLineLocation === 1){
+						needlePos = t.timeToPos(curLineData.endTime, true);
+
+						newLineStartTime = curLineData.endTime;
+						newLineEndTime = newLineStartTime + newLineLength * 1000;
+						newLineData = { 
+							startTime: newLineStartTime, 
+							endTime: newLineEndTime, 
+							text: '' 
+						};
+
+						captions.splice(index + 1, 0, newLineData)
+					}else if(newLineLocation === 2){
+						needlePos = t.timeToPos(curLineData.startTime, true);
+
+						newLineEndTime = curLineData.startTime;
+						newLineStartTime = newLineEndTime - newLineLength * 1000;
+						newLineData = { 
+							startTime: newLineStartTime, 
+							endTime: newLineEndTime, 
+							text: '' 
+						};
+
+						captions.splice(index, 0, newLineData)
+					}
+
+					let triggeredLineIndex = [index + 1, index][newLineLocation - 1];
+					t.$nextTick(function () {
+						$('.caption-line').eq(triggeredLineIndex).find('.caption-text').trigger('click');
+					})
+				}
 			})
 		},
 	}

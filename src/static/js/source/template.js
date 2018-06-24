@@ -66,7 +66,7 @@ module.exports = function(){
                             <img class="pay-code" src="/img/wechat.jpeg" alt="微信" title="微信">
                         </el-popover>
                         
-                        <i v-popover:paycode class="fa fa-money item" title="投币" id="guide-fund-1"></i>
+                        <i v-popover:paycode class="fa fa-money item" title="微信:anothercy 支付宝:13666646794" id="guide-fund-1"></i>
                     </el-col>
                 </el-row>
     

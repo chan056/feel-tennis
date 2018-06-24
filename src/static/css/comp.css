@@ -658,7 +658,7 @@ app {
   top: 0;
 }
 .timedtext-content .playhead .playhead-needle {
-  height: 80px;
+  height: 84px;
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -670,7 +670,7 @@ app {
   height: 20px;
   left: -10px;
   position: absolute;
-  top: 60px;
+  top: 64px;
   width: 20px;
 }
 .timedtext-content .playhead .playhead-triangle {
@@ -688,6 +688,9 @@ app {
   box-sizing: border-box;
   border: 1px solid;
   cursor: pointer;
+}
+.timedtext-content .caption-block.current {
+  box-shadow: inset 0 0 8px #333;
 }
 .timedtext-content .caption-block-dragger {
   position: absolute;
