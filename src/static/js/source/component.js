@@ -2202,13 +2202,6 @@ module.exports = function(){
 		template: temp.translator,
 
 		methods: {
-			fetchRelatedMatches: function (){
-				tools.xhr('/relatedMatches', function(res){
-					this.matches = res;
-					window.matches = Object.assign([], res);
-				}.bind(this));
-			},
-
 			bindVideo: function(){
 				let t = this;
 				tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
@@ -2225,12 +2218,17 @@ module.exports = function(){
 							t.timeLineLength = $('#time-scale').width();
 						})
 
+						t.trimCaption();
+
 						// setTimeout(()=>{
 						// 	console.log($('#time-scale').width())
 						// }, 100)
+
+						t.vEle.oncanplay = null;
 					}
 
 					// type 
+					// 0 拖动视频
 					// 1 左侧点击	
 					// 2 右下角点击
 					t.vEle.ontimeupdate= function(){
@@ -2250,7 +2248,7 @@ module.exports = function(){
 				}, id: 'hls'});
 			},
 
-			bindSubtitle: function(){
+			bindSubtitle: function(fn){
 				tools.xhr('/srt/' + this.videoId, function(resData){
 					if(!resData)
 						return;
@@ -2263,12 +2261,10 @@ module.exports = function(){
 						}) */;
 					});
 
-					this.listCaptions(resData);
-				}.bind(this));
-			},
+					this.captions = resData;
 
-			listCaptions: function(captions){
-				this.captions = captions;
+					fn && fn();
+				}.bind(this));
 			},
 
 			saveSrt: function(){
@@ -2283,18 +2279,31 @@ module.exports = function(){
 			positionLine: function(){
 				let currentTime = this.vEle.currentTime;
 				let captions = this.captions;
+				let curLine;
+				let lineBox = $('#line-editor');
+
 				for(let i=0; i<captions.length; i++){
 					let caption = captions[i];
 
 					if(currentTime> caption.startTime / 1000 && currentTime < caption.endTime / 1000){
 						// console.log(caption, i);
-						let curLine = $('#line-editor').find('.caption-line').eq(i);
+						curLine = lineBox.find('.caption-line').eq(i);
 						curLine.addClass('current-line').siblings().removeClass('current-line');
 						// curLine[0].scrollIntoView(true)
 
-						// todo
-						// currentLine.marginTop < lineBox.scrollTop || currentLine.marginTop > lineBox.scrollTop + lineBox.height
-						// lineBox.scrollTop = currentLine.marginTop || lineBox.scrollTop = currentLine.marginTop - (lineBox.height - line.height)
+						// currentLine.marginTop < lineBox.scrollTop || currentLine.marginTop > lineBox.scrollTop + lineBox.height - curLineHeight
+						let lineBoxScrollTop = lineBox.scrollTop();
+						let lineBoxHeight = lineBox.height();
+						let curLineHeight = curLine.height()
+						let firstLineOffsetTop = lineBox.find('.caption-line').eq(0).offset().top;
+						let curLineMarginTop = curLine.offset().top - firstLineOffsetTop;
+						
+						if(curLineMarginTop < lineBoxScrollTop){
+							lineBox.scrollTop(curLineMarginTop)
+						}else if(curLineMarginTop > lineBoxScrollTop + lineBoxHeight - curLineHeight -tools.matchNumber(curLine.css('margin-top'))){
+							lineBox.scrollTop(curLineMarginTop - lineBoxHeight + curLineHeight + tools.matchNumber(curLine.css('margin-top')))
+						}
+
 						break;
 					}
 				}
@@ -2302,19 +2311,21 @@ module.exports = function(){
 
 			// 滚动时间轴
 			scrollTimeline: function(){
-				let timePass = (this.vEle.currentTime - this.timeOffset) / this.duration * this.timeLineLength;
+				let timePass = this.timeToPos(this.vEle.currentTime - this.timeOffset);
 				$('#timeline').scrollLeft(timePass)
 			},
 
 			// 拖动“针头”
 			handlerMovingNeedle: function(pos){
-				this.timeOffset = pos / this.timeLineLength*this.duration;
+				this.timeOffset = this.posToTime(pos);
 				$('#timeline').triggerHandler('scroll');
 			},
 
 			// 拖动block dragger
 			handlerMovingCaptionBlockLeftDragger: function(pos){
+				pos = pos > 0? pos: 0;
 				let curCaptionBlock = this.curCaptionBlock;
+				let index = $('.caption-block').index(this.curCaptionBlock);
 				let curCaptionBlockLeftBoundry = tools.matchNumber(curCaptionBlock.css('left'));
 				let curCaptionBlockRightBoundry = curCaptionBlockLeftBoundry + curCaptionBlock.width();
 
@@ -2326,10 +2337,21 @@ module.exports = function(){
 
 				if(pos < prevCaptionBlockRightBoundry && prevCaptinBlock){
 					prevCaptinBlock.width(pos - prevCaptionBlockLeftBoundry)
+					if(index > 0){
+						this.captions[index-1].endTime = this.posToTime(pos, true);
+					}
+				}
+
+				if(index > - 1){
+					this.captions[index].startTime = this.posToTime(pos, true);
 				}
 			},
+
 			handlerMovingCaptionBlockRightDragger: function(pos){
+				// console.log(pos, this.timeLineLength)
+				pos = pos < this.timeLineLength? pos: this.timeLineLength;
 				let curCaptionBlock = this.curCaptionBlock;
+				let index = $('.caption-block').index(this.curCaptionBlock);
 				let curCaptionBlockLeftBoundry = tools.matchNumber(curCaptionBlock.css('left'));
 				let curCaptionBlockRightBoundry = curCaptionBlockLeftBoundry + curCaptionBlock.width();
 
@@ -2340,8 +2362,46 @@ module.exports = function(){
 				curCaptionBlock.width(pos - curCaptionBlockLeftBoundry);
 
 				if(pos > nextCaptionBlockLeftBoundry && nextCaptinBlock){
-					nextCaptinBlock.width(nextCaptionBlockRightBoundry - pos).css('left', pos)
+					nextCaptinBlock.width(nextCaptionBlockRightBoundry - pos).css('left', pos);
+					if(index > - 1 && index < this.captions.length - 1){
+						this.captions[index + 1].startTime = this.posToTime(pos, true)
+					}
 				}
+
+				if(index > - 1){
+					this.captions[index].endTime = this.posToTime(pos, true);
+				}
+			},
+
+			// 假如字幕超出视频时间长度
+			trimCaption: function(){
+				let captions = this.captions;
+				let duration = this.duration;
+				let cutSignal = false;
+
+				for(var i=0, j=captions.length; i<j; i++){
+					let caption = captions[i];
+
+					let endTime = caption.endTime / 1000;
+					if(endTime >  duration){
+						caption.endTime = this.duration * 1000;
+						captions.length = i + 1;
+						break;
+					}
+				}
+			},
+
+			posToTime: function(pos, isMilli){
+				let time = pos / this.timeLineLength * this.duration;
+				if(isMilli){
+					return time * 1000;
+				}else{
+					return time;
+				}
+			},
+
+			timeToPos: function(time){
+				return time / this.duration * this.timeLineLength;
 			}
 		},
 
@@ -2351,8 +2411,9 @@ module.exports = function(){
 			t.waveContainerWidth = $('#timeline').width();
 
 			tools.togglePageIE(this);
-			this.bindVideo();
-			this.bindSubtitle();
+			this.bindSubtitle(()=>{
+				this.bindVideo();
+			});
 
 			$('#timeline').on("scroll", function(){
 				let sl = $(this).scrollLeft();
@@ -2367,7 +2428,7 @@ module.exports = function(){
 					// _.debounce
 					
 					// 修改视频时间
-					vEle.currentTime = (sl / t.timeLineLength * duration) + t.timeOffset;
+					vEle.currentTime = t.posToTime(sl) + t.timeOffset;
 					t.updateType = 2;
 
 				}
@@ -2408,6 +2469,16 @@ module.exports = function(){
 				}else{
 					t.captionBlockRightBoundryScope.max = t.timeLineLength;
 				}
+
+				if(e.type == 'click'){
+					let index = $('.caption-block').index(block);
+					$('.caption-line').eq(index).find('.caption-text').trigger('click', {isTrigger: true});
+
+				}
+			}).on('mouseleave', '.caption-block', function(e){
+				if(!$(e.relatedTarget).is('.caption-block-dragger')){
+					$('.caption-block-dragger-min, .caption-block-dragger-max').css('left', -100);
+				}
 			})
 
 			$('#line-editor').on('click', '.caption-line', function(){
@@ -2426,7 +2497,7 @@ module.exports = function(){
 				t.updateType = 1;
 
 				// 指针处于时间轴容器中间
-				let halfTimeOffset = $('#timeline').width() / t.timeLineLength * t.duration / 2;
+				let halfTimeOffset =  t.posToTime(t.waveContainerWidth / 2);
 				if(st > halfTimeOffset){
 					t.timeOffset = halfTimeOffset;
 				}else{
@@ -2434,7 +2505,7 @@ module.exports = function(){
 				}
 
 				$('.playhead').css({
-					left: t.timeOffset/halfTimeOffset/2 * $('#timeline').width()
+					left: t.timeOffset/halfTimeOffset/2 * t.waveContainerWidth
 				})
 			}).on('blur', '.caption-ipt .el-textarea__inner', function(){
 				$(this).parents('.caption-line').removeClass('focused');

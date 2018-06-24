@@ -955,7 +955,7 @@ module.exports = function(){
             <div class="timedtext-content">
                 <el-row>
                     <el-col :span="12">
-                        <div id="captions-options-area">
+                        <div id="captions-area">
                             <el-input
                                 type="textarea"
                                 :rows="2"
@@ -1001,12 +1001,16 @@ module.exports = function(){
                             <TimeScale v-if="duration" :duration="duration" />
                             
                             <div v-for="(caption, index) in captions" v-if="duration && timeLineLength" class="caption-block" 
-                                v-bind:style="{left: caption.startTime/1000/duration*timeLineLength+'px', width: (caption.endTime-caption.startTime)/1000/duration*timeLineLength+'px'}"
+                                v-bind:style="{left: timeToPos(caption.startTime/1000)+'px', width: timeToPos((caption.endTime-caption.startTime)/1000)+'px'}"
                                 >
                             </div>
 
-                            <div class="caption-block-dragger caption-block-dragger-min" v-draggable="{boundry: captionBlockLeftBoundryScope, draggingFn: handlerMovingCaptionBlockLeftDragger, draggingSign: draggingSign}"></div>
-                            <div class="caption-block-dragger caption-block-dragger-max" v-draggable="{boundry: captionBlockRightBoundryScope, draggingFn: handlerMovingCaptionBlockRightDragger, draggingSign: draggingSign}"></div>
+                            <div class="caption-block-dragger caption-block-dragger-min" v-draggable="{boundry: captionBlockLeftBoundryScope, draggingFn: handlerMovingCaptionBlockLeftDragger, draggingSign: draggingSign}">
+                                <i class="fa fa-bars"></i>
+                            </div>
+                            <div class="caption-block-dragger caption-block-dragger-max" v-draggable="{boundry: captionBlockRightBoundryScope, draggingFn: handlerMovingCaptionBlockRightDragger, draggingSign: draggingSign}">
+                                <i class="fa fa-bars"></i>
+                            </div>
 
                             <div id="playhead-container">
                                 <div v-if="waveContainerWidth" class="playhead" v-draggable="{max: waveContainerWidth, draggingFn: handlerMovingNeedle, draggingSign: draggingSign}">

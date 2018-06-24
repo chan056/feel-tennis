@@ -97,46 +97,49 @@ let tools = {
     // 给视频绑定字幕
     // 通过轮询的方式 每x秒检测一次
     // 根据SRT DATA中的start time 和end time 定位字幕
-    attachSubtile: function(video, srts, interval, fn){
+    attachSubtile: function(video, captions, interval, fn){
         interval = interval || 500;
 
-        let lastSrtId;
-        let lastSrtIndex;// 上个匹配到的srt id，用于优化查找速度
+        let lastCaptionId;
+        let lastCaptionIndex;// 上个匹配到的caption id，用于优化查找速度 todo
         let curSubtitle;
 
         setInterval(function(){
-            let curVtime = video.currentTime;
+            let curVtime = video.currentTime;// curVtime和上次一样的话 中断todo
             curVtime = curVtime * 1000;// 微秒
-            let srt, srtId, subtitle;
+            let caption, captionId, subtitle;
             let st, et;// 微秒
 
             let i = 0;
-            let l = srts.length;
+            let l = captions.length;
 
-            if(lastSrtIndex){
-                i = lastSrtIndex;
+            if(lastCaptionIndex){
+                i = lastCaptionIndex;
             }
 
             for(; i<l; i++){
-                srt = srts[i];
-                st = srt.startTime;
-                et = srt.endTime;
-                srtId = srt.id;
+                caption = captions[i];
+                if(!caption){
+                    return;
+                }
+                st = caption.startTime;
+                et = caption.endTime;
+                captionId = caption.id;
 
                 if(curVtime >= st && curVtime <= et){
-                    lastSrtId = srtId;
+                    lastCaptionId = captionId;
                     
-                    curSubtitle = subtitle = srt.text;
+                    curSubtitle = subtitle = caption.text;
                     // console.log(/* '循环次数 '+Z, */ subtitle)
-                    if(i != lastSrtIndex){
+                    if(i != lastCaptionIndex){
                         fn(subtitle);
-                        lastSrtIndex = i;
+                        lastCaptionIndex = i;
                     }
                     
                     break;
                 }else{
                     if(i == l-1){
-                        lastSrtIndex = undefined;
+                        lastCaptionIndex = undefined;
                     }
                 }
             }

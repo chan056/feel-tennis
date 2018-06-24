@@ -564,6 +564,9 @@ app {
 #guide-dialog .el-dialog__body {
   text-align: center;
 }
+#captions-area {
+  padding-right: 1.5rem;
+}
 .timedtext-content {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -579,9 +582,7 @@ app {
   min-height: 30px;
   overflow-x: auto;
   overflow-y: hidden;
-}
-.timedtext-content #timeline canvas {
-  background-color: rebeccapurple;
+  border: 1px solid#f0f0f0;
 }
 .timedtext-content .el-textarea {
   display: none;
@@ -591,9 +592,17 @@ app {
   overflow-x: hidden;
   overflow-y: auto;
 }
+.timedtext-content #line-editor .fa {
+  cursor: pointer;
+  display: none;
+}
 .timedtext-content .caption-line {
   min-height: 60px;
   padding: .5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+.timedtext-content .caption-line .el-textarea__inner {
+  padding: 0 .5rem;
 }
 .timedtext-content .caption-line:hover {
   background-color: #f8f8f8;
@@ -601,11 +610,14 @@ app {
 .timedtext-content .caption-line:hover .fa {
   display: block;
 }
+.timedtext-content .caption-line:hover .fa {
+  display: block !important;
+}
 .timedtext-content .caption-line.selected {
   background-color: #def;
 }
 .timedtext-content .caption-line.selected .fa {
-  display: block;
+  display: block !important;
 }
 .timedtext-content .caption-line.focused .caption-ipt {
   display: block;
@@ -624,10 +636,6 @@ app {
 .timedtext-content .caption-line .caption-text {
   min-height: 40px;
   cursor: text;
-}
-.timedtext-content .fa {
-  cursor: pointer;
-  display: none;
 }
 .timedtext-content .timed-line-btns {
   padding-left: 1rem;
@@ -675,17 +683,25 @@ app {
 }
 .timedtext-content .caption-block {
   position: absolute;
-  top: 20px;
+  top: 24px;
   height: 60px;
   box-sizing: border-box;
   border: 1px solid;
+  cursor: pointer;
 }
 .timedtext-content .caption-block-dragger {
   position: absolute;
   left: -100px;
-  top: 20px;
+  top: 24px;
   height: 60px;
   width: 20px;
-  background-color: #333;
+  background-color: #409EFF;
   margin-left: -10px;
+  cursor: ew-resize;
+  text-align: center;
+}
+.timedtext-content .caption-block-dragger .fa {
+  margin-top: 24px;
+  transform: rotateZ(90deg);
+  color: #fff;
 }
