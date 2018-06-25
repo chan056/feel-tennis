@@ -2459,7 +2459,7 @@ module.exports = function(){
 				let sl = $(this).scrollLeft();
 				$('#playhead-container').css('left', sl);
 
-				if(t.updateType == 1){//左侧点击引起的scroll事件
+				if(t.updateType == 1 || !t.updateType){// 非手动拖动字幕引起
 					return
 				}
 
