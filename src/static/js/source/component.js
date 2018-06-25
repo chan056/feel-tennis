@@ -788,7 +788,9 @@ module.exports = function(){
 			},
 
 			bindSubtitle: function(){
-				tools.xhr('/srt/' + this.videoId, function(resData){
+				let srtAPI = '/srt/' + this.videoId;
+
+				tools.xhr(srtAPI, function(resData){
 					if(!resData)
 						return;
 						
@@ -2176,7 +2178,11 @@ module.exports = function(){
 	},
 
 	COMPONENTS.Translator = {
-		props: ['videoId'],
+		props: ['videoId', 'usrId'],
+		beforeRouteUpdate(to, from, next){
+			location.hash = to.fullPath
+			location.reload();
+		},
 		data: function () {
 			var d = {
 				vEle: null,
@@ -2185,6 +2191,8 @@ module.exports = function(){
 				duration: 0,
 				timeLineLength: 0,
 				captions: [],
+				drafts: [],
+				draft: '',// 字幕草稿/用户 编号
 				updateType: 0,
 				timeOffset: 0,
 
@@ -2249,7 +2257,13 @@ module.exports = function(){
 			},
 
 			bindSubtitle: function(fn){
-				tools.xhr('/srt/' + this.videoId, function(resData){
+				let srtAPI = '/srt/' + this.videoId;
+
+				if(this.draft){
+					srtAPI += '?usrId=' + this.draft;
+				}
+
+				tools.xhr(srtAPI, function(resData){
 					if(!resData)
 						return;
 						
@@ -2273,6 +2287,11 @@ module.exports = function(){
 				}.bind(this), 'post', {
 					srtArr: this.captions,
 				});
+			},
+
+			// 继承当前草稿，作为自己的草稿
+			inheritSrt: function(){
+
 			},
 
 			// 定位当前行
@@ -2302,7 +2321,7 @@ module.exports = function(){
 						
 						if(curLineMarginTop < lineBoxScrollTop){
 							lineBox.scrollTop(curLineMarginTop)
-						}else if(curLineMarginTop > lineBoxScrollTop + lineBoxHeight - curLineHeight -tools.matchNumber(curLine.css('margin-top'))){
+						}else if(curLineMarginTop > lineBoxScrollTop + lineBoxHeight - curLineHeight - tools.matchNumber(curLine.css('margin-top'))){
 							lineBox.scrollTop(curLineMarginTop - lineBoxHeight + curLineHeight + tools.matchNumber(curLine.css('margin-top')))
 						}
 
@@ -2409,11 +2428,23 @@ module.exports = function(){
 				}else{
 					return pos;
 				}
+			},
+
+			listDrafts: function(){
+				tools.xhr('/captionDrafts/' + this.videoId, function(res){
+					this.drafts = res;
+				}.bind(this));
+			},
+
+			handleSlectDraft: function(draft){
+				this.$router.push({path: `/translator/${this.videoId}`, query: {draftId: draft}});
 			}
 		},
 
 		mounted: function(){
 			let t = this;
+			t.draft = this.$route.query.draftId;
+
 			let vEle = this.vEle = $('video')[0];
 			t.waveContainerWidth = $('#timeline').width();
 
@@ -2421,6 +2452,8 @@ module.exports = function(){
 			this.bindSubtitle(()=>{
 				this.bindVideo();
 			});
+
+			this.listDrafts();
 
 			$('#timeline').on("scroll", function(){
 				let sl = $(this).scrollLeft();
@@ -2482,7 +2515,7 @@ module.exports = function(){
 					$(this).addClass('current').siblings().removeClass('current');
 				}
 			}).on('mouseleave', '.caption-block', function(e){
-				if(!$(e.relatedTarget).is('.caption-block-dragger')){
+				if(!$(e.relatedTarget).is('.caption-block-dragger,.playhead-triangle,.playhead-needle,.playhead-handle')){
 					$('.caption-block-dragger-min, .caption-block-dragger-max').css('left', -100);
 				}
 			})

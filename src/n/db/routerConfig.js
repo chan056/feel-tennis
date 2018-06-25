@@ -253,7 +253,7 @@ const routerConfig = {
     
         '/srt/:vId': function(params, res, req){
             let parseSrt = require('../srtParser.js').parseSrt;
-            parseSrt(params.vId, res);
+            parseSrt(params, res);
         },
     
         '/loginInfo': function(params, res, req){
@@ -412,7 +412,14 @@ const routerConfig = {
                 r.query('fetchInmails', params, res, req)
             },
             limit: {level: 10}
-        }
+        },
+
+        '/captionDrafts/:vId': {
+            fn: function(params, res, req){
+                r.query('fetchCaptionDrafts', params, res, req)
+            },
+            limit: {level: 10}
+        },
     },
 
     post: {

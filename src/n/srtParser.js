@@ -1,11 +1,17 @@
 module.exports = {
-    parseSrt: function(vId, res){
+    parseSrt: function(params, res){
         var fs = require('fs');
         var path = require('path');
         var parser = require('subtitles-parser');
 
-        var dir = path.resolve(__dirname, '../static/multimedia/ts/');
-        srt = path.resolve(dir, `./${vId}/subtitle`);
+        let vId= params.vId;
+        let usrId = params.usrId;
+
+        let srt = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle`);
+
+        if(usrId){
+            srt += `.${usrId}`;
+        }
 
         fs.exists(srt, function(doExsit){
             if(doExsit){
@@ -23,7 +29,7 @@ module.exports = {
         function trimSrt(data){
             let item;
             for(let i=0; i<data.length; i++){
-                item=data[i];
+                item = data[i];
                 if(!item){
                     break;
                 }
@@ -41,12 +47,11 @@ module.exports = {
         }
     },
 
-    toSrt: function(vId, arr){
+    toSrt: function(vId, arr, usrId){
         var parser = require('subtitles-parser');
         var fs = require('fs');
         var path = require('path');
-        var dir = path.resolve(__dirname, '../static/multimedia/ts/');
-        var srtPath = path.resolve(dir, `./${vId}/subtitle.${vId}`);
+        var srtPath = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle.${usrId}`);
 
         var srt = parser.toSrt(arr);
         fs.writeFileSync(srtPath, srt);

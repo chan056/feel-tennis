@@ -38,7 +38,11 @@ $(function () {
 			{
 				path: '/',
 				component: GlobalSetting,
-				children: routeConfig
+				children: routeConfig,
+				beforeRouteUpdate(to, from, next){
+					console.log(to)
+					next();
+				}
 			}
 		]
 	})

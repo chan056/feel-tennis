@@ -947,8 +947,23 @@ module.exports = function(){
         translator: `<div>
             <div class="captions-editor-nav">
                 <h4 class="fl captions-editor-nav-captions">视频标题</h4>
-                <el-button class="fr" type="primary" @click="">退出</el-button>
-                <el-button class="fr" type="primary" @click="saveSrt">保存</el-button>
+                <router-link :to.async="{path: '/videos/'+ videoId }">
+                    <el-button class="fr" type="primary">返回</el-button>
+                </router-link>
+                <el-button v-if="!draft" class="fr" type="primary" @click="saveSrt">保存</el-button>
+                <el-button v-if="draft" class="fr" type="primary" @click="inheritSrt">继承</el-button>
+
+                <el-dropdown class="fr" @command="handleSlectDraft">
+                    <el-button type="primary">
+                        草稿<i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                    <!-- 去除自己的草稿 只能查看别人的 todo-->
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item v-for="draft in drafts" :command="draft">
+                            {{draft}}
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
                 <br class="clr"/>
             </div>
             <div class="alert-info"></div>

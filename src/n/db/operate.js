@@ -800,6 +800,38 @@ let operations = {
 			res.end(json);
 		});
 	},
+
+	fetchCaptionDrafts: function(res, qualification, params){
+		const fs = require('fs');
+		const path = require('path');
+
+		let captionDir = path.resolve(global.staticRoot, `multimedia/ts/${params.vId}`);
+
+		fs.readdir(captionDir, function(err, files){
+			let drafts = [];
+			files.forEach(function(file){
+				let reg = /subtitle\.(\d+)$/;
+				let fileMatch = file.match(reg);
+				if(fileMatch){
+					drafts.push(Number(fileMatch[1]));
+				}
+			})
+
+			let json = JSON.stringify(drafts)
+			res.end(json);
+		})
+
+		// var sql = `SELECT * from inmail where receiver=${this.usrInfo.usrId} and readed=0 order by id desc`;
+
+		// conn.query(sql, function(err, list, fields){
+		// 	if(err)
+		// 		console.log(err.sql, err.sqlMessage) ;
+			
+		// 	let json = JSON.stringify(list);
+
+		// 	res.end(json);
+		// });
+	},
 	
 	// ===============POST================
 	login: function(res, postObj, req){
@@ -1278,7 +1310,7 @@ let operations = {
 
 	createCaption: function(res, postObj, req){
 		let toSrt = require('../srtParser.js').toSrt;
-		toSrt(postObj.vId, postObj.srtArr);
+		toSrt(postObj.vId, postObj.srtArr, this.usrInfo.usrId);
 		res.end();
 
 		// let sql = `insert into sport (name, update_time) values ('${postObj.name}', ${+new Date()})`;
