@@ -2178,7 +2178,7 @@ module.exports = function(){
 	},
 
 	COMPONENTS.Translator = {
-		props: ['videoId', 'usrId'],
+		props: ['videoId'],
 		beforeRouteUpdate(to, from, next){
 			location.hash = to.fullPath
 			location.reload();
@@ -2194,6 +2194,7 @@ module.exports = function(){
 				drafts: [],
 				draft: '',// 字幕草稿/用户 编号
 				updateType: 0,
+				triggerScroll: false,
 				timeOffset: 0,
 
 				captionBlockLeftBoundryScope:{},
@@ -2235,22 +2236,14 @@ module.exports = function(){
 						t.vEle.oncanplay = null;
 					}
 
-					// type 
 					// 0 拖动视频
 					// 1 左侧点击	
-					// 2 右下角点击
 					t.vEle.ontimeupdate= function(){
-						if(!t.updateType){// 拖动视频时间
+						if(t.updateType == 0){
 							t.scrollTimeline();
 							t.positionLine();
 						}if(t.updateType == 1){
 							t.scrollTimeline();
-							setTimeout(()=>{// 用于标识通过左侧的点击引起的滚动
-								t.updateType = 0;
-							}, 100);
-						}else if(t.updateType == 2){
-							t.positionLine();
-							t.updateType = 0;
 						}
 					}
 				}, id: 'hls'});
@@ -2334,12 +2327,14 @@ module.exports = function(){
 			scrollTimeline: function(){
 				let timePass = this.timeToPos(this.vEle.currentTime - this.timeOffset);
 				$('#timeline').scrollLeft(timePass)
+				this.triggerScroll = true;//触发scroll事件时 标记为“模拟事件”
+				setTimeout(function(){this.triggerScroll = false;}.bind(this), 10)
 			},
 
 			// 拖动“针头”
 			handlerMovingNeedle: function(pos){
 				this.timeOffset = this.posToTime(pos);
-				$('#timeline').triggerHandler('scroll');
+				// $('#timeline').triggerHandler('scroll');
 			},
 
 			// 拖动block dragger
@@ -2455,22 +2450,18 @@ module.exports = function(){
 
 			this.listDrafts();
 
-			$('#timeline').on("scroll", function(){
+			$('#timeline').on("scroll", function(e){
 				let sl = $(this).scrollLeft();
 				$('#playhead-container').css('left', sl);
 
-				if(t.updateType == 1 || !t.updateType){// 非手动拖动字幕引起
-					return
-				}
-
-				let duration = t.duration;
-				if(duration){
-					// _.debounce
-					
-					// 修改视频时间
-					vEle.currentTime = t.posToTime(sl) + t.timeOffset;
-					t.updateType = 2;
-
+				if(!t.triggerScroll){// 手动拖动字幕时间轴
+					let duration = t.duration;
+					if(duration){
+						// _.debounce todo
+						
+						// 修改视频时间
+						vEle.currentTime = t.posToTime(sl) + t.timeOffset;
+					}
 				}
 			}).on('mouseover click', '.caption-block', function(e){
 				if(t.draggingSign.status){// 拖动操作
@@ -2526,10 +2517,9 @@ module.exports = function(){
 					return;
 				}
 
-				// let index= $('.caption-line').index(this);
-
-				// console.log('click caption-line' + (+new Date()))
+				let index= $('.caption-line').index(this);
 				$(this).addClass('selected current-line').siblings().removeClass('selected current-line');
+				$('.caption-block').eq(index).addClass('current').siblings().removeClass('current');
 
 				// 通过点击时间轴上的“字幕块”
 				if(arguments[1] && arguments[1].isTrigger){
@@ -2541,8 +2531,8 @@ module.exports = function(){
 				let st = caption.startTime / 1000;
 				
 				// 修改视频时间
-				vEle.currentTime = st;
 				t.updateType = 1;
+				vEle.currentTime = st;
 
 				// 指针处于时间轴容器中间
 				let halfTimeOffset =  t.posToTime(t.waveContainerWidth / 2);
