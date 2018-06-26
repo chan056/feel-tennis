@@ -950,7 +950,9 @@ module.exports = function(){
                 <router-link :to.async="{path: '/videos/'+ videoId }">
                     <el-button class="fr" type="primary">返回</el-button>
                 </router-link>
-                <el-button v-if="!draft" class="fr" type="primary" @click="saveSrt">保存</el-button>
+
+                <el-button class="fr" type="primary" @click="saveSrt">审核通过</el-button>
+                <el-button v-if="!draft" class="fr" type="primary" @click="saveSrt">发布</el-button>
                 <el-button v-if="draft" class="fr" type="primary" @click="inheritSrt">继承</el-button>
 
                 <el-dropdown class="fr" @command="handleSlectDraft">
