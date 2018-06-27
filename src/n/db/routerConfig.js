@@ -259,6 +259,9 @@ const routerConfig = {
     
         '/caption/:vId': function(params, res, req){
             let parseCaption = require('../captionParser.js').parseCaption;
+            if(req.usrInfo.usrId){
+                params.usrId = req.usrInfo.usrId;
+            }
             parseCaption(params, res);
         },
     
@@ -606,6 +609,13 @@ const routerConfig = {
         '/srt/:vId': {
             fn: function(req, res, pathParams){
                 r.post('createCaption', req, res, pathParams);
+            },
+            limit: {level: 10}
+        },
+
+        '/caption/inherition': {
+            fn: function(req, res, pathParams){
+                r.post('inheritCaption', req, res, pathParams);
             },
             limit: {level: 10}
         },

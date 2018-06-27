@@ -2204,6 +2204,8 @@ module.exports = function(){
 				loginInfo: {},
 				videoInfo: {},
 
+				captionIntervalId: 0,
+
 				formatMS: tools.formatMS,
 			};
 
@@ -2236,6 +2238,14 @@ module.exports = function(){
 						// }, 100)
 
 						t.vEle.oncanplay = null;
+
+						let vEle = $(t.vEle);
+						let videoWidth = vEle.width();
+						let videoContainerWidth = $('#captions-player-colimn').width();
+
+						if(videoWidth > videoContainerWidth){
+							vEle.width(videoContainerWidth)
+						}
 					}
 
 					// 0 拖动视频
@@ -2251,46 +2261,74 @@ module.exports = function(){
 				}, id: 'hls'});
 			},
 
-			bindSubtitle: function(fn){
+			bindSubtitle: function(fn, captions){
+				if(captions){
+					this.captionIntervalId = tools.attachSubtile(this.vEle, captions, 500, function(subtitle){
+						$('#player-wrapper').find('.subtitle').text(subtitle)
+					});
+					return;
+				}
+
 				let captionAPI = '/caption/' + this.videoId;
 
 				if(this.draft){
 					captionAPI += '?draftId=' + this.draft;
+				}else{
+					captionAPI += '?ownDraft=1'
 				}
 
-				tools.xhr(captionAPI, function(resData){
-					if(!resData)
+				tools.xhr(captionAPI, function(res){
+					if(!res)
 						return;
 						
-					let playerWrapper = $('#player-wrapper');
-
-					tools.attachSubtile(this.vEle, resData, 500, function(subtitle){
-						playerWrapper.find('.subtitle').text(subtitle)/* .css({
-
-						}) */;
+					this.captionIntervalId = tools.attachSubtile(this.vEle, res, 500, function(subtitle){
+						$('#player-wrapper').find('.subtitle').text(subtitle)
 					});
 
-					this.captions = resData;
+					this.captions = res;
 
 					fn && fn();
 				}.bind(this));
 			},
 
 			saveSrt: function(isFinal){
-				tools.xhr('/srt/' + this.videoId, function(resData){
+				tools.xhr('/srt/' + this.videoId, function(){
 					this.$message({
 						message: `${isFinal? '发布': '暂存'}成功`,
 						type: 'success'
-					})
+					});
+					
+					if(isFinal){
+						this.listDrafts();
+					}
 				}.bind(this), 'post', {
 					captions: this.captions,
 					isFinal: isFinal
 				});
+
+				clearInterval(this.captionIntervalId)
+				this.bindSubtitle(this.captions);
 			},
 
-			// 继承当前草稿，作为自己的草稿
-			inheritSrt: function(){
+			// 继承当前查看的终稿
+			inheritCaption: function(){
+				this.$alert('继承字幕会丢失之前的草稿和已经发布的终稿，确定继承？', '提示', {
+					confirmButtonText: '确定',
+					callback: function(){
+						console.log(this.videoId, this.draft)
+						tools.xhr('/caption/inherition' , function(){
+							this.$message({
+								message: `字幕继承成功`,
+								type: 'success'
+							})
 
+							this.listDrafts();
+						}.bind(this), 'post', {
+							vId: this.videoId,
+							draft: this.draft
+						});
+					}.bind(this)
+				});
 			},
 
 			// 定位当前行
@@ -2451,6 +2489,15 @@ module.exports = function(){
 				tools.xhr('/videoInfo/' + this.videoId, function(res){
 					this.videoInfo = res;
 				}.bind(this));
+			},
+
+			// [{}, {id:2}, {id:4}]
+			// 整理captions的id
+			standardizeCaption(){
+				let i = 1;
+				this.captions.forEach(function(caption){
+					caption.id = i++;
+				})
 			}
 		},
 
@@ -2660,6 +2707,7 @@ module.exports = function(){
 
 						captions.splice(index, 0, newLineData)
 					}
+					t.standardizeCaption();
 
 					let triggeredLineIndex = [index + 1, index][newLineLocation - 1];
 					t.$nextTick(function () {

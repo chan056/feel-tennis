@@ -6,15 +6,23 @@ module.exports = {
 
         let vId= params.vId;
         let draftId = params.draftId;
+        let usrId = params.usrId;
 
         let captionPath = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle`);
 
-        // 读取优先级 草稿 终稿 原稿
-        if(draftId){// 
-            if(fs.existsSync(captionPath + `.tmp.${draftId}`)){
-                captionPath = captionPath + `.tmp.${draftId}`;
-            }else{
+        // 查看状态 查看终稿
+        if(draftId){
+            // 读取优先级 终稿 原稿
+            if(fs.existsSync(captionPath + `.${draftId}`)){
                 captionPath += `.${draftId}`;
+            }
+        }else if(params.ownDraft && usrId){
+            // 读取优先级 草稿 终稿 原稿
+
+            if(fs.existsSync(captionPath + `.tmp.${usrId}`)){
+                captionPath = captionPath + `.tmp.${usrId}`;
+            }else{
+                captionPath += `.${usrId}`;
             }
         }
 
@@ -72,5 +80,5 @@ module.exports = {
         if(postObj.isFinal){
             require('del')([draftPath])
         }
-    }
+    },
 }

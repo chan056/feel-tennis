@@ -104,7 +104,7 @@ let tools = {
         let lastCaptionIndex;// 上个匹配到的caption id，用于优化查找速度 todo
         let curSubtitle;
 
-        setInterval(function(){
+        let intervalId = setInterval(function(){
             let curVtime = video.currentTime;// curVtime和上次一样的话 中断todo
             curVtime = curVtime * 1000;// 微秒
             let caption, captionId, subtitle;
@@ -145,6 +145,8 @@ let tools = {
             }
 
         }, interval)
+
+        return intervalId;
     },
 
     // 给视频绑定用户备注

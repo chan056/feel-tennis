@@ -758,7 +758,7 @@ let operations = {
 	},
 
 	checkUsrDatumIntegrity: function(res, qualification, params){
-		let sql = 'select nickname, wechat,level, status, avatar, sex from usr_datum where usr_id=?'
+		let sql = 'select nickname,level, status, avatar, sex from usr_datum where usr_id=?'
 		conn.query(sql, [this.usrInfo.usrId], function(err, result, fields){
 			if(err)
 				console.log(err.sql, err.sqlMessage) ;
@@ -1324,15 +1324,40 @@ let operations = {
 		let toCaption = require('../captionParser.js').toCaption;
 		toCaption(postObj, this.usrInfo.usrId);
 		res.end();
+	},
 
-		// let sql = `insert into sport (name, update_time) values ('${postObj.name}', ${+new Date()})`;
+	inheritCaption: function(res, postObj, req){
+		let usrId = this.usrInfo.usrId;
 
-		// conn.query(sql, function(err, result){
-		// 	if(err)
-		// 		console.log(err);
+		var parser = require('subtitles-parser');
+        var fs = require('fs');
+        var path = require('path');
 
-		// 	res.end();
-		// });
+        // 删除
+        // 复制
+        let draftPath = path.resolve(
+            global.staticRoot, 
+            `./multimedia/ts/${postObj.vId}/subtitle.tmp.${usrId}`
+		)
+		
+        let finalDraftPath = path.resolve(
+            global.staticRoot, 
+            `./multimedia/ts/${postObj.vId}/subtitle.${usrId}`
+		)
+
+		require('del')([draftPath, finalDraftPath]).then(paths => {
+			let targetFinalDraftPath = path.resolve(
+				global.staticRoot, 
+				`./multimedia/ts/${postObj.vId}/subtitle.${postObj.draft}`
+			)
+
+			fs.readFile(targetFinalDraftPath, function(err, data){
+				if(err) console.log(err)
+
+				fs.writeFileSync(finalDraftPath, data);
+				res.end();
+			})
+		});
 	},
 
 	// ===============PATCH================

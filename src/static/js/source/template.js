@@ -952,7 +952,7 @@ module.exports = function(){
                     
                     <el-dropdown class="draft-dropdown" @command="handleSlectDraft">
                         <el-button type="primary">
-                            草稿<i class="el-icon-arrow-down el-icon--right"></i>
+                            终稿<i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item v-for="draft in drafts" :command="draft">
@@ -962,7 +962,7 @@ module.exports = function(){
                     </el-dropdown>
                     <el-button v-if="!draft" type="primary" @click="saveSrt(0)">暂存</el-button>
                     <el-button v-if="!draft" type="primary" @click="saveSrt(1)">发布</el-button>
-                    <el-button v-if="draft && draft!=loginInfo.id" type="primary" @click="inheritSrt">继承</el-button>
+                    <el-button v-if="draft && draft!=loginInfo.id" type="primary" @click="inheritCaption">继承</el-button>
                     <!-- 不能继承自己的 todo -->
                     <!--查看状态 并且用户是管理员-->
                     <el-button v-if="draft && loginInfo.is_admin" type="primary" @click="saveSrt">审核</el-button>
