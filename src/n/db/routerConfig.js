@@ -257,9 +257,9 @@ const routerConfig = {
             limit: {level: 10, visits: 10}
         },
     
-        '/srt/:vId': function(params, res, req){
-            let parseSrt = require('../srtParser.js').parseSrt;
-            parseSrt(params, res);
+        '/caption/:vId': function(params, res, req){
+            let parseCaption = require('../captionParser.js').parseCaption;
+            parseCaption(params, res);
         },
     
         '/loginInfo': function(params, res, req){

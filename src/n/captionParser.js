@@ -1,23 +1,27 @@
 module.exports = {
-    parseSrt: function(params, res){
+    parseCaption: function(params, res){
         var fs = require('fs');
         var path = require('path');
         var parser = require('subtitles-parser');
 
         let vId= params.vId;
-        let usrId = params.usrId;
+        let draftId = params.draftId;
 
-        let srt = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle`);
+        let captionPath = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle`);
 
-        if(usrId){
-            srt += `.${usrId}`;
+        // 读取优先级 草稿 终稿 原稿
+        if(draftId){// 
+            if(fs.existsSync(captionPath + `.tmp.${draftId}`)){
+                captionPath = captionPath + `.tmp.${draftId}`;
+            }else{
+                captionPath += `.${draftId}`;
+            }
         }
 
-        fs.exists(srt, function(doExsit){
+        fs.exists(captionPath, function(doExsit){
             if(doExsit){
-                var srtStream = fs.readFileSync(srt,'utf8');
-                var data = parser.fromSrt(srtStream, true);
-                // console.log(data);
+                var captionStream = fs.readFileSync(captionPath,'utf8');
+                var data = parser.fromSrt(captionStream, true);
                 data = trimSrt(data);
                 res.end(JSON.stringify(data));
             }else{
@@ -47,7 +51,7 @@ module.exports = {
         }
     },
 
-    toSrt: function(postObj, usrId){
+    toCaption: function(postObj, usrId){
         var parser = require('subtitles-parser');
         var fs = require('fs');
         var path = require('path');
@@ -61,8 +65,8 @@ module.exports = {
             `./multimedia/ts/${postObj.vId}/subtitle.${usrId}`
         )
 
-        var srt = parser.toSrt(postObj.srtArr);
-        fs.writeFileSync(postObj.isFinal? finalDraftPath: draftPath, srt);
+        var captions = parser.toSrt(postObj.captions);
+        fs.writeFileSync(postObj.isFinal? finalDraftPath: draftPath, captions);
 
         // 发布时 删除草稿
         if(postObj.isFinal){

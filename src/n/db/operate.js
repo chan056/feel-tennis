@@ -1321,8 +1321,8 @@ let operations = {
 	},
 
 	createCaption: function(res, postObj, req){
-		let toSrt = require('../srtParser.js').toSrt;
-		toSrt(postObj, this.usrInfo.usrId);
+		let toCaption = require('../captionParser.js').toCaption;
+		toCaption(postObj, this.usrInfo.usrId);
 		res.end();
 
 		// let sql = `insert into sport (name, update_time) values ('${postObj.name}', ${+new Date()})`;

@@ -948,9 +948,8 @@ module.exports = function(){
             <div class="captions-editor-nav">
                 <h2 class="captions-editor-nav-captions">{{videoInfo.headline}}</h2>
                 <div class="btns">
-                    <router-link :to.async="{path: '/videos/'+ videoId }">
-                        <el-button class="fr" type="primary">返回</el-button>
-                    </router-link>
+                    <el-button class="fr" type="primary" @click="$router.go(-1)">返回</el-button>
+                    
                     <el-dropdown class="draft-dropdown" @command="handleSlectDraft">
                         <el-button type="primary">
                             草稿<i class="el-icon-arrow-down el-icon--right"></i>

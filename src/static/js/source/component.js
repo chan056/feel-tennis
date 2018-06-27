@@ -788,9 +788,9 @@ module.exports = function(){
 			},
 
 			bindSubtitle: function(){
-				let srtAPI = '/srt/' + this.videoId;
+				let captionAPI = '/caption/' + this.videoId;
 
-				tools.xhr(srtAPI, function(resData){
+				tools.xhr(captionAPI, function(resData){
 					if(!resData)
 						return;
 						
@@ -2252,13 +2252,13 @@ module.exports = function(){
 			},
 
 			bindSubtitle: function(fn){
-				let srtAPI = '/srt/' + this.videoId;
+				let captionAPI = '/caption/' + this.videoId;
 
 				if(this.draft){
-					srtAPI += '?usrId=' + this.draft;
+					captionAPI += '?draftId=' + this.draft;
 				}
 
-				tools.xhr(srtAPI, function(resData){
+				tools.xhr(captionAPI, function(resData){
 					if(!resData)
 						return;
 						
@@ -2283,7 +2283,7 @@ module.exports = function(){
 						type: 'success'
 					})
 				}.bind(this), 'post', {
-					srtArr: this.captions,
+					captions: this.captions,
 					isFinal: isFinal
 				});
 			},
