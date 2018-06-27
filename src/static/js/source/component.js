@@ -2201,8 +2201,10 @@ module.exports = function(){
 				captionBlockRightBoundryScope:{},
 				draggingSign: {status: false},
 
-				formatMS: tools.formatMS,
+				loginInfo: {},
+				videoInfo: {},
 
+				formatMS: tools.formatMS,
 			};
 
 			return d;
@@ -2274,11 +2276,15 @@ module.exports = function(){
 				}.bind(this));
 			},
 
-			saveSrt: function(){
+			saveSrt: function(isFinal){
 				tools.xhr('/srt/' + this.videoId, function(resData){
-					console.log('字幕上传成功')
+					this.$message({
+						message: `${isFinal? '发布': '暂存'}成功`,
+						type: 'success'
+					})
 				}.bind(this), 'post', {
 					srtArr: this.captions,
+					isFinal: isFinal
 				});
 			},
 
@@ -2433,6 +2439,18 @@ module.exports = function(){
 
 			handleSlectDraft: function(draft){
 				this.$router.push({path: `/translator/${this.videoId}`, query: {draftId: draft}});
+			},
+
+			queryLoginInfo(){
+				tools.xhr('/loginInfo', function(res){
+					this.loginInfo = res;
+				}.bind(this));
+			},
+
+			queryVideoInfo(){
+				tools.xhr('/videoInfo/' + this.videoId, function(res){
+					this.videoInfo = res;
+				}.bind(this));
 			}
 		},
 
@@ -2449,6 +2467,9 @@ module.exports = function(){
 			});
 
 			this.listDrafts();
+
+			this.queryLoginInfo();
+			this.queryVideoInfo();
 
 			$('#timeline').on("scroll", function(e){
 				let sl = $(this).scrollLeft();

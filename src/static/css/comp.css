@@ -567,6 +567,17 @@ app {
 #captions-area {
   padding-right: 1.5rem;
 }
+.captions-editor-nav-captions {
+  margin-bottom: 1rem;
+}
+.draft-dropdown {
+  margin-right: 10px;
+  float: right;
+}
+.btns .el-button {
+  font-size: 1rem;
+  padding: .6rem 1rem;
+}
 .timedtext-content {
   -webkit-user-select: none;
   -moz-user-select: none;

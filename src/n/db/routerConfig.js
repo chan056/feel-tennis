@@ -7,6 +7,13 @@ const routerConfig = {
             const tumour = require('../tumour');
             tumour.joinIndexJS(res, req.usrInfo);
         },
+
+        // '/loginInfo': {
+        //     fn: function(params, res, req){
+        //         r.query('queryLoginInfo', params, res, req);
+        //     },
+        //     limit: {level: 10}
+        // },
     
         '/sports': function(params, res, req){
             r.query('querySports', params, res, req);
@@ -24,7 +31,6 @@ const routerConfig = {
             r.query('querySport', params, res, req);
         },
     
-        // 
         '/albums': function(params, res, req){
             r.query('queryAlbumList', params, res, req);
         },
@@ -392,8 +398,6 @@ const routerConfig = {
                 if(err)
                     console.log(err);
                 
-                console.log(result)
-
                 let activeCode = result[0]['active_code'];
                 let email = result[0]['email'];
                 let name = result[0]['name'];

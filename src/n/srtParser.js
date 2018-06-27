@@ -47,13 +47,26 @@ module.exports = {
         }
     },
 
-    toSrt: function(vId, arr, usrId){
+    toSrt: function(postObj, usrId){
         var parser = require('subtitles-parser');
         var fs = require('fs');
         var path = require('path');
-        var srtPath = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle.${usrId}`);
 
-        var srt = parser.toSrt(arr);
-        fs.writeFileSync(srtPath, srt);
+        let draftPath = path.resolve(
+            global.staticRoot, 
+            `./multimedia/ts/${postObj.vId}/subtitle.tmp.${usrId}`
+        )
+        let finalDraftPath = path.resolve(
+            global.staticRoot, 
+            `./multimedia/ts/${postObj.vId}/subtitle.${usrId}`
+        )
+
+        var srt = parser.toSrt(postObj.srtArr);
+        fs.writeFileSync(postObj.isFinal? finalDraftPath: draftPath, srt);
+
+        // 发布时 删除草稿
+        if(postObj.isFinal){
+            require('del')([draftPath])
+        }
     }
 }

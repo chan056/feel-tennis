@@ -28,6 +28,18 @@ let operations = {
 		});
 	},
 
+	// queryLoginInfo: function (res, qualification, params) {
+	// 	let sql = `SELECT id, is_admin as isAdmin FROM usr where id=${this.usrInfo.id}`;
+
+	// 	conn.query(sql, function (err, result, fields) {
+	// 		if (err) return throwError(err, res);
+
+	// 		result = JSON.stringify(result);
+	// 		res.end(result)
+	// 	});
+
+	// },
+
 	querySkills: function (res, qualification, params) {
 
 		conn.query('SELECT * from skill' + qualification, function (err, result, fields) {
@@ -289,7 +301,7 @@ let operations = {
 		let usrInfo = this.usrInfo;
 		
 		if(usrInfo.type == 1){
-			conn.query('select name, day_view, is_admin from usr where id = ' + usrInfo.usrId, function(err, result){
+			conn.query('select id, name, day_view, is_admin from usr where id = ' + usrInfo.usrId, function(err, result){
 				if (err) return throwError(err, res);
 
 				result = JSON.stringify(result[0]);
@@ -1310,7 +1322,7 @@ let operations = {
 
 	createCaption: function(res, postObj, req){
 		let toSrt = require('../srtParser.js').toSrt;
-		toSrt(postObj.vId, postObj.srtArr, this.usrInfo.usrId);
+		toSrt(postObj, this.usrInfo.usrId);
 		res.end();
 
 		// let sql = `insert into sport (name, update_time) values ('${postObj.name}', ${+new Date()})`;
