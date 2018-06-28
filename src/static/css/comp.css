@@ -300,6 +300,7 @@ app {
   display: block;
   width: 210px;
   height: 118px;
+  background-color: #666;
 }
 .block-list .block-title {
   margin: 8px auto;

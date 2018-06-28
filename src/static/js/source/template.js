@@ -362,7 +362,7 @@ module.exports = function(){
                 <div v-if="video" id="usr-operation-desk">
                     <div class="fl">{{video.impression}}次观看</div>
 
-                    <router-link id="link-to-translator" v-if="video.translated" :to="{path: '/translator/' + videoId}">
+                    <router-link id="link-to-translator" :to="{path: '/translator/' + videoId}">
                         {{video.translated? '翻译有误？': '我要翻译'}}
                     </router-link>
 
