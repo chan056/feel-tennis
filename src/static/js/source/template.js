@@ -199,12 +199,6 @@ module.exports = function(){
                 </div>
                 <div class="guide-section" v-if="loginUsrInfo && loginUsrInfo.is_admin == 1">
                     <div class="guide-entry" id="upload-entry" >
-                        <a href="#/feedbacksAdmin" class="guide-entry-renderer" title="反馈列表">
-                            <i class="fa fa-coffee icon"></i>
-                            <span class="text">反馈列表</span>
-                        </a>
-                    </div>
-                    <div class="guide-entry" id="upload-entry" >
                         <a href="#/uploadAdmin" class="guide-entry-renderer" title="上传视频">
                             <i class="el-icon-upload icon"></i>
                             <span class="text">上传视频</span>
@@ -226,6 +220,12 @@ module.exports = function(){
                         <a href="#/sportsAdmin" class="guide-entry-renderer" title="运动列表">
                             <i class="fa fa-soccer-ball-o icon"></i>
                             <span class="text">运动列表</span>
+                        </a>
+                    </div>
+                    <div class="guide-entry" id="upload-entry" >
+                        <a href="#/feedbacksAdmin" class="guide-entry-renderer" title="反馈列表">
+                            <i class="fa fa-coffee icon"></i>
+                            <span class="text">反馈列表</span>
                         </a>
                     </div>
                 </div>
@@ -648,6 +648,8 @@ module.exports = function(){
                                     :value="level">
                                 </el-option>
                             </el-select>
+
+                            <a title="分级详情" style="text-decoration: none;" href="http://baijiahao.baidu.com/s?id=1561865758116633" target="_blank" class="fa fa-question-circle-o">&nbsp;分级详情</a>
                         </el-form-item>
     
                         <el-form-item label="状态" prop="status">
@@ -1011,7 +1013,7 @@ module.exports = function(){
                     <el-col :span="12">
                         <div id="captions-player-colimn">
                         <div id="player-wrapper">
-                            <video id="video" controls="controls" height="400" x5-playsinline="" playsinline="" webkit-playsinline="">
+                            <video id="video" controls="controls" x5-playsinline="" playsinline="" webkit-playsinline="">
                                 请使用现代浏览器，如Chrome Firefox Safari Edge
                             </video>
 

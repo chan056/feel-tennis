@@ -509,7 +509,9 @@ const routerConfig = {
                 if(fileType == 'video'){
                     absPath = path.join(form.uploadDir, file.name);
                     relPath = path.join(uploadDir, file.name);
-                    fs.rename(file.path, absPath, function(){});// 没必要rename todo
+                    fs.rename(file.path, absPath, function(){
+                        
+                    });
                 }else if(fileType == 'subtitle'){
                     absPath = path.join(form.uploadDir, file.name);
                     relPath = path.join(uploadDir, file.name);

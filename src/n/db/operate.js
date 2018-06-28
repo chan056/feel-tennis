@@ -983,6 +983,7 @@ let operations = {
 				let videoStorePath = global.staticRoot + `/multimedia/pristine_v/${vId}${ext}`;
 				let videoGenerator = require('../ffmpeg/generate_video');
 				fs.renameSync(videoAbsPath, videoStorePath);// 用于生成gif
+				// 在统计目录分离出音频
 
 				// videoGenerator.watermark(videoStorePath, function(){
 				videoGenerator.execM3U(videoStorePath, tsDir);
