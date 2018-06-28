@@ -2331,6 +2331,27 @@ module.exports = function(){
 				});
 			},
 
+			// 审核当前查看的终稿
+			auditCaption: function(){
+				this.$alert('审核通过？', '提示', {
+					confirmButtonText: '确定',
+					callback: function(){
+						// console.log(this.videoId, this.draft)
+						tools.xhr('/caption/audition' , function(){
+							this.$message({
+								message: `字幕已通过审核,会作为视频默认字幕`,
+								type: 'success'
+							})
+
+							// this.listDrafts();
+						}.bind(this), 'post', {
+							vId: this.videoId,
+							draft: this.draft
+						});
+					}.bind(this)
+				});
+			},
+
 			// 定位当前行
 			positionLine: function(){
 				let currentTime = this.vEle.currentTime;
@@ -2516,6 +2537,14 @@ module.exports = function(){
 				this.captions.forEach(function(caption){
 					caption.id = i++;
 				})
+			},
+
+			backtrack(){
+				if(this.$route.query.draftId){
+					this.$router.push({path: `/translator/${this.videoId}`});
+				}else{
+					this.$router.push({path: `/videos/${this.videoId}`});
+				}
 			}
 		},
 

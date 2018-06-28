@@ -948,7 +948,7 @@ module.exports = function(){
             <div class="captions-editor-nav">
                 <h2 class="captions-editor-nav-captions">{{videoInfo.headline}}</h2>
                 <div class="btns">
-                    <el-button class="fr" type="primary" @click="$router.go(-1)">返回</el-button>
+                    <el-button class="fr" type="primary" @click="backtrack">返回</el-button>
                     
                     <el-dropdown class="draft-dropdown" @command="handleSlectDraft" v-if="drafts.length" trigger="click">
                         <el-button type="primary">
@@ -963,7 +963,7 @@ module.exports = function(){
                     <el-button v-if="!draft" type="primary" @click="saveSrt(0)">暂存</el-button>
                     <el-button v-if="!draft" type="primary" @click="saveSrt(1)">发布</el-button>
                     <el-button v-if="draft && draft!=loginInfo.id" type="primary" @click="inheritCaption">继承</el-button>
-                    <el-button v-if="draft && loginInfo.is_admin" type="primary" @click="saveSrt">审核</el-button>
+                    <el-button v-if="draft && loginInfo.is_admin" type="primary" @click="auditCaption">审核</el-button>
                     <br class="clr"/>
                 </div>
             </div>

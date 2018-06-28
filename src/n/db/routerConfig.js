@@ -619,6 +619,13 @@ const routerConfig = {
             },
             limit: {level: 10}
         },
+
+        '/caption/audition': {
+            fn: function(req, res, pathParams){
+                r.post('auditCaption', req, res, pathParams);
+            },
+            limit: {level: 100}
+        },
     },
 
     // ============put update完整资源=============

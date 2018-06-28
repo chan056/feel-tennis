@@ -1360,6 +1360,56 @@ let operations = {
 		});
 	},
 
+	auditCaption: function(res, postObj, req){
+		var parser = require('subtitles-parser');
+        var fs = require('fs');
+		var path = require('path');
+		
+		let usrId = this.usrInfo.usrId;
+		let draft = postObj.draft;
+
+		// 复制
+		let srcFinalDraftPath = path.resolve(
+			global.staticRoot, 
+			`./multimedia/ts/${postObj.vId}/subtitle.${draft}`
+		)
+
+		let destFinalDraftPath = path.resolve(
+			global.staticRoot, 
+			`./multimedia/ts/${postObj.vId}/subtitle`
+		)
+
+		fs.readFile(srcFinalDraftPath, function(err, data){
+			if(err) console.log(err)
+
+			fs.writeFileSync(destFinalDraftPath, data);
+			
+			// 记录该视频被翻译
+			let sql = `update video set translated=1 where id=?`;
+			conn.query(sql, [postObj.vId], function(err, result){
+				if(err)
+					return throwError(err, res);
+				
+				res.end();
+			});
+		})
+
+		// 删除
+        // let draftPath = path.resolve(
+        //     global.staticRoot, 
+        //     `./multimedia/ts/${postObj.vId}/subtitle.tmp.${draft}`
+		// )
+		
+        // let finalDraftPath = path.resolve(
+        //     global.staticRoot, 
+        //     `./multimedia/ts/${postObj.vId}/subtitle.${draft}`
+		// )
+
+		// require('del')([draftPath, finalDraftPath]).then(paths => {
+			
+		// });
+	},
+
 	// ===============PATCH================
 	voteVideo: function(res, patchObj){
 		let voteType = patchObj.type;
