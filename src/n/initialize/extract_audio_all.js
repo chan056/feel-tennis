@@ -15,7 +15,7 @@ fs.readdir(tsRoot, function(err, files){
         }    
     })
 
-    // console.log(vIds);
+    console.log(vIds);
     extract(0);
 
     function extract(i){
@@ -36,8 +36,7 @@ fs.readdir(tsRoot, function(err, files){
 function extractAudio(videoStorePath, tsDir, fn){
     let target = `${tsDir}/audio.mp3`;
     if(fs.existsSync(target)){
-        fn && fn();
-        return;
+        require('del').sync(target, {force: true});
     }
 
     let cmd = `ffmpeg -i ${videoStorePath} -q:a 0 -map a ${target}`;
