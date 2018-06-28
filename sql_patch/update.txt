@@ -1,3 +1,0 @@
-==180619
-    translated 是否被翻译
-    duration 视频时长

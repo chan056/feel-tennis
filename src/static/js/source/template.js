@@ -954,6 +954,12 @@ module.exports = function(){
             <div class="captions-editor-nav">
                 <h2 class="captions-editor-nav-captions">{{videoInfo.headline}}</h2>
                 <div class="btns">
+                    
+                    <el-button v-if="!draft" type="primary" @click="saveSrt(0)">暂存</el-button>
+                    <el-button v-if="!draft" type="primary" @click="saveSrt(1)">发布</el-button>
+                    <el-button v-if="draft && draft!=loginInfo.id" type="primary" @click="inheritCaption">继承</el-button>
+                    <el-button v-if="draft && loginInfo.is_admin" type="primary" @click="auditCaption">审核</el-button>
+
                     <el-button class="fr" type="primary" @click="backtrack">返回</el-button>
                     
                     <el-dropdown class="draft-dropdown" @command="handleSlectDraft" v-if="drafts.length" trigger="click">
@@ -966,11 +972,6 @@ module.exports = function(){
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-                    <el-button v-if="!draft" type="primary" @click="saveSrt(0)">暂存</el-button>
-                    <el-button v-if="!draft" type="primary" @click="saveSrt(1)">发布</el-button>
-                    <el-button v-if="draft && draft!=loginInfo.id" type="primary" @click="inheritCaption">继承</el-button>
-                    <el-button v-if="draft && loginInfo.is_admin" type="primary" @click="auditCaption">审核</el-button>
-                    <br class="clr"/>
                 </div>
             </div>
             <div class="alert-info"></div>

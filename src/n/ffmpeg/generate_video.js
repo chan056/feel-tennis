@@ -14,6 +14,7 @@ module.exports.execM3U = execM3U;
 module.exports.screenShot = screenShot;
 module.exports.dynamicPreview = dynamicPreview;
 module.exports.watermark = watermark;
+module.exports.extractAudio = extractAudio;
 
 function execM3U(videoStorePath, tsDir){
     let multiResolution = {
@@ -138,6 +139,17 @@ function watermark (videoStorePath, fn){
         console.log('watermark done........')
 
         fn && fn();
+    })
+}
+
+// 分离音频
+function extractAudio(videoStorePath, tsDir){
+    let cmd = `ffmpeg -i ${videoStorePath} -q:a 0 -map a ${tsDir}/audio.mp3`;
+
+    exec(cmd, function(error){
+        if(error){
+            console.log(error);
+        }
     })
 }
 
