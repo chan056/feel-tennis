@@ -727,3 +727,8 @@ app {
   transform: rotateZ(90deg);
   color: #fff;
 }
+#waveform {
+  position: absolute;
+  left: 0;
+  top: 0;
+}

@@ -2546,6 +2546,27 @@ module.exports = function(){
 				}else{
 					this.$router.push({path: `/videos/${this.videoId}`});
 				}
+			},
+
+			drawWave(){
+				tools.insertScriptTag(1, '/lib/wavesurfer.min.js', {onload: function(){
+					let waveContainerSelector = '#time-scale',
+						waveContainer = $(waveContainerSelector);
+
+					$('#waveform').css({
+						width: waveContainer.width(),
+						height: waveContainer.height(),
+						top: 20
+					})
+					
+					// http://wavesurfer-js.org/docs/options.html
+					var wavesurfer = WaveSurfer.create({
+						container: '#waveform',
+						height: waveContainer.height() - 20
+					});
+
+					wavesurfer.load(`/multimedia/ts/${this.videoId}/audio.mp3`)
+				}.bind(this), id: 'wavesurfer'});
 			}
 		},
 
@@ -2565,6 +2586,7 @@ module.exports = function(){
 
 			this.queryLoginInfo();
 			this.queryVideoInfo();
+			this.drawWave();
 
 			$('#timeline').on("scroll", function(e){
 				let sl = $(this).scrollLeft();

@@ -205,7 +205,7 @@ module.exports = function(){
 
     Vue.component('TimeScale', {
         template: '<canvas id="time-scale" height=80></canvas>',
-        props: ['duration'],
+        props: ['duration', 'fn'],
         mounted: function(){
             var c = document.querySelector('#time-scale');
             var context = c.getContext('2d');
@@ -224,6 +224,8 @@ module.exports = function(){
                 drawLine(i)
             }
 
+            this.fn && this.fn()
+
             function drawLine(scaleIndex){
                 context.moveTo (intervalX * scaleIndex,0);       //设置起点状态
                 context.lineTo (intervalX * scaleIndex, scaleIndex%5?short:tall);       //设置末端状态
@@ -238,6 +240,6 @@ module.exports = function(){
                     )
                 }
             }
-        }
+        },
     });
 }
