@@ -148,6 +148,16 @@ function sendActiveEmail(usrId, name, email, code, req, res){
 	emailer.sendMail(email, emailSubject, emailContent);
 }
 
+function copyFile(src, dest, fn){
+	const fs = require('fs');
+
+	fs.readFile(src, function(err, data){
+		if(err) console.log(err)
+
+		fs.writeFile(dest, data, fn);
+	})
+}
+
 module.exports = {
     response404: response404,
     isEmpty: isEmpty,
@@ -156,4 +166,5 @@ module.exports = {
 	convertSrt2vtt: convertSrt2vtt,
 	scaleImage: scaleImage,
 	sendActiveEmail: sendActiveEmail,
+	copyFile: copyFile
 }

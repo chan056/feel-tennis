@@ -361,7 +361,11 @@ module.exports = function(){
                 </div>
                 <div v-if="video" id="usr-operation-desk">
                     <div class="fl">{{video.impression}}次观看</div>
-                    <a class="fl" :href="'#/translator/' + videoId">翻译？</a>
+
+                    <router-link id="link-to-translator" v-if="video.translated" :to="{path: '/translator/' + videoId}">
+                        {{video.translated? '翻译有误？': '我要翻译'}}
+                    </router-link>
+
                     <ul class="fr block-list ovv">
                         <li id="support-btn" @click="vote(1)">
                             <i v-bind:class="{ 'fa-thumbs-up': like==1, 'fa': 1, 'fa-thumbs-o-up': 1}"></i>

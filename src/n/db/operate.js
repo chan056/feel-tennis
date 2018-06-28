@@ -1368,7 +1368,6 @@ let operations = {
 		let usrId = this.usrInfo.usrId;
 		let draft = postObj.draft;
 
-		// 复制
 		let srcFinalDraftPath = path.resolve(
 			global.staticRoot, 
 			`./multimedia/ts/${postObj.vId}/subtitle.${draft}`
@@ -1379,35 +1378,38 @@ let operations = {
 			`./multimedia/ts/${postObj.vId}/subtitle`
 		)
 
-		fs.readFile(srcFinalDraftPath, function(err, data){
-			if(err) console.log(err)
+		let engDrafPath = path.resolve(
+			global.staticRoot, 
+			`./multimedia/ts/${postObj.vId}/subtitle.eng`
+		)
 
-			fs.writeFileSync(destFinalDraftPath, data);
-			
-			// 记录该视频被翻译
-			let sql = `update video set translated=1 where id=?`;
-			conn.query(sql, [postObj.vId], function(err, result){
-				if(err)
-					return throwError(err, res);
-				
-				res.end();
-			});
+		fs.exists(engDrafPath, function(exists){
+			if(!exists){
+				// 复制原稿（下载的英文稿） subtitle => subtitle.eng
+				// 中文译稿 subtitle.x 复制为subtitle 作为默认译稿
+				tools.copyFile(destFinalDraftPath, engDrafPath, publishCaption)
+			}else{
+				publishCaption();
+			}
 		})
 
-		// 删除
-        // let draftPath = path.resolve(
-        //     global.staticRoot, 
-        //     `./multimedia/ts/${postObj.vId}/subtitle.tmp.${draft}`
-		// )
-		
-        // let finalDraftPath = path.resolve(
-        //     global.staticRoot, 
-        //     `./multimedia/ts/${postObj.vId}/subtitle.${draft}`
-		// )
+		function publishCaption(){
+			// 译稿覆盖原稿
+			fs.readFile(srcFinalDraftPath, function(err, data){
+				if(err) console.log(err)
 
-		// require('del')([draftPath, finalDraftPath]).then(paths => {
-			
-		// });
+				fs.writeFileSync(destFinalDraftPath, data);
+				
+				// 记录该视频被翻译
+				let sql = `update video set translated=1 where id=?`;
+				conn.query(sql, [postObj.vId], function(err, result){
+					if(err)
+						return throwError(err, res);
+					
+					res.end();
+				});
+			})
+		}
 	},
 
 	// ===============PATCH================

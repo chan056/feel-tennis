@@ -2542,6 +2542,7 @@ module.exports = function(){
 			backtrack(){
 				if(this.$route.query.draftId){
 					this.$router.push({path: `/translator/${this.videoId}`});
+					this.draft = '';
 				}else{
 					this.$router.push({path: `/videos/${this.videoId}`});
 				}

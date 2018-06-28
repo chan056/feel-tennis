@@ -10,15 +10,14 @@ module.exports = {
 
         let captionPath = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle`);
 
-        // 查看状态 查看终稿
+        // 查看状态下，查看终稿
         if(draftId){
-            // 读取优先级 终稿 原稿
+            // 读取优先级 终稿 默认稿（翻以前为英文，翻译后为中文）
             if(fs.existsSync(captionPath + `.${draftId}`)){
                 captionPath += `.${draftId}`;
             }
         }else if(params.ownDraft && usrId){
-            // 读取优先级 草稿 终稿 原稿
-
+            // 读取优先级 草稿 终稿 默认稿（翻以前为英文，翻译后为中文）
             if(fs.existsSync(captionPath + `.tmp.${usrId}`)){
                 captionPath = captionPath + `.tmp.${usrId}`;
             }else if(fs.existsSync(captionPath + `.${usrId}`)){

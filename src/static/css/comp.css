@@ -352,6 +352,10 @@ app {
 #usr-operation-desk .block-list li:not(:last-child) {
   margin-right: 20px;
 }
+#link-to-translator {
+  margin-left: 2rem;
+  text-decoration: none;
+}
 #kick-off-ball {
   position: fixed;
   left: 50%;
