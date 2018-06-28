@@ -574,6 +574,9 @@ app {
   margin-right: 10px;
   float: right;
 }
+.cur-draft-item {
+  color: #66b1ff!important;
+}
 .btns .el-button {
   font-size: 1rem;
   padding: .6rem 1rem;

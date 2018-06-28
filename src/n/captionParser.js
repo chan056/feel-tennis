@@ -21,7 +21,7 @@ module.exports = {
 
             if(fs.existsSync(captionPath + `.tmp.${usrId}`)){
                 captionPath = captionPath + `.tmp.${usrId}`;
-            }else{
+            }else if(fs.existsSync(captionPath + `.${usrId}`)){
                 captionPath += `.${usrId}`;
             }
         }

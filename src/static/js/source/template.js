@@ -950,21 +950,19 @@ module.exports = function(){
                 <div class="btns">
                     <el-button class="fr" type="primary" @click="$router.go(-1)">返回</el-button>
                     
-                    <el-dropdown class="draft-dropdown" @command="handleSlectDraft">
+                    <el-dropdown class="draft-dropdown" @command="handleSlectDraft" v-if="drafts.length" trigger="click">
                         <el-button type="primary">
                             终稿<i class="el-icon-arrow-down el-icon--right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item v-for="draft in drafts" :command="draft">
-                                {{draft}}
+                            <el-dropdown-item v-for="draftID in drafts" :command="draftID" v-bind:class="{'cur-draft-item': draft==draftID}">
+                                {{draftID + (draftID == loginInfo.id? '(自己)': '')}}
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                     <el-button v-if="!draft" type="primary" @click="saveSrt(0)">暂存</el-button>
                     <el-button v-if="!draft" type="primary" @click="saveSrt(1)">发布</el-button>
                     <el-button v-if="draft && draft!=loginInfo.id" type="primary" @click="inheritCaption">继承</el-button>
-                    <!-- 不能继承自己的 todo -->
-                    <!--查看状态 并且用户是管理员-->
                     <el-button v-if="draft && loginInfo.is_admin" type="primary" @click="saveSrt">审核</el-button>
                     <br class="clr"/>
                 </div>

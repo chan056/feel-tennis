@@ -2179,32 +2179,32 @@ module.exports = function(){
 
 	COMPONENTS.Translator = {
 		props: ['videoId'],
-		beforeRouteUpdate(to, from, next){
-			location.hash = to.fullPath
-			location.reload();
-		},
+		// beforeRouteUpdate(to, from, next){
+		// 	location.hash = to.fullPath
+		// 	location.reload();
+		// },
 		data: function () {
 			var d = {
 				vEle: null,
-				curCaptionBlock: null,
+				curCaptionBlock: null,// 选中的字幕快
 				waveContainerWidth: 0,
-				duration: 0,
-				timeLineLength: 0,
-				captions: [],
+				duration: 0,// 视频时长
+				timeLineLength: 0,// 时间轴
+				captions: [],// 当前字幕
 				drafts: [],
 				draft: '',// 字幕草稿/用户 编号
 				updateType: 0,
 				triggerScroll: false,
 				timeOffset: 0,
 
-				captionBlockLeftBoundryScope:{},
-				captionBlockRightBoundryScope:{},
-				draggingSign: {status: false},
+				captionBlockLeftBoundryScope:{},// 字幕块左边界移动范围
+				captionBlockRightBoundryScope:{},// 字幕块右边界移动范围
+				draggingSign: {status: false},// 标记是否正在拖动 字幕块边界
 
-				loginInfo: {},
-				videoInfo: {},
+				loginInfo: {},// 登录信息
+				videoInfo: {},// 视频信息
 
-				captionIntervalId: 0,
+				captionIntervalId: 0,// 字幕循环ID
 
 				formatMS: tools.formatMS,
 			};
@@ -2315,7 +2315,7 @@ module.exports = function(){
 				this.$alert('继承字幕会丢失之前的草稿和已经发布的终稿，确定继承？', '提示', {
 					confirmButtonText: '确定',
 					callback: function(){
-						console.log(this.videoId, this.draft)
+						// console.log(this.videoId, this.draft)
 						tools.xhr('/caption/inherition' , function(){
 							this.$message({
 								message: `字幕继承成功`,
@@ -2476,7 +2476,25 @@ module.exports = function(){
 			},
 
 			handleSlectDraft: function(draft){
+				if(draft == this.$route.query.draftId)
+					return;
+
 				this.$router.push({path: `/translator/${this.videoId}`, query: {draftId: draft}});
+				this.draft = draft;
+
+				this.rstTranslator();
+			},
+
+			rstTranslator(){
+				clearInterval(this.captionIntervalId)
+				this.bindSubtitle();
+
+				$('#line-editor').scrollTop(0);
+				$('#timeline').scrollLeft(0);
+				$('.playhead').css('left', 0);
+				$('#line-editor').find('.selected, .current-line').removeClass('selected current-line')
+
+				this.timeOffset = 0;
 			},
 
 			queryLoginInfo(){
