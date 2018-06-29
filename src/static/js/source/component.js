@@ -2406,7 +2406,7 @@ module.exports = function(){
 				}else if(wavesurferProgress <= 0){
 					wavesurferProgress = 0
 				}
-				this.wavesurfer && this.wavesurfer.seekTo();
+				this.wavesurfer && this.wavesurfer.seekTo(wavesurferProgress);
 			},
 
 			// 拖动“针头”
