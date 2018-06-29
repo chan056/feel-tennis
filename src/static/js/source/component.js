@@ -2578,7 +2578,7 @@ module.exports = function(){
 						interact: false,
 						height: waveContainer.height() - 20,
 						// barWidth: 8,
-						barHeight: 1.2
+						// barHeight: 1.2
 					});
 
 					this.wavesurfer = wavesurfer;
