@@ -2247,6 +2247,8 @@ module.exports = function(){
 						if(videoWidth > videoContainerWidth){
 							vEle.width(videoContainerWidth)
 						}
+
+						t.vEle.style.opacity = 1;
 					}
 
 					// 0 拖动视频

@@ -727,6 +727,9 @@ app {
   transform: rotateZ(90deg);
   color: #fff;
 }
+#captions-player-colimn #video {
+  opacity: 0;
+}
 #waveform {
   position: absolute;
   left: 0;
