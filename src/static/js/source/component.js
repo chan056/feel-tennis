@@ -2412,7 +2412,7 @@ module.exports = function(){
 			// 拖动“针头”
 			handlerMovingNeedle: function(pos){
 				this.timeOffset = this.posToTime(pos);
-				// $('#timeline').triggerHandler('scroll');
+				$('#timeline').triggerHandler('scroll');
 			},
 
 			// 拖动block dragger
