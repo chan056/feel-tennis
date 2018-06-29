@@ -2586,7 +2586,6 @@ module.exports = function(){
 
 			this.queryLoginInfo();
 			this.queryVideoInfo();
-			this.drawWave();
 
 			$('#timeline').on("scroll", function(e){
 				let sl = $(this).scrollLeft();
