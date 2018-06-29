@@ -2205,6 +2205,7 @@ module.exports = function(){
 				videoInfo: {},// 视频信息
 
 				captionIntervalId: 0,// 字幕循环ID
+				wavesurfer: null,
 
 				formatMS: tools.formatMS,
 			};
@@ -2253,9 +2254,11 @@ module.exports = function(){
 					t.vEle.ontimeupdate= function(){
 						if(t.updateType == 0){
 							t.scrollTimeline();
+							t.seekWaveProgress();
 							t.positionLine();
 						}if(t.updateType == 1){
 							t.scrollTimeline();
+							t.seekWaveProgress();
 						}
 					}
 				}, id: 'hls'});
@@ -2394,6 +2397,16 @@ module.exports = function(){
 				$('#timeline').scrollLeft(timePass)
 				this.triggerScroll = true;//触发scroll事件时 标记为“模拟事件”
 				setTimeout(function(){this.triggerScroll = false;}.bind(this), 10)
+			},
+
+			seekWaveProgress(){
+				let wavesurferProgress = this.vEle.currentTime / this.duration;
+				if(wavesurferProgress > 1){
+					wavesurferProgress = 1
+				}else if(wavesurferProgress <= 0){
+					wavesurferProgress = 0
+				}
+				this.wavesurfer && this.wavesurfer.seekTo();
 			},
 
 			// 拖动“针头”
@@ -2562,8 +2575,11 @@ module.exports = function(){
 					// http://wavesurfer-js.org/docs/options.html
 					var wavesurfer = WaveSurfer.create({
 						container: '#waveform',
+						interact: false,
 						height: waveContainer.height() - 20
 					});
+
+					this.wavesurfer = wavesurfer;
 
 					wavesurfer.load(`/multimedia/ts/${this.videoId}/audio.mp3`)
 				}.bind(this), id: 'wavesurfer'});
