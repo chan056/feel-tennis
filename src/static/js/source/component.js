@@ -2576,7 +2576,9 @@ module.exports = function(){
 					var wavesurfer = WaveSurfer.create({
 						container: '#waveform',
 						interact: false,
-						height: waveContainer.height() - 20
+						height: waveContainer.height() - 20,
+						// barWidth: 8,
+						barHeight: 2
 					});
 
 					this.wavesurfer = wavesurfer;
@@ -2801,6 +2803,10 @@ module.exports = function(){
 				}
 			})
 		},
+
+		beforeDestroy(){
+			this.wavesurfer.destroy();
+		}
 	}
 
 	window.COMPONENTS = COMPONENTS;
