@@ -728,7 +728,7 @@ app {
   color: #fff;
 }
 #captions-player-colimn {
-  opacity: 1;
+  opacity: 0;
 }
 #waveform {
   position: absolute;

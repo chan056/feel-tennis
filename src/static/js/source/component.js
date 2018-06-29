@@ -2248,7 +2248,7 @@ module.exports = function(){
 							vEle.width(videoContainerWidth)
 						}
 
-						$('#captions-player-colimn').animate({opacity: 1}, 1000);
+						$('#captions-player-colimn').css({opacity: 1});
 					}
 
 					// 0 拖动视频
