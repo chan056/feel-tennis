@@ -398,7 +398,7 @@ app{font-size: 14px;}
   .rel{position: relative; overflow: hidden;}
   #timeline{
     position: relative;
-    min-height: 30px;
+    min-height: 120px;
     overflow-x: auto;
     overflow-y: hidden;
     border: 1px solid#f0f0f0;
@@ -446,7 +446,7 @@ app{font-size: 14px;}
 
   #time-scale{cursor: ew-resize;}
 
-  #playhead-container{width: 100%; height: 100px; overflow: hidden; position: absolute; top: 0; pointer-events: none;}
+  #playhead-container{width: 100%; height: 100%; overflow: hidden; position: absolute; top: 20px; pointer-events: none;}
 
   .playhead{
     pointer-events: auto;
@@ -498,5 +498,5 @@ app{font-size: 14px;}
 }
 
 #waveform{
-  position: absolute; left: 0; top: 0; z-index: -1;
+  position: absolute; left: 0; z-index: -1; height: 80px;
 }

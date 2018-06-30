@@ -2228,9 +2228,11 @@ module.exports = function(){
 					t.vEle.oncanplay= function(){
 						t.duration = t.vEle.duration;
 
-						t.$nextTick(function () {
+						// t.$nextTick(function () {
+							t.drawTimeScale();
 							t.timeLineLength = $('#time-scale').width();
-						})
+							t.drawWave();
+						// })
 
 						t.trimCaption();
 
@@ -2283,14 +2285,13 @@ module.exports = function(){
 				}
 
 				tools.xhr(captionAPI, function(res){
-					if(!res)
-						return;
-						
-					this.captionIntervalId = tools.attachSubtile(this.vEle, res, 500, function(subtitle){
-						$('#player-wrapper').find('.subtitle').text(subtitle)
-					});
-
-					this.captions = res;
+					if(res){
+						this.captionIntervalId = tools.attachSubtile(this.vEle, res, 500, function(subtitle){
+							$('#player-wrapper').find('.subtitle').text(subtitle)
+						});
+	
+						this.captions = res;
+					}
 
 					fn && fn();
 				}.bind(this));
@@ -2398,7 +2399,7 @@ module.exports = function(){
 				let timePass = this.timeToPos(this.vEle.currentTime - this.timeOffset);
 				$('#timeline').scrollLeft(timePass)
 				this.triggerScroll = true;//触发scroll事件时 标记为“模拟事件”
-				setTimeout(function(){this.triggerScroll = false;}.bind(this), 10)
+				setTimeout(function(){this.triggerScroll = false;}.bind(this), 50)
 			},
 
 			seekWaveProgress(){
@@ -2414,7 +2415,7 @@ module.exports = function(){
 			// 拖动“针头”
 			handlerMovingNeedle: function(pos){
 				this.timeOffset = this.posToTime(pos);
-				$('#timeline').triggerHandler('scroll');
+				$('#timeline').triggerHandler('scroll');// 模拟scroll 改变视频当前时间
 			},
 
 			// 拖动block dragger
@@ -2565,20 +2566,15 @@ module.exports = function(){
 
 			drawWave(){
 				tools.insertScriptTag(1, '/lib/wavesurfer.min.js', {onload: function(){
-					let waveContainerSelector = '#time-scale',
-						waveContainer = $(waveContainerSelector);
-
 					$('#waveform').css({
-						width: waveContainer.width(),
-						height: waveContainer.height(),
-						top: 20
+						width: this.timeLineLength
 					})
 					
 					// http://wavesurfer-js.org/docs/options.html
 					var wavesurfer = WaveSurfer.create({
 						container: '#waveform',
 						interact: false,
-						height: waveContainer.height() - 20,
+						height: $('#waveform').height(),
 						// barWidth: 8,
 						// barHeight: 1.2
 					});
@@ -2587,6 +2583,43 @@ module.exports = function(){
 
 					wavesurfer.load(`/multimedia/ts/${this.videoId}/audio.mp3`)
 				}.bind(this), id: 'wavesurfer'});
+			},
+
+			// timeline.scrollLeft + waveContainerWidth
+			drawTimeScale(startTime){
+				var c = document.querySelector('#time-scale');
+				var context = c.getContext('2d');
+				context.lineWidth = 1;          //设置线宽状态
+				context.strokeStyle = "#222" ;  //设置线的颜色状态
+	
+				var duration = this.duration;
+				var totalIndex = duration * 10;// 0 -> 1000
+				var intervalX = 6;
+				var short = 5;
+				var tall = 10;
+	
+				c.width = totalIndex * intervalX;
+	
+				for(var i=0; i <=totalIndex + 1; i ++){
+					// if(i/10 > startTime && i/10 < endTime){
+						drawLine(i)
+					// }
+				}
+	
+				function drawLine(scaleIndex){
+					context.moveTo (intervalX * scaleIndex,0);       //设置起点状态
+					context.lineTo (intervalX * scaleIndex, scaleIndex%5 ? short : tall);       //设置末端状态
+					context.stroke();  
+	
+					if(!(scaleIndex % 10)){
+						var second = scaleIndex / 10;
+						context.fillText(
+							second, 
+							intervalX *scaleIndex - second.toString().length / 2 * 6,// 6=>1个数字的宽度 
+							20
+						)
+					}
+				}
 			}
 		},
 
@@ -2619,6 +2652,7 @@ module.exports = function(){
 						// 修改视频时间
 						vEle.currentTime = t.posToTime(sl) + t.timeOffset;
 					}
+					t.vEle.pause()
 				}
 			}).on('mouseover click', '.caption-block', function(e){
 				if(t.draggingSign.status){// 拖动操作

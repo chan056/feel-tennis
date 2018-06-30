@@ -996,16 +996,22 @@ let operations = {
 							return console.log(err);
 					})
 				});
-				// });
 
-				subtitleAbsPath && videoGenerator.storeSubtitle(subtitleAbsPath, tsDir);
+				if(subtitleAbsPath && fs.existsSync(subtitleAbsPath)){
+					videoGenerator.storeSubtitle(subtitleAbsPath, tsDir);
+					recordSubtitleUploaded();
+				}
 			})
 		}else{
-			if(!fs.existsSync(subtitleAbsPath)){
-				return
+			if(subtitleAbsPath && fs.existsSync(subtitleAbsPath)){
+				videoGenerator.storeSubtitle(subtitleAbsPath, tsDir);
+				recordSubtitleUploaded();
 			}
-			
-			subtitleAbsPath && videoGenerator.storeSubtitle(subtitleAbsPath, tsDir);
+		}
+
+		function recordSubtitleUploaded(){
+			let sql = `update video set has_subtitle=1 where id=${vId}`;
+			conn.query(sql)
 		}
 	},
 
