@@ -2230,7 +2230,6 @@ module.exports = function(){
 
 						// t.$nextTick(function () {
 							t.drawTimeScale();
-							t.timeLineLength = $('#time-scale').width();
 							t.drawWave();
 						// })
 
@@ -2253,7 +2252,7 @@ module.exports = function(){
 						$('#captions-player-colimn').css({opacity: 1});
 					}
 
-					// 0 拖动视频
+					// 0 拖动视频 == 正常情况
 					// 1 左侧点击	
 					t.vEle.ontimeupdate= function(){
 						if(t.updateType == 0){
@@ -2263,7 +2262,10 @@ module.exports = function(){
 						}if(t.updateType == 1){
 							t.scrollTimeline();
 							t.seekWaveProgress();
+							t.updateType = 0;
 						}
+
+						t.drawTimeScale();
 					}
 				}, id: 'hls'});
 			},
@@ -2380,7 +2382,7 @@ module.exports = function(){
 						let lineBoxScrollTop = lineBox.scrollTop();
 						let lineBoxHeight = lineBox.height();
 						let curLineHeight = curLine.height()
-						let firstLineOffsetTop = lineBox.find('.caption-line').eq(0).offset().top;
+						let firstLineOffsetTop = lineBox.children().eq(0).offset().top;
 						let curLineMarginTop = curLine.offset().top - firstLineOffsetTop;
 						
 						if(curLineMarginTop < lineBoxScrollTop){
@@ -2585,12 +2587,11 @@ module.exports = function(){
 				}.bind(this), id: 'wavesurfer'});
 			},
 
-			// timeline.scrollLeft + waveContainerWidth
-			drawTimeScale(startTime){
+			drawTimeScale(){
 				var c = document.querySelector('#time-scale');
-				var context = c.getContext('2d');
-				context.lineWidth = 1;          //设置线宽状态
-				context.strokeStyle = "#222" ;  //设置线的颜色状态
+				var ctx = c.getContext('2d');
+				ctx.lineWidth = 1;          //设置线宽状态
+				ctx.strokeStyle = "#222" ;  //设置线的颜色状态
 	
 				var duration = this.duration;
 				var totalIndex = duration * 10;// 0 -> 1000
@@ -2598,24 +2599,41 @@ module.exports = function(){
 				var short = 5;
 				var tall = 10;
 	
-				c.width = totalIndex * intervalX;
+				let timeLineScrollLeft = $('#timeline').scrollLeft();
+
+				c.width = this.waveContainerWidth;
+				this.timeLineLength = totalIndex * intervalX;
+				
+				c.style.marginLeft = timeLineScrollLeft + 'px';
+				ctx.translate(-timeLineScrollLeft, 0);
+				// 绘制一部分
+				const startTime = this.posToTime(timeLineScrollLeft);
+				const endTime = this.posToTime(timeLineScrollLeft + this.waveContainerWidth);
+				
+				// console.log(startTime, endTime);
+				let j=0;
 	
+				// ctx.clearRect(0,0,c.width,c.height);
 				for(var i=0; i <=totalIndex + 1; i ++){
-					// if(i/10 > startTime && i/10 < endTime){
+					let second = i/10;
+
+					if(second > startTime && second < endTime){
+						j++;
 						drawLine(i)
-					// }
+					}
 				}
+				// console.log(j)
 	
 				function drawLine(scaleIndex){
-					context.moveTo (intervalX * scaleIndex,0);       //设置起点状态
-					context.lineTo (intervalX * scaleIndex, scaleIndex%5 ? short : tall);       //设置末端状态
-					context.stroke();  
+					ctx.moveTo (intervalX * scaleIndex,0);       //设置起点状态
+					ctx.lineTo (intervalX * scaleIndex, scaleIndex%5 ? short : tall);       //设置末端状态
+					ctx.stroke();  
 	
 					if(!(scaleIndex % 10)){
 						var second = scaleIndex / 10;
-						context.fillText(
+						ctx.fillText(
 							second, 
-							intervalX *scaleIndex - second.toString().length / 2 * 6,// 6=>1个数字的宽度 
+							intervalX *scaleIndex - second.toString().length / 2 * 8,// 8 => 1个数字的宽度 
 							20
 						)
 					}

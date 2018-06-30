@@ -985,6 +985,7 @@ module.exports = function(){
                                 placeholder="请输入内容"
                                 >
                             </el-input>
+                            <h1>1</h1>
 
                             <div id="line-editor">
                                 <el-row v-for="(caption, index) in captions" :data-caption="JSON.stringify(caption)" class="caption-line">
@@ -1023,7 +1024,7 @@ module.exports = function(){
                         <div id="timeline">
                             <!--<TimeScale v-if="duration" :duration="duration" :fn="drawWave"/>-->
                             <canvas id="time-scale" height=20></canvas>
-                            <div id="waveform"></div>
+                            <div v-if="timeLineLength" id="waveform" :style="{width: timeLineLength}"></div>
                             <div v-for="(caption, index) in captions" v-if="duration && timeLineLength" class="caption-block" 
                                 v-bind:style="{left: timeToPos(caption.startTime/1000)+'px', width: timeToPos((caption.endTime-caption.startTime)/1000)+'px'}"
                                 >
