@@ -2324,7 +2324,7 @@ module.exports = function(){
 				});
 
 				clearInterval(this.captionIntervalId)
-				this.bindSubtitle(this.captions);
+				this.bindSubtitle(null, this.captions);
 			},
 
 			// 继承当前查看的终稿
