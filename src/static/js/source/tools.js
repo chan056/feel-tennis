@@ -211,14 +211,14 @@ let tools = {
     // 精确到0.1秒
     // 0补齐 左侧第一位0省略
     
-    formatMS: function(ms){
+    formatMS: function(ms=0){
 
         let secondMS = 1000;
         let minuteMs = 60 * secondMS;
         
         let s = '';
 
-        if(ms){
+        // if(ms){
             let minute = Math.floor(ms / minuteMs);
 
             let minuteSecond = ms % minuteMs;
@@ -228,7 +228,7 @@ let tools = {
                 second = '0' + second;
 
             return `${minute}:${second}`;
-        }
+        // }
 
         return '';
     },

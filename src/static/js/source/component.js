@@ -2287,13 +2287,20 @@ module.exports = function(){
 				}
 
 				tools.xhr(captionAPI, function(res){
-					if(res){
-						this.captionIntervalId = tools.attachSubtile(this.vEle, res, 500, function(subtitle){
-							$('#player-wrapper').find('.subtitle').text(subtitle)
-						});
-	
-						this.captions = res;
+					if(!res || !res.length){
+						res = [{
+							id: '1',
+							startTime: 0,
+							endTime: 2000,
+							text: ''
+						}]
 					}
+
+					this.captionIntervalId = tools.attachSubtile(this.vEle, res, 500, function(subtitle){
+						$('#player-wrapper').find('.subtitle').text(subtitle)
+					});
+
+					this.captions = res
 
 					fn && fn();
 				}.bind(this));
@@ -2633,7 +2640,7 @@ module.exports = function(){
 						var second = scaleIndex / 10;
 						ctx.fillText(
 							second, 
-							intervalX *scaleIndex - second.toString().length / 2 * 8,// 8 => 1个数字的宽度 
+							intervalX *scaleIndex - second.toString().length / 2 * 5.5,// 5.5 => 1个数字的宽度 
 							20
 						)
 					}
@@ -2715,13 +2722,18 @@ module.exports = function(){
 					$(this).addClass('current').siblings().removeClass('current');
 				}
 			}).on('mouseleave', '.caption-block', function(e){
-				if(!$(e.relatedTarget).is('.caption-block-dragger,.playhead-triangle,.playhead-needle,.playhead-handle')){
+				if($('.playhead').find())
+				if(!$(e.relatedTarget).is(`
+					.caption-block-dragger,
+					.caption-block-dragger > i,
+					.playhead-triangle,
+					.playhead-needle,
+					.playhead-handle`)){
 					$('.caption-block-dragger-min, .caption-block-dragger-max').css('left', -100);
 				}
 			})
 
-			$('#line-editor').on('click', '.caption-line', function(){
-
+			$('#line-editor').on('click', '.caption-line', function(e){
 				if($(this).is('.selected')){
 					return;
 				}
@@ -2755,10 +2767,8 @@ module.exports = function(){
 					left: t.timeOffset/halfTimeOffset/2 * t.waveContainerWidth
 				})
 
-				// $('.caption-block').addClass('selected');
 			}).on('blur', '.caption-ipt .el-textarea__inner', function(){
 				$(this).parents('.caption-line').removeClass('focused');
-				$(this).focus();
 			}).on('click', '.caption-text', function(){
 				$(this).parents('.caption-line').addClass('focused');
 				$(this).siblings('.caption-ipt').find('.el-textarea__inner').focus();
@@ -2767,12 +2777,9 @@ module.exports = function(){
 				let index = $('.caption-line').index(curLine);
 				t.captions.splice(index, 1);
 				
-				curLine.removeClass('selected current-line');
 			}).on('click', '.add-segment-button', function(e){
 				let curLine = $(this).parents('.caption-line').eq(0);
 				let index = $('.caption-line').index(curLine);
-
-				curLine.removeClass('selected current-line');
 
 				// 优先往后加 最长时间为2秒
 				// 后方间隙不够（小于0.5秒），
@@ -2860,6 +2867,7 @@ module.exports = function(){
 
 		beforeDestroy(){
 			this.wavesurfer.destroy();
+			$('#wavesurfer').remove();
 		}
 	}
 

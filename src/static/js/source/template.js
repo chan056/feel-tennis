@@ -985,10 +985,9 @@ module.exports = function(){
                                 placeholder="请输入内容"
                                 >
                             </el-input>
-                            <h1>1</h1>
 
                             <div id="line-editor">
-                                <el-row v-for="(caption, index) in captions" :data-caption="JSON.stringify(caption)" class="caption-line">
+                                <el-row v-for="(caption, index) in captions" :key="caption.id" :data-caption="JSON.stringify(caption)" class="caption-line">
                                     <el-col :span="4" class="time-label">
                                         <p class="line-start-time" :data-st="caption.startTime">{{formatMS(caption.startTime)}}</p>
                                         <p class="line-end-time" :data-et="caption.endTime">{{formatMS(caption.endTime)}}</p>
@@ -1025,7 +1024,7 @@ module.exports = function(){
                             <!--<TimeScale v-if="duration" :duration="duration" :fn="drawWave"/>-->
                             <canvas id="time-scale" height=20></canvas>
                             <div v-if="timeLineLength" id="waveform" :style="{width: timeLineLength}"></div>
-                            <div v-for="(caption, index) in captions" v-if="duration && timeLineLength" class="caption-block" 
+                            <div v-for="(caption, index) in captions" :key="caption.id" v-if="duration && timeLineLength" class="caption-block" 
                                 v-bind:style="{left: timeToPos(caption.startTime/1000)+'px', width: timeToPos((caption.endTime-caption.startTime)/1000)+'px'}"
                                 >
                             </div>
