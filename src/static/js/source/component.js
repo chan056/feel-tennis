@@ -491,7 +491,6 @@ module.exports = function(){
 		},
 
 		created: function(){
-			console.log(this.$bus)
 			this.$bus.on('update-login-info', function(info){
 				this.loginUsrInfo = info;
 			}.bind(this));
@@ -2753,6 +2752,7 @@ module.exports = function(){
 				let caption = $(this).data('caption');
 
 				let st = caption.startTime / 1000;
+				st = st + 0.02;//确保点击后的字幕和视频上显示的字幕同步
 				
 				// 修改视频时间
 				t.updateType = 1;

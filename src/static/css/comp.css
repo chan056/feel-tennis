@@ -736,3 +736,7 @@ app {
   z-index: -1;
   height: 80px;
 }
+.delete-segment-button,
+.add-segment-button {
+  width: 12px;
+}
