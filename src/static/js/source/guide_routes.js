@@ -63,6 +63,14 @@ module.exports = {
             `,
             direction: 'down'
         },
+
+        {
+            selector: '#link-to-translator',
+            lines: `
+                帮忙翻译视频!!
+            `,
+            direction: 'down'
+        },
     ],
 
     evtInfo: [{

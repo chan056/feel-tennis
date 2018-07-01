@@ -491,6 +491,7 @@ module.exports = function(){
 		},
 
 		created: function(){
+			console.log(this.$bus)
 			this.$bus.on('update-login-info', function(info){
 				this.loginUsrInfo = info;
 			}.bind(this));
@@ -2208,6 +2209,12 @@ module.exports = function(){
 				wavesurfer: null,
 
 				formatMS: tools.formatMS,
+				defaultCaption: {
+					id: '1',
+					startTime: 0,
+					endTime: 2000,
+					text: ''
+				}
 			};
 
 			return d;
@@ -2288,12 +2295,8 @@ module.exports = function(){
 
 				tools.xhr(captionAPI, function(res){
 					if(!res || !res.length){
-						res = [{
-							id: '1',
-							startTime: 0,
-							endTime: 2000,
-							text: ''
-						}]
+						res = [Object.assign({}, this.defaultCaption)];
+						console.log(res);
 					}
 
 					this.captionIntervalId = tools.attachSubtile(this.vEle, res, 500, function(subtitle){
@@ -2776,7 +2779,10 @@ module.exports = function(){
 				let curLine = $(this).parents('.caption-line').eq(0);
 				let index = $('.caption-line').index(curLine);
 				t.captions.splice(index, 1);
-				
+
+;				if(t.captions.length == 0){
+					t.captions = [Object.assign({}, t.defaultCaption)];
+				}
 			}).on('click', '.add-segment-button', function(e){
 				let curLine = $(this).parents('.caption-line').eq(0);
 				let index = $('.caption-line').index(curLine);

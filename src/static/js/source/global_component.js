@@ -50,7 +50,7 @@ module.exports = function(){
 
         template: `
             <div v-if="guideDialogVisible">
-                <i id="guide-cursor" class="fa fa-hand-o-left"></i>
+                <i id="guide-cursor" class="fa fa-hand-o-left" style="display:none;"></i>
 
                 <el-dialog
                     id="guide-dialog"
@@ -80,6 +80,10 @@ module.exports = function(){
             guideEvtInfo.forEach((item)=>{
                 bidnGuideEvent(item);
             });
+
+            this.$bus.on('dismiss-guider', function(info){
+				this.guideDialogVisible = false;
+			}.bind(this));
 
             function bidnGuideEvent(item){
                 let guider = getGuider();
@@ -152,6 +156,9 @@ module.exports = function(){
 
                 if(typeof selector == 'string'){
                     offset = $(selector).offset();
+                }else{
+                    t.guideCursor.hide();
+                    return;
                 }
 
                 t.guideCursor.attr('class', 'fa fa-hand-o-' + routeStep.direction)

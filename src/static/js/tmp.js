@@ -128,8 +128,13 @@ $(function () {
 		]
 	})
 
-	new Vue({
+	let x = new Vue({
 		router,
 		el: '#app'
 	})
+
+	router.afterEach((to, from, next) => {
+		x.$bus.emit('dismiss-guider');
+	})
+	console.log(x);
 });
