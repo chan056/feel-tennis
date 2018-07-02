@@ -181,9 +181,9 @@ module.exports = function(){
 				}.bind(this), 'post', {
 					name: trim(this.loginForm.name),
 					psw: md5(trim(this.loginForm.psw)),
-					ip: CURPOS.ip,
 					city: this.cityZH,
-					coords: CURPOS.longitude + ',' + CURPOS.latitude
+					ip: CURPOS? CURPOS.ip: '',
+					coords: CURPOS? CURPOS.longitude + ',' + CURPOS.latitude: ''
 				}, function(res){
 					let status = res.status;
 					let statusText = res.statusText;
@@ -507,7 +507,7 @@ module.exports = function(){
 
 		methods: {
 			getCurPos: function(fn){
-				$.getJSON('//freegeoip.net/json/?callback=?', function(data) {
+				$.getJSON('//api.ipstack.com/check?access_key=05b0ae3a68eece35c67005836290cb70', function(data) {
 					window.CURPOS = data;
 					var coord = {lng: data.longitude, lat: data.latitude};
 					fn && fn(coord);
