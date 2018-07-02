@@ -506,12 +506,25 @@ module.exports = function(){
 		},
 
 		methods: {
-			getCurPos: function(fn){
-				$.getJSON('//api.ipstack.com/check?access_key=05b0ae3a68eece35c67005836290cb70', function(data) {
-					window.CURPOS = data;
-					var coord = {lng: data.longitude, lat: data.latitude};
-					fn && fn(coord);
-				});
+			getCurPos: function(){
+				// 检查localstorage
+				let ipstack = localStorage.getItem('ipstack')
+				if(ipstack){
+					ipstack = JSON.stringify(localStorage.getItem('ipstack'));
+					let storageTime = ipstack.storageTime;
+					const day = 1 * 24 * 60 * 60 * 1000;
+					if(Date.now - storageTime < day){
+						window.CURPOS = ipstack;
+					}
+				}else{
+					$.getJSON('//api.ipstack.com/check?access_key=05b0ae3a68eece35c67005836290cb70', function(data) {
+						data.storageTime = Date.now();
+						window.CURPOS = data;
+						localStorage.setItem('ipstack', JSON.stringify(data))
+						// var coord = {lng: data.longitude, lat: data.latitude};
+						// fn && fn(coord);
+					});
+				}
 			},
 		},
 	};
