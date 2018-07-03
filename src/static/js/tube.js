@@ -49,6 +49,7 @@ $(function () {
 	})
 
 	router.afterEach((to, from, next) => {
+		// 页面切换，隐藏引导
 		appInstance.$bus.emit('dismiss-guider');
 	})
 });

@@ -1,8 +1,16 @@
 module.exports = function(){
     var fragment = {
-        attachVideo: function(vId){
+        attachVideo: function(vId, lowResolution){
+            let m3u8 = '';
+            if(window.isMobile || lowResolution){
+                m3u8 = '480p'
+                console.log('low resolution')
+            }else{
+                m3u8 = '_'
+            }
+
             return `{
-                var m3u = '/multimedia/ts/${vId}/_.m3u8';
+                var m3u = '/multimedia/ts/${vId}/${m3u8}.m3u8';
                 var video = $('video')[0];
 
                 if(Hls.isSupported()) {

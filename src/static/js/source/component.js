@@ -2238,7 +2238,7 @@ module.exports = function(){
 			bindVideo: function(){
 				let t = this;
 				tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
-					tools.insertScriptTag(2, FRAGMENTS.attachVideo(t.videoId), {id: 'hls-frag'});
+					tools.insertScriptTag(2, FRAGMENTS.attachVideo(t.videoId, 1), {id: 'hls-frag'});
 
 					t.vEle.onended = function(){
 						$('.subtitle').text('');

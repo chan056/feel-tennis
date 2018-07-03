@@ -65,7 +65,7 @@ module.exports = function(){
 
                     <span v-html="route?route[routeIndex].lines: ''"></span>
                     <span slot="footer" class="dialog-footer">
-                        <el-button @click="guideDialogVisible = false">跳过引导</el-button>
+                        <el-button @click="skipGuide">跳过引导</el-button>
                         <el-button type="primary" @click="onNext">下一步</el-button>
                     </span>
                 </el-dialog>
@@ -88,15 +88,19 @@ module.exports = function(){
             function bidnGuideEvent(item){
                 let guider = getGuider();
                 if(guider.indexOf(item.name) == -1){
+                    let triggerType = item.triggerType || 'click';
                     if(item.delegator){
-                        $(item.delegator).one('click', item.tar, evt);
+                        $(item.delegator).one(triggerType, item.tar, evt);
                     }else{
-                        $(item.tar).one('click', evt);
+                        $(item.tar).one(triggerType, evt);
                     }
                 }
 
                 function evt(){
-                    t.guideDialogVisible = true;
+                    // 在dismiss-guider触发之后执行
+                    setTimeout(()=>{
+                        t.guideDialogVisible = true;
+                    }, 200)
 
                     t.routeTitle = item.title;
                     t.routeName = item.name;
@@ -122,7 +126,6 @@ module.exports = function(){
         methods: {
             onNext: function(){
                 let routeStep = this.route[this.routeIndex];
-                routeStep.trigger && $(routeStep.selector).trigger('click');
 
                 this.routeIndex ++;
                 if(this.routeIndex < this.route.length){
@@ -136,14 +139,20 @@ module.exports = function(){
                 }
             },
 
+            skipGuide(){
+                this.guideDialogVisible = false; 
+                this.route = null;
+                this.routeIndex = 0;
+            },
+
             guide: function(){
+
                 const t = this;
 
                 t.route = t['routes'][t.routeName];
 
                 let routeStep = t.route[t.routeIndex];
                 t.guideCursor = $('#guide-cursor');
-                let selector = routeStep.selector;
                 if(!routeStep.direction){
                     t.guideCursor.hide();
                     return;
@@ -154,6 +163,7 @@ module.exports = function(){
                 let offset;
                 let translation = {};
 
+                let selector = routeStep.selector;// 光标的位置
                 if(typeof selector == 'string'){
                     offset = $(selector).offset();
                 }else{

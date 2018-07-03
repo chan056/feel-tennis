@@ -15,14 +15,11 @@ module.exports = {
 
     compete: [
         {
-            selector: '#guide-compete-1', 
-
             lines: `
-                这是竞技场入口,<br/>
+                这是竞技场,<br/>
                 你可以在这找到志趣相投、水平相近的伙伴,<br/>
                 一起打球、一起交流
             `,
-            trigger: true
         },
 
         {
@@ -78,6 +75,7 @@ module.exports = {
         name: 'fund',
         tar: '#guide-fund-1',
         delegator: '',
+        // triggerType
     },{
         title: '竞赛',
         name: 'compete',

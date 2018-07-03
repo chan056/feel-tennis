@@ -22,13 +22,15 @@ fs.readdir(tsRoot, function(err, files){
         let vId = vIds[i];
         if(!vId)
             return;
-        console.log(i, vId)
+        
         let videoStorePath = path.resolve(__dirname, '../../static/multimedia/pristine_v/'+vId+'.mp4');
 
         if(fs.existsSync(videoStorePath)){
             extractAudio(videoStorePath, tsRoot + '/' + vId, function(){
                 extract(++i);
             });
+        }else{
+            extract(++i);
         }
     }
 })
@@ -36,8 +38,12 @@ fs.readdir(tsRoot, function(err, files){
 function extractAudio(videoStorePath, tsDir, fn){
     let target = `${tsDir}/audio.mp3`;
     if(fs.existsSync(target)){
-        require('del').sync(target, {force: true});
+        fn && fn();
+        return;
+        // require('del').sync(target, {force: true});
     }
+
+    console.log(videoStorePath)
 
     let cmd = `ffmpeg -i ${videoStorePath} -q:a 0 -map a ${target}`;
 
