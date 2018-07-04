@@ -21,7 +21,7 @@ module.exports={
     entry:{
         app: './src/static/js/source/entry.js',
         admin: './src/static/js/source/admin.js',
-        sport_intro: './src/static/js/source/sport_intro_entry.js'// 运动介绍页
+        sport_intro: './src/static/js/source/entry_sport_intro.js'// 运动介绍页
     },
 
     output:{

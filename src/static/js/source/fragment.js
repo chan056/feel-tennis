@@ -1,21 +1,25 @@
 module.exports = function(){
     var fragment = {
-        attachVideo: function(vId, lowResolution){
+        attachVideo: function(vId, lowResolution, isIntroductory, selector){
             let m3u8 = '';
-            if(window.isMobile || lowResolution){// 未登录
-                m3u8 = lowResolution+'p'
-                console.log('low resolution：' + lowResolution)
+            if(window.isMobile){
+                lowResolution = lowResolution || 480;
+                m3u8 = lowResolution + 'p'
+                console.log('low resolution：' + m3u8)
+            }else if(lowResolution){
+                m3u8 = lowResolution + 'p'
+                console.log('low resolution：' + m3u8)
             }else{
                 m3u8 = '_'
             }
 
+            let tsRoot = isIntroductory? `/multimedia/ts_introductory/${vId}/`: `/multimedia/ts/${vId}/`;
+
             return `{
-                var m3u = '/multimedia/ts/${vId}/${m3u8}.m3u8';
-                var video = $('video')[0];
+                var m3u = '${tsRoot}${m3u8}.m3u8';
+                var video = $('video')[0];// selector
 
                 if(Hls.isSupported()) {
-                    // window.vEle = video;
-                    
                     var hls = new Hls({
                         maxBufferLength: 20,
                         maxMaxBufferLength: 20,
@@ -32,21 +36,10 @@ module.exports = function(){
 
                 }else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                     video.src = m3u;
-                    var s = '<track kind="subtitles" src="/multimedia/ts/${vId}/subtitle.vtt" srclang="zh" label="中文" default></track>';
+                    var s = '<track kind="subtitles" src="${tsRoot}subtitle.vtt" srclang="zh" label="中文" default></track>';
                     $(video).prepend(s);
-                    video.addEventListener('canplay',function() {
-                        // video.play();
-                    });
                 }else{
-                    // alert('请更换浏览器后再试,Chrome/Firefox/EDGE等现代浏览器');
-                    // Vue.prototype.$alert('请更换浏览器后再试,Chrome/Firefox/EDGE等现代浏览器，或者升级IE到IE11', '提示', {
-                    //     confirmButtonText: '确定',
-                    //     callback: function() {
-
-                    //     }
-                    // })
-
-                    video.src = '/multimedia/pristine_v/${vId}.mp4';
+                    video.src = '${tsRoot}${vId}.mp4';
                 }
             }`
         },

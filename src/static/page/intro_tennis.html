@@ -37,12 +37,24 @@
             排行榜
             著名运动员
         </h2>
-
+		<video controls src=""></video>
 	
-		<script src="../lib/axios.min.js"></script>
-		<script src="../lib/zepto.js"></script>
+		<!-- <script src="../lib/axios.min.js"></script>
+		<script src="../lib/zepto.js"></script> -->
 	
 		<script src="../js/sport_intro.js"></script>
+		<script>
+			window.vEle = $('video');
+
+			bindVideo(1)
+
+			function bindVideo(videoId){
+				tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
+					tools.insertScriptTag(2, FRAGMENTS.attachVideo(videoId, 360, true), {id: 'hls-frag'});
+
+				}.bind(this), id: 'hls'});
+			}
+		</script>
 		
 		<!-- <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5XGIRhLpHgiaALCHuFfkCGcAewbkm4IP"></script>
 		<script>
