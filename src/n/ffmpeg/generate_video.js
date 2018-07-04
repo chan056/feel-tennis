@@ -41,12 +41,12 @@ function execM3U(videoStorePath, tsDir, specifiedResolution){
     
         let resolutions = [];
         for(let i in multiResolution){
-            resolutions.push(multiResolution[i]);
+            resolutions.push(i);
         }
 
         let index = 0;
         cutVideo(resolutions[index], function(){
-            ++index
+            ++index;
             resolutions[index] && cutVideo(resolutions[index])
         })
     }else{
