@@ -14,12 +14,11 @@ module.exports = function(){
             }
 
             let tsRoot = isIntroductory? `/multimedia/ts_introductory/${vId}/`: `/multimedia/ts/${vId}/`;
+            let video = selector? `document.querySelector('${selector}')`: `$('video')[0]`;
 
             return `{
                 var m3u = '${tsRoot}${m3u8}.m3u8';
-                var video = '${selector}'
-                    ? document.querySelector('${selector}')
-                    : $('video')[0];// selector
+                var video = ${video};
 
                 if(Hls.isSupported()) {
                     var hls = new Hls({

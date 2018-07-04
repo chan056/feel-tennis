@@ -35,7 +35,6 @@ function execM3U(videoStorePath, tsDir, specifiedResolution){
         fs.readFile(sourcePlaylist, (err, data) => {
             fs.writeFile(targetPlaylist, data, (err) => {
                 if (err) console.log(err);
-                // console.log('The file has been saved!');
             });
         });
     
