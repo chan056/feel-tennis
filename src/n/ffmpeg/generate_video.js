@@ -16,35 +16,45 @@ module.exports.dynamicPreview = dynamicPreview;
 module.exports.watermark = watermark;
 module.exports.extractAudio = extractAudio;
 
-function execM3U(videoStorePath, tsDir){
+function execM3U(videoStorePath, tsDir, specifiedResolution){
     let multiResolution = {
         360: {scaleW: 640, scaleH: 360, bv: 800, maxrate: 856, bufsize: 1200, ba: 96},
         480: {scaleW: 842, scaleH: 480, bv: 1400, maxrate: 1498, bufsize: 2100, ba: 128},
         720: {scaleW: 1280, scaleH: 720, bv: 2800, maxrate: 2996, bufsize: 4200, ba:128},
         1280: {scaleW: 1920, scaleH: 1080, bv: 5000, maxrate: 5350, bufsize: 7500, ba: 192}
     }
-    delete multiResolution[360];
-    delete multiResolution[1280];
 
-    // 复制一份多分辨率控制列表
-    let sourcePlaylist = path.resolve(tsDir, '../playlist.m3u8');
-    let targetPlaylist = path.resolve(tsDir, './_.m3u8');
+    if(!specifiedResolution){
+        delete multiResolution[360];
+        delete multiResolution[1280];
     
-    fs.readFile(sourcePlaylist, (err, data) => {
-        fs.writeFile(targetPlaylist, data, (err) => {
-            if (err) console.log(err);
-            // console.log('The file has been saved!');
+        // 复制一份多分辨率控制列表
+        let sourcePlaylist = path.resolve(tsDir, '../playlist.m3u8');
+        let targetPlaylist = path.resolve(tsDir, './_.m3u8');
+        
+        fs.readFile(sourcePlaylist, (err, data) => {
+            fs.writeFile(targetPlaylist, data, (err) => {
+                if (err) console.log(err);
+                // console.log('The file has been saved!');
+            });
         });
-    });
+    
+        let resolutions = [];
+        for(let i in multiResolution){
+            resolutions.push(multiResolution[i]);
+        }
 
-    cutVideo(480, function(){
-        cutVideo(720, function(){
-            
-        });
-    });
+        let index = 0;
+        cutVideo(resolutions[index], function(){
+            ++index
+            resolutions[index] && cutVideo(resolutions[index])
+        })
+    }else{
+        cutVideo(specifiedResolution);
+    }
 
     function cutVideo(videoWidth, fn){
-        resolution = multiResolution[videoWidth]
+        let resolution = multiResolution[videoWidth]
         let tsFile = path.resolve(tsDir, `./${videoWidth}p_%03d.ts`);
         let m3u8File = path.resolve(tsDir, `./${videoWidth}p.m3u8`);
 

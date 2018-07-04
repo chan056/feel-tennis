@@ -20,7 +20,8 @@ module.exports={
     mode: 'development',
     entry:{
         app: './src/static/js/source/entry.js',
-        admin: './src/static/js/source/admin.js'
+        admin: './src/static/js/source/admin.js',
+        sport_intro: './src/static/js/source/sport_intro_entry.js'// 运动介绍页
     },
 
     output:{

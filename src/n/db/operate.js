@@ -965,6 +965,8 @@ let operations = {
 		let tsDir = global.staticRoot + `/multimedia/ts/${vId}`;
 		
 		const fs = require('fs');
+
+		fs.existsSync(tsDir) || fs.mkdirSync(tsDir, 0777);
 		
 		if(videoAbsPath){
 			if(!fs.existsSync(videoAbsPath)){
@@ -977,7 +979,6 @@ let operations = {
 			// 如果只传视频 字幕会被误删
 			del([tsDir + '/*.*', '!' + tsDir + '/subtitle', '!' + tsDir + '/subtitle.vtt']).then(paths => {
 				// console.log('Deleted files and folders:\n', paths.join('\n'));
-				fs.existsSync(tsDir) || fs.mkdirSync(tsDir, 0777);
 
 				let ext = path.extname(videoAbsPath);
 				let videoStorePath = global.staticRoot + `/multimedia/pristine_v/${vId}${ext}`;
@@ -1015,32 +1016,88 @@ let operations = {
 		}
 	},
 
+	generateIntroductoryVideo: function(vId, obj){
+		const fs = require('fs');
+
+		let videoAbsPath = obj.videoAbsPath;
+		let subtitleAbsPath = obj.subtitleAbsPath;
+
+		let videoGenerator = require('../ffmpeg/generate_video');
+		let tsDir = global.staticRoot + `/multimedia/ts_introductory/${vId}`;
+		
+		fs.existsSync(tsDir) || fs.mkdirSync(tsDir, 0777);
+		
+		if(videoAbsPath){
+			if(!fs.existsSync(videoAbsPath)){
+				return
+			}
+			
+			const del = require('del');
+			const path = require('path');
+
+			del([tsDir + '/*.*', '!' + tsDir + '/subtitle', '!' + tsDir + '/subtitle.vtt']).then(paths => {
+				// console.log('Deleted files and folders:\n', paths.join('\n'));
+
+				let ext = path.extname(videoAbsPath);
+				let videoStorePath = global.staticRoot + `/multimedia/pristine_introductory_v/${vId}${ext}`;
+				let videoGenerator = require('../ffmpeg/generate_video');
+				fs.renameSync(videoAbsPath, videoStorePath);// 用于生成gif
+
+				videoGenerator.execM3U(videoStorePath, tsDir, 360);
+
+				if(subtitleAbsPath && fs.existsSync(subtitleAbsPath)){
+					videoGenerator.storeSubtitle(subtitleAbsPath, tsDir);
+				}
+			})
+		}else{
+			if(subtitleAbsPath && fs.existsSync(subtitleAbsPath)){
+				videoGenerator.storeSubtitle(subtitleAbsPath, tsDir);
+			}
+		}
+	},
+
 	createVideo: function(res, postObj){
 		const path = require('path');
 
 		let videoAbsPath = postObj.videoAbsPath;
 		let ext = path.extname(videoAbsPath);
 
-		var sql = `INSERT INTO video 
+		if(postObj.isTutorial){
+			let sql = `INSERT INTO video 
 			(album_id, headline, headline_eng, tag, video_ext, update_time)
 			VALUES (?, ?, ?, ?, ?, ?)`;
 
-		conn.query(sql, [postObj.albumId, postObj.headline, postObj.headlineEng, postObj.tag, ext, +new Date()], function(err, result, fields){
-			if(err)
-				return throwError(err, res);
+			conn.query(sql, [postObj.albumId, postObj.headline, postObj.headlineEng, postObj.tag, ext, Date.now()], function(err, result, fields){
+				if(err)
+					return throwError(err, res);
 
-			res.end();
+				res.end();
 
-			// 更新album 和 sport
-			let now = +new Date();
-			let albumId = postObj.albumId;
+				// 更新album 和 sport
+				let now = Date.now();
+				let albumId = postObj.albumId;
 
-			conn.query('update album set update_time = ' + now + ' where id=' + albumId);
-			conn.query('update sport set update_time = ' + now + ' where id = (select sport_id from album where id = ' + albumId + ')');
+				conn.query('update album set update_time = ' + now + ' where id=' + albumId);
+				conn.query('update sport set update_time = ' + now + ' where id = (select sport_id from album where id = ' + albumId + ')');
 
-			let insertId = result.insertId;
-			insertId && this.generateVideo(insertId, postObj);
-		}.bind(this));
+				let insertId = result.insertId;
+				insertId && this.generateVideo(insertId, postObj);
+			}.bind(this));
+		}else{
+			let sql = `INSERT INTO video_introductory 
+			(headline, headline_eng, tag, video_ext, update_time)
+			VALUES (?, ?, ?, ?, ?)`;
+
+			conn.query(sql, [postObj.headline, postObj.headlineEng, postObj.tag, ext, Date.now()], function(err, result, fields){
+				if(err)
+					return throwError(err, res);
+
+				res.end();
+
+				let insertId = result.insertId;
+				insertId && this.generateIntroductoryVideo(insertId, postObj);
+			}.bind(this));
+		}
 	},
 
 	createFeedback: function(res, postObj, req){
@@ -1103,7 +1160,7 @@ let operations = {
 	createAlbum: function(res, postObj){
 		var sql = `INSERT INTO album 
 			(sport_id, author_id, name, tag, update_time)
-			VALUES (?, ?, ?, ?, ${+new Date()})`;
+			VALUES (?, ?, ?, ?, ${Date.now()})`;
 
 		conn.query(sql, [postObj.sportId, postObj.maker, postObj.name, postObj.tag], function(err, result, fields){
 			if(err)
@@ -1251,7 +1308,7 @@ let operations = {
 	},
 
 	createSport: function(res, postObj, req){
-		let sql = `insert into sport (name, update_time) values ('${postObj.name}', ${+new Date()})`;
+		let sql = `insert into sport (name, update_time) values ('${postObj.name}', ${Date.now()})`;
 
 		conn.query(sql, function(err, result){
 			if(err)
@@ -1716,7 +1773,7 @@ let operations = {
 				let defenseRes = matchDetail.defense_res;
 				let offenseTime = +matchDetail.offense_time;
 				let defenseTime = +matchDetail.defense_time;
-				let NOW = +new Date();
+				let NOW = Date.now();
 				let ONEDAY = 1 * 24 * 60 * 60 *1000;
 
 				let usrMarkedResult = patchObj.result;
@@ -1887,14 +1944,14 @@ let operations = {
 		let vId = postObj.id;
 		var sql = `update video set album_id=?, headline=?, headline_eng=?, tag=?, update_time=? where id=${postObj.id}`;
 
-		conn.query(sql, [postObj.albumId, postObj.headline, postObj.headlineEng, postObj.tag, +new Date()], function(err, result, fields){
+		conn.query(sql, [postObj.albumId, postObj.headline, postObj.headlineEng, postObj.tag, Date.now()], function(err, result, fields){
 			if(err)
 				return throwError(err, res);
 
 			res.end();
 
 			// 更新album 和 sport
-			let now = +new Date();
+			let now = Date.now();
 			let albumId = postObj.albumId;
 
 			conn.query('update album set update_time = ' + now + ' where id=' + albumId);
@@ -1907,7 +1964,7 @@ let operations = {
 	updateAlbumInfo: function(res, putObj){
 		var sql = `update album set sport_id=?, author_id=?, tag=?, update_time=? where id=${putObj.id}`;
 
-		conn.query(sql, [putObj.sportId, putObj.maker, putObj.tag, +new Date()], function(err, result, fields){
+		conn.query(sql, [putObj.sportId, putObj.maker, putObj.tag, Date.now()], function(err, result, fields){
 			if(err)
 				return throwError(err, res);
 				
@@ -1924,7 +1981,7 @@ let operations = {
 						
 					require('../tools.js').scaleImage(sourceCoverPath, destCoverPath);
 				}
-				conn.query('update sport set update_time = ' + (+new Date()) + ' where id = (select sport_id from album where id = ' + putObj.id + ')');
+				conn.query('update sport set update_time = ' + (Date.now()) + ' where id = (select sport_id from album where id = ' + putObj.id + ')');
 			}
 		});
 	},
@@ -1932,7 +1989,7 @@ let operations = {
 	updateSportInfo:function(res, putObj){
 		var sql = `update sport set name=?, update_time=? where id=${putObj.id}`;
 
-		conn.query(sql, [putObj.name, +new Date()], function(err, result, fields){
+		conn.query(sql, [putObj.name, Date.now()], function(err, result, fields){
 			if(err)
 				return throwError(err, res);
 				

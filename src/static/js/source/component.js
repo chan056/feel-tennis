@@ -515,8 +515,14 @@ module.exports = function(){
 					const day = 1 * 24 * 60 * 60 * 1000;
 					if(Date.now - storageTime < day){
 						window.CURPOS = ipstack;
+					}else{
+						requestIpStack()
 					}
 				}else{
+					requestIpStack()
+				}
+
+				function requestIpStack(){
 					$.getJSON('//api.ipstack.com/check?access_key=05b0ae3a68eece35c67005836290cb70', function(data) {
 						data.storageTime = Date.now();
 						window.CURPOS = data;
@@ -2238,7 +2244,7 @@ module.exports = function(){
 			bindVideo: function(){
 				let t = this;
 				tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
-					tools.insertScriptTag(2, FRAGMENTS.attachVideo(t.videoId, 1), {id: 'hls-frag'});
+					tools.insertScriptTag(2, FRAGMENTS.attachVideo(t.videoId, 480), {id: 'hls-frag'});
 
 					t.vEle.onended = function(){
 						$('.subtitle').text('');

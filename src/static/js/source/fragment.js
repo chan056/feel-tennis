@@ -2,9 +2,9 @@ module.exports = function(){
     var fragment = {
         attachVideo: function(vId, lowResolution){
             let m3u8 = '';
-            if(window.isMobile || lowResolution){
-                m3u8 = '480p'
-                console.log('low resolution')
+            if(window.isMobile || lowResolution){// 未登录
+                m3u8 = lowResolution+'p'
+                console.log('low resolution：' + lowResolution)
             }else{
                 m3u8 = '_'
             }

@@ -2,7 +2,16 @@ temp.uploadAdmin =  `
     <div class="upload-wrapper">
         <h2>视频上传</h2>
 
-        <el-row>
+        <el-row v-if="!vId && !aId && !sId">
+            <el-col :span="4">
+            </el-col>
+
+            <el-col :span="10">
+                <el-checkbox v-model="isTutorial">教程视频</el-checkbox>
+            </el-col>
+        </el-row>
+
+        <el-row v-if="isTutorial">
             <el-col :span="4">
                 <label>运动</label>
             </el-col>
@@ -26,7 +35,7 @@ temp.uploadAdmin =  `
             <el-button v-show="videoEditable" @click="newSportConfig.visibility=true" class="new-sport-btn">新建运动</el-button>
         </el-row>
 
-        <el-row ng-show="sport_id">
+        <el-row v-if="isTutorial">
             <el-col :span="4">
                 <label>专辑</label>
             </el-col>
@@ -334,6 +343,7 @@ COMPONENTS.UploadAdmin = {
 		};
 
 		var d = {
+            isTutorial: true,
             sport_id: null,
             SO: {
                 albumId: '',
@@ -438,7 +448,15 @@ COMPONENTS.UploadAdmin = {
 
 		postVideo(){
 			let so = Object.assign({}, this.SO);
-			so.tag = this.SO.tag.join(',');
+            so.tag = this.SO.tag.join(',');
+            
+            let api = '';
+
+            if(this.isTutorial){
+                so.isTutorial = 1;
+            }else{
+                so.isTutorial = 0;
+            }
 
 			tools.xhr('/video', function(){
                 var vId = this.vId;
