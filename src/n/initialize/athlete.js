@@ -6,7 +6,7 @@ let TENNISSPORTID = 1;//网球
 
 // language: en + zh-Hans
 let url1 = 'https://live-tennis.eu/zh-Hans/atp-live-ranking';// atp年度排名
-let url2 = 'https://live-tennis.eu/zh-Hans/wta-live-ranking';// atp年度排名
+let url2 = 'https://live-tennis.eu/zh-Hans/wta-live-ranking';// wta年度排名
 
 let urls = {};
 urls[TENNISSPORTID] = {'atp': url1, 'wta': url2};
