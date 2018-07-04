@@ -9,6 +9,9 @@ module.exports = {
         let usrId = params.usrId;
 
         let captionPath = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle`);
+        if(params.noTutorial){
+            captionPath = path.resolve(global.staticRoot, `./multimedia/ts_introductory/${vId}/subtitle`);
+        }
 
         // 查看状态下，查看终稿
         if(draftId){

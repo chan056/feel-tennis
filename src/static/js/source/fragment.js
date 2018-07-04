@@ -17,7 +17,9 @@ module.exports = function(){
 
             return `{
                 var m3u = '${tsRoot}${m3u8}.m3u8';
-                var video = $('video')[0];// selector
+                var video = '${selector}'
+                    ? document.querySelector('${selector}')
+                    : $('video')[0];// selector
 
                 if(Hls.isSupported()) {
                     var hls = new Hls({

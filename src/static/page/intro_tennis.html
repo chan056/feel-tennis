@@ -6,7 +6,8 @@
 		<meta name="description" content="学习、交流、分享运动技巧的平台" />
 		<title>网球/Tennis</title>
 		<link rel="shortcut icon" href="/img/logo.png">
-		<link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/comp.css">
 
 		<script src="../lib/browser-detect.js"></script>
 		<script type="text/javascript">
@@ -30,29 +31,54 @@
 	</head>
 
 	<body>
-        <h2>    
-            规则视频
+            <!-- 规则视频
             历史
             水平评测
             排行榜
-            著名运动员
-        </h2>
-		<video controls src=""></video>
-	
-		<!-- <script src="../lib/axios.min.js"></script>
-		<script src="../lib/zepto.js"></script> -->
-	
+            著名运动员 -->
+        <h1>网球</h1>
+
+        <h2>规则视频</h2>
+        <div class="player-wrapper">
+            <video id="v-rule" controls="controls" x5-playsinline="" playsinline="" webkit-playsinline="">
+                请使用现代浏览器，如Chrome Firefox Safari Edge
+            </video>
+
+            <p class="subtitle"></p>
+        </div>
+
+        <h2>历史</h2>
+        <video id="v-history" controls src=""></video>
+        
 		<script src="../js/sport_intro.js"></script>
 		<script>
 			window.vEle = $('video');
 
-			bindVideo(1)
+            bindVideo(3, '#v-rule');
+            bindSubtitle(3, '#v-rule');
+            bindVideo(1, '#v-history');
 
-			function bindVideo(videoId){
+			function bindVideo(videoId, selector){
 				tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
-					tools.insertScriptTag(2, FRAGMENTS.attachVideo(videoId, 360, true), {id: 'hls-frag'});
+                    tools.insertScriptTag(2, FRAGMENTS.attachVideo(videoId, 360, true, selector), {id: 'hls-frag' + selector});
+				}.bind(this), id: 'hls'+selector});
+            }
+            
+            function bindSubtitle(videoId, selector){
+				let captionAPI = '/caption/' + videoId + '?noTutorial=1';
 
-				}.bind(this), id: 'hls'});
+				tools.xhr(captionAPI, function(resData){
+					if(!resData)
+						return;
+						
+					let playerWrapper = $(selector).parent('.player-wrapper');
+
+					tools.attachSubtile($(selector)[0], resData, 500, function(subtitle){
+						playerWrapper.find('.subtitle').text(subtitle)/* .css({
+
+						}) */;
+					});
+				});
 			}
 		</script>
 		
