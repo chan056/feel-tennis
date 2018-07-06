@@ -35,7 +35,7 @@
             历史
             水平评测
             排行榜
-            著名运动员 -->
+             -->
         <h1>网球</h1>
 
         <h2>规则视频</h2>
@@ -48,37 +48,75 @@
         </div>
 
         <h2>历史</h2>
-        <video id="v-history" controls src=""></video>
-        
+		<video id="v-history" controls src=""></video>
+		
+		<h2>水平测评</h2>
+		<a id="tennis-level" href="" target="_blank">评测</a>
+
+		<h2>排行榜</h2>
+		<ol>
+			<li>1</li>
+			<li>2</li>
+		</ol>
+
+		<script id="athlete-template" type="text/template">
+			{{~it:item}}
+				{{style=item.gender==1? 'color: green;': 'color: red;';}}
+				<li style="{{=style}}">{{=item.name}}</li>
+			{{~}}
+		</script>
+		
+		<script src="../lib/dot.min.js"></script>
 		<script src="../js/sport_intro.js"></script>
 		<script>
 			window.vEle = $('video');
 
-            bindVideo(3, '#v-rule');
-            bindSubtitle(3, '#v-rule');
-            bindVideo(1, '#v-history');
+            // bindVideo(2, '#v-rule');
+            // bindSubtitle(2, '#v-rule');
+			// bindVideo(1, '#v-history');
+			
+			$('#tennis-level').attr('href', CONSTANT.level.tennis);
+
+			queryAthletes();
 
 			function bindVideo(videoId, selector){
 				tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
-                    tools.insertScriptTag(2, FRAGMENTS.attachVideo(videoId, 360, true, selector), {id: 'hls-frag' + selector});
+                    tools.insertScriptTag(
+						2, 
+						FRAGMENTS.attachVideo(videoId, 360, true, selector), 
+						{id: 'hls-frag' + selector}
+					);
 				}.bind(this), id: 'hls'+selector});
             }
             
             function bindSubtitle(videoId, selector){
 				let captionAPI = '/caption/' + videoId + '?noTutorial=1';
 
-				tools.xhr(captionAPI, function(resData){
-					if(!resData)
+				tools.xhr(captionAPI, function(res){
+					if(!res)
 						return;
 						
 					let playerWrapper = $(selector).parent('.player-wrapper');
 
-					tools.attachSubtile($(selector)[0], resData, 500, function(subtitle){
+					tools.attachSubtile($(selector)[0], res, 500, function(subtitle){
 						playerWrapper.find('.subtitle').text(subtitle)/* .css({
 
 						}) */;
 					});
 				});
+			}
+
+			function queryAthletes(){
+				tools.xhr('/athletes/1', function(res){
+					var athletes = res;
+					console.log(res);
+					
+
+					var athleteTemplateFn = doT.template($('#athlete-template').html());
+					$('ol').html(
+						athleteTemplateFn(res)
+					);
+				}.bind(this));
 			}
 		</script>
 		

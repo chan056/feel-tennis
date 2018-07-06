@@ -649,7 +649,7 @@ module.exports = function(){
                                 </el-option>
                             </el-select>
 
-                            <a title="分级详情" style="text-decoration: none;" href="http://baijiahao.baidu.com/s?id=1561865758116633" target="_blank" class="fa fa-question-circle-o">&nbsp;分级详情</a>
+                            <a title="分级详情" style="text-decoration: none;" :href="tennisLevel" target="_blank" class="fa fa-question-circle-o">&nbsp;分级详情</a>
                         </el-form-item>
     
                         <el-form-item label="状态" prop="status">
