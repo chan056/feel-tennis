@@ -1209,6 +1209,7 @@ module.exports = function(){
 	COMPONENTS.Datum = {
 		data: function(){
 			return {
+				
 				datumForm:{
 					unstableDatum: {
 						nickname: '',
@@ -1250,7 +1251,9 @@ module.exports = function(){
 				},{
 					id: '2',
 					name: '修整中',
-				}]
+				}],
+
+				tennisLevel: CONSTANT.level.tennis,
 			}
 
 			function checkTel(rule, value, callback) {

@@ -1,8 +1,10 @@
 let https = require('https');
 let cheerio = require('cheerio');
-let conn = require('./db/connect').conn;
+let conn = require('../db/connect').conn;
 
 let TENNISSPORTID = 1;//网球
+
+var curSportId = TENNISSPORTID;
 
 // language: en + zh-Hans
 let url1 = 'https://live-tennis.eu/zh-Hans/atp-live-ranking';// atp年度排名
@@ -45,27 +47,35 @@ function truncateAthlete(fn){
 }
 
 function fetchAndfilterData(html, sportId) {
-    // console.log(arguments)
     if (html) {
         let $ = cheerio.load(html);
-        // return console.log($('#plyrRankings').length, $('#plyrRankings tbody td').length, $('#plyrRankings tbody td:nth-child(3)').length)
-        $('#u868>tbody td:nth-child(4)').map(function(i, p){// 4 不是 3！
-            if (i > 99)
-                return;
 
-            var pt =  $(p).text();
-            var sql = `INSERT INTO athlete 
-            (sport_id, name)
-            VALUES (?, ?)`;
-            conn.query(sql, [
-                sportId,
-                pt
-            ], function(err, result, fields){
-                if(err)
-                    console.log(err.sql, err.sqlMessage) ;
+        if(curSportId == 1){// 网球
+            let title = $('title').eq(0).text();
+            let gender = 3;
+            if(title.match('ATP')){
+                gender = 1;
+            }else if(title.match('WTA')){
+                gender = 2;
+            }
+            $('#u868>tbody td:nth-child(4)').map(function(i, p){// 4 不是 3！
+                if (i > 99)
+                    return;
+    
+                var pt =  $(p).text();
+                var sql = `INSERT INTO athlete 
+                (sport_id, name, gender)
+                VALUES (?, ?, ?)`;
+    
+                conn.query(sql, [
+                    sportId,
+                    pt,
+                    gender
+                ], function(err, result, fields){
+                    if(err)
+                        console.log(err.sql, err.sqlMessage) ;
+                });
             });
-            
-            // console.log(pt);
-        }).get();
+        }
     }
 }
