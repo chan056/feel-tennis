@@ -2890,8 +2890,16 @@ module.exports = function(){
 						$('.caption-line').eq(triggeredLineIndex).find('.caption-text').trigger('click');
 					})
 				}
-			}).on('keyup', '.caption-ipt .el-textarea__inner', function(e){
-				console.log(e)
+			}).on('keydown', '.caption-ipt .el-textarea__inner', function(e){
+				if(e.keyCode === 9){
+					let curLine = $(this).parents('.caption-line').eq(0);
+					let nextLine = curLine.next('.caption-line');
+					console.log(nextLine[0])
+					if(nextLine.length){
+						nextLine.find('.caption-text').trigger('click');
+					}
+					e.preventDefault();
+				}
 			})
 
 
