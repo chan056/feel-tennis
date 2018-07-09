@@ -98,6 +98,10 @@ let tools = {
     // 通过轮询的方式 每x秒检测一次
     // 根据SRT DATA中的start time 和end time 定位字幕
     attachSubtile: function(video, captions, interval, fn){
+        if(video.canPlayType('application/vnd.apple.mpegurl')){
+            return;
+        }
+        
         interval = interval || 500;
 
         let lastCaptionId;

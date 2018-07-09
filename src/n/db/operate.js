@@ -695,17 +695,13 @@ let operations = {
 			if (err) return throwError(err, res);
 	
 			if(result){
-				// 过滤
 				let proceededResult = [];
 				result.forEach(function(){
 					let match = arguments[0];
 
-					if(match.offense == usrId && match.offense_res){
-
-					}else if(match.defense == usrId && match.defense_res){
-
-					}else{
-						// 自己没有记录过
+					if(match.offensive && !match.offense_res){
+						proceededResult.push(match);
+					}else if(match.defensive && !match.defense_res){
 						proceededResult.push(match);
 					}
 				});
