@@ -2902,12 +2902,33 @@ module.exports = function(){
 				}
 			})
 
-
+			// —— 32 ← 37 → 39
+			$('body').off('keydown.videoKeyController').on('keydown.videoKeyController', function(e){
+				// console.log(e.keyCode)
+				const kc = e.keyCode;
+				if(kc == 32){
+					t.vEle.paused? t.vEle.play(): t.vEle.pause();
+					e.preventDefault();
+				}else if(kc == 37){
+					t.vEle.currentTime -= 5;
+					if(t.vEle.currentTime < 0){
+						t.vEle.currentTime = 0;
+					}
+					e.preventDefault();
+				}else if(kc == 39){
+					t.vEle.currentTime += 5;
+					if(t.vEle.currentTime > t.duration){
+						t.vEle.currentTime = t.duration
+					}
+					e.preventDefault();
+				}
+			})
 		},
 
 		beforeDestroy(){
 			this.wavesurfer.destroy();
 			$('#wavesurfer').remove();
+			$('body').off('keydown.videoKeyController');
 		}
 	}
 
