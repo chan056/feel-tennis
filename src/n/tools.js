@@ -79,22 +79,22 @@ function formatTime(seconds){
 	}
 }
 
-function convertSrt2vtt(r){
-	var path = require('path');
-	var fs = require('fs');
+
+function convertSrt2vtt(r, filename){
+	const path = require('path');
+	const fs = require('fs');
 	
-    var srtPath = path.resolve(r, './subtitle');
-	var srt2vtt = require('srt2vtt');
+	filename = filename || 'subtitle'
+    let srtPath = path.resolve(r, filename);
+	let srt2vtt = require('srt-to-vtt');
 
     fs.exists(srtPath, function(doExist){
         if(doExist){
-            var srtData = fs.readFileSync(srtPath);
-            srt2vtt(srtData, function(err, vttData) {
-                if (err) throw new Error(err);
-                    
-                var storePos = path.resolve(r, 'subtitle.vtt')
-                fs.writeFileSync(storePos, vttData);
-            });
+			let storePos = path.resolve(r, `${filename}.vtt`)
+
+			fs.createReadStream(srtPath)
+				.pipe(srt2vtt())
+				.pipe(fs.createWriteStream(storePos))
         }
     })
 }

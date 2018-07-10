@@ -41,15 +41,14 @@ module.exports = function(){
                     // 多种vtt字幕 
                     // 只有在全屏时显示
 
-                    // setInterval(function(){
-                    //     alert(document.fullscreenElement)
-                    // },3000)
-
                     document.addEventListener("fullscreenchange", function( event ) {
                         alert(document.fullscreenElement)
                     });
 
-                    var s = '<track kind="subtitles" src="${tsRoot}subtitle.vtt" srclang="zh" label="中文" default></track>';
+                    var s = '<track kind="subtitles" src="${tsRoot}subtitle.vtt" srclang="en" label="英文"></track>';
+                    $(video).prepend(s);
+
+                    s = '<track kind="subtitles" src="${tsRoot}subtitle.zh.vtt" srclang="zh" label="中文" default></track>';
                     $(video).prepend(s);
                 }else{
                     video.src = '${tsRoot}${vId}.mp4';

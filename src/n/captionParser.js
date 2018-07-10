@@ -8,7 +8,12 @@ module.exports = {
         let draftId = params.draftId;
         let usrId = params.usrId;
 
-        let captionPath = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle`);
+        let captionPath = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle.zh`);// 中文字幕
+        if(!fs.existsSync(captionPath)){
+            captionPath = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle`);//英文字幕
+        }
+
+        // 运动介绍页的视频字幕
         if(params.noTutorial){
             captionPath = path.resolve(global.staticRoot, `./multimedia/ts_introductory/${vId}/subtitle`);
         }

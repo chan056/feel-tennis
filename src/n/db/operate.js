@@ -1422,55 +1422,40 @@ let operations = {
 	},
 
 	auditCaption: function(res, postObj, req){
-		var parser = require('subtitles-parser');
-        var fs = require('fs');
-		var path = require('path');
+		const parser = require('subtitles-parser');
+        const fs = require('fs');
+		const path = require('path');
 		
 		let usrId = this.usrInfo.usrId;
 		let draft = postObj.draft;
 
+		let root = path.resolve(
+			global.staticRoot, 
+			`./multimedia/ts/${postObj.vId}`
+		)
+
 		let srcFinalDraftPath = path.resolve(
-			global.staticRoot, 
-			`./multimedia/ts/${postObj.vId}/subtitle.${draft}`
+			root, 
+			`subtitle.${draft}`
 		)
 
-		let destFinalDraftPath = path.resolve(
-			global.staticRoot, 
-			`./multimedia/ts/${postObj.vId}/subtitle`
+		let zhDrafPath = path.resolve(
+			root, 
+			`subtitle.zh`
 		)
 
-		let engDrafPath = path.resolve(
-			global.staticRoot, 
-			`./multimedia/ts/${postObj.vId}/subtitle.eng`
-		)
-
-		fs.exists(engDrafPath, function(exists){
-			if(!exists){
-				// 复制原稿（下载的英文稿） subtitle => subtitle.eng
-				// 中文译稿 subtitle.x 复制为subtitle 作为默认译稿
-				tools.copyFile(destFinalDraftPath, engDrafPath, publishCaption)
-			}else{
-				publishCaption();
-			}
-		})
-
-		function publishCaption(){
-			// 译稿覆盖原稿
-			fs.readFile(srcFinalDraftPath, function(err, data){
-				if(err) console.log(err)
-
-				fs.writeFileSync(destFinalDraftPath, data);
+		// subtitle.25 -> subtitle.zh
+		tools.copyFile(srcFinalDraftPath, zhDrafPath, function(){
+			require('../tools').convertSrt2vtt(root, 'subtitle.zh')
+			// 记录该视频被翻译
+			let sql = `update video set translated=1 where id=?`;
+			conn.query(sql, [postObj.vId], function(err, result){
+				if(err)
+					return throwError(err, res);
 				
-				// 记录该视频被翻译
-				let sql = `update video set translated=1 where id=?`;
-				conn.query(sql, [postObj.vId], function(err, result){
-					if(err)
-						return throwError(err, res);
-					
-					res.end();
-				});
-			})
-		}
+				res.end();
+			});
+		})
 	},
 
 	// ===============PATCH================
