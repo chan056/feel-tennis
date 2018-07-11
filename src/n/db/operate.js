@@ -699,10 +699,11 @@ let operations = {
 				result.forEach(function(){
 					let match = arguments[0];
 
-					if(match.offensive && !match.offense_res){
-						proceededResult.push(match);
-					}else if(match.defensive && !match.defense_res){
-						proceededResult.push(match);
+					if(
+						(match.offensive && !match.offense_res) ||
+						(match.defensive && !match.defense_res)
+					){
+						isUnAccepted(match) || proceededResult.push(match);
 					}
 				});
 
@@ -710,6 +711,18 @@ let operations = {
 				res.end(result);
 			}
 		});
+
+		function isUnAccepted(match){
+			if(match.stage === 1){
+				let offenseTime = match.offense_time.getTime();
+				let now = Date.now();
+				const day = 1 * 24 * 60 * 60 * 1000;
+
+				if(now - offenseTime > 7 * day){
+					return true;
+				}
+			}
+		}
 	},
 
 	fetchFeedbackList: function(res, qualification, params){
