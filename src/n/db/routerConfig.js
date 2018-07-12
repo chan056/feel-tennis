@@ -113,7 +113,7 @@ const routerConfig = {
     
         // 根据关键字搜索视频
         '/videos': function(params, res, req){
-            let sql = `select * from video`;
+            let sql = `select * from video as v`;
     
             if(params && !tools.isEmpty(params)){
                 sql += ' where';
@@ -126,7 +126,11 @@ const routerConfig = {
             }
     
             if(params.headline){
-                clauses.push(`(headline like '%${params.headline}%' or headline_eng like '%${params.headline}%')`);
+                clauses.push(`
+                    (headline like '%${params.headline}%' or headline_eng like '%${params.headline}%') 
+                    or
+                    (v.tag = (select id from tag where name='${params.headline}'))
+                `);
                 delete params.headline;
             }
             
@@ -139,6 +143,7 @@ const routerConfig = {
                 sql += ' ' + clauses.join(' and ');
             }
     
+            console.log(sql);
             r.excuteSQL(sql, res, function(resData){
                 res.end( JSON.stringify({
                         datalist: resData,
