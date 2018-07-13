@@ -120,17 +120,32 @@ const routerConfig = {
             }
     
             var clauses = [];
+            // 点击标签
             if(params.tagId){
                 clauses.push(`CONCAT(',',tag,',')  like '%,` + params.tagId + `,%'`)
                 delete params.tagId;
             }
     
+            // 搜索框
             if(params.headline){
-                clauses.push(`
-                    (headline like '%${params.headline}%' or headline_eng like '%${params.headline}%') 
-                    or
-                    (v.tag = (select id from tag where name='${params.headline}'))
-                `);
+                let clause = `
+                    (
+                        headline LIKE '%${params.headline}%'
+                        OR headline_eng LIKE '%${params.headline}%'
+                    )
+                OR (
+                    CONCAT(',', v.tag, ',') REGEXP CONCAT(
+                        ',',
+                        (SELECT
+                            id
+                        FROM
+                            tag
+                        WHERE
+                            NAME = '${params.headline}'),
+                        ','
+                    )
+                )`;
+                clauses.push(clause);
                 delete params.headline;
             }
             
@@ -141,16 +156,16 @@ const routerConfig = {
     
             if(clauses.length){
                 sql += ' ' + clauses.join(' and ');
+
+                console.log(sql);
+                r.excuteSQL(sql, res, function(resData){
+                    res.end( JSON.stringify({
+                            datalist: resData,
+                            total: resData.length
+                        })
+                    )
+                });
             }
-    
-            console.log(sql);
-            r.excuteSQL(sql, res, function(resData){
-                res.end( JSON.stringify({
-                        datalist: resData,
-                        total: resData.length
-                    })
-                )
-            });
         },
     
         '/tags(/:sport_id)?': function(params, res, req){

@@ -29,6 +29,7 @@ module.exports = {
         user: 'root',
         password: '62191056',
         database: 'n',
+        multipleStatements: true// 执行多条语句
     },
 
     videoCoverSize: '210x118',
