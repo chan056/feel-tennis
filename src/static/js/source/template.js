@@ -302,10 +302,19 @@ module.exports = function(){
     
         album: `
             <div>
-                <el-breadcrumb separator="/">
-                    <el-breadcrumb-item :to="{ path: '/sports/' + crumb.sId }">{{crumb.sName}}</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{ path: '/albums/' + crumb.aId }">{{crumb.aName}}</el-breadcrumb-item>
-                </el-breadcrumb>
+                <el-row>
+                    <el-col :span="18">
+                        <el-breadcrumb separator="/" class="fl">
+                            <el-breadcrumb-item :to="{ path: '/sports/' + crumb.sId }">{{crumb.sName}}</el-breadcrumb-item>
+                            <el-breadcrumb-item :to="{ path: '/albums/' + crumb.aId }">{{crumb.aName}}</el-breadcrumb-item>
+                        </el-breadcrumb>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-input placeholder="专辑内搜索" v-model="vName" class="fr">
+                            <el-button slot="append" icon="el-icon-search"></el-button>
+                        </el-input>
+                    </el-col>
+                </el-row>
                 <div class="tags">
                     <el-tag type="info" v-for="tag in tags" :key="tag.id">
                         <router-link :to="{path: '/searchedvideos?tagId=' + tag.id}">{{tag.name}}</router-link>

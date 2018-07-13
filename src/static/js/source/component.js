@@ -619,6 +619,7 @@ module.exports = function(){
 		props: ['albumId'],
 		data: function () {
 			let d = {
+				vName: '',
 				albumVideoList: [], 
 				crumb: {}, 
 				tags:[],
