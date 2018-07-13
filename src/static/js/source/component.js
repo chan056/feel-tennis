@@ -2901,6 +2901,8 @@ module.exports = function(){
 					}
 					e.preventDefault();
 				}
+
+				e.stopPropagation();
 			})
 
 			// —— 32 ← 37 → 39
