@@ -2,18 +2,18 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<meta name="keywords" content="网球视频,运动视频,约球" />
+		<meta name="keywords" content="网球,排名,atp,wta" />
 		<meta name="description" content="学习、交流、分享运动技巧的平台" />
 		<title>网球/Tennis</title>
 		<link rel="shortcut icon" href="/img/logo.png">
         <link rel="stylesheet" href="../css/font-awesome.min.css">
-        <link rel="stylesheet" href="../css/comp.css">
+		<link rel="stylesheet" href="../css/common.css">
+		<link rel="stylesheet" href="../css/sport.css">
 
-		<script src="../lib/browser-detect.js"></script>
 		<script type="text/javascript">
 			if(/Android (\d+\.\d+)/.test(navigator.userAgent)){
 				var version = parseFloat(RegExp.$1);
-				if(version>2.3){
+				if(version > 2.3){
 					var phoneScale = parseInt(window.screen.width) / 750;
 					document.write('<meta name="viewport" content="width=750, minimum-scale = '+ phoneScale +', maximum-scale = '+ phoneScale +', target-densitydpi=device-dpi">');
 				}else{
@@ -23,46 +23,43 @@
 				document.write('<meta name="viewport" content="width=750, user-scalable=no, target-densitydpi=device-dpi">');
 			}
 		</script>
+		<script src="../lib/browser-detect.js"></script>
 		<script>
 			var noSupportItems = {ie: [8, 7, 5, 6]};
 			BrowserDetect.init(noSupportItems);
 			window.isMobile = BrowserDetect.detectMob();
-		</script>
+	</script>
 	</head>
 
 	<body>
-            <!-- 规则视频
-            历史
-            水平评测
-            排行榜
-             -->
-        <h1>网球</h1>
+        <div id="main-body">
+			<h1>网球</h1>
 
-        <h2>规则视频</h2>
-        <div class="player-wrapper">
-            <video id="v-rule" controls="controls" x5-playsinline="" playsinline="" webkit-playsinline="">
-                请使用现代浏览器，如Chrome Firefox Safari Edge
-            </video>
+			<h2>规则视频</h2>
+			<div class="player-wrapper">
+				<video id="v-rule" controls="controls" x5-playsinline="" playsinline="" webkit-playsinline="">
+					请使用现代浏览器，如Chrome Firefox Safari Edge
+				</video>
 
-            <p class="subtitle"></p>
-        </div>
+				<p class="subtitle"></p>
+			</div>
 
-        <h2>历史</h2>
-		<video id="v-history" controls src=""></video>
-		
-		<h2>水平测评</h2>
-		<a id="tennis-level" href="" target="_blank">评测</a>
+			<h2>历史</h2>
+			<video id="v-history" controls src=""></video>
+			
+			<h2>水平测评</h2>
+			<a id="tennis-level" href="" target="_blank">评测</a>
 
-		<h2>排行榜</h2>
-		<ol>
-			<li>1</li>
-			<li>2</li>
-		</ol>
+			<h2>排行榜</h2>
+			<ol id="male-athlete-list" class="athlete-list fl"></ol>
+			<ol id="female-athlete-list" class="athlete-list fl"></ol>
+			<br class="clr">
+		</div>
 
 		<script id="athlete-template" type="text/template">
-			{{~it:item}}
+			{{~it:item:i}}
 				{{style=item.gender==1? 'color: green;': 'color: red;';}}
-				<li style="{{=style}}">{{=item.name}}</li>
+				<li style="{{=style}}">{{=i+1 + '. '}}{{=item.name}}</li>
 			{{~}}
 		</script>
 		
@@ -71,9 +68,9 @@
 		<script>
 			window.vEle = $('video');
 
-            // bindVideo(2, '#v-rule');
-            // bindSubtitle(2, '#v-rule');
-			// bindVideo(1, '#v-history');
+            bindVideo(2, '#v-rule');
+            bindSubtitle(2, '#v-rule');
+			bindVideo(1, '#v-history');
 			
 			$('#tennis-level').attr('href', CONSTANT.level.tennis);
 
@@ -110,11 +107,25 @@
 				tools.xhr('/athletes/1', function(res){
 					var athletes = res;
 					console.log(res);
-					
+
+					var maleAhletes = [],
+						femaleAhletes = [];
+						
+					res.forEach(function(athlete){
+						if(athlete.gender == 1){
+							maleAhletes.push(athlete);
+						}else if(athlete.gender == 2){
+							femaleAhletes.push(athlete);
+						}
+					})
 
 					var athleteTemplateFn = doT.template($('#athlete-template').html());
-					$('ol').html(
-						athleteTemplateFn(res)
+					$('#male-athlete-list').html(
+						athleteTemplateFn(maleAhletes)
+					);
+
+					$('#female-athlete-list').html(
+						athleteTemplateFn(femaleAhletes)
 					);
 				}.bind(this));
 			}

@@ -8,7 +8,9 @@ var curSportId = TENNISSPORTID;
 
 // language: en + zh-Hans
 let url1 = 'https://live-tennis.eu/zh-Hans/atp-live-ranking';// atp年度排名
+// https://live-tennis.eu/en/atp-live-ranking
 let url2 = 'https://live-tennis.eu/zh-Hans/wta-live-ranking';// wta年度排名
+// https://live-tennis.eu/en/wta-live-ranking
 
 let urls = {};
 urls[TENNISSPORTID] = {'atp': url1, 'wta': url2};

@@ -57,3 +57,10 @@ img{border-width: 0;}
   white-space: nowrap;
   overflow: hidden;
 }
+
+// 视频字幕
+#player-wrapper, .player-wrapper{
+  display: inline-block; position: relative;
+  .subtitle{position: absolute;  width: 100%; bottom: 30px; text-align: center; font-size: 24px; color: #eee; text-shadow: 2px 2px 2px rgb(65, 59, 59); pointer-events: none;}
+  max-width: 800px;
+}
