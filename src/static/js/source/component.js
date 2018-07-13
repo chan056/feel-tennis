@@ -510,10 +510,10 @@ module.exports = function(){
 				// 检查localstorage
 				let ipstack = localStorage.getItem('ipstack')
 				if(ipstack){
-					ipstack = JSON.stringify(localStorage.getItem('ipstack'));
+					ipstack = JSON.parse(localStorage.getItem('ipstack'));
 					let storageTime = ipstack.storageTime;
 					const day = 1 * 24 * 60 * 60 * 1000;
-					if(Date.now - storageTime < day){
+					if(Date.now() - storageTime < day){
 						window.CURPOS = ipstack;
 					}else{
 						requestIpStack()
@@ -556,9 +556,9 @@ module.exports = function(){
 
 		methods: {
 			fetchSports: function(pageNum){
-				tools.xhr('/sports', function(resData){
-					this.sports = resData.datalist;
-					this.total = resData.total;
+				tools.xhr('/sports', function(res){
+					this.sports = res.datalist;
+					this.total = res.total;
 				}.bind(this),'get',{
 					pageNum: pageNum,
 					pageSize: this.pageSize
@@ -582,8 +582,8 @@ module.exports = function(){
 				total: 0,
 			};
 			
-			tools.xhr('/navInfo/1/' + this.sportId, function(resData){
-				d.crumb = resData[0];
+			tools.xhr('/navInfo/1/' + this.sportId, function(res){
+				d.crumb = res[0];
 			});
 
 			return d;
@@ -594,9 +594,9 @@ module.exports = function(){
 		methods: {
 			fetchAlbumList: function(pageNum){
 				// 某项运动下的所有专辑
-				tools.xhr('/sports/' + this.sportId + '/albums', function(resData){
-					this.albumList = resData.datalist;
-					this.total = resData.total;
+				tools.xhr('/sports/' + this.sportId + '/albums', function(res){
+					this.albumList = res.datalist;
+					this.total = res.total;
 				}.bind(this),'get',{
 					pageNum: pageNum,
 					pageSize: this.pageSize
@@ -619,7 +619,7 @@ module.exports = function(){
 		props: ['albumId'],
 		data: function () {
 			let d = {
-				vName: '',
+				headline: '',
 				albumVideoList: [], 
 				crumb: {}, 
 				tags:[],
@@ -627,12 +627,12 @@ module.exports = function(){
 				pageSize: CONSTANT.PAGESIZE
 			};
 
-			tools.xhr('/navInfo/2/' + this.albumId, function(resData){
-				d.crumb = resData[0];
+			tools.xhr('/navInfo/2/' + this.albumId, function(res){
+				d.crumb = res[0];
 			});
 
-			tools.xhr('/albumTags/' + this.albumId, function(resData){
-				d.tags = resData;
+			tools.xhr('/albumTags/' + this.albumId, function(res){
+				d.tags = res;
 			});
 
 			return d;
@@ -640,13 +640,21 @@ module.exports = function(){
 		template: temp.album,
 		methods: {
 			fetchAlbumVideo: function(pageNum){
-				tools.xhr('/albums/' + this.albumId + '/videos?sortBy=id&sort=desc', function(resData){
-					this.albumVideoList = resData.datalist;
-					this.total = resData.total;
-				}.bind(this),'get',{
+				let api = '/albums/' + this.albumId + '/videos?sortBy=id&sort=desc';
+				
+				let req = {
 					pageNum: pageNum,
-					pageSize: this.pageSize
-				});
+					pageSize: this.pageSize,
+				};
+
+				if(this.headline){
+					req.headline = this.headline
+				}
+
+				tools.xhr(api, function(res){
+					this.albumVideoList = res.datalist;
+					this.total = res.total;
+				}.bind(this),'get', req);
 			},
 
 			handlePageChange: function(i){
@@ -760,16 +768,16 @@ module.exports = function(){
 
 		methods: {
 			fetchVideoInfo: function(){
-				tools.xhr('/videos/' + this.videoId, function(resData){
-					// console.log(resData)
-					if(resData){
-						this.video = resData;
+				tools.xhr('/videos/' + this.videoId, function(res){
+					// console.log(res)
+					if(res){
+						this.video = res;
 						this.captureParams.ext = this.video.video_ext;
 						
-						let dayViewLeft = resData.dayViewLeft;
+						let dayViewLeft = res.dayViewLeft;
 						if(dayViewLeft){
 							if(dayViewLeft <= 5){
-								this.$message({message: `当天剩余播放次数 ${resData.dayViewLeft || 0}次`, type: 'warning'});
+								this.$message({message: `当天剩余播放次数 ${res.dayViewLeft || 0}次`, type: 'warning'});
 							}
 	
 							this.bindVideo();
@@ -786,14 +794,14 @@ module.exports = function(){
 			},
 
 			fetchNavInfo: function(){
-				tools.xhr('/navInfo/3/' + this.videoId, function(resData){
-					this.crumb = resData[0];
+				tools.xhr('/navInfo/3/' + this.videoId, function(res){
+					this.crumb = res[0];
 				}.bind(this));
 			},
 
 			fetchVideoTags: function(){
-				tools.xhr('/videoTags/' + this.videoId, function(resData){
-					this.tags = resData;
+				tools.xhr('/videoTags/' + this.videoId, function(res){
+					this.tags = res;
 				}.bind(this));
 			},
 
@@ -810,13 +818,13 @@ module.exports = function(){
 			bindSubtitle: function(){
 				let captionAPI = '/caption/' + this.videoId;
 
-				tools.xhr(captionAPI, function(resData){
-					if(!resData)
+				tools.xhr(captionAPI, function(res){
+					if(!res)
 						return;
 						
 					let playerWrapper = $('#player-wrapper');
 
-					tools.attachSubtile(window.vEle, resData, 500, function(subtitle){
+					tools.attachSubtile(window.vEle, res, 500, function(subtitle){
 						playerWrapper.find('.subtitle').text(subtitle)/* .css({
 
 						}) */;
@@ -868,8 +876,8 @@ module.exports = function(){
 
 				this.shooting = true;
 				
-				tools.xhr('/shortVideoLink?' + $.param(this.captureParams), function(resData){
-					this.shortVideoLink = resData;
+				tools.xhr('/shortVideoLink?' + $.param(this.captureParams), function(res){
+					this.shortVideoLink = res;
 					this.shortVideoFullLink = location.origin + this.shortVideoLink;
 					this.shooting = false;
 				}.bind(this), null, null, function(ret){ 
@@ -885,8 +893,8 @@ module.exports = function(){
 				delete params.et;
 				params.size = $(window.vEle).width() + 'x' + $(window.vEle).height();
 
-				tools.xhr('/videoScreenshot?' + $.param(params), function(resData){
-					this.screenshotLink = resData;
+				tools.xhr('/videoScreenshot?' + $.param(params), function(res){
+					this.screenshotLink = res;
 					this.screenshotFullLink = location.origin + this.screenshotLink;
 				}.bind(this), null, null);
 
@@ -925,7 +933,7 @@ module.exports = function(){
 			},
 
 			remark: function(){
-				tools.xhr(`/video/${this.videoId}/remark`, function(resData){
+				tools.xhr(`/video/${this.videoId}/remark`, function(res){
 					this.$message({
 						message: '标注成功',
 						type: 'success'
@@ -1195,9 +1203,9 @@ module.exports = function(){
 				params.pageSize = this.pageSize;
 				params.pageNum = pageNum;
 
-				tools.xhr('/videos', function(resData){
-					this.videos = resData.datalist;
-					this.total = resData.total;
+				tools.xhr('/videos', function(res){
+					this.videos = res.datalist;
+					this.total = res.total;
 				}.bind(this), 'get', params);
 			},
 
@@ -1483,28 +1491,28 @@ module.exports = function(){
 
 		methods:{
 			querySports(){
-				tools.xhr('/sports', function(resData){
-					this.sports = resData;
+				tools.xhr('/sports', function(res){
+					this.sports = res;
 					this.voteNextForm.sport = this.sports[0].id
 				}.bind(this));
 			},
 
 			querySKills(){
-				tools.xhr('/skills/'+this.voteNextForm.sport, function(resData){
-					this.skills = resData;
+				tools.xhr('/skills/'+this.voteNextForm.sport, function(res){
+					this.skills = res;
 				}.bind(this));
 			},
 
 			queryAthletes(){
-				tools.xhr('/athletes/'+this.voteNextForm.sport, function(resData){
-					this.athletes = resData;
+				tools.xhr('/athletes/'+this.voteNextForm.sport, function(res){
+					this.athletes = res;
 				}.bind(this));
 			},
 
 			submitForm: function(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						tools.xhr('/voteNext', function(resData){
+						tools.xhr('/voteNext', function(res){
 							this.fetchVoteResult();
 							this.$message({
 								message: '感谢您的投票',
@@ -1537,9 +1545,9 @@ module.exports = function(){
 			},
 
 			fetchVoteResult: function(){
-				tools.xhr('/videoVoteResult', function(resData){
+				tools.xhr('/videoVoteResult', function(res){
 					// this.resetForm('form');
-					this.updateChart(resData);
+					this.updateChart(res);
 				}.bind(this));
 			},
 
@@ -1643,7 +1651,7 @@ module.exports = function(){
 					d.files = this.files.join(',');
 
 					if (valid) {
-						tools.xhr('/feedback', function(resData){
+						tools.xhr('/feedback', function(res){
 							// this.resetForm('form');
 							this.$message({
 								message: '感谢您的反馈',
@@ -1738,7 +1746,7 @@ module.exports = function(){
 
 		methods:{
 			sendConfirmData: function(){
-				tools.xhr('/emailConfirm' + location.search, function(resData){
+				tools.xhr('/emailConfirm' + location.search, function(res){
 					this.$alert('账号已激活', '提示', {
 						confirmButtonText: '确定',
 						callback: function(){
@@ -1785,9 +1793,9 @@ module.exports = function(){
 
 		methods: {
 			fetchVideoStar: function(pageNum){
-				tools.xhr('/vStars', function(resData){
-					this.vStars = resData.datalist;
-					this.starTotal = resData.total;
+				tools.xhr('/vStars', function(res){
+					this.vStars = res.datalist;
+					this.starTotal = res.total;
 				}.bind(this),'get',{
 					pageNum: pageNum,
 					pageSize: this.pageSize
@@ -1795,9 +1803,9 @@ module.exports = function(){
 			},
 
 			fetchShootVideo: function(pageNum){
-				tools.xhr('/usrShotVideos', function(resData){
-					this.shotVideos = resData.datalist;
-					this.videoTotal = resData.total;
+				tools.xhr('/usrShotVideos', function(res){
+					this.shotVideos = res.datalist;
+					this.videoTotal = res.total;
 				}.bind(this),'get',{
 					pageNum: pageNum,
 					pageSize: this.pageSize
@@ -1823,8 +1831,8 @@ module.exports = function(){
 				pageSize: CONSTANT.PAGESIZE
 			};
 
-			// tools.xhr('/starVideo/' + this.vStarId, function(resData){
-			// 	d.starVideos = resData;
+			// tools.xhr('/starVideo/' + this.vStarId, function(res){
+			// 	d.starVideos = res;
 			// });
 
 			return d;
@@ -1839,9 +1847,9 @@ module.exports = function(){
 
 		methods: {
 			fetchStarVideo: function(pageNum){
-				tools.xhr('/starVideo/' + this.vStarId, function(resData){
-					this.starVideos = resData.datalist;
-					this.total = resData.total;
+				tools.xhr('/starVideo/' + this.vStarId, function(res){
+					this.starVideos = res.datalist;
+					this.total = res.total;
 				}.bind(this),'get',{
 					pageNum: pageNum,
 					pageSize: this.pageSize
@@ -1889,13 +1897,13 @@ module.exports = function(){
 
 		methods: {
 			fetchVideoShoot: function(pageNum, type){
-				tools.xhr('/usrVshoot?vId=' + this.$route.query.vId, function(resData){
+				tools.xhr('/usrVshoot?vId=' + this.$route.query.vId, function(res){
 					if(type == 1){
-						this.dynamicShoots = resData.datalist;
-						this.dynamicTotal = resData.total;
+						this.dynamicShoots = res.datalist;
+						this.dynamicTotal = res.total;
 					}else if(type == 2){
-						this.staticShoots = resData.datalist;
-						this.staticTotal = resData.total;
+						this.staticShoots = res.datalist;
+						this.staticTotal = res.total;
 					}
 				}.bind(this),'get',{
 					pageNum: pageNum,

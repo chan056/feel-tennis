@@ -312,3 +312,6 @@ nodesession 独立
         排行榜√
 
     搜索时 考虑 标签
+
+0713
+    考虑标签搜索 sql REGEXP

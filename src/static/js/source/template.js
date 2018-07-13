@@ -310,8 +310,8 @@ module.exports = function(){
                         </el-breadcrumb>
                     </el-col>
                     <el-col :span="6">
-                        <el-input placeholder="专辑内搜索" v-model="vName" class="fr">
-                            <el-button slot="append" icon="el-icon-search"></el-button>
+                        <el-input placeholder="专辑内搜索" v-model="headline" class="fr" @keydown.enter="fetchAlbumVideo(0)">
+                            <el-button slot="append" icon="el-icon-search" @click="fetchAlbumVideo(0)"></el-button>
                         </el-input>
                     </el-col>
                 </el-row>
