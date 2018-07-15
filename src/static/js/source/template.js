@@ -310,7 +310,7 @@ module.exports = function(){
                         </el-breadcrumb>
                     </el-col>
                     <el-col :span="6">
-                        <el-input placeholder="专辑内搜索" v-model="headline" class="fr" @keydown.enter="fetchAlbumVideo(0)">
+                        <el-input placeholder="专辑内搜索" v-model="headline" clearable class="fr" @clear="fetchAlbumVideo(0)" @keyup.enter.native="fetchAlbumVideo(0)">
                             <el-button slot="append" icon="el-icon-search" @click="fetchAlbumVideo(0)"></el-button>
                         </el-input>
                     </el-col>
@@ -566,7 +566,7 @@ module.exports = function(){
     
         vStar: `
             <div id="video-list" class="main-model">
-                <h2>视频列表</h2>
+                <h2>教程视频</h2>
                 <ul class="block-list video-list">
                     <li v-for="video in starVideos">
                         <router-link :to="{path: '/videos/'+ video.id }">
@@ -585,6 +585,8 @@ module.exports = function(){
                     :page-size="pageSize"
                     @current-change="handlePageChange">
                 </el-pagination>
+                
+                <h2>运动介绍类视频</h2>
             </div>
         `,
     

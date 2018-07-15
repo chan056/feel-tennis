@@ -640,6 +640,7 @@ module.exports = function(){
 		template: temp.album,
 		methods: {
 			fetchAlbumVideo: function(pageNum){
+				console.log('fetchAlbumVideo')
 				let api = '/albums/' + this.albumId + '/videos?sortBy=id&sort=desc';
 				
 				let req = {
