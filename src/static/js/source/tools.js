@@ -2,8 +2,13 @@ let tools = {
     // POST 才有 params
     xhr: function xhr(api, sfn, type, params, errorHandle){
         type = type || 'get';
-        if(type == 'get'){
-            params = {params: params};// 加到链接后面?a=1&b=2
+        if(type === 'get'){
+            // {
+            //     params: {
+            //         ID: 12345
+            //     }
+            // }
+            params = {params: params};
         }
     
         axios[type](api, params)

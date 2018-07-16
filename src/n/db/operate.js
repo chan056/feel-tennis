@@ -161,6 +161,19 @@ let operations = {
 		});
 	},
 
+	queryVideoIntroInfo: function (res, qualification, params) {
+		let sql = `SELECT * from video_introductory ${qualification}`;
+
+		conn.query(sql, function (err, result, fields) {
+			if (err) return throwError(err, res);
+			
+			let vInfo = result[0];
+			result = JSON.stringify(vInfo);
+			
+			res.end(result);
+		});
+	},
+
 	queryAlbumInfo: function (res, qualification, params) {
 		conn.query('SELECT * from album' + qualification, function (err, result, fields) {
 			if (err) return throwError(err, res);
@@ -244,6 +257,10 @@ let operations = {
 				if (err) return throwError(err, res);
 				
 				let vInfo = result[0];
+
+				if(!vInfo){
+					return;
+				}
 				
 				// 更新关联的表
 				let albumId = result[0].album_id;
@@ -793,7 +810,7 @@ let operations = {
 		});
 	},
 
-	queryPageVideos: function(res, qualification, params){
+	queryVideosAdmin: function(res, qualification, params){
 		var sql = `SELECT * from video order by id desc`;
 
 		sql = disposePageSql(sql, params);
@@ -803,6 +820,27 @@ let operations = {
 				console.log(err.sql, err.sqlMessage) ;
 			
 			conn.query('select count(*) as count from video', function(err, result){
+
+				let json = JSON.stringify({
+					datalist: list,
+					total: result[0].count
+				});
+
+				res.end(json);
+			})
+		});
+	},
+
+	queryVideosIntroAdmin: function(res, qualification, params){
+		var sql = `SELECT * from video_introductory order by id desc`;
+
+		sql = disposePageSql(sql, params);
+
+		conn.query(sql, function(err, list, fields){
+			if(err)
+				console.log(err.sql, err.sqlMessage) ;
+			
+			conn.query('select count(*) as count from video_introductory', function(err, result){
 
 				let json = JSON.stringify({
 					datalist: list,
@@ -1099,10 +1137,10 @@ let operations = {
 			}.bind(this));
 		}else{
 			let sql = `INSERT INTO video_introductory 
-			(headline, headline_eng, tag, video_ext, update_time)
-			VALUES (?, ?, ?, ?, ?)`;
+			(headline, headline_eng, tag, video_ext, update_time, sport_id)
+			VALUES (?, ?, ?, ?, ?, ?)`;
 
-			conn.query(sql, [postObj.headline, postObj.headlineEng, postObj.tag, ext, Date.now()], function(err, result, fields){
+			conn.query(sql, [postObj.headline, postObj.headlineEng, postObj.tag, ext, Date.now(), postObj.sportId], function(err, result, fields){
 				if(err)
 					return throwError(err, res);
 
@@ -1924,6 +1962,28 @@ let operations = {
 		});
 
 	},
+
+	deleteIntroductoryVideo: function (res, deleteObj, req) {
+		let vId = deleteObj.id;
+		let sql = `delete from video_introductory where id=${vId}`;
+
+		conn.query(sql, function (err, result, fields) {
+			if (err) return throwError(err, res);
+
+			if(result.affectedRows == 1)
+				res.end()
+
+			// 删除文件
+			let del = require('del');
+			let pristineVideoPath = global.staticRoot + '/multimedia/pristine_introductory_v/' + vId + '.mp4';
+			let tsVideoPath = global.staticRoot + '/multimedia/ts_introductory/' + vId;
+
+			del([pristineVideoPath, tsVideoPath]).then(paths => {
+				console.log('Deleted files and folders:\n', paths.join('\n'));
+			});
+		});
+
+	},
 	
 	deleteSport: function (res, deleteObj, req) {
 		
@@ -1940,6 +2000,43 @@ let operations = {
 
 	// ===============PUT================
 	updateVideoInfo: function(res, postObj){
+		let vId = postObj.id;
+
+		if(postObj.isTutorial){
+			var sql = `update video set album_id=?, headline=?, headline_eng=?, tag=?, update_time=? where id=${vId}`;
+
+			conn.query(sql, [postObj.albumId, postObj.headline, postObj.headlineEng, postObj.tag, Date.now()], function(err, result, fields){
+				if(err)
+					return throwError(err, res);
+	
+				res.end();
+	
+				// 更新album 和 sport
+				let now = Date.now();
+				let albumId = postObj.albumId;
+	
+				conn.query('update album set update_time = ' + now + ' where id=' + albumId);
+				conn.query('update sport set update_time = ' + now + ' where id = (select sport_id from album where id = ' + albumId + ')');
+	
+				vId && this.generateVideo(vId, postObj);
+			}.bind(this));
+		}else{
+			let sportId = postObj.sportId;
+
+			var sql = `update video_introductory set sport_id=?, headline=?, headline_eng=?, tag=?, update_time=? where id=${vId}`;
+
+			conn.query(sql, [sportId, postObj.headline, postObj.headlineEng, postObj.tag, Date.now()], function(err, result, fields){
+				if(err)
+					return throwError(err, res);
+	
+				res.end();
+
+				vId && this.generateVideo(vId, postObj);
+			}.bind(this));
+		}
+	},
+
+	updateVideoIntroInfo: function(res, postObj){
 		let vId = postObj.id;
 		var sql = `update video set album_id=?, headline=?, headline_eng=?, tag=?, update_time=? where id=${postObj.id}`;
 

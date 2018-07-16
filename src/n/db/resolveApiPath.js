@@ -114,9 +114,8 @@ function resolveApiPath(req, res) {
 
             if (reqMethod == 'get') {
                 // 将params和query结合 /a/1?b=2
-                let queryParams = Object.assign(paramsMathed, urlObj.query);
-                
-                fnMatched(queryParams, res, req);
+                let params = Object.assign(paramsMathed, urlObj.query);
+                fnMatched(params, res, req);
             } else {
                 fnMatched(req, res, paramsMathed);
             }

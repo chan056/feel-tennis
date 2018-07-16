@@ -47,6 +47,10 @@ const routerConfig = {
             r.query('queryVideoInfo', params, res, req);
         },
 
+        '/videoIntroInfo/:id': function(params, res, req){
+            r.query('queryVideoIntroInfo', params, res, req);
+        },
+
         // 根据video信息并更新相关记录
         '/videos/:id': function(params, res, req){
             r.query('queryVideo', params, res, req);
@@ -104,9 +108,16 @@ const routerConfig = {
         },
 
         // 分页video列表
-        '/pageVideos':{
+        '/videosAdmin':{
             fn: function(params, res, req){
-                r.query('queryPageVideos', params, res, req);
+                r.query('queryVideosAdmin', params, res, req);
+            },
+            limit: {level: 100}
+        },
+
+        '/videosIntroAdmin':{
+            fn: function(params, res, req){
+                r.query('queryVideosIntroAdmin', params, res, req);
             },
             limit: {level: 100}
         },
@@ -730,6 +741,13 @@ const routerConfig = {
         '/video/:id': {
             fn: function(req, res, pathParams){
                 r.delete('deleteVideo', req, res, pathParams);
+            },
+            limit: {level: 100}
+        },
+
+        '/video_introductory/:id': {
+            fn: function(req, res, pathParams){
+                r.delete('deleteIntroductoryVideo', req, res, pathParams);
             },
             limit: {level: 100}
         },

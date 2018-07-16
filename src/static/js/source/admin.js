@@ -11,7 +11,7 @@ temp.uploadAdmin =  `
             </el-col>
         </el-row>
 
-        <el-row v-if="isTutorial">
+        <el-row>
             <el-col :span="4">
                 <label>运动</label>
             </el-col>
@@ -320,7 +320,7 @@ temp.uploadAdmin =  `
 `;
 
 COMPONENTS.UploadAdmin = {
-	props: ['vId', 'aId', 'sId'],
+	props: ['vId', 'aId', 'sId', 'isIntro'],
 	data: function () {
         let newSportConfig = {
             visibility: false,
@@ -456,6 +456,7 @@ COMPONENTS.UploadAdmin = {
                 so.isTutorial = 1;
             }else{
                 so.isTutorial = 0;
+                so.sportId = this.sport_id
             }
 
 			tools.xhr('/video', function(){
@@ -530,26 +531,26 @@ COMPONENTS.UploadAdmin = {
             if(!sportId)
                 return;
 
-			tools.xhr('/sports/'+sportId+'/albums', function(resData){
-				this.albums = resData;
+			tools.xhr('/sports/'+sportId+'/albums', function(res){
+				this.albums = res;
 			}.bind(this));
 		},
 
 		queryTags(){
-			tools.xhr('/tags', function(resData){
-				this.tags = resData;
+			tools.xhr('/tags', function(res){
+				this.tags = res;
 			}.bind(this));
 		},
 
 		querySports(){
-			tools.xhr('/sports', function(resData){
-				this.sports = resData;
+			tools.xhr('/sports', function(res){
+				this.sports = res;
 			}.bind(this));
 		},
 
 		queryMakers(){
-			tools.xhr('/makers', function(resData){
-				this.makers = resData;
+			tools.xhr('/makers', function(res){
+				this.makers = res;
 			}.bind(this));
 		},
 
@@ -558,10 +559,10 @@ COMPONENTS.UploadAdmin = {
 		},
 
 		queryMaker(makerId){
-			tools.xhr('/maker/' + makerId, function(resData){
-				let makerInfo = resData[0];
+			tools.xhr('/maker/' + makerId, function(res){
+				let makerInfo = res[0];
 				if(makerInfo){
-					this.selectedMaker = resData[0].name;
+					this.selectedMaker = res[0].name;
 				}else{
 					this.selectedMaker = '';
 				}
@@ -569,40 +570,59 @@ COMPONENTS.UploadAdmin = {
 		},
 
         fetchVideoInfo(fn){
-			tools.xhr('/videoInfo/' + this.vId, function(resData){
-                this.videoInfo = resData;
+			tools.xhr('/videoInfo/' + this.vId, function(res){
+                this.videoInfo = res;
 
-                this.sport_id =  resData.sport_id;
+                this.sport_id =  res.sport_id;
 
-                this.SO.albumId = resData.album_id;
-                this.SO.headline = resData.headline;
-                this.SO.headlineEng = resData.headline_eng;
-                this.SO.tag = resData.tag? resData.tag.split(',').map(function(){
+                this.SO.albumId = res.album_id;
+                this.SO.headline = res.headline;
+                this.SO.headlineEng = res.headline_eng;
+                this.SO.tag = res.tag? res.tag.split(',').map(function(){
                     return Number(arguments[0])
                 }): [];
 
-                fn && fn(resData.sport_id);
+                fn && fn(res.sport_id);
+			}.bind(this));
+        },
+
+        fetchVideoIntroInfo(){
+			tools.xhr('/videoIntroInfo/' + this.vId, function(res){
+                this.videoInfo = res;
+                this.sport_id =  res.sport_id;
+                this.SO.headline = res.headline;
+                this.SO.headlineEng = res.headline_eng;
+                this.SO.tag = res.tag? res.tag.split(',').map(function(){
+                    return Number(arguments[0])
+                }): [];
 			}.bind(this));
         },
 
         fetchAlbumInfo: function(){
-            tools.xhr('/albumInfo/' + this.aId, function(resData){
-                this.newAlbum.sportId = resData.sport_id;
-                this.newAlbum.maker = Number(resData.author_id);
-                this.newAlbum.tag = Number(resData.tag);
-                this.newAlbum.name = resData.name;
+            tools.xhr('/albumInfo/' + this.aId, function(res){
+                this.newAlbum.sportId = res.sport_id;
+                this.newAlbum.maker = Number(res.author_id);
+                this.newAlbum.tag = Number(res.tag);
+                this.newAlbum.name = res.name;
 			}.bind(this));
         },
 
         fetchSportInfo: function(){
-            tools.xhr('/sportInfo/' + this.sId, function(resData){
-                this.newSport.name = resData.name;
+            tools.xhr('/sportInfo/' + this.sId, function(res){
+                this.newSport.name = res.name;
 			}.bind(this));
         },
         
         putVideo(){
 			let so = Object.assign({}, this.SO);
-			so.tag = this.SO.tag.join(',');
+            so.tag = this.SO.tag.join(',');
+
+            if(this.isTutorial){
+                so.isTutorial = 1;
+            }else{
+                so.isTutorial = 0;
+                so.sportId = this.sport_id
+            }
 
 			tools.xhr('/video/' + this.vId, function(){
 				console.log(arguments);
@@ -664,12 +684,15 @@ COMPONENTS.UploadAdmin = {
     // }},
     
     mounted: function(){
-
         tools.togglePageIE(this);
         if(this.vId){
-            this.fetchVideoInfo(function(sId){
-                this.queryAlbums(sId);
-            }.bind(this));
+            if(this.isIntro){
+                this.fetchVideoIntroInfo()
+            }else{
+                this.fetchVideoInfo(function(sId){
+                    this.queryAlbums(sId);
+                }.bind(this));
+            }
         }else if(this.aId){
             this.fetchAlbumInfo();
             this.queryMakers();
@@ -680,14 +703,29 @@ COMPONENTS.UploadAdmin = {
         }
         
         this.querySports();
-		this.queryTags();
+        this.queryTags();
+        
+        if(this.isIntro){
+            this.isTutorial = false;
+        }
     },
 
 	template: temp.uploadAdmin
 };
 
 routeConfig.push(
-    { path: '/uploadAdmin', component: COMPONENTS.UploadAdmin, props: function(route){return {vId: route.query.vId, aId: route.query.aId, sId: route.query.sId}} },
+    { 
+        path: '/uploadAdmin', 
+        component: COMPONENTS.UploadAdmin, 
+        props: function(route){
+            return {
+                vId: route.query.vId, 
+                aId: route.query.aId, 
+                sId: route.query.sId, 
+                isIntro: route.query.isIntroductory
+            }
+        } 
+    },
 );
 
 temp.feedbacksAdmin =  `
@@ -772,9 +810,9 @@ COMPONENTS.FeedbacksAdmin = {
 		},
 
 		fetchFeedbacks(pageNum){
-			tools.xhr('/feedbacks', function(resData){
-                this.feedbacks = resData.datalist;
-                this.total = resData.total;
+			tools.xhr('/feedbacks', function(res){
+                this.feedbacks = res.datalist;
+                this.total = res.total;
                 this.curPage = pageNum;
 			}.bind(this), 'get', {
                 pageNum: pageNum - 1,
@@ -788,7 +826,7 @@ COMPONENTS.FeedbacksAdmin = {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(function(){
-                tools.xhr('/feedback/' + id, function(resData){
+                tools.xhr('/feedback/' + id, function(res){
                     this.fetchFeedbacks(this.curPage);
                     this.$message({
                         message: '删除成功',
@@ -803,7 +841,7 @@ COMPONENTS.FeedbacksAdmin = {
         blockUsr: function(ip, usrId, e){
             this.$confirm('确认加黑？')
             .then(function(){
-                tools.xhr('/blockedUsr', function(resData){
+                tools.xhr('/blockedUsr', function(res){
                     this.$message({
                         message: '加黑成功',
                         type: 'success'
@@ -843,7 +881,7 @@ routeConfig.push(
 
 temp.videosAdmin =  `
     <div>
-        <h2>视频列表</h2>
+        <h2>教程类</h2>
 
         <el-table
         :data="videos"
@@ -884,6 +922,45 @@ temp.videosAdmin =  `
             :page-size="pageSize"
             @current-change="fetchVideos">
         </el-pagination>
+
+        <h2>运动介绍类</h2>
+
+        <el-table
+        :data="videosIntro"
+        style="width: 100%">
+            <el-table-column
+                prop="id"
+                label="id">
+            </el-table-column>
+
+            <el-table-column
+                prop="headline"
+                label="headline">
+            </el-table-column>
+
+            <el-table-column
+                prop="tag"
+                label="tag">
+            </el-table-column>
+
+            <el-table-column
+                fixed="right"
+                label="操作"
+                width="200">
+                <template slot-scope="scope">
+                    <el-button @click="patchVideo(scope.row.id, 1)" type="text" size="small">更新</el-button>
+                    <el-button @click="deleteIntroVideo(scope.row.id)" type="text" size="small">删除</el-button>
+                    <el-button @click="redirect(scope.row.id, 1)" type="text" size="small">查看</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <el-pagination
+            layout="prev, pager, next"
+            :total="totalIntro"
+            :page-size="pageSizeIntro"
+            @current-change="fetchIntroVideos">
+        </el-pagination>
     </div>
 `;
 
@@ -892,9 +969,14 @@ COMPONENTS.VideosAdmin = {
 
 		var d = {
             pageSize: 10,
-            curPage: 0,
             total: 0,
-			videos: []
+            curPage: 1,
+            videos: [],
+            
+            pageSizeIntro: 10,
+            totalIntro: 0,
+            curPageIntro: 1,
+			videosIntro: []
 		};
 
 		return d;
@@ -902,9 +984,9 @@ COMPONENTS.VideosAdmin = {
 	methods: {
 
 		fetchVideos(pageNum){
-			tools.xhr('/pageVideos', function(resData){
-                this.videos = resData.datalist;
-                this.total = resData.total;
+			tools.xhr('/videosAdmin', function(res){
+                this.videos = res.datalist;
+                this.total = res.total;
                 this.curPage = pageNum;
 			}.bind(this), 'get', {
                 pageNum: pageNum - 1,
@@ -912,29 +994,71 @@ COMPONENTS.VideosAdmin = {
             });
         },
 
-        patchVideo: function(id){
-            location.href = `#/uploadAdmin?vId=${id}`;
+        fetchIntroVideos(pageNum){
+			tools.xhr('/videosIntroAdmin', function(res){
+                this.videosIntro = res.datalist;
+                this.totalIntro = res.total;
+                this.curPageIntro = pageNum;
+			}.bind(this), 'get', {
+                pageNum: pageNum - 1,
+                pageSize: this.pageSizeIntro
+            });
+        },
+
+        patchVideo: function(id, isIntroductory){
+            if(!isIntroductory){
+                this.$router.push({ path: 'uploadAdmin', query: { vId: id }})
+            }else{
+                this.$router.push({ path: 'uploadAdmin', query: { vId: id, isIntroductory: isIntroductory }})
+            }
+            // location.href = `#/uploadAdmin?vId=${id}`;
         },
         
         deleteVideo: function(id){
-            this.$confirm('确定删除', '提示', {
+            let t = this;
+            t.$confirm('确定删除', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(function(){
-                tools.xhr('/video/' + id, function(resData){
-                    this.fetchVideos(this.curPage);
-                    this.$message({
+                tools.xhr('/video/' + id, function(res){
+                    t.fetchVideos(t.curPage);
+                    t.$message({
                         message: '删除成功',
                         type: 'success'
                     });
-                }.bind(this), 'delete');
-            }.bind(this)).catch(function(){
+                }, 'delete');
+            }).catch(function(){
+
             });
         },
 
-        redirect: function(id){
-            location.href="#/videos/"+id;
+        deleteIntroVideo: function(id){
+            let t = this;
+            t.$confirm('确定删除', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(function(){
+                tools.xhr('/video_introductory/' + id, function(res){
+                    t.fetchIntroVideos(t.curPageIntro);
+                    t.$message({
+                        message: '删除成功',
+                        type: 'success'
+                    });
+                }, 'delete');
+            }).catch(function(){
+                
+            });
+        },
+
+        redirect: function(id, isIntroductory){
+            // location.href="#/videos/"+id;
+            if(!isIntroductory){
+                this.$router.push({path: `/videos/${id}`})
+            }else{
+                location.href = '/page/intro_tennis.html'
+            }
         }
 	},
 
@@ -943,6 +1067,7 @@ COMPONENTS.VideosAdmin = {
     mounted: function(){
         tools.togglePageIE(this);
         this.fetchVideos(1);
+        this.fetchIntroVideos(1);
     }
 };
 
@@ -1024,9 +1149,9 @@ COMPONENTS.AlbumsAdmin = {
 
 		fetchAlbums(pageNum){
             // 分页专辑
-			tools.xhr('/albums', function(resData){
-                this.albums = resData.datalist;
-                this.total = resData.total;
+			tools.xhr('/albums', function(res){
+                this.albums = res.datalist;
+                this.total = res.total;
                 this.curPage = pageNum;
 			}.bind(this), 'get', {
                 pageNum: pageNum - 1,
@@ -1044,7 +1169,7 @@ COMPONENTS.AlbumsAdmin = {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(function(){
-                tools.xhr('/album/' + id, function(resData){
+                tools.xhr('/album/' + id, function(res){
                     this.fetchAlbums(this.curPage);
                     this.$message({
                         message: '删除成功',
@@ -1136,9 +1261,9 @@ COMPONENTS.SportsAdmin = {
 
 		fetchSports(pageNum){
             // 分页专辑
-			tools.xhr('/sports', function(resData){
-                this.sports = resData.datalist;
-                this.total = resData.total;
+			tools.xhr('/sports', function(res){
+                this.sports = res.datalist;
+                this.total = res.total;
                 this.curPage = pageNum;
 			}.bind(this), 'get', {
                 pageNum: pageNum - 1,
@@ -1156,7 +1281,7 @@ COMPONENTS.SportsAdmin = {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(function(){
-                tools.xhr('/sport/' + id, function(resData){
+                tools.xhr('/sport/' + id, function(res){
                     this.fetchSports(this.curPage);
                     this.$message({
                         message: '删除成功',
