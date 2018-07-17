@@ -2044,30 +2044,9 @@ let operations = {
 	
 				res.end();
 
-				vId && this.generateVideo(vId, postObj);
+				vId && this.generateIntroductoryVideo(vId, postObj);
 			}.bind(this));
 		}
-	},
-
-	updateVideoIntroInfo: function(res, postObj){
-		let vId = postObj.id;
-		var sql = `update video set album_id=?, headline=?, headline_eng=?, tag=?, update_time=? where id=${postObj.id}`;
-
-		conn.query(sql, [postObj.albumId, postObj.headline, postObj.headlineEng, postObj.tag, Date.now()], function(err, result, fields){
-			if(err)
-				return throwError(err, res);
-
-			res.end();
-
-			// 更新album 和 sport
-			let now = Date.now();
-			let albumId = postObj.albumId;
-
-			conn.query('update album set update_time = ' + now + ' where id=' + albumId);
-			conn.query('update sport set update_time = ' + now + ' where id = (select sport_id from album where id = ' + albumId + ')');
-
-			vId && this.generateVideo(vId, postObj);
-		}.bind(this));
 	},
 
 	updateAlbumInfo: function(res, putObj){
