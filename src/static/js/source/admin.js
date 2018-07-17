@@ -1053,7 +1053,6 @@ COMPONENTS.VideosAdmin = {
         },
 
         redirect: function(id, isIntroductory){
-            // location.href="#/videos/"+id;
             if(!isIntroductory){
                 this.$router.push({path: `/videos/${id}`})
             }else{

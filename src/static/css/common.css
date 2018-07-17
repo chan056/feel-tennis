@@ -44,6 +44,15 @@ img {
 .ovv {
   overflow: visible !important;
 }
+.abs {
+  position: absolute;
+}
+.rel {
+  position: relative;
+}
+.fix {
+  position: fixed;
+}
 .hidden {
   display: none;
 }

@@ -321,10 +321,11 @@ module.exports = function(){
                     </el-tag>
                 </div>
                 <ul class="block-list video-list">
-                    <li v-for="video in albumVideoList">
+                    <li v-for="video in albumVideoList" class="rel">
                         <router-link :to="{path: '/videos/'+ video.id }">
                             <img @mouseover="dynamivePreview($event);" @mouseout="staticPreview($event);" 
                                 :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb video-thumb" alt="video"/>
+                            <span class="translate-tag" v-if="video.translated">已译</span>
                             <h3 class="block-title video-title ellipsis">
                                 <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
                             </h3>

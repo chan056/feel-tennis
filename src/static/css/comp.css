@@ -44,6 +44,15 @@ img {
 .ovv {
   overflow: visible !important;
 }
+.abs {
+  position: absolute;
+}
+.rel {
+  position: relative;
+}
+.fix {
+  position: fixed;
+}
 .hidden {
   display: none;
 }
@@ -345,6 +354,14 @@ app {
 #login-dialog .btns {
   padding-left: 100px;
 }
+.translate-tag {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #fff;
+  background-color: #ccc;
+  padding: 2px 3px;
+}
 #usr-operation-desk {
   margin: 30px 0px;
   width: 712px;
@@ -411,25 +428,6 @@ app {
 #shoot-container > img {
   max-height: 300px;
   max-width: 100%;
-}
-.time {
-  font-size: 13px;
-  color: #999;
-}
-.bottom {
-  margin-top: 13px;
-  line-height: 12px;
-}
-.button {
-  padding: 0;
-  float: right;
-}
-.image {
-  width: 100%;
-  display: block;
-}
-.video-list li {
-  width: 210px;
 }
 #about pre {
   white-space: pre-line;
