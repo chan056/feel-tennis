@@ -896,6 +896,19 @@ let operations = {
 		// 	res.end(json);
 		// });
 	},
+
+	fetchIntroVideoIndex: function(res, qualification, params){
+		var sql = `SELECT id from video_introductory where sport_id=${params.sId}`;
+
+		conn.query(sql, function(err, list, fields){
+			if(err)
+				console.log(err.sql, err.sqlMessage) ;
+			
+			let json = JSON.stringify(list);
+
+			res.end(json);
+		});
+	},
 	
 	// ===============POST================
 	login: function(res, postObj, req){

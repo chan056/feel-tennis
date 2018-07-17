@@ -73,16 +73,28 @@
 		<script src="../js/sport_intro.js"></script>
 		<script>
 			window.vEle = $('video');
-
-			bindVideo(1, '#v-history');
-			bindSubtitle(1, '#v-history');
-
-            bindVideo(2, '#v-rule');
-			bindSubtitle(2, '#v-rule');
-			
 			$('#tennis-level').attr('href', CONSTANT.level.tennis);
 
 			queryAthletes();
+			queryVideoIndex(function(data){
+				let historyIndex = data[0].id,
+					ruleIndex = data[1].id;
+
+				bindVideo(historyIndex, '#v-history');
+				bindSubtitle(historyIndex, '#v-history');
+
+				bindVideo(ruleIndex, '#v-rule');
+				bindSubtitle(ruleIndex, '#v-rule');
+			});
+
+			function queryVideoIndex(fn){
+				tools.xhr('/introVideoIndex/1', function(res){
+					if(!res)
+						return;
+						
+					fn && fn(res);
+				});
+			}
 
 			function bindVideo(videoId, selector){
 				tools.insertScriptTag(1, "../lib/hls.js", {onload: function(){
@@ -114,7 +126,7 @@
 			function queryAthletes(){
 				tools.xhr('/athletes/1', function(res){
 					var athletes = res;
-					console.log(res);
+					// console.log(res);
 
 					var maleAhletes = [],
 						femaleAhletes = [];

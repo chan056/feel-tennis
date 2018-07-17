@@ -458,6 +458,10 @@ const routerConfig = {
             },
             limit: {level: 10}
         },
+
+        '/introVideoIndex/:sId': function(params, res, req){
+            r.query('fetchIntroVideoIndex', params, res, req)
+        },
     },
 
     post: {

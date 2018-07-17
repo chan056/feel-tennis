@@ -321,3 +321,6 @@ nodesession 独立
 
 0716
     更新运动历史、规则视频
+
+0717
+    介绍性视频 根据sport id 查询视频的index
