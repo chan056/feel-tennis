@@ -82,8 +82,10 @@ let operations = {
 			m.link as author_link
 			from album as a inner join maker as m 
 			where a.author_id = m.id`;
-
+		
 		params.sport_id && (sql += ` and a.sport_id = ${params.sport_id}`);
+		params.sortBy && (sql += ` order by ${params.sortBy}`);
+		params.sort && (sql += ` ${params.sort}`);
 
 		if(params.pageSize){
 			sql = disposePageSql(sql, params);

@@ -599,7 +599,9 @@ module.exports = function(){
 					this.total = res.total;
 				}.bind(this),'get',{
 					pageNum: pageNum,
-					pageSize: this.pageSize
+					pageSize: this.pageSize,
+					sortBy: 'id',
+					sort: 'desc'
 				});
 			},
 
