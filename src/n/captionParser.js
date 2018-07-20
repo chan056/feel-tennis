@@ -8,28 +8,30 @@ module.exports = {
         let draftId = params.draftId;
         let usrId = params.usrId;
 
-        let captionPath = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle.zh`);// 中文字幕
-        if(!fs.existsSync(captionPath)){
-            captionPath = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle`);//英文字幕
-        }
-
-        // 运动介绍页的视频字幕
-        if(params.noTutorial){
-            captionPath = path.resolve(global.staticRoot, `./multimedia/ts_introductory/${vId}/subtitle`);
-        }
-
-        // 查看状态下，查看终稿
-        if(draftId){
-            // 读取优先级 终稿 默认稿（翻以前为英文，翻译后为中文）
+        let captionPath = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle`);
+        
+        if(draftId){// 字幕编辑-查看状态
+            // 读取优先级 终稿 默认稿
             if(fs.existsSync(captionPath + `.${draftId}`)){
                 captionPath += `.${draftId}`;
             }
         }else if(params.ownDraft && usrId){
-            // 读取优先级 草稿 终稿 默认稿（翻以前为英文，翻译后为中文）
+            // 读取优先级 草稿 终稿 默认稿
             if(fs.existsSync(captionPath + `.tmp.${usrId}`)){
                 captionPath = captionPath + `.tmp.${usrId}`;
             }else if(fs.existsSync(captionPath + `.${usrId}`)){
                 captionPath += `.${usrId}`;
+            }
+        }else{// 视频播放
+            let p;
+            
+            if(params.noTutorial){// 运动介绍
+                p = path.resolve(global.staticRoot, `./multimedia/ts_introductory/${vId}/subtitle`);
+            }else{// 教程视频
+                p = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle.zh`);
+                if(fs.existsSync(p)){
+                    captionPath = p;
+                }
             }
         }
 
