@@ -5,15 +5,8 @@ module.exports = function(){
             if(window.isMobile){
                 lowResolution = lowResolution || 480;
                 m3u8 = lowResolution + 'p'
-<<<<<<< HEAD
             }else if(lowResolution){
                 m3u8 = lowResolution + 'p'
-=======
-                // alert('low resolution：' + m3u8)
-            }else if(lowResolution){
-                m3u8 = lowResolution + 'p'
-                // console.log('low resolution：' + m3u8)
->>>>>>> 2b762ac220afee04612977ff96653f123473ab03
             }else{
                 m3u8 = '_'
             }
