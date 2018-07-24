@@ -725,7 +725,8 @@ module.exports = function(){
 				remarkPlaySetting: {
 					enable: true,
 					all: true
-				}
+				},
+				isMobile: window.isMobile
 			};
 
 			return d;
@@ -2770,13 +2771,11 @@ module.exports = function(){
 			})
 
 			$('#line-editor').on('click', '.caption-line', function(e){
-				if($(this).is('.selected')){
-					return;
+				if(!$(this).is('.selected')){
+					let index= $('.caption-line').index(this);
+					$(this).addClass('selected current-line').siblings().removeClass('selected current-line');
+					$('.caption-block').eq(index).addClass('current').siblings().removeClass('current');
 				}
-
-				let index= $('.caption-line').index(this);
-				$(this).addClass('selected current-line').siblings().removeClass('selected current-line');
-				$('.caption-block').eq(index).addClass('current').siblings().removeClass('current');
 
 				// 通过点击时间轴上的“字幕块”
 				if(arguments[1] && arguments[1].isTrigger){
@@ -2791,6 +2790,7 @@ module.exports = function(){
 				// 修改视频时间
 				t.updateType = 1;
 				vEle.currentTime = st;
+				vEle.pause();
 
 				// 指针处于时间轴容器中间
 				let halfTimeOffset =  t.posToTime(t.waveContainerWidth / 2);
@@ -2903,7 +2903,7 @@ module.exports = function(){
 					})
 				}
 			}).on('keydown', '.caption-ipt .el-textarea__inner', function(e){
-				if(e.keyCode === 9){
+				if(e.keyCode === 9){// tab
 					let curLine = $(this).parents('.caption-line').eq(0);
 					let nextLine = curLine.next('.caption-line');
 					console.log(nextLine[0])
@@ -2924,13 +2924,13 @@ module.exports = function(){
 					t.vEle.paused? t.vEle.play(): t.vEle.pause();
 					e.preventDefault();
 				}else if(kc == 37){
-					t.vEle.currentTime -= 5;
+					t.vEle.currentTime -= 2;
 					if(t.vEle.currentTime < 0){
 						t.vEle.currentTime = 0;
 					}
 					e.preventDefault();
 				}else if(kc == 39){
-					t.vEle.currentTime += 5;
+					t.vEle.currentTime += 2;
 					if(t.vEle.currentTime > t.duration){
 						t.vEle.currentTime = t.duration
 					}

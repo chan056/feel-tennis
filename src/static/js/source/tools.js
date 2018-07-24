@@ -141,7 +141,7 @@ let tools = {
                     curSubtitle = subtitle = caption.text;
                     // console.log(/* '循环次数 '+Z, */ subtitle)
                     if(i != lastCaptionIndex){
-                        fn(subtitle);
+                        fn && fn(subtitle);
                         lastCaptionIndex = i;
                     }
                     
@@ -150,6 +150,8 @@ let tools = {
                     if(i == l-1){
                         lastCaptionIndex = undefined;
                     }
+
+                    fn && fn('');
                 }
             }
 
