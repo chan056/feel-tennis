@@ -1,46 +1,14 @@
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 const exec = require('child_process').exec;
+const videoIterator = require('./iterate_video.js');
 
-var tsRoot = path.resolve(__dirname, '../../static/multimedia/ts');
-
-fs.readdir(tsRoot, function(err, files){
-    let vIds = [];
-    files.forEach(function(file){
-        var videoRoot = path.resolve(tsRoot, file)
-        let stat = fs.statSync(videoRoot);
-        if(stat.isDirectory()){
-            vIds.push(path.basename(videoRoot));
-        }    
-    })
-
-    console.log(vIds);
-    extract(0);
-
-    function extract(i){
-        let vId = vIds[i];
-        if(!vId)
-            return;
-        
-        let videoStorePath = path.resolve(__dirname, '../../static/multimedia/pristine_v/'+vId+'.mp4');
-
-        if(fs.existsSync(videoStorePath)){
-            extractAudio(videoStorePath, tsRoot + '/' + vId, function(){
-                extract(++i);
-            });
-        }else{
-            extract(++i);
-        }
-    }
-})
-
-function extractAudio(videoStorePath, tsDir, fn){
+videoIterator(function extractAudio(videoStorePath, tsDir, fn){
     let target = `${tsDir}/audio.mp3`;
     if(fs.existsSync(target)){
         fn && fn();
         return;
-        // require('del').sync(target, {force: true});
     }
 
     console.log(videoStorePath)
@@ -54,4 +22,4 @@ function extractAudio(videoStorePath, tsDir, fn){
 
         fn && fn();
     })
-}
+})

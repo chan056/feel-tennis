@@ -84,19 +84,35 @@ function storeSubtitle(subtitleAbsPath, tsDir){
 function screenShot (videoStorePath, tsDir){
 
     let vDurationCmd = `ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 ${videoStorePath}`;
+    let vResolutionCmd = `ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 ${videoStorePath}`;
+    let screenshot = require('./screenshot');
 
     exec(vDurationCmd, function(error, duration){
         if(error){
             console.log(error);
         }
 
-        require('./screenshot')(
+        screenshot(
             videoStorePath,
             path.resolve(tsDir, './cover.jpg'),
             tool.formatTime(duration/2)
         );
-    });
 
+        exec(vResolutionCmd, function(error, resolution){
+            if(error){
+                console.log(error);
+            }
+    
+            resolution = resolution.trim();
+
+            screenshot(
+                videoStorePath,
+                path.resolve(tsDir, './poster.jpg'),
+                tool.formatTime(duration/2),
+                resolution
+            );
+        });
+    });
 }
 
 // 动态预览

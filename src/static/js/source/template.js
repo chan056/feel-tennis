@@ -362,7 +362,9 @@ module.exports = function(){
                     </el-tag>
                 </div>
                 <div id="player-wrapper">
-                    <video id="video" controls="controls" height="400" x5-playsinline="" playsinline="" webkit-playsinline="">
+                    <video id="video" controls="controls" height="400" x5-playsinline="" playsinline="" webkit-playsinline=""
+                        :poster="'/multimedia/ts/' + videoId + '/poster.jpg'"
+                    >
                         请使用现代浏览器，如Chrome Firefox Safari Edge
                     </video>
 
