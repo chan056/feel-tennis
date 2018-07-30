@@ -2344,18 +2344,24 @@ module.exports = function(){
 				}.bind(this));
 			},
 
-			saveSrt: function(isFinal){
+			saveSrt: function(isFinal, auto){
 				tools.xhr('/srt/' + this.videoId, function(){
-					this.$message({
-						message: `${isFinal? '发布': '暂存'}成功`,
-						type: 'success'
-					});
 					
 					if(isFinal){
 						this.listDrafts();
 					}
 
 					this.clear = true;
+
+					let message = `${isFinal? '发布': '暂存'}成功`;
+					if(auto){
+						message = '自动' + message;
+					}
+					this.$message({
+						message: message,
+						type: 'success'
+					});
+					
 				}.bind(this), 'post', {
 					captions: this.captions,
 					isFinal: isFinal
@@ -2695,6 +2701,8 @@ module.exports = function(){
 			let vEle = this.vEle = $('video')[0];
 			t.waveContainerWidth = $('#timeline').width();
 
+			t.startEditTime = Date.now();
+
 			tools.togglePageIE(this);
 			this.bindSubtitle(()=>{
 				this.bindVideo();
@@ -2941,6 +2949,12 @@ module.exports = function(){
 					e.preventDefault();
 				}
 			})
+
+			setInterval(()=>{
+				if(!this.clear){
+					this.saveSrt(false, true);
+				}
+			}, 5 * 60 * 1000)
 		},
 
 		beforeDestroy(){
