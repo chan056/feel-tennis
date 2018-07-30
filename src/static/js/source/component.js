@@ -2955,6 +2955,20 @@ module.exports = function(){
 					this.saveSrt(false, true);
 				}
 			}, 5 * 60 * 1000)
+
+			window.onfocus = ()=>{
+				tools.xhr('/loginInfo', function(res){
+					if(!res){
+						t.$alert('登录后再操作', '提示', {
+							confirmButtonText: '确定',
+							callback: function(){
+								Vue.bus.emit('trigger-login');
+							},
+							closable: false
+						});
+					}
+				});
+			}
 		},
 
 		beforeDestroy(){
