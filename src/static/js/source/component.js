@@ -2248,7 +2248,8 @@ module.exports = function(){
 					startTime: 0,
 					endTime: 2000,
 					text: ''
-				}
+				},
+				clear: true,// 标记 是否全部保存
 			};
 
 			return d;
@@ -2353,6 +2354,8 @@ module.exports = function(){
 					if(isFinal){
 						this.listDrafts();
 					}
+
+					this.clear = true;
 				}.bind(this), 'post', {
 					captions: this.captions,
 					isFinal: isFinal
@@ -2806,6 +2809,7 @@ module.exports = function(){
 
 			}).on('blur', '.caption-ipt .el-textarea__inner', function(){
 				$(this).parents('.caption-line').removeClass('focused');
+				t.clear = false;
 			}).on('click', '.caption-text', function(){
 				$(this).parents('.caption-line').addClass('focused');
 				$(this).siblings('.caption-ipt').find('.el-textarea__inner').focus();
@@ -2943,6 +2947,22 @@ module.exports = function(){
 			this.wavesurfer.destroy();
 			$('#wavesurfer').remove();
 			$('body').off('keydown.videoKeyController');
+
+		},
+
+		beforeRouteLeave: function(to, from , next){
+			if(this.clear){
+				next();
+			}else{
+				this.$confirm('您还未保存草稿，确定需要提出?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					// 选择确定
+					next()
+				})
+			}
 		}
 	}
 
