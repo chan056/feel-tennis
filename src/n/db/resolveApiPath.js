@@ -52,7 +52,13 @@ function resolveApiPath(req, res) {
                 let usrLevel = usrAuthority(req.usrInfo);
 
                 if(usrLevel >= level){
-
+                    // 延长token时间
+                    // require('../cookie').setCookie(res, {
+                    //     name: `sid`,
+                    //     value: '1',
+                    //     expires: new Date(new Date().getTime()+10*60*60*24*1000).toUTCString(),
+                    //     HttpOnly: true
+                    // });
                     if(usrLevel == 10 && visits){
                         // 普通用户, 特定接口访问次数限制
                         let conn = require('./connect').conn;

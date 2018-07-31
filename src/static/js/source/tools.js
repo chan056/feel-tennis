@@ -31,7 +31,7 @@ let tools = {
                 type: 'warning',
                 position: 'bottom-right',
                 onClose: function(){
-                    console.log('close');
+                    // console.log('close');
                 }
             };
 
@@ -41,6 +41,8 @@ let tools = {
                 notifyConfig.onClick = function(){
                     Vue.bus.emit('trigger-login');
                 }
+
+                Vue.bus.emit('trigger-login');
             }
 
             // 未激活
