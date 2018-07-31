@@ -2331,7 +2331,7 @@ module.exports = function(){
 				tools.xhr(captionAPI, function(res){
 					if(!res || !res.length){
 						res = [Object.assign({}, this.defaultCaption)];
-						console.log(res);
+						// console.log(res);
 					}
 
 					this.captionIntervalId = tools.attachSubtile(this.vEle, res, 500, function(subtitle){
@@ -2959,13 +2959,11 @@ module.exports = function(){
 			window.onfocus = ()=>{
 				tools.xhr('/loginInfo', function(res){
 					if(!res){
-						t.$alert('登录后再操作', '提示', {
-							confirmButtonText: '确定',
-							callback: function(){
-								Vue.bus.emit('trigger-login');
-							},
-							closable: false
+						t.$message({
+							message: '登录后再操作',
+							type: 'warning'
 						});
+						Vue.bus.emit('trigger-login')
 					}
 				});
 			}

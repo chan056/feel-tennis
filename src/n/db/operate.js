@@ -984,7 +984,7 @@ let operations = {
 				require('../cookie').setCookie(res, {
 					name: `bear`,
 					value: '1',
-					expires: new Date(new Date().getTime()+10*60*60*24*1000).toUTCString(),
+					expires: new Date(Date.now()+10*60*60*24*1000).toUTCString(),
 					HttpOnly: true
 				});
 
@@ -1364,7 +1364,7 @@ let operations = {
 					require('../cookie').setCookie(res, {
 						name: `bear`,
 						value: '1',
-						expires: new Date(new Date().getTime()+10*60*60*24*1000).toUTCString(),
+						expires: new Date(Date.now()+10*60*60*24*1000).toUTCString(),
 						HttpOnly: true
 					});
 	
