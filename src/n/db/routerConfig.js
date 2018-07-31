@@ -7,13 +7,6 @@ const routerConfig = {
             const tumour = require('../tumour');
             tumour.joinIndexJS(res, req.usrInfo);
         },
-
-        // '/loginInfo': {
-        //     fn: function(params, res, req){
-        //         r.query('queryLoginInfo', params, res, req);
-        //     },
-        //     limit: {level: 10}
-        // },
     
         '/sports': function(params, res, req){
             r.query('querySports', params, res, req);

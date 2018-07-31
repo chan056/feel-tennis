@@ -2345,6 +2345,10 @@ module.exports = function(){
 			},
 
 			saveSrt: function(isFinal, auto){
+				if(isFinal){
+					// 发布时 清空每一行两端的空字符 清空全是英文或者空行
+				}
+
 				tools.xhr('/srt/' + this.videoId, function(){
 					
 					if(isFinal){
