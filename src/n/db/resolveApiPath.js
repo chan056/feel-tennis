@@ -53,14 +53,12 @@ function resolveApiPath(req, res) {
 
                 if(usrLevel >= level){
                     let cookies = require('cookie').parse(req.headers.cookie || '');
-                    console.log(cookies.sid);
                     // 延长token时间
                     require('../cookie').setCookie(res, {
                         name: `sid`,
                         value: cookies.sid,
                         plainValue: true,
-                        expires: new Date(Date.now() + 10*60*60*24*1000).toUTCString(),
-                        HttpOnly: true,
+                        expires: new Date(Date.now() + 1*60*60*24*1000).toUTCString(),
                     });
 
                     if(usrLevel == 10 && visits){
