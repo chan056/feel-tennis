@@ -2347,6 +2347,22 @@ module.exports = function(){
 			saveSrt: function(isFinal, auto){
 				if(isFinal){
 					// 发布时 清空每一行两端的空字符 清空全是英文或者空行
+					var j = 0;
+					this.captions.forEach((caption, i)=>{
+						caption.text = caption.text.trim();
+						const reg = /^[a-z'-\s\d]+$/;
+						if(!caption.text || caption.text.match(reg)){
+							console.log(caption.text)
+							this.captions.splice(i, 1);
+							i --;
+							j ++
+						}
+					})
+
+					j && this.$message({
+						message: '字幕已清理',
+						type: 'info'
+					});
 				}
 
 				tools.xhr('/srt/' + this.videoId, function(){
@@ -2616,8 +2632,12 @@ module.exports = function(){
 
 			backtrack(){
 				if(this.$route.query.draftId){
+
 					this.$router.push({path: `/translator/${this.videoId}`});
 					this.draft = '';
+
+					this.bindSubtitle();
+
 				}else{
 					this.$router.push({path: `/videos/${this.videoId}`});
 				}
