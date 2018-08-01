@@ -84,11 +84,11 @@ module.exports = function(){
 			component: COMPONENTS.Translator,
 			props: true,
 		},
-		{ 
-			path: 'translator/:videoId/:usrId', 
-			component: COMPONENTS.Translator,
-			props: true,
-		},
+		// { 
+		// 	path: 'translator/:videoId/:usrId', 
+		// 	component: COMPONENTS.Translator,
+		// 	props: true,
+		// },
 	];
 
 	window.routeConfig = routeConfig;
