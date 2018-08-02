@@ -828,6 +828,8 @@ module.exports = function(){
 						
 					let playerWrapper = $('#player-wrapper');
 
+					
+
 					tools.attachSubtile(window.vEle, res, 500, function(subtitle){
 						playerWrapper.find('.subtitle').text(subtitle)/* .css({
 
