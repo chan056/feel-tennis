@@ -2354,7 +2354,7 @@ module.exports = function(){
 						caption.text = caption.text.trim();
 						const reg = /^[\w'-\s]+$/;
 						if(!caption.text || caption.text.match(reg)){
-							console.log(caption.text)
+							// console.log(caption.text)
 							this.captions.splice(i, 1);
 							i --;
 							j ++
@@ -2383,11 +2383,14 @@ module.exports = function(){
 						message: message,
 						type: 'success'
 					});
-					
 				}.bind(this), 'post', {
 					captions: this.captions,
 					isFinal: isFinal
 				});
+
+				if(this.captions.length == 0){
+					this.captions = [Object.assign({}, this.defaultCaption)];
+				}
 
 				clearInterval(this.captionIntervalId)
 				this.bindSubtitle(null, this.captions);
