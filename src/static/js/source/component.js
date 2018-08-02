@@ -2352,7 +2352,7 @@ module.exports = function(){
 					var j = 0;
 					this.captions.forEach((caption, i)=>{
 						caption.text = caption.text.trim();
-						const reg = /^[a-z'-\s\d]+$/;
+						const reg = /^[\w'-\s]+$/;
 						if(!caption.text || caption.text.match(reg)){
 							console.log(caption.text)
 							this.captions.splice(i, 1);
