@@ -111,14 +111,12 @@ let tools = {
         
         interval = interval || 500;
 
-        let lastCaptionId;
         let lastCaptionIndex;// 上个匹配到的caption id，用于优化查找速度 todo
-        let curSubtitle;
 
         let intervalId = setInterval(function(){
             let curVtime = video.currentTime;// curVtime和上次一样的话 中断todo
             curVtime = curVtime * 1000;// 微秒
-            let caption, captionId, subtitle;
+            let caption, subtitle;
             let st, et;// 微秒
 
             let i = 0;
@@ -131,17 +129,14 @@ let tools = {
             for(; i<l; i++){
                 caption = captions[i];
                 if(!caption){
-                    return;
+                    continue;
                 }
                 st = caption.startTime;
                 et = caption.endTime;
-                captionId = caption.id;
 
                 if(curVtime >= st && curVtime <= et){
-                    lastCaptionId = captionId;
-                    
-                    curSubtitle = subtitle = caption.text;
-                    // console.log(/* '循环次数 '+Z, */ subtitle)
+                    subtitle = caption.text;
+                    console.log(i)
                     if(i != lastCaptionIndex){
                         fn && fn(subtitle);
                         lastCaptionIndex = i;
