@@ -128,7 +128,7 @@ let operations = {
 		if(sql.match(r)){
 			sql = sql.replace(r, `headline like '%${params.headline}%'`)
 		}
-		console.log(sql)
+
 		conn.query(sql, function (err, list, fields) {
 			if (err) return throwError(err, res);
 		
