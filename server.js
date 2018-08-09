@@ -4,17 +4,21 @@ const https = require('https');
 const fs = require('fs');
 
 let PORT = 80;
+let isTesting = false;
 
 let argv = process.argv;
 if(argv[0] == '/usr/local/bin/node' || argv[0] == 'E:\\soft\\node\\node.exe'){
+    isTesting = true;
     PORT = 3000;
 }
-
 global.staticRoot = __dirname + '/src/static';
 
 let serverConfig = require('./src/n/db/serverConfig');
 
-let server = http.createServer(serverConfig).listen(PORT, function(){
+let server = http.createServer(function(req, res){
+    res.writeHead(301, {'Location': isTesting? 'https://localhost':'https://www.yitube.cn/'});
+    res.end();
+}).listen(PORT, function(){
     console.log('HTTP listen on ' + PORT)
 });
 
