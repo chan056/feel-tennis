@@ -880,11 +880,12 @@ routeConfig.push(
 );
 
 temp.videosAdmin =  `
-    <div>
+    <div class="admin-video-list">
         <h2>教程类</h2>
 
         <el-table
         :data="videos"
+        :row-class-name="tableRowStatus"
         style="width: 100%">
             <el-table-column
                 prop="id"
@@ -912,6 +913,7 @@ temp.videosAdmin =  `
                     <el-button @click="patchVideo(scope.row.id)" type="text" size="small">更新</el-button>
                     <el-button @click="deleteVideo(scope.row.id)" type="text" size="small">删除</el-button>
                     <el-button @click="redirect(scope.row.id)" type="text" size="small">查看</el-button>
+                    <el-button @click="toggle(scope.row.id, scope.row.hidden, $event)" type="text" size="small">{{scope.row.hidden? '显示': '隐藏'}}</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -994,6 +996,15 @@ COMPONENTS.VideosAdmin = {
             });
         },
 
+        tableRowStatus({row, rowIndex}){
+            console.log(row, row.hidden);
+            if(row.hidden){
+                return 'row-disabled'
+            }
+
+            return ''
+        },
+
         fetchIntroVideos(pageNum){
 			tools.xhr('/videosIntroAdmin', function(res){
                 this.videosIntro = res.datalist;
@@ -1058,6 +1069,16 @@ COMPONENTS.VideosAdmin = {
             }else{
                 location.href = '/page/intro_tennis.html'
             }
+        },
+
+        toggle: function(id, hidden, e){
+            console.log(e.target)
+            tools.xhr('/toggleVideo', function(res){
+                this.fetchVideos(this.curPage)
+            }.bind(this), 'patch', {
+                vId: id,
+                hidden: hidden
+            });
         }
 	},
 

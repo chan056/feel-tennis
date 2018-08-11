@@ -648,6 +648,7 @@ module.exports = function(){
 				let req = {
 					pageNum: pageNum,
 					pageSize: this.pageSize,
+					hidden: 0
 				};
 
 				if(this.headline){
@@ -1208,6 +1209,7 @@ module.exports = function(){
 				let params = this.$route.query || {};
 				params.pageSize = this.pageSize;
 				params.pageNum = pageNum;
+				params.hidden = 0;
 
 				tools.xhr('/videos', function(res){
 					this.videos = res.datalist;

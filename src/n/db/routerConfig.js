@@ -152,16 +152,14 @@ const routerConfig = {
                 clauses.push(clause);
                 delete params.headline;
             }
-            
-            let clause = tools.newClause(params);
-            if(clause){
-                clauses.push(clause);
+
+            if(params.hidden != undefined){
+                clauses.push('hidden='+params.hidden)
             }
-    
+
             if(clauses.length){
                 sql += ' ' + clauses.join(' and ');
 
-                console.log(sql);
                 r.excuteSQL(sql, res, function(resData){
                     res.end( JSON.stringify({
                             datalist: resData,
@@ -723,6 +721,10 @@ const routerConfig = {
                 r.patch('markAsRead', req, res);
             },
             limit: {level: 10}
+        },
+
+        '/toggleVideo': function(req, res){
+            r.patch('toggleVideo', req, res)
         },
     },
 

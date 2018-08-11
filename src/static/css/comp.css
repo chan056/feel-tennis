@@ -742,3 +742,6 @@ app {
 .add-segment-button {
   width: 12px;
 }
+.admin-video-list .row-disabled {
+  background-color: #bbb;
+}

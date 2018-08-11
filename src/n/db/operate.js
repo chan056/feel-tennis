@@ -1942,6 +1942,16 @@ let operations = {
 		});
 	},
 
+	toggleVideo: function(res, patchObj, req){
+		let sql = `update video set hidden=${patchObj.hidden? 0: 1} where id=${patchObj.vId}`;
+		conn.query(sql, function(err, result){
+			if(err)
+				console.log(err);
+
+			res.end();
+		});
+	},
+
 	// ===============DELETE================
 	deleteFeedback: function (res, deleteObj, req) {
 		
