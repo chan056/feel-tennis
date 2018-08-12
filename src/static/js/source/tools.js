@@ -3,14 +3,10 @@ let tools = {
     xhr: function xhr(api, sfn, type, params, errorHandle){
         type = type || 'get';
         if(type === 'get'){
-            // {
-            //     params: {
-            //         ID: 12345
-            //     }
-            // }
             params = {params: params};
         }
     
+        api = '/api' + api;
         axios[type](api, params)
         .then(function (response) {
            sfn && sfn(response.data)

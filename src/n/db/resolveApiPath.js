@@ -9,6 +9,7 @@ function resolveApiPath(req, res) {
     var fnMatched;
     var keys;
     var urlObj = require('url').parse(req.url, true);
+    urlObj.pathname = urlObj.pathname.replace(/\/api/, '');
 
     let reqMethod = req.method.toLowerCase();
     routerConfig = routerConfig[reqMethod];

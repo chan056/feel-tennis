@@ -33,7 +33,8 @@ $(function () {
 	}
 
 	const router = new VueRouter({
-		// mode: 'history',
+		mode: 'history',
+		fallback: true,
 		routes: [
 			{
 				path: '/',

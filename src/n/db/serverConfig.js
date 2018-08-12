@@ -24,7 +24,16 @@ module.exports = function(req, res) {
 			var contentType = mime[ext];
 			contentType? disposeStaticResource(): tools.response404(res);
 		}else{
-			disposeApi();
+			if(pathname.match(/\/api\//)){
+				disposeApi();
+			}else{
+				// 如果发现是 robot
+				// 返回template对应html，不返回 admin 部分
+				pathname = '/page/index.html';
+				realPath = path.join(global.staticRoot, pathname);
+				var contentType = 'text/html'
+				return serveStatic();
+			}
 		}
 
 		function disposeStaticResource(){
@@ -40,12 +49,14 @@ module.exports = function(req, res) {
 	
 		function disposeApi(){
 			require('./usr')(req, function(){
-				let resolveApiPathModule = require('./resolveApiPath');
-				resolveApiPathModule.resolveApiPath(req, res);
+				require('./resolveApiPath').resolveApiPath(req, res);
 			}, res);
 		}
 
 		function serveStatic(){
+			// var userAgent = req.headers['user-agent'];
+			// var isBot = tools.botCheck(userAgent);
+			
 			// 域名限制
 			if(ext == 'm3u8' || ext == 'mp4'){
 				let referer = req.headers.referer || '';

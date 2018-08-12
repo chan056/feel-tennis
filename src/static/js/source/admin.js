@@ -997,7 +997,6 @@ COMPONENTS.VideosAdmin = {
         },
 
         tableRowStatus({row, rowIndex}){
-            console.log(row, row.hidden);
             if(row.hidden){
                 return 'row-disabled'
             }

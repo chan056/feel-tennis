@@ -5,9 +5,9 @@ module.exports = function(){
                 <el-row>
                     <el-col :span="4">
                         <i class="el-icon-menu aside-menu-btn"></i>
-                        <a href="#/sports" id="logo">
+                        <router-link to="/sports" id="logo">
                             <img src="../img/logo.png" width="60px" alt="logo"/>
-                        </a>
+                        </router-link>
                         
                     </el-col>
     
@@ -163,75 +163,77 @@ module.exports = function(){
             <div id="aside">
                 <div class="guide-section">
                     <div class="guide-entry">
-                        <a href="#/sports" class="guide-entry-renderer" title="首页">
+                        <router-link to="/sports" class="guide-entry-renderer" title="首页">
                             <i class="icon fa fa-home"></i>
                             <span class="text">首页</span>
-                        </a>
+                        </router-link>
                     </div>
                     <div v-if="(loginUsrInfo && loginUsrInfo.name)"  class="guide-entry">
-                        <a href="#/stars" class="guide-entry-renderer" title="收藏">
+                        <router-link to="/stars" class="guide-entry-renderer" title="收藏">
                             <i class="icon fa fa-star"></i>
                             <span class="text">收藏</span>
-                        </a>
+                        </router-link>
                     </div>
                 </div>
                 <div class="guide-section">
                     <div v-show="loginUsrInfo && loginUsrInfo.name" class="guide-entry" id="upload-entry" >
-                        <a href="#/compete" class="guide-entry-renderer" title="竞赛" id="guide-compete-1">
+                        <router-link to="/compete" class="guide-entry-renderer" title="竞赛" id="guide-compete-1">
                             <i class="fa fa-trophy icon"></i>
                             <span class="text">竞赛</span>
-                        </a>
+                        </router-link>
                     </div>
                 </div>
                 <div class="guide-section">
                     <div v-if="(loginUsrInfo && loginUsrInfo.name)" class="guide-entry">
-                        <a href="#/voteNext" class="guide-entry-renderer" title="投票">
+                        <router-link to="/voteNext" class="guide-entry-renderer" title="投票">
                             <i class="fa fa-hand-paper-o icon"></i>
                             <span class="text">投票</span>
-                        </a>
+                        </router-link>
                     </div>
                     <div class="guide-entry" id="feedback-entry">
-                        <a href="#/feedback" class="guide-entry-renderer" title="反馈">
+                        <router-link to="/feedback" class="guide-entry-renderer" title="反馈">
                             <i class="el-icon-service icon"></i>
                             <span class="text">反馈</span>
-                        </a>
+                        </router-link>
                     </div>
                 </div>
                 <div class="guide-section" v-if="loginUsrInfo && loginUsrInfo.is_admin == 1">
                     <div class="guide-entry" id="upload-entry" >
-                        <a href="#/uploadAdmin" class="guide-entry-renderer" title="上传视频">
-                            <i class="el-icon-upload icon"></i>
+                        <router-link to="/uploadAdmin" class="guide-entry-renderer" title="上传视频">
+                            <i class="fa el-icon-upload icon"></i>
                             <span class="text">上传视频</span>
-                        </a>
+                        </router-link>
                     </div>
                     <div class="guide-entry" id="upload-entry" >
-                        <a href="#/videosAdmin" class="guide-entry-renderer" title="视频列表">
+                        <router-link to="/videosAdmin" class="guide-entry-renderer" title="视频列表">
                             <i class="fa fa-video-camera icon"></i>
                             <span class="text">视频列表</span>
-                        </a>
+                        </router-link>
                     </div>
                     <div class="guide-entry" id="upload-entry" >
-                        <a href="#/albumsAdmin" class="guide-entry-renderer" title="专辑列表">
-                            <i class="fa fa-book icon"></i>
+                        <router-link to="/albumsAdmin" class="guide-entry-renderer" title="专辑列表">
+                        <i class="fa fa-book icon"></i>
                             <span class="text">专辑列表</span>
-                        </a>
+                        </router-link>
                     </div>
                     <div class="guide-entry" id="upload-entry" >
-                        <a href="#/sportsAdmin" class="guide-entry-renderer" title="运动列表">
+                        <router-link to="/sportsAdmin" class="guide-entry-renderer" title="运动列表">
                             <i class="fa fa-soccer-ball-o icon"></i>
                             <span class="text">运动列表</span>
-                        </a>
+                        </router-link>
                     </div>
                     <div class="guide-entry" id="upload-entry" >
-                        <a href="#/feedbacksAdmin" class="guide-entry-renderer" title="反馈列表">
+                        <router-link to="/feedbacksAdmin" class="guide-entry-renderer" title="反馈列表">
                             <i class="fa fa-coffee icon"></i>
                             <span class="text">反馈列表</span>
-                        </a>
+                        </router-link>
                     </div>
                 </div>
                 
                 <div id="footer">
-                    <a class="guide-links-primary" href="#/about">关于</a>
+                    <router-link to="/about" class="guide-links-primary" title="运动列表" id="guide-compete-1">
+                        关于
+                    </router-link>
                 </div>
                 <div id="llc">
                     <span class="">2018 YiTube</span>
