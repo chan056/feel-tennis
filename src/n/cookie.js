@@ -11,11 +11,17 @@ module.exports = {
         }else{
             cookieValue = crypto.aesEncrypt(opts.value, CONSTANT.sessionSecret);
         }
-        let tomorrow = new Date(Date.now()+60*60*24*1000).toUTCString();
 
-        let cookie = `${cookieName}=${cookieValue}; expires=${opts.expires || tomorrow}`;
-        if(opts.HttpOnly)
-            cookie += '; HttpOnly';
+        let cookie;
+        if(cookieValue){
+            let tomorrow = new Date(Date.now()+60*60*24*1000).toUTCString();
+
+            cookie = `${cookieName}=${cookieValue}; expires=${opts.expires || tomorrow}`;
+            if(opts.HttpOnly)
+                cookie += '; HttpOnly';
+        }else{
+            cookie = `${cookieName}=${cookieValue}; expires=${(new Date().toUTCString())}`;
+        }
             
         res.setHeader('Set-Cookie', [
             cookie
@@ -39,5 +45,5 @@ module.exports = {
         });
 
         return matchedCookieValue
-    }
+    },
 }

@@ -236,10 +236,6 @@ let operations = {
 							dayViewLeft = constants.tmpUsrDayView - dayView - 1;
 							queryVinfo();
 						}else{
-							// 跳转到首页？
-							// res.writeHead(302, {
-							// 	'Location': '/?#/albums/1'
-							// });
 							res.end();
 						}
 					}else{

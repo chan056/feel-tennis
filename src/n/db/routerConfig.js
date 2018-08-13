@@ -89,6 +89,7 @@ const routerConfig = {
                     require('../cookie').setCookie(res, {
                         name: `sid`,
                         value: '',
+                        plainValue: true,
                         HttpOnly: true
                     });
                     res.end();
@@ -463,6 +464,7 @@ const routerConfig = {
         '/logout': function(req, res){
             require('../cookie').setCookie(res, {
                 name: `sid`,
+                plainValue: true,
                 value: '',
                 HttpOnly: true
             });

@@ -1,6 +1,5 @@
 
 const http = require('http');
-const https = require('https');
 const fs = require('fs');
 
 let PORT = 80;
@@ -16,8 +15,12 @@ global.staticRoot = __dirname + '/src/static';
 let serverConfig = require('./src/n/db/serverConfig');
 
 let server = http.createServer(function(req, res){
-    res.writeHead(301, {'Location': isTesting? 'https://localhost':'https://www.yitube.cn/'});
-    res.end();
+    if(isTesting){
+        serverConfig(req, res)
+    }else{
+        res.writeHead(301, {'Location': 'https://www.yitube.cn/'});
+        res.end();
+    }
 }).listen(PORT, function(){
     console.log('HTTP listen on ' + PORT)
 });
@@ -27,9 +30,14 @@ let sslOption = {
     cert: fs.readFileSync('./1533833923829.pem')
 }
 
-https.createServer(sslOption, serverConfig).listen(443, function(){
-    console.log('HTTPS listen on ' + 443)
-});
+if(!isTesting){
+    let https = require('https');
+
+    https.createServer(sslOption, serverConfig).listen(443, function(){
+        console.log('HTTPS listen on ' + 443)
+    });
+}
+
 // process.on('uncaughtException',function(err){
 //     console.log(err);
 //     return false;
