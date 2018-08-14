@@ -13,7 +13,7 @@ var BrowserDetect = {
             if(callback)
                 return callback(isSupport);
 
-            console.log("当前浏览器不支持！");
+            // console.log("当前浏览器不支持！");
             this.showTips(b, v);
         }
        
@@ -58,7 +58,7 @@ var BrowserDetect = {
 
             var items = noSupportItems[browser];
             for ( var item in items ) {
-                console.log(items[item], _version)
+                // console.log(items[item], _version)
                 if( items[item] === _version ){
                     _isSupport = false;
                 };
