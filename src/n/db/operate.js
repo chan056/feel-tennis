@@ -319,7 +319,6 @@ let operations = {
 
 	loginInfo: function(res, qualification, params){
 		let usrInfo = this.usrInfo;
-		
 		if(usrInfo.type == 1){
 			conn.query('select id, name, day_view, is_admin from usr where id = ' + usrInfo.usrId, function(err, result){
 				if (err) return throwError(err, res);

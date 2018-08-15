@@ -112,7 +112,7 @@ module.exports = function(){
 						location.hash = "#/searchedVideos?headline=" + this.searchForm.name;
 						t.searchForm.name = '';
 					} else {
-						console.log('error submit!!');
+						// console.log('error submit!!');
 						return false;
 					}
 				});
@@ -222,7 +222,7 @@ module.exports = function(){
 							email: trim(t.registForm.email)
 						});
 					} else {
-						console.log('error submit!!');
+						// console.log('error submit!!');
 						return false;
 					}
 				});
@@ -342,7 +342,6 @@ module.exports = function(){
 
 			fetchUsrLoginInfo: function(){
 				tools.xhr('/loginInfo', function(loginUsrInfo){
-					// 登陆状态在各组件共享 todo
 					this.loginUsrInfo = loginUsrInfo || {};
 					window.loginUsrInfo = loginUsrInfo;
 
@@ -385,7 +384,6 @@ module.exports = function(){
 				tmpUsr = tmpUsr.substr(3, 10);
 				$('#header .el-icon-view').attr('title', tmpUsr).addClass('tmp-usr');
 			}
-
 			this.fetchUsrLoginInfo();
 
 			$('.aside-menu-btn').on('click', function(){
@@ -1052,7 +1050,7 @@ module.exports = function(){
 						this.newStar();
 						this.newStarForm.visible = false;
 					} else {
-						console.log('error submit!!');
+						// console.log('error submit!!');
 						return false;
 					}
 				}.bind(this));
@@ -1302,7 +1300,7 @@ module.exports = function(){
 					if (valid) {
 						this.updateUsrDatum();
 					} else {
-						console.log('error submit!!');
+						// console.log('error submit!!');
 						return false;
 					}
 				}.bind(this));

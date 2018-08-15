@@ -3,9 +3,14 @@ let tools = {
     xhr: function xhr(api, sfn, type, params, errorHandle){
         type = type || 'get';
         if(type === 'get'){
-            params = {params: params};
+            if(params){
+                params['_'] = Date.now();
+                params = {params: params};
+            }else{
+                params = {params: {'_': Date.now()}};
+            }
         }
-    
+
         api = '/api' + api;
         axios[type](api, params)
         .then(function (response) {
@@ -132,7 +137,6 @@ let tools = {
 
                 if(curVtime >= st && curVtime <= et){
                     subtitle = caption.text;
-                    console.log(i)
                     if(i != lastCaptionIndex){
                         fn && fn(subtitle);
                         lastCaptionIndex = i;

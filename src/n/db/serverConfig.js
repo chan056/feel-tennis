@@ -20,10 +20,12 @@ module.exports = function(req, res) {
 		var ext = path.extname(pathname);
 		ext = ext ? ext.slice(1) : '';
 
+
 		if(ext){
 			var contentType = mime[ext];
 			contentType? disposeStaticResource(): tools.response404(res);
 		}else{
+			
 			if(pathname.match(/\/api\//)){
 				disposeApi();
 			}else{
@@ -48,6 +50,9 @@ module.exports = function(req, res) {
 		}
 	
 		function disposeApi(){
+			// if(req.url.match('loginInfo')){
+			// 	console.log(1)
+			// }
 			require('./usr')(req, function(){
 				require('./resolveApiPath').resolveApiPath(req, res);
 			}, res);

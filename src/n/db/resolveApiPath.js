@@ -124,6 +124,7 @@ function resolveApiPath(req, res) {
             if (reqMethod == 'get') {
                 // 将params和query结合 /a/1?b=2
                 let params = Object.assign(paramsMathed, urlObj.query);
+                if(params['_']){delete params['_']}
                 fnMatched(params, res, req);
             } else {
                 fnMatched(req, res, paramsMathed);
