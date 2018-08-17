@@ -1,6 +1,5 @@
 module.exports = {
     setCookie: function(res, opts){
-        // console.log('setCookie', opts.value, opts.plainValue)
         let crypto = require('./crypto.js');
         let CONSTANT = require('./constant');
 

@@ -81,15 +81,17 @@ const routerConfig = {
             let crypto = require('../crypto.js');
             let decryptedCode = crypto.aesDecrypt(code, require('../constant').aesKey);
             
-            // console.log(decryptedCode);
             decryptedCode = JSON.parse(decryptedCode);
-            let sql = `update usr set is_active = '1', active_code = '' where id = ${decryptedCode.id} and active_code = ${decryptedCode.code}`;
+            let sql = `update usr set is_active = '1', active_code = '' where id = 
+                ${decryptedCode.id} and active_code = ${decryptedCode.code}`;
+
             r.excuteSQL(sql, res, function(result){
                 if(result.affectedRows){
+                    req.usrInfo.isActive = 1;
+                    req.usrInfo.id = decryptedCode.id;
                     require('../cookie').setCookie(res, {
                         name: `sid`,
-                        value: '',
-                        plainValue: true,
+                        value: JSON.stringify(req.usrInfo),
                         HttpOnly: true
                     });
                     res.end();

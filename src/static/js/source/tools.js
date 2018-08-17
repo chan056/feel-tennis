@@ -70,7 +70,7 @@ let tools = {
 
             // 统一错误处理
             setTimeout(function(){
-                isActivePage || Vue.prototype.$notify(notifyConfig);
+                Vue.prototype.$notify(notifyConfig);
             }, 100)
         });
     },
