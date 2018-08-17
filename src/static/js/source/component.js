@@ -1753,18 +1753,17 @@ module.exports = function(){
 		methods:{
 			sendConfirmData: function(){
 				tools.xhr('/emailConfirm' + location.search, function(res){
-					this.$alert('账号已激活', '提示', {
-						confirmButtonText: '确定',
-						callback: function(){
-							setTimeout(function(){
-								location.href = location.origin + '/#/';
-							}, 1000);
+
+					this.$message({
+						showClose: true,
+						message: '账号已激活',
+						type: 'success',
+						onClose: function(){
+							location.href = location.origin;
 						}
 					});
-
 				}.bind(this), '', {}, function(){
 					// 重新激活
-					// location.href = location.origin + '/#/';
 				});
 			}
 		},

@@ -22,6 +22,7 @@ let tools = {
                 return;
 
             let statusCode = response.status;
+            let isActivePage = location.href.match('/emailConfirm');
             
             // 自定义错误处理
             errorHandle && errorHandle(response);
@@ -43,7 +44,7 @@ let tools = {
                     Vue.bus.emit('trigger-login');
                 }
 
-                Vue.bus.emit('trigger-login');
+                isActivePage || Vue.bus.emit('trigger-login');
             }
 
             // 未激活
@@ -69,7 +70,7 @@ let tools = {
 
             // 统一错误处理
             setTimeout(function(){
-                Vue.prototype.$notify(notifyConfig);
+                isActivePage || Vue.prototype.$notify(notifyConfig);
             }, 100)
         });
     },

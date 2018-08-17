@@ -1,1 +1,1 @@
-video hidden tiny 0
+usr is_mapper boolean

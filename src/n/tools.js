@@ -124,8 +124,8 @@ function scaleImage(source, dest, imgSize, fn){
 }
 
 function sendActiveEmail(usrId, name, email, code, req, res){
-	let host = req.headers.referer;
-	if(!host)
+	let referer = req.headers.referer;
+	if(!referer)
 		return;
 
 	let activeCode = JSON.stringify({
@@ -134,15 +134,23 @@ function sendActiveEmail(usrId, name, email, code, req, res){
 	});
 
 	let crypto = require('./crypto.js');
+
 	let encryptedCode = crypto.aesEncrypt(activeCode, require('./constant').aesKey);
 
-	let emailSubject = 'www.yitube.cn 注册确认',
-		emailContent = `你好 ${name}, 
-			<a href="${host}?code=${encryptedCode}#/emailConfirm">点击</a>完成注册
+	let url = require('url');
+	referer = url.parse(referer);
+	let host = this.resolveRefererHost(referer);
+	let emailSubject = `${host} 注册确认`;
+	let linkActivePage = `${host}/emailConfirm?code=${encryptedCode}`;
+	if(referer.path === '/'){// vue-router hash mode
+		linkActivePage = `${host}?code=${encryptedCode}#/emailConfirm`;
+	}
+	let emailContent = `你好 ${name}, 
+			<a href="${linkActivePage}">点击</a>激活账号
 			<br/>
 			如无法打开，请复制以下链接
 			<br/>
-			${host}?code=${encryptedCode}#/emailConfirm`;
+			${linkActivePage}`;
 
 	let emailer = require('./mail');
 	emailer.sendMail(email, emailSubject, emailContent);
@@ -186,6 +194,10 @@ function botCheck(userAgent) {
 	}
 }
 
+function resolveRefererHost(referer){
+	return (referer.protocol || 'http') + '//' + referer.host;
+}
+
 module.exports = {
     response404: response404,
     isEmpty: isEmpty,
@@ -195,5 +207,6 @@ module.exports = {
 	scaleImage: scaleImage,
 	sendActiveEmail: sendActiveEmail,
 	copyFile: copyFile,
-	botCheck: botCheck
+	botCheck: botCheck,
+	resolveRefererHost: resolveRefererHost
 }
