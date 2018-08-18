@@ -125,9 +125,9 @@ module.exports = function(){
 				let o = {
 					'login': this.handlerLogin,
 					'regist': this.handlerRegist,
-					'datum': function(){
+					'datum': ()=>{
 						console.log(this, this.$location)
-						location.href = "#/datum";
+						this.$router.push({name: 'datum'})
 					},
 					'logout': this.handlerLogout
 				};
@@ -270,7 +270,7 @@ module.exports = function(){
 					});
 
 					setTimeout(function(){
-						location.href=location.origin + '/#/';
+						location.href = location.origin;
 					}, 1000);
 
 					t.retrievePswForm.visible = false; 
@@ -2175,10 +2175,10 @@ module.exports = function(){
 							confirmButtonText: '确定',
 							cancelButtonText: '取消',
 							type: 'warning'
-						}).then(function(){
-							location.href="#/datum";
-						}).catch(function(){
-							location.href="#/datum";
+						}).then(()=>{
+							this.$router.push({name: 'datum'})
+						}).catch(()=>{
+							this.$router.push({name: 'datum'})
 						});
 					}
 				}.bind(this));

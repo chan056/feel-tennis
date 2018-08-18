@@ -472,7 +472,7 @@ module.exports = function(){
                         </el-popover>
                         <el-button v-popover:qrcodePop @click="popShow()">分享</el-button>
     
-                        <a :href="[shortVideoLink, screenshotLink][previewType-1]" download="视频截图.gif">
+                        <a :href="[shortVideoLink, screenshotLink][previewType-1]" :download="'视频截图.'+['gif','jpg'][previewType-1]">
                             <el-button type="primary" @click="">下载</el-button>
                         </a>
                         

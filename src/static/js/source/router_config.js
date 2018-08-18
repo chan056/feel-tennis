@@ -39,6 +39,7 @@ module.exports = function(){
 			}
 		},
 		{ 
+			name: 'datum',
 			path: 'datum', 
 			component: COMPONENTS.Datum
 		},
