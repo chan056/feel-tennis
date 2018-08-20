@@ -463,11 +463,11 @@ module.exports = function(){
                             trigger="click"
                             >
                             <div id="qrcode-shoot"></div>
-                            <button type="button"
+                            <button type="button" v-if="clipboardLoaded"
                                 class="el-button el-button--default"
                                 v-clipboard:copy="[shortVideoFullLink, screenshotFullLink][previewType-1]"
                                 v-clipboard:success="copySuccess"
-                                v-clipboard:error="">复制链接</button>
+                            >复制链接</button>
                             </button>
                         </el-popover>
                         <el-button v-popover:qrcodePop @click="popShow()">分享</el-button>

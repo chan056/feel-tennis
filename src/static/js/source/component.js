@@ -725,7 +725,8 @@ module.exports = function(){
 					enable: true,
 					all: true
 				},
-				isMobile: window.isMobile
+				isMobile: window.isMobile,
+				clipboardLoaded: false
 			};
 
 			return d;
@@ -909,10 +910,10 @@ module.exports = function(){
 			// 点击分享时
 			popShow: function(){
 				tools.insertScriptTag(1, "../lib/qrcode.js", {onload: function(){
-					if(this.shortVideoLink){
-						
+					let codeLink = [this.shortVideoFullLink, this.screenshotFullLink][this.previewType-1];
+					if(codeLink){
 						var qrcode = new QRCode($('#qrcode-shoot').empty()[0], {
-							text: this.shortVideoFullLink,
+							text: codeLink,
 							width: 128,
 							height: 128,
 							colorDark : "#000000",
@@ -920,14 +921,11 @@ module.exports = function(){
 							correctLevel : QRCode.CorrectLevel.H
 						});
 					}
-
-					// qrcode.clear(); // clear the code.
-					// qrcode.makeCode("http://naver.com"); // make another code.
 				}.bind(this), id: 'qrcode'});
-				// tools.insertScriptTag(1, "../lib/clipboard.min.js", {onload: function(){
-					// console.log(ClipboardJS, $('#copy-shoot-link-btn').length)
-					// new ClipboardJS('#copy-shoot-link-btn');
-				// }.bind(this), id: 'clipboard'});
+
+				tools.insertScriptTag(1, "../lib/vue-clipboard.min.js", {onload: function(){
+					this.clipboardLoaded = true;
+				}.bind(this), id: 'clipboard'});
 			},
 
 			copySuccess: function (){
@@ -2190,15 +2188,24 @@ module.exports = function(){
 			}
 		},
 
+		beforeRouteEnter(to, from, next){
+			tools.insertScriptTag(1, CONSTANT.BAIDUMAPAPI, {id: 'map-api'});
+
+			var intervalId = setInterval(()=>{
+				if(window.BMap && window.BMap.Map){
+					clearInterval(intervalId);
+					next();
+				}
+			}, 10)
+		},
+
 		mounted: function(){
 			tools.togglePageIE(this);
 
-			$('#map-script').remove();
 			tools.insertScriptTag(1, '../js/map.js', {onload: function(){
 				var mapConstainer = $('.map-container');
 
 				mapConstainer.find('.close-btn').one('click', function(){
-					// mapConstainer.hide();
 					this.$router.go(-1);
 				}.bind(this));
 			}.bind(this), id: 'map-script'});

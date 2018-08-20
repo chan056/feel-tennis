@@ -10,11 +10,9 @@
 //10 external外部配置文件(开发依赖)，例如项目用到jQuery
 //11 file-loader处理图片
 
-var webpack=require('webpack');
-
-const path=require("path");
-
-const env = process.env.NODE_ENV;
+// var webpack = require('webpack');
+// const path = require("path");
+// const env = process.env.NODE_ENV;
 
 module.exports={
     mode: 'development',
@@ -26,7 +24,7 @@ module.exports={
     },
 
     output:{
-        path:__dirname + '/src/static/js/',
+        path: __dirname + '/src/static/js/',
         filename: '[name].js'
     },
 
@@ -50,7 +48,7 @@ module.exports={
     *
     * */
     externals:{
-       jquery:'window.jQuery'
+    //    jquery:'window.jQuery'
     },
 
 };

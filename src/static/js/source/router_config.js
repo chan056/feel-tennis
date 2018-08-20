@@ -34,7 +34,7 @@ module.exports = function(){
 			component: COMPONENTS.searchedvideos, 
 			meta: {title: '视频列表'},
 			beforeRouteUpdate(to, from, next) {
-				console.log(to, from)
+				// console.log(to, from)
 				next();
 			}
 		},
