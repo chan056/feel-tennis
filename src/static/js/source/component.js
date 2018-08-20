@@ -2196,12 +2196,13 @@ module.exports = function(){
 					clearInterval(intervalId);
 					next();
 				}
-			}, 10)
+			}, 100)
 		},
 
 		mounted: function(){
 			tools.togglePageIE(this);
 
+			$('#map-script').remove();
 			tools.insertScriptTag(1, '../js/map.js', {onload: function(){
 				var mapConstainer = $('.map-container');
 
