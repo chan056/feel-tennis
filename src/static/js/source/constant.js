@@ -12,3 +12,5 @@ let CONSTANT = {
 }
 
 window.CONSTANT = CONSTANT;
+
+export default CONSTANT;

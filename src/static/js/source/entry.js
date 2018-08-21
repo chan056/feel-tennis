@@ -1,6 +1,6 @@
 import "babel-polyfill";
 
-require('./constant.js');
+import './constant.js';
 require('./tools.js');
 
 var directive = require('./directive.js');

@@ -390,7 +390,7 @@ module.exports = function(){
                             <em>{{video.degrade_time}}</em>
                         </li>
                         <li id="share-btn"><i class="fa fa-share"></i></li>
-                        <li id="enshrine-btn">
+                        <li id="enshrine-btn" class="ovv">
                             <i class="fa fa-plus" @click.stop="diplayStarSection();" id="star-btn"></i>
                             <div id="star-section" class="hidden" @click.stop>
                                 <h5>添加到...</h5>

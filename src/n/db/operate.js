@@ -919,9 +919,10 @@ let operations = {
 				});
 
 				if(!postObj.city){
-					res.statusCode = 400;
-					res.statusMessage = 'login fail';
-					return res.end();
+					postObj.city = '';
+					// res.statusCode = 400;
+					// res.statusMessage = 'login fail';
+					// return res.end();
 				}
 
 				sql = `INSERT INTO usr_login_log VALUES (${id}, now(), '${postObj.ip}', '${postObj.city.toLowerCase()}', '${postObj.coords}') 

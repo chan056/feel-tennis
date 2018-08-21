@@ -405,12 +405,23 @@ module.exports = function(){
 		},
 
 		created: function(){
-			try{(new BMap.LocalCity()).get(function(city){
-				this.cityZH = city.name;
-			}.bind(this))}
-			catch(e){
+			let t =  this;
 
-			}
+			tools.insertScriptTag(1, CONSTANT.BAIDUMAPAPI, {id: 'map-api'});
+
+			var intervalId = setInterval(()=>{
+				if(window.BMap && window.BMap.Map){
+					clearInterval(intervalId);
+
+					try{
+						(new BMap.LocalCity()).get(function(city){
+							t.cityZH = city.name;
+						})
+					}catch(e){
+		
+					}
+				}
+			}, 100)
 
 			this.$bus.on('update-inmails', function(){
 				this.fetchInmails();
@@ -2993,15 +3004,13 @@ module.exports = function(){
 			}, 5 * 60 * 1000)
 
 			window.onfocus = ()=>{
-				tools.xhr('/loginInfo', function(res){
-					if(!res){
-						t.$message({
-							message: '登录后再操作',
-							type: 'warning'
-						});
-						Vue.bus.emit('trigger-login')
-					}
-				});
+				if(!window.loginUsrInfo){
+					t.$message({
+						message: '登录后再操作',
+						type: 'warning'
+					});
+					Vue.bus.emit('trigger-login')
+				}
 			}
 		},
 

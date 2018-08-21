@@ -10,25 +10,7 @@
 		<link rel="stylesheet" href="../css/common.css">
 		<link rel="stylesheet" href="../css/sport.css">
 
-		<script type="text/javascript">
-			if(/Android (\d+\.\d+)/.test(navigator.userAgent)){
-				var version = parseFloat(RegExp.$1);
-				if(version > 2.3){
-					var phoneScale = parseInt(window.screen.width) / 750;
-					document.write('<meta name="viewport" content="width=750, minimum-scale = '+ phoneScale +', maximum-scale = '+ phoneScale +', target-densitydpi=device-dpi">');
-				}else{
-					document.write('<meta name="viewport" content="width=750, target-densitydpi=device-dpi">');
-				}
-			}else{
-				document.write('<meta name="viewport" content="width=750, user-scalable=no, target-densitydpi=device-dpi">');
-			}
-		</script>
 		<script src="../lib/browser-detect.js"></script>
-		<script>
-			var noSupportItems = {ie: [8, 7, 5, 6]};
-			BrowserDetect.init(noSupportItems);
-			window.isMobile = BrowserDetect.detectMob();
-	</script>
 	</head>
 
 	<body>
@@ -71,6 +53,7 @@
 		
 		<script src="../lib/dot.min.js"></script>
 		<script src="../js/sport_intro.js"></script>
+		<script src="../js/source/mix.js"></script>
 		<script>
 			window.vEle = $('video');
 			$('#tennis-level').attr('href', CONSTANT.level.tennis);
@@ -150,21 +133,5 @@
 				}.bind(this));
 			}
 		</script>
-		
-		<script>
-		(function(){
-			var bp = document.createElement('script');
-			var curProtocol = window.location.protocol.split(':')[0];
-			if (curProtocol === 'https') {
-				bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-			}
-			else {
-				bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-			}
-			var s = document.getElementsByTagName("script")[0];
-			s.parentNode.insertBefore(bp, s);
-		})();
-		</script>
-
 	</body>
 </html>
