@@ -39,9 +39,9 @@ module.exports = function(req, res) {
 					ext = 'html';
 					// 查询
 					let conn = require('./connect.js').conn;
+					pathname = tools.transformPath(pathname);
 					let sql  = `select file_path from spider_food where path=${pathname}`;
 
-					// tools.transformPath(pagePath)
 					conn.query(sql, function (err, result, fields) {
 						if (err) return console.log(err);
 			
