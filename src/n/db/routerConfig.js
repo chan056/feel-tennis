@@ -457,6 +457,10 @@ const routerConfig = {
         '/introVideoIndex/:sId': function(params, res, req){
             r.query('fetchIntroVideoIndex', params, res, req)
         },
+
+        '/isMapper': function(params, res, req){
+            r.query('isMapper', params, res, req)
+        }
     },
 
     post: {
@@ -656,6 +660,13 @@ const routerConfig = {
         '/caption/audition': {
             fn: function(req, res, pathParams){
                 r.post('auditCaption', req, res, pathParams);
+            },
+            limit: {level: 100}
+        },
+
+        '/pageRecoder': {
+            fn: function(req, res, pathParams){
+                r.post('pageRecoder', req, res, pathParams);
             },
             limit: {level: 100}
         },

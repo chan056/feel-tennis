@@ -894,6 +894,27 @@ let operations = {
 			res.end(json);
 		});
 	},
+
+	isMapper: function(res, qualification, params){
+		let usrInfo = this.usrInfo;
+		let usrId = usrInfo.usrId;
+		let sql = `select is_mapper from usr where id=${usrId}`;
+
+		conn.query(sql, function(err, list, fields){
+			if(err)
+				console.log(err.sql, err.sqlMessage) ;
+
+			let isMapper = list[0]['is_mapper'];
+
+			if(usrInfo.type == 1 && usrInfo.isAdmin == 1 && isMapper){
+				res.end('1')
+			}else{
+				res.end('0')
+			}
+		});
+
+		
+	},
 	
 	// ===============POST================
 	login: function(res, postObj, req){
@@ -1511,6 +1532,52 @@ let operations = {
 				res.end();
 			});
 		})
+	},
+
+	pageRecoder: function(res, postObj, req){
+		const pathModule = require('path'),
+			fs =require('fs');
+
+		let pagePath = postObj.pagePath;
+		let pageContent = postObj.pageContent;
+
+		// // /albums/13 => albums.13
+		// let pagePath = pagePath.replace(/\//, '').replace(/\//g, '.');
+		// // albums.13 => albums._
+		// pagePath = pagePath.split('.').map((p)=>{
+		// 	if(p.match(/^\d+$/)){
+		// 		return '_'
+		// 	}else{
+		// 		return p
+		// 	}
+		// });
+
+		// pagePath = pagePath.join('.')
+
+		pagePath = tools.transformPath(pagePath)
+
+		let fileStorePath = pathModule.resolve(global.staticRoot, `./page/spider/${pagePath}.html`)
+
+		fs.writeFile(fileStorePath, pageContent, (err) => {
+			if (err) throw err;
+		});
+
+		fileStorePath = fileStorePath.replace(/\\/g, '/');// 存储到MYSQL 将\转化为/
+		let sql = `insert into spider_food (path, file_path) values ('${pagePath}', '${fileStorePath}') 
+			ON DUPLICATE KEY 
+			UPDATE file_path='${fileStorePath}'`;
+
+		conn.query(sql, [], function(err, result){
+			if(err)
+				return throwError(err, res);
+
+			if(result.affectedRows == 1){
+				res.statusMessage = 'update page success';
+				res.end();
+			}else{
+				res.end();
+			}
+		});
 	},
 
 	// ===============PATCH================

@@ -198,6 +198,22 @@ function resolveRefererHost(referer){
 	return (referer.protocol || 'http') + '//' + referer.host;
 }
 
+// /albums/13 => albums._
+function transformPath(pagePath){
+	// /albums/13 => albums.13
+	pagePath = pagePath.replace(/\//, '').replace(/\//g, '.');
+	// albums.13 => albums._
+	pagePath = pagePath.split('.').map((p)=>{
+		if(p.match(/^\d+$/)){
+			return '_'
+		}else{
+			return p
+		}
+	});
+
+	return pagePath.join('.')
+}
+
 module.exports = {
     response404: response404,
     isEmpty: isEmpty,
@@ -208,5 +224,6 @@ module.exports = {
 	sendActiveEmail: sendActiveEmail,
 	copyFile: copyFile,
 	botCheck: botCheck,
-	resolveRefererHost: resolveRefererHost
+	resolveRefererHost: resolveRefererHost,
+	transformPath: transformPath
 }

@@ -30,11 +30,28 @@ module.exports = function(req, res) {
 				disposeApi();
 			}else{
 				// 如果发现是 robot
-				// 返回template对应html，不返回 admin 部分
-				pathname = '/page/index.html';
-				realPath = path.join(global.staticRoot, pathname);
-				var contentType = 'text/html'
-				return serveStatic();
+				// 返回对应html
+				var userAgent = req.headers['user-agent'];
+				var isBot = tools.botCheck(userAgent);
+
+				if(isBot){
+					var contentType = 'text/html';
+					ext = 'html';
+					// 查询
+					let conn = require('./connect.js').conn;
+					let sql  = `select file_path from spider_food where path=${pathname}`;
+
+					// tools.transformPath(pagePath)
+					conn.query(sql, function (err, result, fields) {
+						if (err) return console.log(err);
+			
+						let filePath = result[0]['file_path'];
+						realPath = filePath;
+						return serveStatic();
+					});
+				}else{
+					tools.response404(res);
+				}
 			}
 		}
 
@@ -50,17 +67,12 @@ module.exports = function(req, res) {
 		}
 	
 		function disposeApi(){
-			// if(req.url.match('loginInfo')){
-			// 	console.log(1)
-			// }
 			require('./usr')(req, function(){
 				require('./resolveApiPath').resolveApiPath(req, res);
 			}, res);
 		}
 
 		function serveStatic(){
-			// var userAgent = req.headers['user-agent'];
-			// var isBot = tools.botCheck(userAgent);
 			
 			// 域名限制
 			if(ext == 'm3u8' || ext == 'mp4'){

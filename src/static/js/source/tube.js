@@ -2,6 +2,8 @@
 $(function () {
 	let AppHeader = COMPONENTS.HeaderComponent,
 		AppAside = COMPONENTS.AsideComponent;
+		
+	let isMapper;
 
 	const GlobalSetting = {
 		data: function(){
@@ -47,12 +49,39 @@ $(function () {
 	let appInstance = new Vue({
 		router,
 		el: '#app'
-	})
+	});
 
-	router.afterEach((to, from, next) => {
-		// 页面切换，隐藏引导
-		appInstance.$bus.emit('dismiss-guider');
+	router.beforeEach((to, from, next)=>{
+		let curPath = router.history.current.path;
+		if(curPath.toLowerCase().match('admin')){
+			return next();
+		}
 
-		
+		if(isMapper == undefined){
+			tools.xhr('/isMapper', function(res){
+				isMapper = res;
+				if(isMapper){
+					recordPage();
+				}
+			});
+		}else if(isMapper){
+			recordPage();
+		}
+
+		function recordPage(){
+			var pageContent = $('html')[0].outerHTML;
+
+			tools.xhr('/pageRecoder', function(res){
+			}, 'post', {
+				pagePath: curPath,
+				pageContent: pageContent
+			});
+
+			next()
+		}
+	});
+
+	router.afterEach((to, from) => {
+		appInstance.$bus.emit('dismiss-guider');// 页面切换，隐藏引导
 	})
 });
