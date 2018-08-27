@@ -3,7 +3,7 @@ $(function () {
 	let AppHeader = COMPONENTS.HeaderComponent,
 		AppAside = COMPONENTS.AsideComponent;
 		
-	let isMapper;
+	let isMapper;// 是否SEOer/上传页面的人
 
 	const GlobalSetting = {
 		data: function(){
@@ -59,42 +59,33 @@ $(function () {
 			return next();
 		}
 
-		if(isMapper == undefined){
-			tools.xhr('/isMapper', function(res){
-				isMapper = res;
-				if(isMapper){
-					recordPage();
-				}else{
-					next();
-				}
-			});
-		}else if(isMapper){
+		if(isMapper){
 			recordPage();
 		}else{
-			next();
+			document.title = to.meta.title;
 		}
 
-		function recordPage(){
-			// 修改标题
-			// console.log(from.meta.title)
-			if (from.meta.title) {
-				document.title = from.meta.title;
-			}
+		next();
 
-			// console.log('isMapper')
+		function recordPage(){
 			var pageContent = $('html')[0].outerHTML;
+			if (to.meta.title) {
+				document.title = to.meta.title;
+			}
 
 			tools.xhr('/pageRecoder', function(res){
 			}, 'post', {
 				pagePath: curPath,
 				pageContent: pageContent
 			});
-
-			next()
 		}
 	});
 
 	router.afterEach((to, from) => {
 		appInstance.$bus.emit('dismiss-guider');// 页面切换，隐藏引导
 	})
+
+	tools.xhr('/isMapper', function(res){
+		isMapper = res;
+	});
 });
