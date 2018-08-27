@@ -85,7 +85,7 @@ module.exports = function(){
                 var bp = document.createElement('script');
                 var curProtocol = window.location.protocol.split(':')[0];
                 if (curProtocol === 'https') {
-                    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+                    bp.src = '${CONSTANT.BAIDUPUSHLINK}';
                 }
                 else {
                     bp.src = 'http://push.zhanzhang.baidu.com/push.js';

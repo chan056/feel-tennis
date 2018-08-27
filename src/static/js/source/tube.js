@@ -82,6 +82,7 @@ $(function () {
 
 		function sitePush(){
 			if(location.host === CONSTANT.HOSTNAME){
+				$(`[src="${CONSTANT.BAIDUPUSHLINK}"]`).remove();
 				tools.insertScriptTag(2, FRAGMENTS.baiduLinkPusher, {id: 'baidu-push-api'});
 			}
 		}
