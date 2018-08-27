@@ -82,8 +82,7 @@ $(function () {
 
 		function sitePush(){
 			if(location.host === CONSTANT.HOSTNAME){
-				$('#baidu-push-api').remove();
-				tools.insertScriptTag(1, CONSTANT.BAIDUPUSHLINK, {id: 'baidu-push-api'});
+				tools.insertScriptTag(2, FRAGMENTS.baiduLinkPusher, {id: 'baidu-push-api'});
 			}
 		}
 	});
