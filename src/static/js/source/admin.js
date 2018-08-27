@@ -716,6 +716,7 @@ COMPONENTS.UploadAdmin = {
 routeConfig.push(
     { 
         path: '/uploadAdmin', 
+        meta: {title: '上传'},
         component: COMPONENTS.UploadAdmin, 
         props: function(route){
             return {
@@ -876,7 +877,11 @@ COMPONENTS.FeedbacksAdmin = {
 };
 
 routeConfig.push(
-    { path: '/feedbacksAdmin', component: COMPONENTS.FeedbacksAdmin},
+    { 
+        path: '/feedbacksAdmin',
+        meta: {title: '反馈管理'},
+        component: COMPONENTS.FeedbacksAdmin
+    },
 );
 
 temp.videosAdmin =  `
@@ -1091,7 +1096,11 @@ COMPONENTS.VideosAdmin = {
 };
 
 routeConfig.push(
-    { path: '/videosAdmin', component: COMPONENTS.VideosAdmin},
+    { 
+        path: '/videosAdmin', 
+        meta: {title: '视频管理'},
+        component: COMPONENTS.VideosAdmin
+    },
 );
 
 temp.albumsAdmin =  `
@@ -1213,7 +1222,11 @@ COMPONENTS.AlbumsAdmin = {
 };
 
 routeConfig.push(
-    { path: '/albumsAdmin', component: COMPONENTS.AlbumsAdmin},
+    { 
+        path: '/albumsAdmin', 
+        meta: {title: '专辑管理'},
+        component: COMPONENTS.AlbumsAdmin
+    },
 );
 
 temp.sportsAdmin =  `
@@ -1325,5 +1338,9 @@ COMPONENTS.SportsAdmin = {
 };
 
 routeConfig.push(
-    { path: '/sportsAdmin', component: COMPONENTS.SportsAdmin},
+    { 
+        path: '/sportsAdmin', 
+        meta: {title: '运动管理'},
+        component: COMPONENTS.SportsAdmin
+    },
 );

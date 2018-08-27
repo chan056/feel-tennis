@@ -12,52 +12,37 @@ module.exports = function(req, res) {
 		let pathname = urlObj.pathname;
 
 		if(pathname == '/'){
-			pathname = '/page/index.html';
+			pathname = constants.indexPath;
 		}
 
-		var realPath = path.join(global.staticRoot, pathname);
-		
-		var ext = path.extname(pathname);
+		let absPath = path.join(global.staticRoot, pathname);
+		let ext = path.extname(pathname);
 		ext = ext ? ext.slice(1) : '';
-
+		let contentType = '';
 
 		if(ext){
-			var contentType = mime[ext];
+			contentType = mime[ext];
 			contentType? disposeStaticResource(): tools.response404(res);
 		}else{
-			
 			if(pathname.match(/\/api\//)){
 				disposeApi();
 			}else{
-				// 如果发现是 robot
-				// 返回对应html
-				var userAgent = req.headers['user-agent'];
-				var isBot = tools.botCheck(userAgent);
+				let userAgent = req.headers['user-agent'];
+				let isBot = tools.botCheck(userAgent);
 
 				if(isBot){
-					var contentType = 'text/html';
-					ext = 'html';
-					// 查询
-					let conn = require('./connect.js').conn;
-					pathname = tools.transformPath(pathname);
-					let sql  = `select file_path from spider_food where path=${pathname}`;
-
-					conn.query(sql, function (err, result, fields) {
-						if (err) return console.log(err);
-			
-						let filePath = result[0]['file_path'];
-						realPath = filePath;
-						return serveStatic();
-					});
+					feedBot();
 				}else{
-					tools.response404(res);
+					absPath = path.join(global.staticRoot, constants.indexPath);
+					ext = 'html';
+					contentType = mime[ext];
+					return serveStatic();
 				}
 			}
 		}
 
 		function disposeStaticResource(){
-	
-			fs.exists(realPath, function(exists) {
+			fs.exists(absPath, function(exists) {
 				if (!exists) {
 					tools.response404(res);
 				} else {
@@ -73,7 +58,6 @@ module.exports = function(req, res) {
 		}
 
 		function serveStatic(){
-			
 			// 域名限制
 			if(ext == 'm3u8' || ext == 'mp4'){
 				let referer = req.headers.referer || '';
@@ -90,9 +74,9 @@ module.exports = function(req, res) {
 			}
 
 			// gzip压缩
-			var zlib = require('zlib');
-			var file = fs.createReadStream(realPath);
-			var acceptEncoding = req.headers['accept-encoding'];
+			const zlib = require('zlib');
+			let file = fs.createReadStream(absPath);
+			let acceptEncoding = req.headers['accept-encoding'];
 			if (acceptEncoding && acceptEncoding.indexOf('gzip') != -1) {
 				var gzipStream = zlib.createGzip();
 
@@ -110,6 +94,32 @@ module.exports = function(req, res) {
 			});
 
 			res.pipe(file);
+		}
+
+		// 如果发现是 robot 返回对应页面
+		function feedBot(){
+
+			ext = 'html';
+			contentType = mime[ext]
+
+			let conn = require('./connect.js').conn;
+			pathname = tools.transformPath(pathname);
+			let sql  = `select file_path from spider_food where path='${pathname}'`;
+
+			conn.query(sql, function (err, result, fields) {
+				if (err) return console.log(err);
+	
+				if(result[0]){
+					let filePath = result[0]['file_path'];
+					if(fs.existsSync(filePath)){
+						absPath = filePath;
+						return serveStatic();
+					}
+				}
+
+				return tools.response404(res);
+			});
+
 		}
 	});
 }

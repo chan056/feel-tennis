@@ -52,6 +52,8 @@ $(function () {
 	});
 
 	router.beforeEach((to, from, next)=>{
+
+		// 存储页面
 		let curPath = router.history.current.path;
 		if(curPath.toLowerCase().match('admin')){
 			return next();
@@ -69,6 +71,13 @@ $(function () {
 		}
 
 		function recordPage(){
+			// 修改标题
+			console.log(from.meta.title)
+			if (from.meta.title) {
+				document.title = from.meta.title;
+			}
+
+			console.log('isMapper')
 			var pageContent = $('html')[0].outerHTML;
 
 			tools.xhr('/pageRecoder', function(res){

@@ -32,62 +32,73 @@ module.exports = function(){
 		{ 
 			path: 'searchedvideos', 
 			component: COMPONENTS.searchedvideos, 
-			meta: {title: '视频列表'},
+			meta: {title: '视频列表搜素结果'},
 			beforeRouteUpdate(to, from, next) {
-				// console.log(to, from)
 				next();
 			}
 		},
 		{ 
 			name: 'datum',
 			path: 'datum', 
-			component: COMPONENTS.Datum
+			component: COMPONENTS.Datum,
+			meta: {title: '个人资料'},
 		},
 		{ 
 			path: 'voteNext', 
-			component: COMPONENTS.VoteNext
+			component: COMPONENTS.VoteNext,
+			meta: {title: '投票'},
 		},
 		{ 
 			path: 'feedback', 
 			component: COMPONENTS.Feedback,
+			meta: {title: '反馈'},
 		},
 		{ 
 			path: 'about',
 			component: COMPONENTS.About,
+			meta: {title: '关于作者'},
 		},
 		{ 
 			path: 'emailConfirm', 
-			component: COMPONENTS.EmailConfirm
+			component: COMPONENTS.EmailConfirm,
+			meta: {title: '邮件确认'},
 		},
 		{ 
 			path: 'retrievePsw', 
-			component: COMPONENTS.RetrievePsw
+			component: COMPONENTS.RetrievePsw,
+			meta: {title: '找回密码'},
 		},
 		{ 
 			path: 'stars', 
-			component: COMPONENTS.Stars
+			component: COMPONENTS.Stars,
+			meta: {title: '我的收藏'},
 		},
 		{ 
 			path: 'vStar/:vStarId', 
 			component: COMPONENTS.Vstar,
+			meta: {title: '视频收藏'},
 			props: true,
 		},
 		{ 
 			path: 'usrVshoots', 
 			component: COMPONENTS.UsrVshoots,
+			meta: {title: '截图收藏'},
 		},
 		{ 
 			path: 'compete', 
 			component: COMPONENTS.Compete,
+			meta: {title: '竞技场'},
 		},
 		{ 
 			path: 'translator/:videoId', 
 			component: COMPONENTS.Translator,
+			meta: {title: '字幕翻译'},
 			props: true,
 		},
 		// { 
 		// 	path: 'translator/:videoId/:usrId', 
 		// 	component: COMPONENTS.Translator,
+		//  meta: {title: '翻译'},
 		// 	props: true,
 		// },
 	];
