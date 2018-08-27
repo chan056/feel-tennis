@@ -1,4 +1,3 @@
-
 $(function () {
 	let AppHeader = COMPONENTS.HeaderComponent,
 		AppAside = COMPONENTS.AsideComponent;
@@ -61,6 +60,7 @@ $(function () {
 
 		if(isMapper){
 			recordPage();
+			sitePush();
 		}else{
 			document.title = to.meta.title;
 		}
@@ -78,6 +78,13 @@ $(function () {
 				pagePath: curPath,
 				pageContent: pageContent
 			});
+		}
+
+		function sitePush(){
+			if(location.host === CONSTANT.HOSTNAME){
+				$('#baidu-push-api').remove();
+				tools.insertScriptTag(1, CONSTANT.BAIDUPUSHLINK, {id: 'baidu-push-api'});
+			}
 		}
 	});
 

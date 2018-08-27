@@ -8,7 +8,9 @@ let CONSTANT = {
     level: {
         tennis: '//baijiahao.baidu.com/s?id=1561865758116633'
     },
-    BAIDUMAPAPI: '//api.map.baidu.com/api?v=2.0&ak=5XGIRhLpHgiaALCHuFfkCGcAewbkm4IP&callback=initMap'
+    BAIDUMAPAPI: '//api.map.baidu.com/api?v=2.0&ak=5XGIRhLpHgiaALCHuFfkCGcAewbkm4IP&callback=initMap',
+    BAIDUPUSHLINK: '//data.zz.baidu.com/urls?site=https://www.yitube.cn&token=0RnuNXoL9ZqsA6RJ',
+    HOSTNAME: 'www.yitube.cn'
 }
 
 window.CONSTANT = CONSTANT;

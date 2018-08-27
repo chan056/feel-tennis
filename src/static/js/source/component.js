@@ -2200,7 +2200,7 @@ module.exports = function(){
 		},
 
 		beforeRouteEnter(to, from, next){
-			tools.insertScriptTag(1, CONSTANT.BAIDUMAPAPI, {id: 'map-api'});
+			tools.insertScriptTag(1, CONSTANT.BAIDUPUSHLINK, {id: 'map-api'});
 
 			var intervalId = setInterval(()=>{
 				if(window.BMap && window.BMap.Map){
