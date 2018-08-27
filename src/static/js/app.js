@@ -3795,7 +3795,7 @@ eval("\n\nvar _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nvar CONSTANT = {\n    erroMsg: {\n        401: '请登录后操作',\n        402: '账户未激活',\n        500: '服务器错误'\n    },\n    PAGESIZE: 8,\n    level: {\n        tennis: '//baijiahao.baidu.com/s?id=1561865758116633'\n    },\n    BAIDUMAPAPI: '//api.map.baidu.com/api?v=2.0&ak=5XGIRhLpHgiaALCHuFfkCGcAewbkm4IP&callback=initMap',\n    BAIDUPUSHLINK: 'http://push.zhanzhang.baidu.com/push.js',\n    HOSTNAME: 'www.yitube.cn'\n};\n\nwindow.CONSTANT = CONSTANT;\n\nexports.default = CONSTANT;\n\n//# sourceURL=webpack:///./src/static/js/source/constant.js?");
+eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nvar CONSTANT = {\n    erroMsg: {\n        401: '请登录后操作',\n        402: '账户未激活',\n        500: '服务器错误'\n    },\n    PAGESIZE: 8,\n    level: {\n        tennis: '//baijiahao.baidu.com/s?id=1561865758116633'\n    },\n    BAIDUMAPAPI: '//api.map.baidu.com/api?v=2.0&ak=5XGIRhLpHgiaALCHuFfkCGcAewbkm4IP&callback=initMap',\n    BAIDUPUSHLINK: 'https://zz.bdstatic.com/linksubmit/push.js',\n    HOSTNAME: 'www.yitube.cn'\n};\n\nwindow.CONSTANT = CONSTANT;\n\nexports.default = CONSTANT;\n\n//# sourceURL=webpack:///./src/static/js/source/constant.js?");
 
 /***/ }),
 

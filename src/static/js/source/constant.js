@@ -9,7 +9,7 @@ let CONSTANT = {
         tennis: '//baijiahao.baidu.com/s?id=1561865758116633'
     },
     BAIDUMAPAPI: '//api.map.baidu.com/api?v=2.0&ak=5XGIRhLpHgiaALCHuFfkCGcAewbkm4IP&callback=initMap',
-    BAIDUPUSHLINK: 'http://push.zhanzhang.baidu.com/push.js',
+    BAIDUPUSHLINK: 'https://zz.bdstatic.com/linksubmit/push.js',
     HOSTNAME: 'www.yitube.cn'
 }
 
