@@ -3,14 +3,14 @@ module.exports = {
         const path = require('path');
         const fs = require('fs');
 
-        let dir = path.resolve(__dirname, '../static');
-        let f1 = dir + '/js/admin.js';
-        let f2 = dir + '/js/tube.js';
+        const staticRoot = global.staticRoot;
+        let f1 = staticRoot + '/js/admin.js';
+        let f2 = staticRoot + '/js/tube.js';
 
         if(usrInfo && usrInfo.isAdmin == 1){
             const concat = require('concat-files');
-            
-            let tmp = dir + '/js/tmp.js'
+            let usrId = usrInfo.usrId;
+            let tmp = staticRoot + `/js/tmp_${usrId}.js`
 
             concat([
                 f1,
@@ -21,7 +21,10 @@ module.exports = {
                 fs.readFile(tmp, "binary", function(err, file) {
                     res.write(file, "binary");
                     res.end();
+
+                    require('del')(tmp)
                 });
+
             });
         }else{
             fs.readFile(f2, "binary", function(err, file) {
