@@ -64,20 +64,24 @@ $(function () {
 				isMapper = res;
 				if(isMapper){
 					recordPage();
+				}else{
+					next();
 				}
 			});
 		}else if(isMapper){
 			recordPage();
+		}else{
+			next();
 		}
 
 		function recordPage(){
 			// 修改标题
-			console.log(from.meta.title)
+			// console.log(from.meta.title)
 			if (from.meta.title) {
 				document.title = from.meta.title;
 			}
 
-			console.log('isMapper')
+			// console.log('isMapper')
 			var pageContent = $('html')[0].outerHTML;
 
 			tools.xhr('/pageRecoder', function(res){
