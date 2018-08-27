@@ -12,10 +12,10 @@
 
 // var webpack = require('webpack');
 // const path = require("path");
-// const env = process.env.NODE_ENV;
+const env = process.env.NODE_ENV;
 
 module.exports={
-    mode: 'development',
+    mode: 'development',//production
     entry:{
         app: './src/static/js/source/entry.js',
         admin: './src/static/js/source/admin.js',
