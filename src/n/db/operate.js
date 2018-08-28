@@ -904,13 +904,15 @@ let operations = {
 			if(err)
 				console.log(err.sql, err.sqlMessage) ;
 
-			let isMapper = list[0]['is_mapper'];
+			if(list && list[0]){
+				let isMapper = list[0]['is_mapper'];
 
-			if(usrInfo.type == 1 && usrInfo.isAdmin == 1 && isMapper){
-				res.end('1')
-			}else{
-				res.end('0')
+				if(usrInfo.type == 1 && usrInfo.isAdmin == 1 && isMapper){
+					return res.end('1')
+				}
 			}
+
+			res.end('0')
 		});
 
 		
