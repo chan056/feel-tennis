@@ -887,7 +887,7 @@ let operations = {
 
 		conn.query(sql, function(err, list, fields){
 			if(err)
-				console.log(err.sql, err.sqlMessage) ;
+				return throwError(err, res);
 			
 			let json = JSON.stringify(list);
 
@@ -902,7 +902,7 @@ let operations = {
 
 		conn.query(sql, function(err, list, fields){
 			if(err)
-				console.log(err.sql, err.sqlMessage) ;
+				return throwError(err, res);
 
 			if(list && list[0]){
 				let isMapper = list[0]['is_mapper'];
