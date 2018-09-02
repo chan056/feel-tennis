@@ -900,22 +900,24 @@ let operations = {
 		let usrId = usrInfo.usrId;
 		let sql = `select is_mapper from usr where id=${usrId}`;
 
-		conn.query(sql, function(err, list, fields){
-			if(err)
-				return throwError(err, res);
-
-			if(list && list[0]){
-				let isMapper = list[0]['is_mapper'];
-
-				if(usrInfo.type == 1 && usrInfo.isAdmin == 1 && isMapper){
-					return res.end('1')
+		if(usrInfo.type == 1 && usrInfo.isAdmin == 1){
+			conn.query(sql, function(err, list, fields){
+				if(err)
+					return throwError(err, res);
+	
+				if(list && list[0]){
+					let isMapper = list[0]['is_mapper'];
+	
+					if(isMapper){
+						return res.end('1')
+					}
 				}
-			}
-
-			res.end('0')
-		});
-
-		
+	
+				res.end('0')
+			});
+		}else{
+			return res.end('0')
+		}
 	},
 	
 	// ===============POST================

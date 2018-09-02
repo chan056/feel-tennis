@@ -6,7 +6,7 @@ let PORT = 80;
 let isTesting = false;
 
 let argv = process.argv;
-if(argv[0] == '/usr/local/bin/node' || argv[0] == 'E:\\soft\\node\\node.exe'){
+if(argv[0] == '/usr/local/bin/node' || argv[0] == 'E:\\soft\\node\\node.exe' || argv[0] == 'D:\\soft_dev\\node\\node.exe'){
     isTesting = true;
     PORT = 3000;
 }

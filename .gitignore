@@ -1,7 +1,6 @@
 sessions/
 .git-credentials
-.package-lock.json
-src/n/package-lock.json
+package-lock.json
 /src/static/img/avatar/*.*
 /src/static/img/cover
 /src/static/img/cover/album/*.*
