@@ -898,9 +898,10 @@ let operations = {
 	isMapper: function(res, qualification, params){
 		let usrInfo = this.usrInfo;
 		let usrId = usrInfo.usrId;
-		let sql = `select is_mapper from usr where id=${usrId}`;
 
 		if(usrInfo.type == 1 && usrInfo.isAdmin == 1){
+			let sql = `select is_mapper from usr where id=${usrId}`;
+
 			conn.query(sql, function(err, list, fields){
 				if(err)
 					return throwError(err, res);
