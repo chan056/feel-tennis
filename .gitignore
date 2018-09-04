@@ -1,17 +1,18 @@
-sessions/
 .git-credentials
 package-lock.json
-/src/static/img/avatar/*.*
-/src/static/img/cover
-/src/static/img/cover/album/*.*
+
 /src/static/js/tmp.js
 /src/static/js/admin.js
 /src/static/js/app.js
-/src/n/ffmpeg/*.mp4
 /src/n/ffmpeg/test.js
-/src/static/multimedia/screenshot/*.*
+
 1533833923829.*
 sitemap.txt
+
+/src/static/img/avatar/*.*
+/src/static/img/cover/album/*.*
+/src/n/ffmpeg/*.mp4
+/src/static/multimedia/screenshot/*.*
 
 # Logs
 logs
@@ -71,8 +72,4 @@ typings/
 
 # dotenv environment variables file
 .env
-src/static/img/cover/album/13.jpg
-src/static/js/app.js
-src/static/js/admin.js
-src/static/multimedia/screenshot/35-1527749868999.jpg
-src/static/sitemap.txt
+
