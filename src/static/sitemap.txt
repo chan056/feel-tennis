@@ -1,5 +1,0 @@
-http://localhost:3000/stars
-http://localhost:3000/sports
-http://localhost:3000/sports/1
-http://localhost:3000/albums/13
-http://localhost:3000/videos/51
