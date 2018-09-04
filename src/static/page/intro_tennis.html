@@ -70,6 +70,19 @@
 				bindSubtitle(ruleIndex, '#v-rule');
 			});
 
+			tools.xhr('/isMapper', function(res){
+				isMapper = res;
+				if(isMapper){
+					var pageContent = $('html')[0].outerHTML;
+
+					tools.xhr('/pageRecoder', function(res){
+					}, 'post', {
+						pagePath: location.pathname,
+						pageContent: pageContent
+					});
+				}
+			});
+
 			function queryVideoIndex(fn){
 				tools.xhr('/introVideoIndex/1', function(res){
 					if(!res)

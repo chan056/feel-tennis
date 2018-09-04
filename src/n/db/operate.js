@@ -1546,10 +1546,16 @@ let operations = {
 		let pagePath = postObj.pagePath;
 		let pageContent = postObj.pageContent;
 
+		if(pathModule.extname(pagePath)){
+			// /page/intro_tennis.html
+			return updateSitemap();
+		}
+
 		// /albums/13 => albums.13
 		pagePath = tools.transformPath(pagePath)
 
-		let fileStorePath = pathModule.resolve(global.staticRoot, `./page/spider/${pagePath}.html`)
+		let fileStorePath = pathModule.resolve(global.staticRoot, `./page/spider/${pagePath}.html`);
+		
 
 		fs.writeFile(fileStorePath, pageContent, (err) => {
 			if (err) throw err;
@@ -1568,29 +1574,32 @@ let operations = {
 				res.statusMessage = 'update page success';
 				res.end();
 
-				// 更新到sitemap
-				const path = require('path');
-				let sitemapLocation = path.resolve(global.staticRoot, 'sitemap.txt');
-
-				fs.readFile(sitemapLocation, 'utf8', function(err, data){
-					let PATH = req.headers.origin + postObj.pagePath;// https://www.yitube.cn/albums/13 
-					let eol  = require('os').EOL;
-					data = data.split(eol);
-
-					if(data.length == 1 && !data[0]){
-						data = [];
-					}
-
-					if(data.indexOf(PATH) === -1){
-						data.push(PATH);
-
-						fs.writeFileSync(sitemapLocation, data.join(eol), {encoding: 'utf8'})
-					}
-				})
+				updateSitemap();
 			}else{
 				res.end();
 			}
 		});
+
+		// 更新到sitemap
+		function updateSitemap(){
+			let sitemapLocation = pathModule.resolve(global.staticRoot, 'sitemap.txt');
+
+			fs.readFile(sitemapLocation, 'utf8', function(err, data){
+				let PATH = req.headers.origin + postObj.pagePath;// https://www.yitube.cn/albums/13 
+				let eol  = require('os').EOL;
+				data = data.split(eol);
+
+				if(data.length == 1 && !data[0]){
+					data = [];
+				}
+
+				if(data.indexOf(PATH) === -1){
+					data.push(PATH);
+
+					fs.writeFileSync(sitemapLocation, data.join(eol), {encoding: 'utf8'})
+				}
+			})
+		}
 	},
 
 	// ===============PATCH================
