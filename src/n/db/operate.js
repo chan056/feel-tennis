@@ -1572,18 +1572,19 @@ let operations = {
 				const path = require('path');
 				let sitemapLocation = path.resolve(global.staticRoot, 'sitemap.txt');
 
-				let PATH = postObj.pagePath;
 				fs.readFile(sitemapLocation, 'utf8', function(err, data){
+					let PATH = req.headers.origin + postObj.pagePath;// https://www.yitube.cn/albums/13 
+					let eol  = require('os').EOL;
+					data = data.split(eol);
 
-					if(!data.match(PATH)){
-						PATH = req.headers.origin + PATH;
-						if(data){
-							data += require('os').EOL + PATH; 
-						}else{
-							data = PATH;
-						}
+					if(data.length == 1 && !data[0]){
+						data = [];
+					}
 
-						fs.writeFileSync(sitemapLocation, data, {encoding: 'utf8'})
+					if(data.indexOf(PATH) === -1){
+						data.push(PATH);
+
+						fs.writeFileSync(sitemapLocation, data.join(eol), {encoding: 'utf8'})
 					}
 				})
 			}else{
