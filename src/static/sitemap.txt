@@ -1,7 +1,5 @@
-https://www.yitube.cn/page/spider/stars.html
-https://www.yitube.cn/page/spider/sports.html
-https://www.yitube.cn/page/spider/sports.1.html
-https://www.yitube.cn/page/spider/albums.13.html
-https://www.yitube.cn/page/spider/videos.51.html
-https://http:/localhost:3000/page/spider/stars.html
-https://http:/localhost:3000/page/spider/sports.html
+http://localhost:3000/stars
+http://localhost:3000/sports
+http://localhost:3000/sports/1
+http://localhost:3000/albums/13
+http://localhost:3000/videos/51

@@ -103,7 +103,7 @@ module.exports = function(req, res) {
 			contentType = mime[ext]
 
 			let conn = require('./connect.js').conn;
-			pathname = tools.transformPath(pathname);
+			// pathname = tools.transformPath(pathname);
 			let sql  = `select file_path from spider_food where path='${pathname}'`;
 
 			conn.query(sql, function (err, result, fields) {

@@ -11,6 +11,7 @@ package-lock.json
 /src/n/ffmpeg/test.js
 /src/static/multimedia/screenshot/*.*
 1533833923829.*
+sitemap.txt
 
 # Logs
 logs
@@ -74,3 +75,4 @@ src/static/img/cover/album/13.jpg
 src/static/js/app.js
 src/static/js/admin.js
 src/static/multimedia/screenshot/35-1527749868999.jpg
+src/static/sitemap.txt

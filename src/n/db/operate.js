@@ -1556,7 +1556,7 @@ let operations = {
 		});
 
 		fileStorePath = fileStorePath.replace(/\\/g, '/');// 存储到MYSQL 将\转化为/
-		let sql = `insert into spider_food (path, file_path) values ('${pagePath}', '${fileStorePath}') 
+		let sql = `insert into spider_food (path, file_path) values ('${postObj.pagePath}', '${fileStorePath}') 
 			ON DUPLICATE KEY 
 			UPDATE file_path='${fileStorePath}'`;
 
@@ -1571,16 +1571,16 @@ let operations = {
 				// 更新到sitemap
 				const path = require('path');
 				let sitemapLocation = path.resolve(global.staticRoot, 'sitemap.txt');
-				let fileURL = path.join(req.headers.origin, `page/spider/${pagePath}.html`)
-				fs.readFile(sitemapLocation, 'utf8', function(err, data){
-					fileURL = fileURL.replace(/\\/g, '/');
-					if(!data.match(fileURL)){
 
-						fileURL = 'https://' + fileURL;
+				let PATH = postObj.pagePath;
+				fs.readFile(sitemapLocation, 'utf8', function(err, data){
+
+					if(!data.match(PATH)){
+						PATH = req.headers.origin + PATH;
 						if(data){
-							data += require('os').EOL + fileURL; 
+							data += require('os').EOL + PATH; 
 						}else{
-							data = fileURL;
+							data = PATH;
 						}
 
 						fs.writeFileSync(sitemapLocation, data, {encoding: 'utf8'})
