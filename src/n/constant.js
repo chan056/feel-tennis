@@ -34,5 +34,6 @@ module.exports = {
 
     videoCoverSize: '210x118',
     avtarThumbWidth: 50,
-    indexPath: '/page/index.html'
+    indexPath: '/page/index.html',
+    site: 'www.yitube.cn'
 }

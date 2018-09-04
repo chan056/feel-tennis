@@ -1546,19 +1546,7 @@ let operations = {
 		let pagePath = postObj.pagePath;
 		let pageContent = postObj.pageContent;
 
-		// // /albums/13 => albums.13
-		// let pagePath = pagePath.replace(/\//, '').replace(/\//g, '.');
-		// // albums.13 => albums._
-		// pagePath = pagePath.split('.').map((p)=>{
-		// 	if(p.match(/^\d+$/)){
-		// 		return '_'
-		// 	}else{
-		// 		return p
-		// 	}
-		// });
-
-		// pagePath = pagePath.join('.')
-
+		// /albums/13 => albums.13
 		pagePath = tools.transformPath(pagePath)
 
 		let fileStorePath = pathModule.resolve(global.staticRoot, `./page/spider/${pagePath}.html`)
@@ -1579,6 +1567,25 @@ let operations = {
 			if(result.affectedRows == 1){
 				res.statusMessage = 'update page success';
 				res.end();
+
+				// 更新到sitemap
+				const path = require('path');
+				let sitemapLocation = path.resolve(global.staticRoot, 'sitemap.txt');
+				let fileURL = path.join(req.headers.origin, `page/spider/${pagePath}.html`)
+				fs.readFile(sitemapLocation, 'utf8', function(err, data){
+					fileURL = fileURL.replace(/\\/g, '/');
+					if(!data.match(fileURL)){
+
+						fileURL = 'https://' + fileURL;
+						if(data){
+							data += require('os').EOL + fileURL; 
+						}else{
+							data = fileURL;
+						}
+
+						fs.writeFileSync(sitemapLocation, data, {encoding: 'utf8'})
+					}
+				})
 			}else{
 				res.end();
 			}

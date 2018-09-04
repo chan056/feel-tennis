@@ -202,14 +202,15 @@ function resolveRefererHost(referer){
 function transformPath(pagePath){
 	// /albums/13 => albums.13
 	pagePath = pagePath.replace(/\//, '').replace(/\//g, '.');
+	return pagePath;
 	// albums.13 => albums._
-	pagePath = pagePath.split('.').map((p)=>{
+	/* pagePath = pagePath.split('.').map((p)=>{
 		if(p.match(/^\d+$/)){
 			return '_'
 		}else{
 			return p
 		}
-	});
+	}); */
 
 	return pagePath.join('.')
 }
