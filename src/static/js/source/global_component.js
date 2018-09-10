@@ -35,7 +35,6 @@ module.exports = function(){
     let guideRoute = require('./guide_routes.js');
 
     Vue.component('AppGuide',{
-        // v-bind="guideRoutes"// 传入guideRoutes所有属性 如 fundSteps
         data: function(){
             return {
                 guideDialogVisible: false,
@@ -88,11 +87,15 @@ module.exports = function(){
             function bidnGuideEvent(item){
                 let guider = getGuider();
                 if(guider.indexOf(item.name) == -1){
-                    let triggerType = item.triggerType || 'click';
-                    if(item.delegator){
-                        $(item.delegator).one(triggerType, item.tar, evt);
+                    if(item.tar){
+                        let triggerType = item.triggerType || 'click';
+                        if(item.delegator){
+                            $(item.delegator).one(triggerType, item.tar, evt);
+                        }else{
+                            $(item.tar).one(triggerType, evt);
+                        }
                     }else{
-                        $(item.tar).one(triggerType, evt);
+                        evt();
                     }
                 }
 
@@ -107,7 +110,7 @@ module.exports = function(){
 
                     setTimeout(function(){
                         t.guide();
-                    }, 100)
+                    }, 300)
 
                     let guider = getGuider();
                     guider.push(item.name)
@@ -153,6 +156,7 @@ module.exports = function(){
 
                 let routeStep = t.route[t.routeIndex];
                 t.guideCursor = $('#guide-cursor');
+
                 if(!routeStep.direction){
                     t.guideCursor.hide();
                     return;

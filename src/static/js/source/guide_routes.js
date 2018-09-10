@@ -1,4 +1,37 @@
 module.exports = {
+    evtInfo: [{
+        title: '注册',
+        name: 'regist',
+    },{
+        title: '资助',
+        name: 'fund',
+        tar: '#guide-fund-1',
+        delegator: '',
+        // triggerType
+    },{
+        title: '竞赛',
+        name: 'compete',
+        tar: '#guide-compete-1',
+        delegator: ''
+    },{
+        title: '视频播放',
+        name: 'video',
+        tar: '.video-thumb',
+        delegator: 'body'
+    }],
+
+
+    regist: [
+        {
+            selector: '#usr-btns', 
+
+            lines: `
+                注册人口在这<i class="fa fa-handshake-o"></i>
+            `,
+            direction: 'up'
+        }
+    ],
+
     fund: [
         {
             selector: '#guide-fund-1', 
@@ -70,21 +103,5 @@ module.exports = {
         },
     ],
 
-    evtInfo: [{
-        title: '资助',
-        name: 'fund',
-        tar: '#guide-fund-1',
-        delegator: '',
-        // triggerType
-    },{
-        title: '竞赛',
-        name: 'compete',
-        tar: '#guide-compete-1',
-        delegator: ''
-    },{
-        title: '视频播放',
-        name: 'video',
-        tar: '.video-thumb',
-        delegator: 'body'
-    }]
+    
 }

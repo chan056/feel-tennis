@@ -20,7 +20,7 @@ $(function () {
 					</div>
 					<br class="clr">
 				</div>
-				<AppGuide v-bind="guideRoutes"/>
+				<AppGuide/>
 			</div>
 		`,
 		components: {
