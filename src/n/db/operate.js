@@ -1585,6 +1585,10 @@ let operations = {
 			let sitemapLocation = pathModule.resolve(global.staticRoot, 'sitemap.txt');
 
 			fs.readFile(sitemapLocation, 'utf8', function(err, data){
+				if(!data){
+					return
+				}
+				
 				let PATH = req.headers.origin + postObj.pagePath;// https://www.yitube.cn/albums/13 
 				let eol  = require('os').EOL;
 				data = data.split(eol);

@@ -701,7 +701,7 @@ module.exports = function(){
                             <el-upload
                                 v-if="datumForm.editable"
                                 class=""
-                                action="/upload"
+                                action="/api/upload"
                                 :data="{type:'img'}"
                                 :on-success="handleUploadSuccess"
                                 v-model="datumForm.unstableDatum.avatar"
@@ -817,7 +817,7 @@ module.exports = function(){
                     <el-form-item label="">
                         <el-upload
                             class="upload-demo"
-                            action="/upload"
+                            action="/api/upload"
                             :data="{type:'img'}"
                             :on-remove="handleRemove"
                             :on-success="handleSuccess"
