@@ -236,25 +236,26 @@ module.exports = function(){
 					if(!err){
 						var name = $.trim(t.resetPswForm.name);
 
-						t.$alert(`确认重置密码?`, '注意', {
+						t.$confirm(`确认重置密码?`, '注意', {
 							confirmButtonText: '确定',
-							callback: function (action) {
-								tools.xhr('/retrievePswEmail', function(res){
-									t.$message({
-										type: 'info',
-										message: res
-									});
-
-									// t.resetPswForm.visible = false; 
-								}, 'patch', {
-									usrname: name
-								}, function(){
-									t.$message({
-										type: 'warning',
-										message: `密码重置邮件发送失败`
-									});
+							cancelButtonText: '取消',
+						}).then(()=>{
+							tools.xhr('/retrievePswEmail', function(res){
+								t.$message({
+									type: 'info',
+									message: res
 								});
-							}
+
+							}, 'patch', {
+								usrname: name
+							}, function(){
+								t.$message({
+									type: 'warning',
+									message: `密码重置邮件发送失败`
+								});
+							});
+						}).catch(()=>{
+							
 						});
 					}
 				})
@@ -290,27 +291,30 @@ module.exports = function(){
 				const t = this;
 				let trim = $.trim;
 
-				this.$alert(`确认将密码修改为${t.resetPswForm.npsw}?`, '注意', {
+				this.$confirm(`确认将密码修改为${t.resetPswForm.npsw}?`, '注意', {
 					confirmButtonText: '确定',
-					callback: function (action) {
-						tools.xhr('/resetPsw', function(res){
-							t.$message({
-								type: 'info',
-								message: `密码修改成功`
-							});
-
-							t.resetPswForm.visible = false; 
-						}, 'patch', {
-							name: trim(t.resetPswForm.name),
-							opsw: md5(trim(t.resetPswForm.opsw)),
-							npsw: md5(trim(t.resetPswForm.npsw))
-						}, function(){
-							t.$message({
-								type: 'warning',
-								message: `密码修改失败`
-							});
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(()=>{
+					tools.xhr('/resetPsw', function(res){
+						t.$message({
+							type: 'info',
+							message: `密码修改成功`
 						});
-					}
+
+						t.resetPswForm.visible = false; 
+					}, 'patch', {
+						name: trim(t.resetPswForm.name),
+						opsw: md5(trim(t.resetPswForm.opsw)),
+						npsw: md5(trim(t.resetPswForm.npsw))
+					}, function(){
+						t.$message({
+							type: 'warning',
+							message: `密码修改失败`
+						});
+					});
+				}).catch(()=>{
+
 				});
 			},
 
@@ -2416,43 +2420,49 @@ module.exports = function(){
 
 			// 继承当前查看的终稿
 			inheritCaption: function(){
-				this.$alert('继承字幕会丢失之前的草稿和已经发布的终稿，确定继承？', '提示', {
+				this.$confirm('继承字幕会丢失之前的草稿和已经发布的终稿，确定继承？', '提示', {
 					confirmButtonText: '确定',
-					callback: function(){
-						// console.log(this.videoId, this.draft)
-						tools.xhr('/caption/inherition' , function(){
-							this.$message({
-								message: `字幕继承成功`,
-								type: 'success'
-							})
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(()=>{
+					tools.xhr('/caption/inherition' , function(){
+						this.$message({
+							message: `字幕继承成功`,
+							type: 'success'
+						})
 
-							this.listDrafts();
-						}.bind(this), 'post', {
-							vId: this.videoId,
-							draft: this.draft
-						});
-					}.bind(this)
+						this.listDrafts();
+					}.bind(this), 'post', {
+						vId: this.videoId,
+						draft: this.draft
+					});
+				}).catch(()=>{
+
 				});
 			},
 
 			// 审核当前查看的终稿
 			auditCaption: function(){
-				this.$alert('审核通过？', '提示', {
+				this.$confirm('审核通过？', '提示', {
 					confirmButtonText: '确定',
-					callback: function(){
-						// console.log(this.videoId, this.draft)
-						tools.xhr('/caption/audition' , function(){
-							this.$message({
-								message: `字幕已通过审核,会作为视频默认字幕`,
-								type: 'success'
-							})
+					cancelButtonText: '取消',
+					type: 'warning',
+				}).then(()=>{
+					tools.xhr('/caption/audition' , function(){
+						this.$message({
+							message: `字幕已通过审核,会作为视频默认字幕`,
+							type: 'success'
+						})
 
-							// this.listDrafts();
-						}.bind(this), 'post', {
-							vId: this.videoId,
-							draft: this.draft
-						});
-					}.bind(this)
+					}.bind(this), 'post', {
+						vId: this.videoId,
+						draft: this.draft
+					});
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '审核已取消'
+					});
 				});
 			},
 

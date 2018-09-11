@@ -1013,6 +1013,7 @@ module.exports = function(){
                                         <el-input
                                             class="caption-ipt"
                                             type="textarea"
+                                            :disabled="Boolean(draft)"
                                             :rows="2"
                                             placeholder="请输入字幕"
                                             v-model="caption.text">

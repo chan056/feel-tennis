@@ -1695,7 +1695,7 @@ let operations = {
 				res.statusMessage = 'reset password success';
 				res.end();
 			}else{
-				res.statusCode = 401;
+				res.statusCode = 350;
 				res.statusMessage = 'reset password fail';
 				res.end();
 			}
@@ -1765,25 +1765,6 @@ let operations = {
 				res.end();
 			}
 		})
-	},
-
-	resetPsw: function(res, patchObj, req){
-		let sql = `update usr set psw='${patchObj.npsw}' where psw='${patchObj.opsw}' and name='${patchObj.name}'`;
-		// console.log(sql);
-		
-		conn.query(sql, function(err, result){
-			if(err)
-				console.log( err );
-
-			if(result.affectedRows == 1){
-				res.statusMessage = 'reset password success';
-				res.end();
-			}else{
-				res.statusCode = 401;
-				res.statusMessage = 'reset password fail';
-				res.end();
-			}
-		});
 	},
 
 	updateUsrDatum: function(res, patchObj, req){
