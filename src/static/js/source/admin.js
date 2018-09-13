@@ -120,7 +120,7 @@ temp.uploadAdmin =  `
                 <el-upload
                     v-show="videoEditable"
                     class="upload-demo"
-                    action="/upload"
+                    action="/api/upload"
                     accept="video/*"
                     :data="{type:'video'}"
                     :on-preview="handlePreview"
@@ -146,7 +146,7 @@ temp.uploadAdmin =  `
                 <el-upload
                     v-show="videoEditable"
                     class="upload-demo"
-                    action="/upload"
+                    action="/api/upload"
                     accept=".srt"
                     :data="{type:'subtitle'}"
                     :on-remove="handleSubtitleRemove"
@@ -237,7 +237,7 @@ temp.uploadAdmin =  `
                 <el-form-item label="" v-if="!aId">
                     <el-upload
                         class="album-cover-uploader"
-                        action="/upload"
+                        action="/api/upload"
                         :data="{type:'img'}"
                         :on-remove="handleAlbumCoverRemove"
                         :on-success="handleAlbumCoverSuccess"
@@ -252,7 +252,7 @@ temp.uploadAdmin =  `
                     <el-upload
                         v-show="albumEditable"
                         class="album-cover-uploader"
-                        action="/upload"
+                        action="/api/upload"
                         :data="{type:'img'}"
                         :on-remove="handleAlbumCoverRemove"
                         :on-success="handleAlbumCoverSuccess"
@@ -397,11 +397,11 @@ COMPONENTS.UploadAdmin = {
 	},
 	methods: {
         backToAlbumList: function(){
-            location.href="#/albumsAdmin";
+            this.$router.push({ path: 'albumsAdmin'})
         },
         
         backToSportList: function(){
-            location.href="#/sportsAdmin";
+            this.$router.push({ path: 'sportsAdmin'})
         },
 
 		handleVideoRemove(file, fileList) {
@@ -650,7 +650,8 @@ COMPONENTS.UploadAdmin = {
 					type: 'success'
                 });
                 this.albumEditable = false;
-                location.href="#/albumsAdmin"
+                
+                this.$router.push({ path: 'albumsAdmin'})
 			}.bind(this), 'put', this.newAlbum, function(){
                 this.$message({
 					message: '更新出错',
@@ -665,7 +666,8 @@ COMPONENTS.UploadAdmin = {
 					message: '更新成功',
 					type: 'success'
                 });
-                location.href="#/sportsAdmin"
+
+                this.$router.push({ path: 'albumsAdmin'})
 			}.bind(this), 'put', this.newSport, function(){
                 this.$message({
 					message: '更新出错',
@@ -1032,7 +1034,6 @@ COMPONENTS.VideosAdmin = {
             }else{
                 this.$router.push({ path: 'uploadAdmin', query: { vId: id, isIntroductory: isIntroductory }})
             }
-            // location.href = `#/uploadAdmin?vId=${id}`;
         },
         
         deleteVideo: function(id){
@@ -1199,7 +1200,7 @@ COMPONENTS.AlbumsAdmin = {
         },
 
         patchAlbum: function(id){
-            location.href = `#/uploadAdmin?aId=${id}`;
+            this.$router.push({ path: 'uploadAdmin', query: { aId: id } })
         },
         
         deleteAlbum: function(id){
@@ -1220,7 +1221,7 @@ COMPONENTS.AlbumsAdmin = {
         },
 
         redirect: function(id){
-            location.href="#/albums/"+id;
+            this.$router.push({ path: "/albums/" + id })
         }
 	},
 
@@ -1315,7 +1316,7 @@ COMPONENTS.SportsAdmin = {
         },
 
         patchSport: function(id){
-            location.href = `#/uploadAdmin?sId=${id}`;
+            this.$router.push({ path: `/uploadAdmin?sId=${id}`, query: { sId: id }})
         },
         
         deleteSport: function(id){
@@ -1336,7 +1337,7 @@ COMPONENTS.SportsAdmin = {
         },
 
         redirect: function(id){
-            location.href="#/sports/"+id;
+            this.$router.push({ path: 'sports/' + id})
         }
 	},
 

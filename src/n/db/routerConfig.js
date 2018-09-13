@@ -572,7 +572,7 @@ const routerConfig = {
         
             form.on('end', function() {
                 var d = {
-                    absPath: absPath,// 不能返回路径todo，会暴露服务器信息
+                    absPath: absPath,
                     relPath: relPath
                 }
                 res.end(JSON.stringify(d));
