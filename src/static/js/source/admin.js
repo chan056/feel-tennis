@@ -927,6 +927,7 @@ temp.videosAdmin =  `
             layout="prev, pager, next"
             :total="total"
             :page-size="pageSize"
+            :current-page="Number(curPage)"
             @current-change="fetchVideos">
         </el-pagination>
 
@@ -966,6 +967,7 @@ temp.videosAdmin =  `
             layout="prev, pager, next"
             :total="totalIntro"
             :page-size="pageSizeIntro"
+            :current-page="Number(curPageIntro)"
             @current-change="fetchIntroVideos">
         </el-pagination>
     </div>
@@ -995,6 +997,8 @@ COMPONENTS.VideosAdmin = {
                 this.videos = res.datalist;
                 this.total = res.total;
                 this.curPage = pageNum;
+
+                this.$router.push({ path: 'videosAdmin', query: { p1: this.curPage, p2: this.curPageIntro }})
 			}.bind(this), 'get', {
                 pageNum: pageNum - 1,
                 pageSize: this.pageSize
@@ -1014,6 +1018,8 @@ COMPONENTS.VideosAdmin = {
                 this.videosIntro = res.datalist;
                 this.totalIntro = res.total;
                 this.curPageIntro = pageNum;
+
+                this.$router.push({ path: 'videosAdmin', query: { p1: this.curPage, p2: this.curPageIntro }})
 			}.bind(this), 'get', {
                 pageNum: pageNum - 1,
                 pageSize: this.pageSizeIntro
@@ -1076,7 +1082,6 @@ COMPONENTS.VideosAdmin = {
         },
 
         toggle: function(id, hidden, e){
-            console.log(e.target)
             tools.xhr('/toggleVideo', function(res){
                 this.fetchVideos(this.curPage)
             }.bind(this), 'patch', {
@@ -1089,9 +1094,15 @@ COMPONENTS.VideosAdmin = {
     template: temp.videosAdmin,
     
     mounted: function(){
+        let p1 = this.$route.query.p1 || 1;
+        let p2 = this.$route.query.p2 || 1;
+
+        // this.curPage = p1 || 1;
+        // this.curPageIntro = p2 || 1;
+
         tools.togglePageIE(this);
-        this.fetchVideos(1);
-        this.fetchIntroVideos(1);
+        this.fetchVideos(p1);
+        this.fetchIntroVideos(p2);
     }
 };
 
