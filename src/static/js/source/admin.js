@@ -752,23 +752,33 @@ temp.feedbacksAdmin =  `
             </el-table-column>
             <el-table-column
                 prop="description"
-                label="描述">
+                label="描述"
+                :show-overflow-tooltip="true"
+                >
             </el-table-column>
             <el-table-column
                 prop="site"
-                label="网址">
+                label="网址"
+                :show-overflow-tooltip="true"
+                >
             </el-table-column>
             <el-table-column
                 prop="wechat"
-                label="微信">
+                label="微信"
+                :show-overflow-tooltip="true"
+                >
             </el-table-column>
             <el-table-column
                 prop="email"
-                label="邮件">
+                label="邮件"
+                :show-overflow-tooltip="true"
+                >
             </el-table-column>
             <el-table-column
                 prop="files"
-                label="文件">
+                label="文件"
+                :show-overflow-tooltip="true"
+                >
             </el-table-column>
             <el-table-column
                 fixed="right"
@@ -893,6 +903,7 @@ temp.videosAdmin =  `
         <el-table
         :data="videos"
         :row-class-name="tableRowStatus"
+        :highlight-current-row=true
         style="width: 100%">
             <el-table-column
                 prop="id"
@@ -905,7 +916,9 @@ temp.videosAdmin =  `
             </el-table-column>
             <el-table-column
                 prop="headline"
-                label="headline">
+                label="headline"
+                :show-overflow-tooltip="true"
+                >
             </el-table-column>
             <el-table-column
                 prop="tag"
@@ -945,7 +958,9 @@ temp.videosAdmin =  `
 
             <el-table-column
                 prop="headline"
-                label="headline">
+                label="headline"
+                :show-overflow-tooltip="true"
+                >
             </el-table-column>
 
             <el-table-column
@@ -1137,7 +1152,9 @@ temp.albumsAdmin =  `
             </el-table-column>
             <el-table-column
                 prop="name"
-                label="标题">
+                label="标题"
+                :show-overflow-tooltip="true"
+                >
             </el-table-column>
             <el-table-column
                 prop="tag"

@@ -74,3 +74,4 @@ typings/
 .env
 
 src/static/js/tube.js
+src/static/js/sport_intro.js
