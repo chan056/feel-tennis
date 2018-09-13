@@ -808,7 +808,7 @@ let operations = {
 
 				let json = JSON.stringify({
 					datalist: list,
-					total: result[0].count * 10
+					total: result[0].count
 				});
 
 				res.end(json);
