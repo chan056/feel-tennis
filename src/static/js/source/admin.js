@@ -500,7 +500,6 @@ COMPONENTS.UploadAdmin = {
 
 		postMaker(){
 			tools.xhr('/maker', function(){
-				console.log(arguments);
 				this.$message({
 					message: '制作者创建成功',
 					type: 'success'
