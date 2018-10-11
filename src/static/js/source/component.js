@@ -153,9 +153,9 @@ module.exports = function(){
 			handlerRegist: function(){
 				this.registForm.visible = true;
 
-				tools.insertScriptTag(1, "../lib/captcha.js", {onload: function(){
-					tools.insertScriptTag(2, FRAGMENTS.captcha, {id: 'captcha-frag'});
-				}.bind(this), id: 'captcha'});
+				// tools.insertScriptTag(1, "../lib/captcha.js", {onload: function(){
+				// 	tools.insertScriptTag(2, FRAGMENTS.captcha, {id: 'captcha-frag'});
+				// }.bind(this), id: 'captcha'});
 
 				tools.insertScriptTag(1, '../lib/md5.js', 'md5');
 			},

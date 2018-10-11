@@ -587,7 +587,7 @@ const routerConfig = {
                 r.post('createFeedback', req, res);
             },
 
-            limit: {level: 100}
+            limit: {level: 10}
         },
     
         '/voteNext': {

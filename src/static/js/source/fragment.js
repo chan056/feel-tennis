@@ -63,6 +63,9 @@ module.exports = function(){
                 if(!$('.jCaptcha').siblings('.jCaptchaText').length){
                     var myCaptcha = new jCaptcha({
                         callback: function(response, $captchaInputElement) {
+                            alert(response)
+                            alert($captchaInputElement[0].value)
+                            // console.log($captchaInputElement)
                             if (response == 'success') {
                                 $('#regist-btn').show();
                             }else if (response == 'error') {
@@ -73,6 +76,7 @@ module.exports = function(){
                     });
             
                     $('.jCaptcha').on('blur', function(e) {
+                        alert('blur')
                         e.preventDefault();
                         myCaptcha.validate();
                     });

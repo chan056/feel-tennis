@@ -342,6 +342,7 @@ app {
 }
 .tags {
   margin-bottom: 30px;
+  min-height: 30px;
 }
 .tags .el-tag {
   margin-right: 10px;
@@ -434,9 +435,6 @@ app {
 #about pre {
   white-space: pre-line;
   font-size: 1.4rem;
-}
-#regist-btn {
-  display: none;
 }
 .feedback-wrapper {
   max-width: 500px !important;

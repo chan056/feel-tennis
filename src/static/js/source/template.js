@@ -81,9 +81,9 @@ module.exports = function(){
                         <el-form-item label="邮箱" :label-width="registForm.formLabelWidth" prop="email">
                             <el-input type="email" v-model="registForm.email" auto-complete="off"></el-input>
                         </el-form-item>
-                        <el-form-item label="" :label-width="registForm.formLabelWidth" prop="captcha">
+                        <!--<el-form-item label="" :label-width="registForm.formLabelWidth" prop="captcha">
                             <input v-model="registForm.captcha" class="jCaptcha" placeholder="请输入计算结果"/>
-                        </el-form-item>
+                        </el-form-item>-->
                     </el-form>
                     <div slot="footer" class="dialog-footer">
                         <el-button type="primary" @click="resetForm('registForm');">重 置</el-button>
