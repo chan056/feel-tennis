@@ -582,12 +582,16 @@ const routerConfig = {
             form.parse(req);
         },
     
-        '/feedback': {
-            fn: function(req, res){
-                r.post('createFeedback', req, res);
-            },
+        // '/feedback': {
+        //     fn: function(req, res){
+        //         r.post('createFeedback', req, res);
+        //     },
 
-            limit: {level: 10}
+        //     // limit: {level: 10}
+        // },
+
+        '/feedback': function(req, res){
+            r.post('createFeedback', req, res);
         },
     
         '/voteNext': {
