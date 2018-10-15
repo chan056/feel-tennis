@@ -59,7 +59,10 @@ module.exports = function(req, res) {
 
 		function serveStatic(){
 			// 域名限制
-			if(ext == 'm3u8' || ext == 'mp4'){
+			if(
+				ext == 'm3u8' || ext == 'mp4' || ext == 'ts'
+				|| ext == 'vtt' || ext == 'srt'
+			){
 				let referer = req.headers.referer || '';
 				if(!referer)
 					return res.end();
@@ -88,10 +91,14 @@ module.exports = function(req, res) {
 				file.pipe(res);
 			}
 
-			res.writeHead(200, {
+			let responseHeader = {
 				'Content-Type': contentType,
-				// 'Cache-Control': 'max-age=3600'
-			});
+			};
+			
+			// 'Cache-Control': 'max-age=3600'
+			// console.log(urlObj);
+
+			res.writeHead(200, responseHeader);
 
 			res.pipe(file);
 		}
