@@ -868,6 +868,8 @@ module.exports = function(){
 					_this.capture();
 				}
 
+				window.vEle.play();
+
 				// 倒计时
 				function countdown(){
 					let t = 10;
@@ -2370,23 +2372,34 @@ module.exports = function(){
 
 			saveSrt: function(isFinal, auto){
 				if(isFinal){
-					// 发布时 清空每一行两端的空字符 清空全是英文或者空行
-					var j = 0;
-					this.captions.forEach((caption, i)=>{
-						caption.text = caption.text.trim();
-						const reg = /^[\w'-\s]+$/;
-						if(!caption.text || caption.text.match(reg)){
-							// console.log(caption.text)
-							this.captions.splice(i, 1);
-							i --;
-							j ++
-						}
-					})
+					// 发布时 
+					// 清空每一行两端的空字符 
+					// 清空无汉字的行
+					let captionCopy = [];
+					const kanji = /[\u4e00-\u9fa5]/;
 
-					j && this.$message({
-						message: '字幕已清理',
-						type: 'info'
-					});
+					for(var i = 0; i < this.captions.length; i++){
+						var caption = this.captions[i];
+						caption.text = caption.text.trim();
+
+						if(
+							caption.text &&
+							caption.text.match(kanji)
+						){
+							captionCopy.push(caption)
+						}
+					}
+
+					if(captionCopy.length < this.captions.length){
+						setTimeout(()=>{
+							this.$message({
+								message: '字幕已清理',
+								type: 'info'
+							});
+						}, 2000)
+					}
+					
+					this.captions = captionCopy;
 				}
 
 				tools.xhr('/srt/' + this.videoId, function(){
@@ -3009,7 +3022,7 @@ module.exports = function(){
 
 			setInterval(()=>{
 				if(!this.clear){
-					this.saveSrt(false, true);
+					this.saveSrt(0);
 				}
 			}, 5 * 60 * 1000)
 
