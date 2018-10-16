@@ -383,10 +383,10 @@ app {
   position: fixed;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%) scale(0.1);
+  transform: translate(-50%, -50%) scale(0.01);
   opacity: 1;
   background-color: transparent;
-  transition: .7s ease 0s;
+  transition: transform 1s ease 0s, opacity 1s ease 0s;
 }
 #enshrine-btn {
   position: relative;

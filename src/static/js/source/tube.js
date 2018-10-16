@@ -58,7 +58,7 @@ $(function () {
 			return next();
 		}
 
-		if(isMapper){
+		if(loginUsrInfo && isMapper){
 			recordPage();
 			sitePush();
 		}else{

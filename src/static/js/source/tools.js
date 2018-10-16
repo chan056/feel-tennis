@@ -227,19 +227,16 @@ let tools = {
         
         let s = '';
 
-        // if(ms){
-            let minute = Math.floor(ms / minuteMs);
+        let minute = Math.floor(ms / minuteMs);
 
-            let minuteSecond = ms % minuteMs;
+        let minuteSecond = ms % minuteMs;
 
-            let second = (minuteSecond / secondMS).toFixed(1);
-            if(second < 10)
-                second = '0' + second;
+        let second = (minuteSecond / secondMS).toFixed(1);
+        if(second < 10)
+            second = '0' + second;
 
-            return `${minute}:${second}`;
-        // }
+        return `${minute}:${second}`;
 
-        return '';
     },
 
     togglePageIE: function(t){

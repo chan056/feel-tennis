@@ -109,10 +109,8 @@ module.exports = function(){
 
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						location.hash = "#/searchedVideos?headline=" + this.searchForm.name;
-						t.searchForm.name = '';
+						this.$router.push({ path: 'searchedVideos', query: { headline: this.searchForm.name}})
 					} else {
-						// console.log('error submit!!');
 						return false;
 					}
 				});
@@ -1053,10 +1051,14 @@ module.exports = function(){
 			// 开场动画
 			opening: function(e){
 				var t = $(e.target);
-				t.css({opacity: 0, transform: 'translate(-50%, -50%) scale(5)'});
-				setTimeout(function(){
+
+				setTimeout(()=>{
+					t.css({opacity: 0, transform: 'translate(-50%, -50%) scale(5)'});
+				}, 300)
+
+				setTimeout(() => {
 					t.hide()
-				}, 700)
+				}, 300 + 800)
 			},
 
 			submitNewStarForm: function(formName){
@@ -1207,14 +1209,20 @@ module.exports = function(){
 
 			return d;
 		},
+
 		template: temp.searchedvideos,
-		created() {
-			
-		},
+
 
 		mounted(to, from, next) {
 			this.fetchVideolist(0);
 			tools.togglePageIE(this);
+		},
+
+		beforeRouteUpdate(to, from, next){
+			this.$nextTick(()=>{
+				this.fetchVideolist(0);
+			})
+			next();
 		},
 
 		methods: {
