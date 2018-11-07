@@ -1,0 +1,44 @@
+/* reset */
+body,
+ul,
+li {
+  margin: 0;
+  padding: 0;
+}
+li {
+  list-style: none;
+}
+/* commmom */
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.clr {
+  clear: both;
+}
+.ovh {
+  overflow: hidden;
+}
+.hori-list li {
+  float: left;
+}
+.hori-list::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+/* detail */
+body {
+  max-width: 970px;
+  margin: auto;
+  background-color: #e0ebe8;
+  text-align: center;
+}
+header {
+  overflow: hidden;
+}
+#logo {
+  width: 75px;
+}

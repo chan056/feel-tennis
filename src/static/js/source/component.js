@@ -861,12 +861,14 @@ module.exports = function(){
 					_this.captureParams.st = _this.getVideoTime();
 
 					countdown();
+
+					window.vEle.play();
 				}else{
 					clearCountdown();
 					_this.capture();
-				}
 
-				window.vEle.play();
+					window.vEle.pause();
+				}
 
 				// 倒计时
 				function countdown(){
