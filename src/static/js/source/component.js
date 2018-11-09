@@ -109,7 +109,7 @@ module.exports = function(){
 
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						this.$router.push({ path: 'searchedVideos', query: { headline: this.searchForm.name}})
+						this.$router.push({ path: '/searchedVideos', query: { headline: this.searchForm.name}})
 					} else {
 						return false;
 					}
@@ -560,9 +560,16 @@ module.exports = function(){
 		template: temp.sports,
 
 		mounted: function(){
-			this.fetchSports(0);
 			
 			tools.togglePageIE(this)
+
+			this.fetchSports(0);
+		},
+
+		watch: {
+			'$route.query.pageNum': function (pageNum) {
+				this.fetchSports(pageNum? pageNum - 1 : 0);
+			}
 		},
 
 		methods: {
@@ -577,7 +584,7 @@ module.exports = function(){
 			},
 
 			handlePageChange: function(i){
-				this.fetchSports(i-1);
+				this.$router.push({path: `/sports`, query: {pageNum: i}});
 			},
 
 		}
@@ -639,7 +646,7 @@ module.exports = function(){
 				total: 0,
 				pageSize: CONSTANT.PAGESIZE
 			};
-
+// console.log(this.albumId)
 			tools.xhr('/navInfo/2/' + this.albumId, function(res){
 				d.crumb = res[0];
 			});
