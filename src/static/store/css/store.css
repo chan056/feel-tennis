@@ -2,7 +2,7 @@
   box-sizing: border-box;
 }
 div {
-  border: 1px solid #000;
+  border: 1px solid rgba(1, 1, 1, 0);
 }
 html {
   height: 100%;

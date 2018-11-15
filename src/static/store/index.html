@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="创造独一无二的个人站点">
+    <meta name="keywords" content="网站开发,个人站点,服务外包">
     <title>INDEX</title>
     <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="./css/store.css">
@@ -48,6 +50,18 @@
                 <img class="case-cover" src="./img/case/3.jpg" alt="">
             </div>
         </div>
-</div>
+    </div>
+    <script src="/js/sport_intro.js"></script>
+    <script>
+        tools.xhr('/isMapper', function(res){
+            isMapper = res;
+            if(isMapper){
+                tools.xhr('/pageRecoder', function(res){
+                }, 'post', {
+                    pagePath: location.pathname,
+                });
+            }
+        });
+    </script>
 </body>
 </html>
