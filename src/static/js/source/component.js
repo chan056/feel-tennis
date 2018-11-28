@@ -124,7 +124,6 @@ module.exports = function(){
 					'login': this.handlerLogin,
 					'regist': this.handlerRegist,
 					'datum': ()=>{
-						console.log(this, this.$location)
 						this.$router.push({name: 'datum'})
 					},
 					'logout': this.handlerLogout
@@ -644,9 +643,10 @@ module.exports = function(){
 				crumb: {}, 
 				tags:[],
 				total: 0,
-				pageSize: CONSTANT.PAGESIZE
+				pageSize: CONSTANT.PAGESIZE,
+				curPage: 1// 1 第一页
 			};
-// console.log(this.albumId)
+
 			tools.xhr('/navInfo/2/' + this.albumId, function(res){
 				d.crumb = res[0];
 			});
@@ -659,12 +659,11 @@ module.exports = function(){
 		},
 		template: temp.album,
 		methods: {
-			fetchAlbumVideo: function(pageNum){
-				// console.log('fetchAlbumVideo')
+			fetchAlbumVideo: function(){
 				let api = '/albums/' + this.albumId + '/videos?sortBy=id&sort=desc';
-				
+				var page = this.curPage;
 				let req = {
-					pageNum: pageNum,
+					pageNum: page - 1,
 					pageSize: this.pageSize,
 					hidden: 0
 				};
@@ -675,17 +674,26 @@ module.exports = function(){
 
 				tools.xhr(api, function(res){
 					this.albumVideoList = res.datalist;
+					
 					this.total = res.total;
+
+					var query = { page: page};
+					if(this.headline){
+						query.headline = this.headline
+					}
+					this.$router.push({ path: this.$route.path, query: query})
+
+					this.curPage = page;// ?需要重新赋值一次 todo
 				}.bind(this),'get', req);
 			},
 
 			handlePageChange: function(i){
-				this.fetchAlbumVideo(i-1);
+				this.curPage = i;
+				this.fetchAlbumVideo();
 			},
 
 			dynamivePreview: function(e){
 				$(e.target).attr('src', function(){
-					// console.log(arguments);
 					return arguments[1].replace('cover.jpg', 'd_cover.gif');
 				});
 			},
@@ -698,7 +706,10 @@ module.exports = function(){
 		},
 
 		mounted: function(){
-			this.fetchAlbumVideo(0);
+			this.curPage = Number(this.$route.query.page) || 1;
+			this.headline = this.$route.query.headline || '';
+
+			this.fetchAlbumVideo();
 
 			tools.togglePageIE(this);
 		},

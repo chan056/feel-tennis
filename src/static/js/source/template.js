@@ -13,17 +13,13 @@ module.exports = function(){
     
                     <el-col :span="10" id="search-form-wrapper">
                         <el-form :model="searchForm" :rules="searchFormRules" ref="searchForm"  class="" id="searchForm">
-                            <el-row>
-                                <el-col :span=20>
-                                    <el-form-item label="" prop="name">
-                                        <el-input class="searchBox" v-model="searchForm.name" @keyup.enter.native="submitForm('searchForm');"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span=4 class="header-search-btn">
-                                    <el-button style="width: 100%;" icon="el-icon-search" @click="submitForm('searchForm')"></el-button>
-                                </el-col>
-                            </el-row>
+                            <el-form-item label="" prop="name">
+                                <el-input placeholder="请输入内容" v-model="searchForm.name" @keyup.enter.native="submitForm('searchForm');">
+                                    <el-button slot="append" icon="el-icon-search" @click="submitForm('searchForm')"></el-button>
+                                </el-input>
+                            </el-form-item>
                         </el-form>
+                        
                     </el-col>
     
                     <el-col :span="6" class="masthead fr">
@@ -346,6 +342,7 @@ module.exports = function(){
                     layout="prev, pager, next"
                     :total="total"
                     :page-size="pageSize"
+                    :current-page.sync="curPage"
                     @current-change="handlePageChange">
                 </el-pagination>
             </div>
