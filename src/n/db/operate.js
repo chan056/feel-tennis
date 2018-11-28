@@ -120,7 +120,6 @@ let operations = {
 		conn.query(sql, function (err, list, fields) {
 			if (err) return throwError(err, res);
 		
-			console.log(qualification)
 			conn.query(`select count(*) as count from video ${qualification}`, function(err, result){
 
 				let json = JSON.stringify({

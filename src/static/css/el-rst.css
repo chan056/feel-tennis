@@ -6,7 +6,7 @@
 }
 @media screen and (max-width: 1000px) {
   .el-pager li {
-    font-size: 1.4rem;
+    font-size: 2.1rem;
   }
   .el-pagination .el-icon {
     font-size: 1.4rem !important;
@@ -47,5 +47,8 @@
   .el-dialog__body {
     font-size: 1.4rem;
     line-height: 1.5em;
+  }
+  #llc {
+    display: none !important;
   }
 }
