@@ -7,8 +7,8 @@
 
 @media screen and (max-width: 1000px) {
 	@fz: 1.4rem;
-	.el-pager li{
-		font-size: @fz * 1.5;
+	.el-pagination{
+		.el-pager >li, .btn-next, .btn-prev{font-size: @fz; width: @fz * 2; height: @fz * 2; line-height: @fz*2;}
 	}
 
 	.el-pagination .el-icon{

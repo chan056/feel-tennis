@@ -677,7 +677,7 @@ module.exports = function(){
 					
 					this.total = res.total;
 
-					var query = { page: page};
+					var query = {page: page};
 					if(this.headline){
 						query.headline = this.headline
 					}

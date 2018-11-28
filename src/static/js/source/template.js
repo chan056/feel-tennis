@@ -256,6 +256,7 @@ module.exports = function(){
                     </li>
                 </ul>
                 <el-pagination
+                    background
                     layout="prev, pager, next"
                     :total="total"
                     :page-size="pageSize"
@@ -290,6 +291,7 @@ module.exports = function(){
                     </li>
                 </ul>
                 <el-pagination
+                    background
                     layout="prev, pager, next"
                     :total="total"
                     :page-size="pageSize"
@@ -339,7 +341,9 @@ module.exports = function(){
                 </ul>
     
                 <el-pagination
+                    background
                     layout="prev, pager, next"
+                    :pager-count="5"
                     :total="total"
                     :page-size="pageSize"
                     :current-page.sync="curPage"
@@ -520,6 +524,7 @@ module.exports = function(){
                 </ul>
     
                 <el-pagination
+                    background
                     layout="prev, pager, next"
                     :total="total"
                     :page-size="pageSize"
@@ -539,6 +544,7 @@ module.exports = function(){
                     </li>
                 </ul>
                 <el-pagination
+                    background
                     layout="prev, pager, next"
                     :total="starTotal"
                     :page-size="pageSize"
@@ -558,6 +564,7 @@ module.exports = function(){
                 </ul>
     
                 <el-pagination
+                    background
                     layout="prev, pager, next"
                     :total="videoTotal"
                     :page-size="pageSize"
@@ -582,6 +589,7 @@ module.exports = function(){
                 </ul>
     
                 <el-pagination
+                    background
                     layout="prev, pager, next"
                     :total="total"
                     :page-size="pageSize"
@@ -608,6 +616,7 @@ module.exports = function(){
                 </ul>
     
                 <el-pagination
+                    background
                     layout="prev, pager, next"
                     :total="dynamicTotal"
                     :page-size="pageSize"
@@ -625,6 +634,7 @@ module.exports = function(){
                 </ul>
 
                 <el-pagination
+                    background
                     layout="prev, pager, next"
                     :total="staticTotal"
                     :page-size="pageSize"

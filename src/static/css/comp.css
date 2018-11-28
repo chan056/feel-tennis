@@ -132,8 +132,13 @@ img {
   margin: 3rem 0;
 }
 @media screen and (max-width: 1000px) {
-  .el-pager li {
-    font-size: 2.1rem;
+  .el-pagination .el-pager > li,
+  .el-pagination .btn-next,
+  .el-pagination .btn-prev {
+    font-size: 1.4rem;
+    width: 2.8rem;
+    height: 2.8rem;
+    line-height: 2.8rem;
   }
   .el-pagination .el-icon {
     font-size: 1.4rem !important;
