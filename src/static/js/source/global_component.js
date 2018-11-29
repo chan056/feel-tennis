@@ -1,24 +1,22 @@
 module.exports = function(){
-    // let tagCreatorConstructor = Vue.extend({
-    //     template: `
-    //         <el-dialog v-bind:title="config.title" :visible.sync="config.visibility">
-    //             <el-form>
-                    
-    //             </el-form>
-    //             <div slot="footer" class="dialog-footer">
-    //                 <el-button @click="config.visibility = false">取 消</el-button>
-    //                 <el-button type="primary" @click="config.visibility = false">确 定</el-button>
-    //             </div>
-    //         </el-dialog>`,
-    //     data: function () {
-    //         return {
-                
-    //         }
-    //     },
-    //     props:['config'],
-    // });
-    
-    // Vue.component('tagCreator', tagCreatorConstructor);
+    // CUSTOMIZED COMPONENT EXAMPLE
+    /*  Vue.component('Sortor', {
+        template: '<div></div>',
+        props: ['config'],
+        data: function(){
+            console.log(this.config);
+            return {};
+        },
+        mounted(){
+
+        },
+        methods: {
+            
+        }
+    }); */
+
+    // 操作引导的配置
+    let guideRoute = require('./guide_routes.js');
     
     // 时间的转换 如 2周之前 1天之前
     Vue.component('UpdateTime', {
@@ -31,8 +29,6 @@ module.exports = function(){
             };
         }
     });
-
-    let guideRoute = require('./guide_routes.js');
 
     Vue.component('AppGuide',{
         data: function(){
@@ -265,4 +261,23 @@ module.exports = function(){
     //         }
     //     },
     // });
+
+
+
+    Vue.component('Sortor', {
+        template: '<div>\
+        \
+        </div>',
+        props: ['config'],
+        data: function(){
+            console.log(this.config);
+            return {};
+        },
+        mounted(){
+
+        },
+        methods: {
+
+        }
+    });
 }
