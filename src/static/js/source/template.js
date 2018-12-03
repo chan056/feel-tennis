@@ -315,21 +315,17 @@ module.exports = function(){
                         </el-input>
                     </el-col>
                 </el-row>
-                <div class="clearfix sortor-line">
-                    <div class="fr sortor-wrapper">
-                        <Sortor :config="1"/>
-                        <div>
-                            <el-button icon="fa fa-sort-up">已翻译</el-button>
-                            <el-button icon="fa fa-sort-up">播放最多</el-button>
-                            <el-button icon="fa fa-sort-up">点赞率最高</el-button>
-                        </div>
-                    </div>
-                </div>
+                
                 <div class="tags">
                     <el-tag type="info" v-for="tag in tags" :key="tag.id">
                         <router-link :to="{path: '/searchedvideos?tagId=' + tag.id}">{{tag.name}}</router-link>
                     </el-tag>
                 </div>
+
+                <div class="clearfix sortor-line">
+                    <Sortor class="sortor-wrapper" :config="sortorConfig"/>
+                </div>
+
                 <ul class="block-list video-list">
                     <li v-for="video in albumVideoList" class="rel">
                         <router-link :to="{path: '/videos/'+ video.id }">

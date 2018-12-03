@@ -618,7 +618,7 @@ module.exports = function(){
 					pageNum: pageNum,
 					pageSize: this.pageSize,
 					sortBy: 'id',
-					sort: 'desc'
+					sortOrd: 'desc'
 				});
 			},
 
@@ -644,7 +644,22 @@ module.exports = function(){
 				tags:[],
 				total: 0,
 				pageSize: CONSTANT.PAGESIZE,
-				curPage: 1// 1 第一页
+				curPage: 1,// 1 第一页
+				sortBy: 'id',
+				sortOrd: 'desc',
+				sortorConfig: [{
+					name: '已翻译',
+					value: 'translated'
+				},{
+					name: '播放数',
+					value: 'impression'
+				},{
+					name: '点赞数',
+					value: 'support_time'
+				},{
+					name: '更新时间',
+					value: 'update_time'
+				}]
 			};
 
 			tools.xhr('/navInfo/2/' + this.albumId, function(res){
@@ -655,17 +670,22 @@ module.exports = function(){
 				d.tags = res;
 			});
 
+			d.sortorConfig.callback = this.fetchAlbumVideo;
+			d.sortorConfig.parentData = d;
+
 			return d;
 		},
 		template: temp.album,
 		methods: {
 			fetchAlbumVideo: function(){
-				let api = '/albums/' + this.albumId + '/videos?sortBy=id&sort=desc';
+				let api = '/albums/' + this.albumId + '/videos';
 				var page = this.curPage;
 				let req = {
 					pageNum: page - 1,
 					pageSize: this.pageSize,
-					hidden: 0
+					hidden: 0,
+					sortBy: this.sortBy,
+					sortOrd: this.sortOrd
 				};
 
 				if(this.headline){
@@ -691,6 +711,31 @@ module.exports = function(){
 				this.curPage = i;
 				this.fetchAlbumVideo();
 			},
+
+			/* sortVideo: function(e){
+				let t = e.target;
+				t = $(t);
+				if(!t.is('button')){
+					t = t.parents('button');
+				}
+
+				let sortBy = t.data('by');
+				this.sortBy = sortBy;
+
+				if(!t.is('.active')){
+					t.addClass('active el-button--primary').children('.fa').addClass('fa-chevron-down');
+					t.siblings().removeClass('active el-button--primary').children('.fa').removeClass('fa-chevron-up fa-chevron-down')
+					this.sortOrd = 'desc';
+				}else if(t.children('.fa').is('.fa-chevron-down')){
+					t.children('.fa').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+					this.sortOrd = 'asc';
+				}else if(t.children('.fa').is('.fa-chevron-up')){
+					t.children('.fa').removeClass('fa-chevron-up').addClass('fa-chevron-down')	
+					this.sortOrd = 'desc';
+				}
+
+				this.fetchAlbumVideo();
+			}, */
 
 			dynamivePreview: function(e){
 				$(e.target).attr('src', function(){

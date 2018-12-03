@@ -266,18 +266,38 @@ module.exports = function(){
 
     Vue.component('Sortor', {
         template: '<div>\
-        \
+            排序:&nbsp;&nbsp;\
+            <el-button v-for="item in config" icon="fa" size="small" :data-by="item.value" @click="sortVideo($event, config.callback, config.parentData)">{{item.name}} </el-button>\
         </div>',
         props: ['config'],
-        data: function(){
-            console.log(this.config);
-            return {};
-        },
         mounted(){
 
         },
         methods: {
+            sortVideo: function(e, callback, parentData){
+				let t = e.target;
+				t = $(t);
+				if(!t.is('button')){
+					t = t.parents('button');
+                }
 
+				let sortBy = t.data('by');
+				parentData.sortBy = sortBy;
+
+				if(!t.is('.active')){
+					t.addClass('active el-button--primary').children('.fa').addClass('fa-chevron-down');
+					t.siblings().removeClass('active el-button--primary').children('.fa').removeClass('fa-chevron-up fa-chevron-down')
+					parentData.sortOrd = 'desc';
+				}else if(t.children('.fa').is('.fa-chevron-down')){
+					t.children('.fa').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+					parentData.sortOrd = 'asc';
+				}else if(t.children('.fa').is('.fa-chevron-up')){
+					t.children('.fa').removeClass('fa-chevron-up').addClass('fa-chevron-down')	
+					parentData.sortOrd = 'desc';
+				}
+
+				callback();
+			},
         }
     });
 }

@@ -373,6 +373,15 @@ app {
   background-color: #ccc;
   padding: 2px 3px;
 }
+.sortor-line {
+  margin-bottom: 2rem;
+}
+.sortor-wrapper {
+  margin: 1rem 0;
+}
+.sortor-wrapper .fa {
+  margin-right: 5px;
+}
 #usr-operation-desk {
   margin: 30px 0px;
   width: 712px;

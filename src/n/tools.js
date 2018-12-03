@@ -30,8 +30,8 @@ function newQueryClause(params) {
 		if(i != 'pageNum' && i != 'pageSize'){
 			if(i == 'sortBy'){
 				sortBy = k;
-			}else if(i == 'sort'){
-				sort = k;
+			}else if(i == 'sortOrd'){
+				sortOrd = k;
 			}else{
 				n == 0?
 				qualification += i + '="' + k + '"':
@@ -46,8 +46,8 @@ function newQueryClause(params) {
 		qualification += ` order by ${sortBy}`;
 	}
 
-	if(sort){
-		qualification += ` ${sort}`;
+	if(sortOrd){
+		qualification += ` ${sortOrd}`;
 	}
 
 	qualification = qualification.replace(/'/g, '');
