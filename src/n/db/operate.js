@@ -1141,10 +1141,10 @@ let operations = {
 
 		if(postObj.isTutorial){
 			let sql = `INSERT INTO video 
-			(album_id, headline, headline_eng, tag, video_ext, update_time)
-			VALUES (?, ?, ?, ?, ?, ?)`;
+			(album_id, headline, headline_eng, tag, video_ext, update_time, translated)
+			VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
-			conn.query(sql, [postObj.albumId, postObj.headline, postObj.headlineEng, postObj.tag, ext, Date.now()], function(err, result, fields){
+			conn.query(sql, [postObj.albumId, postObj.headline, postObj.headlineEng, postObj.tag, ext, Date.now(), postObj.translated], function(err, result, fields){
 				if(err)
 					return throwError(err, res);
 

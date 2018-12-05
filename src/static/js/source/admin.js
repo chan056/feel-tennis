@@ -19,7 +19,7 @@ temp.uploadAdmin =  `
             <el-col :span="10">
                 <el-select 
                 :disabled="!videoEditable"
-                v-model="sport_id" 
+                v-model="sportId" 
                 clearable 
                 placeholder="请选择" 
                 @change="handleChooseSport">
@@ -158,6 +158,17 @@ temp.uploadAdmin =  `
                     <el-button size="small" type="primary">上传字幕</el-button>
                 </el-upload>
                 <el-input v-show="!videoEditable" :value="vId+'.srt'" disabled/>
+            </el-col>
+        </el-row>
+
+        <el-row>
+            <el-col :span="4">
+                <label>翻译</label>
+            </el-col>
+
+            <el-col :span="10">
+                <el-radio v-model="SO.translated" label="1">需要</el-radio>
+                <el-radio v-model="SO.translated" label="2">不需要</el-radio>
             </el-col>
         </el-row>
 
@@ -344,14 +355,15 @@ COMPONENTS.UploadAdmin = {
 
 		var d = {
             isTutorial: true,
-            sport_id: null,
+            sportId: null,
             SO: {
                 albumId: '',
                 headline: '',
                 headlineEng: '',
                 tag: '',
                 videoAbsPath: '',
-                subtitleAbsPath: ''
+                subtitleAbsPath: '',
+                translated: '1'
             }, 
 			albums: [], 
 			tags: [], 
@@ -447,22 +459,14 @@ COMPONENTS.UploadAdmin = {
         },
 
 		postVideo(){
-			let so = Object.assign({}, this.SO);
+            let so = Object.assign({}, this.SO);
             so.tag = this.SO.tag.join(',');
             
-            let api = '';
-
-            if(this.isTutorial){
-                so.isTutorial = 1;
-            }else{
-                so.isTutorial = 0;
-                so.sportId = this.sport_id
-            }
+            so.isTutorial = Number(this.isTutorial);
+            so.translated = Number(so.translated - 1);
 
 			tools.xhr('/video', function(){
-                var vId = this.vId;
-                var action = this.vId? '更新': '创建';
-                var message  = `视频${action}成功`;
+                var message  = `视频$创建成功`;
                 
 				this.$message({
 					message: message,
@@ -471,6 +475,7 @@ COMPONENTS.UploadAdmin = {
 
                 this.SO.videoAbsPath = '';
                 this.SO.subtitleAbsPath = '';
+                this.SO.translated = '1';//新建后重置“翻译”选项
 
                 this.videoFileList = [];
                 this.subtitleFileList = [];
@@ -521,7 +526,7 @@ COMPONENTS.UploadAdmin = {
 					type: 'success'
 				});
 
-				this.queryAlbums(this.sport_id);
+				this.queryAlbums(this.sportId);
 
 			}.bind(this), 'post', this.newAlbum);
 		},
@@ -572,7 +577,7 @@ COMPONENTS.UploadAdmin = {
 			tools.xhr('/videoInfo/' + this.vId, function(res){
                 this.videoInfo = res;
 
-                this.sport_id =  res.sport_id;
+                this.sportId =  res.sportId;
 
                 this.SO.albumId = res.album_id;
                 this.SO.headline = res.headline;
@@ -581,14 +586,14 @@ COMPONENTS.UploadAdmin = {
                     return Number(arguments[0])
                 }): [];
 
-                fn && fn(res.sport_id);
+                fn && fn(res.sportId);
 			}.bind(this));
         },
 
         fetchVideoIntroInfo(){
 			tools.xhr('/videoIntroInfo/' + this.vId, function(res){
                 this.videoInfo = res;
-                this.sport_id =  res.sport_id;
+                this.sportId =  res.sportId;
                 this.SO.headline = res.headline;
                 this.SO.headlineEng = res.headline_eng;
                 this.SO.tag = res.tag? res.tag.split(',').map(function(){
@@ -599,7 +604,7 @@ COMPONENTS.UploadAdmin = {
 
         fetchAlbumInfo: function(){
             tools.xhr('/albumInfo/' + this.aId, function(res){
-                this.newAlbum.sportId = res.sport_id;
+                this.newAlbum.sportId = res.sportId;
                 this.newAlbum.maker = Number(res.author_id);
                 this.newAlbum.tag = Number(res.tag);
                 this.newAlbum.name = res.name;
@@ -620,11 +625,10 @@ COMPONENTS.UploadAdmin = {
                 so.isTutorial = 1;
             }else{
                 so.isTutorial = 0;
-                so.sportId = this.sport_id
+                so.sportId = this.sportId
             }
 
 			tools.xhr('/video/' + this.vId, function(){
-				console.log(arguments);
 				this.$message({
 					message: '视频更新成功',
 					type: 'success'
@@ -1142,7 +1146,7 @@ temp.albumsAdmin =  `
             </el-table-column>
             
             <el-table-column
-                prop="sport_id"
+                prop="sportId"
                 label="运动">
             </el-table-column>
             <el-table-column

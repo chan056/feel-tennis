@@ -78,8 +78,7 @@ img {
   overflow: hidden;
 }
 .block-list li {
-  float: left;
-  /*min-height: 100px; width: 210px;*/
+  display: inline-block;
   margin: 0 4px 0px 0;
   max-width: 210px;
   overflow: hidden;
