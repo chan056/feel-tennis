@@ -686,8 +686,12 @@ module.exports = function(){
 					hidden: 0,
 					sortBy: this.sortBy,
 					sortOrd: this.sortOrd,
-					headline: this.headline
+					
 				};
+
+				if(this.headline){
+					req.headline = this.headline;
+				}
 
 				tools.xhr(api, function(res){
 					this.albumVideoList = res.datalist;
