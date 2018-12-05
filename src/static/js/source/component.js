@@ -685,23 +685,20 @@ module.exports = function(){
 					pageSize: this.pageSize,
 					hidden: 0,
 					sortBy: this.sortBy,
-					sortOrd: this.sortOrd
+					sortOrd: this.sortOrd,
+					headline: this.headline
 				};
-
-				if(this.headline){
-					req.headline = this.headline
-				}
 
 				tools.xhr(api, function(res){
 					this.albumVideoList = res.datalist;
 					
 					this.total = res.total;
 
-					var query = {page: page};
-					if(this.headline){
-						query.headline = this.headline
-					}
-					this.$router.push({ path: this.$route.path, query: query})
+					var routeQueryObj = {page: page};
+					routeQueryObj.headline = this.headline;
+					routeQueryObj.sortBy = this.sortBy;
+					routeQueryObj.sortOrd = this.sortOrd;
+					this.$router.replace({ path: this.$route.path, query: routeQueryObj})
 
 					this.curPage = page;// ?需要重新赋值一次 todo
 				}.bind(this),'get', req);
@@ -711,31 +708,6 @@ module.exports = function(){
 				this.curPage = i;
 				this.fetchAlbumVideo();
 			},
-
-			/* sortVideo: function(e){
-				let t = e.target;
-				t = $(t);
-				if(!t.is('button')){
-					t = t.parents('button');
-				}
-
-				let sortBy = t.data('by');
-				this.sortBy = sortBy;
-
-				if(!t.is('.active')){
-					t.addClass('active el-button--primary').children('.fa').addClass('fa-chevron-down');
-					t.siblings().removeClass('active el-button--primary').children('.fa').removeClass('fa-chevron-up fa-chevron-down')
-					this.sortOrd = 'desc';
-				}else if(t.children('.fa').is('.fa-chevron-down')){
-					t.children('.fa').removeClass('fa-chevron-down').addClass('fa-chevron-up');
-					this.sortOrd = 'asc';
-				}else if(t.children('.fa').is('.fa-chevron-up')){
-					t.children('.fa').removeClass('fa-chevron-up').addClass('fa-chevron-down')	
-					this.sortOrd = 'desc';
-				}
-
-				this.fetchAlbumVideo();
-			}, */
 
 			dynamivePreview: function(e){
 				$(e.target).attr('src', function(){
@@ -751,11 +723,16 @@ module.exports = function(){
 		},
 
 		mounted: function(){
-			this.curPage = Number(this.$route.query.page) || 1;
-			this.headline = this.$route.query.headline || '';
+			let routeQuery = this.$route.query;
+			this.curPage = Number(routeQuery.page) || 1;
+			this.sortBy = routeQuery.sortBy;
+			this.sortOrd = routeQuery.sortOrd;
+			this.headline = routeQuery.headline || '';
+
+			$('.sortor-wrapper button[data-by=' + this.sortBy + ']').addClass('active el-button--primary')
+				.children('.fa').addClass(this.sortOrd == 'desc'? 'fa-chevron-down': 'fa-chevron-up')
 
 			this.fetchAlbumVideo();
-
 			tools.togglePageIE(this);
 		},
 	};
