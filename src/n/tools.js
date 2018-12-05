@@ -20,7 +20,7 @@ function newQueryClause(params) {
 	var qualification = '';
 	var n = 0;
 	var sortBy = '';
-	var sort = '';
+	var sortOrd = '';
 	for (var i in params) {
 		let k = params[i];
 
