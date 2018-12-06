@@ -699,7 +699,7 @@ module.exports = function(){
 					this.total = res.total;
 
 					var routeQueryObj = {page: page};
-					routeQueryObj.headline = this.headline;
+					routeQueryObj.headline = this.headline || undefined;
 					routeQueryObj.sortBy = this.sortBy;
 					routeQueryObj.sortOrd = this.sortOrd;
 					this.$router.replace({ path: this.$route.path, query: routeQueryObj})
