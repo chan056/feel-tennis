@@ -648,17 +648,20 @@ module.exports = function(){
 				sortBy: 'id',
 				sortOrd: 'desc',
 				sortorConfig: [{
+					name: '默认',
+					value: 'id',
+				},{
 					name: '已翻译',
-					value: 'translated'
+					value: 'translated',
 				},{
 					name: '播放数',
-					value: 'impression'
+					value: 'impression',
 				},{
 					name: '点赞数',
-					value: 'support_time'
+					value: 'support_time',
 				},{
 					name: '更新时间',
-					value: 'update_time'
+					value: 'update_time',
 				}]
 			};
 
@@ -670,7 +673,10 @@ module.exports = function(){
 				d.tags = res;
 			});
 
-			d.sortorConfig.callback = this.fetchAlbumVideo;
+			d.sortorConfig.callback = function(){
+				this.curPage = 1;
+				this.fetchAlbumVideo();
+			}.bind(this)
 			d.sortorConfig.parentData = d;
 
 			return d;
@@ -693,7 +699,7 @@ module.exports = function(){
 					req.headline = this.headline;
 				}
 
-				tools.xhr(api, function(res){
+				return tools.xhr(api, function(res){
 					this.albumVideoList = res.datalist;
 					
 					this.total = res.total;
@@ -729,9 +735,9 @@ module.exports = function(){
 		mounted: function(){
 			let routeQuery = this.$route.query;
 			this.curPage = Number(routeQuery.page) || 1;
-			this.sortBy = routeQuery.sortBy;
-			this.sortOrd = routeQuery.sortOrd;
-			this.headline = routeQuery.headline || '';
+			routeQuery.headline && (this.headline = routeQuery.headline);
+			routeQuery.sortBy && (this.sortBy = routeQuery.sortBy);
+			routeQuery.sortOrd && (this.sortOrd = routeQuery.sortOrd);
 
 			$('.sortor-wrapper button[data-by=' + this.sortBy + ']').addClass('active el-button--primary')
 				.children('.fa').addClass(this.sortOrd == 'desc'? 'fa-chevron-down': 'fa-chevron-up')

@@ -12,7 +12,7 @@ let tools = {
         }
 
         api = '/api' + api;
-        axios[type](api, params)
+        return axios[type](api, params)
         .then(function (response) {
            sfn && sfn(response.data)
         })
