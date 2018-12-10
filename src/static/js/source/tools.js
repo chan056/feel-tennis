@@ -291,7 +291,7 @@ let tools = {
             $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function (e) {
                 
                 var fullscreenElement = this.getFullscreenElement();
-                console.log(fullscreenElement)
+                // console.log(fullscreenElement)
                 if(fullscreenElement){
                     if(fullscreenElement.tagName == 'VIDEO'){
                         fn && fn();

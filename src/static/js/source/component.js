@@ -882,19 +882,21 @@ module.exports = function(){
 				}.bind(this), id: 'hls'});
 
 				// TODO
-				tools.fullscreen.watchFullscreenChange(function(){
-					$('html').css('opacity', 0)
-					tools.fullscreen.exit();
-					setTimeout(()=>{
-						// tools.fullscreen.launch(document.documentElement);//不生效TODO，需要手动点击
-						setTimeout(()=>{//伪全屏
-							tools.addfullScreenMask();
-							$('html').css('opacity', 1)
-							fitTowindow('#player-wrapper', window)
-						}, 500)
-					}, 500)
-
-				});
+				if(!isMobile){
+					tools.fullscreen.watchFullscreenChange(function(){
+						$('html').css('opacity', 0)
+						tools.fullscreen.exit();
+						setTimeout(()=>{
+							// tools.fullscreen.launch(document.documentElement);//不生效TODO，需要手动点击
+							setTimeout(()=>{//伪全屏
+								tools.addfullScreenMask();
+								$('html').css('opacity', 1)
+								fitTowindow('#player-wrapper', window)
+							}, 100)
+						}, 100)
+	
+					});
+				}
 
 				function fitTowindow(from, to){
 					from = $(from);
