@@ -882,16 +882,32 @@ module.exports = function(){
 				}.bind(this), id: 'hls'});
 
 				// TODO
-				// tools.fullscreen.watchFullscreenChange(function(){
-				//		console.log('exited')
-				// });
+				tools.fullscreen.watchFullscreenChange(function(){
+					$('html').css('opacity', 0)
+					tools.fullscreen.exit();
+					setTimeout(()=>{
+						// tools.fullscreen.launch(document.documentElement);//不生效TODO，需要手动点击
+						setTimeout(()=>{//伪全屏
+							tools.addfullScreenMask();
+							$('html').css('opacity', 1)
+							fitTowindow('#player-wrapper', window)
+						}, 500)
+					}, 500)
 
-				// 暗色背景
-				// tools.addfullScreenMask();
-				// contain
-				// fitTo('body')
-				// fixed center
-				// $(window.vEle).addClass('')
+				});
+
+				function fitTowindow(from, to){
+					from = $(from);
+					to = $(to);
+					
+					let zoomLevel = Math.min(to.height()/from.height(), to.width()/from.width());
+
+					from.children('video').css({
+						height: from.height() * zoomLevel,
+					});
+
+					from.addClass('fixed-center')
+				}
 			},
 
 			bindSubtitle: function(){

@@ -283,18 +283,26 @@ let tools = {
         },
         
         checkFullscreenEnabled: function (){
+            // !window.screenTop && !window.screenY
             return document.fullscreenEnabled || document.mozFullScreenEnabled || document.webkitFullscreenEnabled;
         },
 
         watchFullscreenChange: function(fn){
             $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function (e) {
-                if (!window.screenTop && !window.screenY) {
-                    console.log('not fullscreen');
-                } else {
-                    console.log('fullscreen');
-                    this.exit();
-                    fn && fn();
+                
+                var fullscreenElement = this.getFullscreenElement();
+                console.log(fullscreenElement)
+                if(fullscreenElement){
+                    if(fullscreenElement.tagName == 'VIDEO'){
+                        fn && fn();
+                    }else if(fullscreenElement.tagName == 'HTML'){
+                        console.log('xxx')
+                    }
+                }else{
+                    tools.removeFullScreenMask()
+                    $('video').height(400).parent().removeClass('fixed-center')
                 }
+
             }.bind(this));
         }, 
 
@@ -302,6 +310,7 @@ let tools = {
 
     addfullScreenMask: function(){
         var html = '<div class="fullscreen-mask" ></div>'
+        this.removeFullScreenMask();
         $('body').append(html).css('overflow', 'hidden');
     },
 
