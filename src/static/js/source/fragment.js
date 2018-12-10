@@ -36,13 +36,6 @@ module.exports = function(){
                 }else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                     video.src = m3u;
                     
-                    // 多种vtt字幕 
-                    // 只有在全屏时显示
-
-                    // document.addEventListener("fullscreenchange", function( event ) {
-                    //     alert(document.fullscreenElement)
-                    // });
-
                     var s = '<track kind="subtitles" src="${tsRoot}subtitle.vtt" srclang="en" label="英文"></track>';
                     $(video).prepend(s);
 

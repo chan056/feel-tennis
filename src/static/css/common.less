@@ -67,3 +67,24 @@ img{border-width: 0;}
   .subtitle{position: absolute;  width: 100%; bottom: 30px; text-align: center; font-size: 24px; color: #eee; text-shadow: 2px 2px 2px rgb(65, 59, 59); pointer-events: none;}
   max-width: 800px;
 }
+
+// 全屏遮罩
+.fullscreen{
+  position: fixed !important;
+  top: 0px !important;
+  right: 0px !important;
+  bottom: 0px !important;
+  left: 0px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+  margin: 0px !important;
+}
+
+.fullscreen-mask{
+  .fullscreen;
+  z-index: 100;
+  background-color: #000;
+}
+

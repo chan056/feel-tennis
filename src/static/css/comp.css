@@ -124,6 +124,32 @@ img {
   text-shadow: 2px 2px 2px #413b3b;
   pointer-events: none;
 }
+.fullscreen {
+  position: fixed !important;
+  top: 0px !important;
+  right: 0px !important;
+  bottom: 0px !important;
+  left: 0px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+  margin: 0px !important;
+}
+.fullscreen-mask {
+  position: fixed !important;
+  top: 0px !important;
+  right: 0px !important;
+  bottom: 0px !important;
+  left: 0px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+  margin: 0px !important;
+  z-index: 100;
+  background-color: #000;
+}
 .el-breadcrumb span {
   font-size: 2rem;
 }

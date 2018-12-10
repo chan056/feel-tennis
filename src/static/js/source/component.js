@@ -880,6 +880,18 @@ module.exports = function(){
 						$('.subtitle').text('');
 					}
 				}.bind(this), id: 'hls'});
+
+				// TODO
+				// tools.fullscreen.watchFullscreenChange(function(){
+				//		console.log('exited')
+				// });
+
+				// 暗色背景
+				// tools.addfullScreenMask();
+				// contain
+				// fitTo('body')
+				// fixed center
+				// $(window.vEle).addClass('')
 			},
 
 			bindSubtitle: function(){
