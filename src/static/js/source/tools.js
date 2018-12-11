@@ -103,6 +103,23 @@ let tools = {
         document.body.appendChild(script);
     },
 
+    bindSubtitle: function(videoId){
+        let captionAPI = '/caption/' + videoId;
+
+        tools.xhr(captionAPI, function(res){
+            if(!res)
+                return;
+                
+            let playerWrapper = $('#player-wrapper');
+
+            tools.attachSubtile(window.vEle, res, 500, function(subtitle){
+                playerWrapper.find('.subtitle').text(subtitle)/* .css({
+
+                }) */;
+            });
+        });
+    },
+
     // 给视频绑定字幕
     // 通过轮询的方式 每x秒检测一次
     // 根据SRT DATA中的start time 和end time 定位字幕

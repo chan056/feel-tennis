@@ -1,23 +1,33 @@
 module.exports = function(){
     var fragment = {
-        attachVideo: function(vId, lowResolution, isIntroductory, selector){
+        attachVideo: function(vId, resolution, isIntroductory, selector){
             let m3u8 = '';
             if(window.isMobile){
-                lowResolution = lowResolution || 480;
-                m3u8 = lowResolution + 'p'
-            }else if(lowResolution){
-                m3u8 = lowResolution + 'p'
+                resolution = resolution || 480;
+                m3u8 = resolution + 'p'
+            }else if(resolution){
+                m3u8 = resolution + 'p'
             }else{
                 m3u8 = '_'
             }
 
             let tsRoot = isIntroductory? `/multimedia/ts_introductory/${vId}/`: `/multimedia/ts/${vId}/`;
+            let pristineRoot = isIntroductory? `/multimedia/pristine_introductory_v/`: `/multimedia/pristine_v/`; 
             let video = selector? `document.querySelector('${selector}')`: `$('video')[0]`;
 
             return `{
                 var m3u = '${tsRoot}${m3u8}.m3u8';
                 var video = ${video};
 
+                // Chrome for Android 34+
+                // Chrome for Desktop 34+
+                // Firefox for Android 41+
+                // Firefox for Desktop 42+
+                // IE11+ for Windows 8.1+
+                // Edge for Windows 10+
+                // Opera for Desktop
+                // Vivaldi for Desktop
+                // Safari for Mac 8+ (beta)
                 if(Hls.isSupported()) {
                     var hls = new Hls({
                         maxBufferLength: 20,
@@ -33,16 +43,58 @@ module.exports = function(){
                         video.volume = .6;
                     });
 
-                }else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    // 翻译页 使用自定义字幕 便于修改后刷新
+                    if(${resolution} && !${isIntroductory}){
+
+                    }else{
+                        var s = '<track kind="subtitles" src="${tsRoot}subtitle.zh.vtt" srclang="zh" label="中文" default></track>';
+                        $(video).prepend(s);
+    
+                        var s = '<track kind="subtitles" src="${tsRoot}subtitle.vtt" srclang="en" label="英文"></track>';
+                        $(video).prepend(s);
+                    }
+
+                }else if (video.canPlayType('application/vnd.apple.mpegurl')) {// IOS
                     video.src = m3u;
                     
+                    // 检查有哪种字幕 排在前面
                     var s = '<track kind="subtitles" src="${tsRoot}subtitle.vtt" srclang="en" label="英文"></track>';
                     $(video).prepend(s);
 
                     s = '<track kind="subtitles" src="${tsRoot}subtitle.zh.vtt" srclang="zh" label="中文" default></track>';
                     $(video).prepend(s);
-                }else{
-                    video.src = '${tsRoot}${vId}.mp4';
+                }else{//IE 9 10 11
+                    video.src = '${pristineRoot}${vId}.mp4';
+                    tools.bindSubtitle(${vId})
+                    // 伪全屏 为了显示字幕 TODO
+                        // 	tools.fullscreen.watchFullscreenChange(function(){
+                        // 		$('html').css('opacity', 0)
+                        // 		tools.fullscreen.exit();
+                        // 		setTimeout(()=>{
+                        // 			// tools.fullscreen.launch(document.documentElement);//不生效TODO，需要手动点击
+                        // 			setTimeout(()=>{//伪全屏
+                        // 				tools.addfullScreenMask();
+                        // 				$('html').css('opacity', 1)
+                        // 				fitTowindow('#player-wrapper', window)
+                        // 			}, 100)
+                        // 		}, 100)
+            
+                        // 	});
+                        // }
+        
+                        // function fitTowindow(from, to){
+                        // 	from = $(from);
+                        // 	to = $(to);
+                            
+                        // 	let zoomLevel = Math.min(to.height()/from.height(), to.width()/from.width());
+        
+                        // 	from.children('video').css({
+                        // 		height: from.height() * zoomLevel,
+                        // 	});
+        
+                        // 	from.addClass('fixed-center')
+
+                        // route change 还原
                 }
             }`
         },

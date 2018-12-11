@@ -804,7 +804,7 @@ module.exports = function(){
 			
 			this.fetchVideoTags();
 			
-			this.bindSubtitle();
+			// this.bindSubtitle();
 
 			tools.togglePageIE(this);
 
@@ -880,55 +880,6 @@ module.exports = function(){
 						$('.subtitle').text('');
 					}
 				}.bind(this), id: 'hls'});
-
-				// TODO
-				if(!isMobile){
-					tools.fullscreen.watchFullscreenChange(function(){
-						$('html').css('opacity', 0)
-						tools.fullscreen.exit();
-						setTimeout(()=>{
-							// tools.fullscreen.launch(document.documentElement);//不生效TODO，需要手动点击
-							setTimeout(()=>{//伪全屏
-								tools.addfullScreenMask();
-								$('html').css('opacity', 1)
-								fitTowindow('#player-wrapper', window)
-							}, 100)
-						}, 100)
-	
-					});
-				}
-
-				function fitTowindow(from, to){
-					from = $(from);
-					to = $(to);
-					
-					let zoomLevel = Math.min(to.height()/from.height(), to.width()/from.width());
-
-					from.children('video').css({
-						height: from.height() * zoomLevel,
-					});
-
-					from.addClass('fixed-center')
-				}
-			},
-
-			bindSubtitle: function(){
-				let captionAPI = '/caption/' + this.videoId;
-
-				tools.xhr(captionAPI, function(res){
-					if(!res)
-						return;
-						
-					let playerWrapper = $('#player-wrapper');
-
-					
-
-					tools.attachSubtile(window.vEle, res, 500, function(subtitle){
-						playerWrapper.find('.subtitle').text(subtitle)/* .css({
-
-						}) */;
-					});
-				});
 			},
 
 			captureCountdown: function(){
