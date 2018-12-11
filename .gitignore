@@ -13,6 +13,9 @@ sitemap.txt
 /src/static/img/cover/album/*.*
 /src/n/ffmpeg/*.mp4
 /src/static/multimedia/screenshot/*.*
+src/static/js/tube.js
+src/static/js/sport_intro.js
+src/n/dev_constant.js
 
 # Logs
 logs
@@ -73,5 +76,3 @@ typings/
 # dotenv environment variables file
 .env
 
-src/static/js/tube.js
-src/static/js/sport_intro.js

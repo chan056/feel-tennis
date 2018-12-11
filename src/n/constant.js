@@ -1,4 +1,6 @@
-module.exports = {
+const fs = require('fs');
+
+let c = {
     aesKey: 'key',// 密钥
 
     whiteList: [
@@ -24,18 +26,8 @@ module.exports = {
         pass: 'rpnuovesymglcaic',  //btwnqqiqgvjybiid
     },
 
-    isLocalData: 1,// 是否连接本地数据库
-
     dbConfig: {
         host: 'localhost',
-        user: 'root',
-        password: '62191056',
-        database: 'n',
-        multipleStatements: true// 执行多条语句
-    },
-
-    dbConfigProductive: {
-        host: '47.98.108.40',
         user: 'root',
         password: '62191056',
         database: 'n',
@@ -46,4 +38,8 @@ module.exports = {
     avtarThumbWidth: 50,
     indexPath: '/page/index.html',
     site: 'www.yitube.cn'
-}
+};
+
+Object.assign(c, require('./dev_constant.js') || {})
+
+module.exports = c;

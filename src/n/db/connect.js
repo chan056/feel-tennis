@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 const constant = require('../constant');
-let dbConfig = constant.isLocalData? constant.dbConfig: constant.dbConfigProductive;
+let dbConfig = (constant.linkRemote && constant.dbConfigProductive)? constant.dbConfigProductive: constant.dbConfig;
 
 let connection;
 
