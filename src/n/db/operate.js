@@ -920,6 +920,26 @@ let operations = {
 			return res.end('0')
 		}
 	},
+
+	checkVttSituation: function(res, qualification, params){
+
+		const fs = require('fs');
+		const path = require('path');
+		
+		let isTutorial = params.isTutorial;
+		let vId = params.vId;
+
+		let relativePath = [`./multimedia/ts_introductory/${vId}/`, `./multimedia/ts/${vId}/`][isTutorial];
+		let absPath = path.resolve(global.staticRoot, relativePath);
+		
+		let data = {
+			zh: fs.existsSync(path.resolve(absPath, 'subtitle.zh.vtt')),
+			en: fs.existsSync(path.resolve(absPath, 'subtitle.vtt'))
+		}
+
+		res.end(JSON.stringify(data));
+
+	},
 	
 	// ===============POST================
 	login: function(res, postObj, req){

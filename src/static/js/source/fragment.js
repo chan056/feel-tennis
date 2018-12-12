@@ -13,7 +13,9 @@ module.exports = function(){
 
             let tsRoot = isIntroductory? `/multimedia/ts_introductory/${vId}/`: `/multimedia/ts/${vId}/`;
             let pristineRoot = isIntroductory? `/multimedia/pristine_introductory_v/`: `/multimedia/pristine_v/`; 
-            let video = selector? `document.querySelector('${selector}')`: `$('video')[0]`;
+            let video = selector? 
+                `document.querySelector('${selector}')`:// 运动介绍页
+                `$('video')[0]`;// 视频播放页
 
             return `{
                 var m3u = '${tsRoot}${m3u8}.m3u8';
@@ -43,29 +45,19 @@ module.exports = function(){
                         video.volume = .6;
                     });
 
-                    // 翻译页 使用自定义字幕 便于修改后刷新
                     if(${resolution} && !${isIntroductory}){
-
+                        // 翻译页 使用自定义字幕(interval) 不用vtt 便于修改后刷新
                     }else{
-                        var s = '<track kind="subtitles" src="${tsRoot}subtitle.zh.vtt" srclang="zh" label="中文" default></track>';
-                        $(video).prepend(s);
-    
-                        var s = '<track kind="subtitles" src="${tsRoot}subtitle.vtt" srclang="en" label="英文"></track>';
-                        $(video).prepend(s);
+                        appendVtt();
                     }
 
                 }else if (video.canPlayType('application/vnd.apple.mpegurl')) {// IOS
                     video.src = m3u;
                     
-                    // 检查有哪种字幕 排在前面
-                    var s = '<track kind="subtitles" src="${tsRoot}subtitle.vtt" srclang="en" label="英文"></track>';
-                    $(video).prepend(s);
-
-                    s = '<track kind="subtitles" src="${tsRoot}subtitle.zh.vtt" srclang="zh" label="中文" default></track>';
-                    $(video).prepend(s);
+                    appendVtt();
                 }else{//IE 9 10 11
                     video.src = '${pristineRoot}${vId}.mp4';
-                    tools.bindSubtitle(${vId})
+                    tools.bindSubtitle(${vId}, ${isIntroductory}, ${video})
                     // 伪全屏 为了显示字幕 TODO
                         // 	tools.fullscreen.watchFullscreenChange(function(){
                         // 		$('html').css('opacity', 0)
@@ -95,6 +87,28 @@ module.exports = function(){
                         // 	from.addClass('fixed-center')
 
                         // route change 还原
+                }
+
+                function appendVtt(){
+                    // 查询字幕文件是否存在
+                    var localVideo = video;
+                    tools.xhr('/vttSituation', function(res){
+
+                        var s = '<track kind="subtitles" src="${tsRoot}subtitle.zh.vtt" srclang="zh" label="中文"></track>\
+                        <track kind="subtitles" src="${tsRoot}subtitle.vtt" srclang="en" label="英文"></track>';
+
+                        $(localVideo).prepend(s)
+                        if(res.zh){
+                            $(localVideo).find('track').eq(0).prop('default', true);
+                        }else if(res.en){
+                            $(localVideo).find('track').eq(1).prop('default', true);
+                        }
+                            
+                    }, 'get', {
+                        isTutorial: ${+!isIntroductory},
+                        vId: ${vId}
+                    });
+                    
                 }
             }`
         },

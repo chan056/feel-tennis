@@ -460,7 +460,12 @@ const routerConfig = {
 
         '/isMapper': function(params, res, req){
             r.query('isMapper', params, res, req)
-        }
+        },
+
+        // 是否存在字幕文件
+        '/vttSituation': function(params, res, req){
+            r.query('checkVttSituation', params, res, req);
+        },
     },
 
     post: {

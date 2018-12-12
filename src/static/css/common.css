@@ -124,6 +124,10 @@ img {
   text-shadow: 2px 2px 2px #413b3b;
   pointer-events: none;
 }
+#player-wrapper .subtitle:hover,
+.player-wrapper .subtitle:hover {
+  display: none;
+}
 .fullscreen {
   position: fixed !important;
   top: 0px !important;

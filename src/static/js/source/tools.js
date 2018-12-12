@@ -103,17 +103,21 @@ let tools = {
         document.body.appendChild(script);
     },
 
-    bindSubtitle: function(videoId){
+    // IE 非翻译页 
+    bindSubtitle: function(videoId, isIntroductory, video){
+        console.log(arguments)
         let captionAPI = '/caption/' + videoId;
+        
+        if(isIntroductory)
+            captionAPI += '?noTutorial=1'
 
         tools.xhr(captionAPI, function(res){
             if(!res)
                 return;
-                
-            let playerWrapper = $('#player-wrapper');
 
-            tools.attachSubtile(window.vEle, res, 500, function(subtitle){
-                playerWrapper.find('.subtitle').text(subtitle)/* .css({
+                console.log(res)
+            tools.attachSubtile(video, res, 500, function(subtitle){
+                $(video).siblings('.subtitle').text(subtitle)/* .css({
 
                 }) */;
             });

@@ -66,14 +66,14 @@
 
 			queryAthletes();
 			queryVideoIndex(function(data){
-				let historyIndex = data[0].id,
+				var historyIndex = data[0].id,
 					ruleIndex = data[1].id;
 
 				bindVideo(historyIndex, '#v-history');
-				bindSubtitle(historyIndex, '#v-history');
+				// bindSubtitle(historyIndex, '#v-history');
 
 				bindVideo(ruleIndex, '#v-rule');
-				bindSubtitle(ruleIndex, '#v-rule');
+				// bindSubtitle(ruleIndex, '#v-rule');
 			});
 
 			// 同步到sitemap
@@ -107,13 +107,13 @@
             }
             
             function bindSubtitle(videoId, selector){
-				let captionAPI = '/caption/' + videoId + '?noTutorial=1';
+				var captionAPI = '/caption/' + videoId + '?noTutorial=1';
 
 				tools.xhr(captionAPI, function(res){
 					if(!res)
 						return;
 						
-					let playerWrapper = $(selector).parent('.player-wrapper');
+					var playerWrapper = $(selector).parent('.player-wrapper');
 
 					tools.attachSubtile($(selector)[0], res, 500, function(subtitle){
 						playerWrapper.find('.subtitle').text(subtitle)/* .css({

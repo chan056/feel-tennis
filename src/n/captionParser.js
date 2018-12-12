@@ -29,9 +29,10 @@ module.exports = {
                 p = path.resolve(global.staticRoot, `./multimedia/ts_introductory/${vId}/subtitle`);
             }else{// 教程视频
                 p = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle.zh`);
-                if(fs.existsSync(p)){
-                    captionPath = p;
-                }
+            }
+            
+            if(fs.existsSync(p)){
+                captionPath = p;
             }
         }
 
