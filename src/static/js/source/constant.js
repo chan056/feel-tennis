@@ -6,7 +6,7 @@ let CONSTANT = {
     },
     PAGESIZE: 8,
     level: {
-        tennis: '//baijiahao.baidu.com/s?id=1561865758116633'
+        tennis: 'https://baike.baidu.com/item/%E7%BD%91%E7%90%83%E5%88%86%E7%BA%A7%E6%A0%87%E5%87%86/3384823'
     },
     BAIDUMAPAPI: '//api.map.baidu.com/api?v=2.0&ak=5XGIRhLpHgiaALCHuFfkCGcAewbkm4IP&callback=initMap',
     BAIDUPUSHLINK: 'https://zz.bdstatic.com/linksubmit/push.js',

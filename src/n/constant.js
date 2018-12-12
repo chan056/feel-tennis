@@ -40,6 +40,8 @@ let c = {
     site: 'www.yitube.cn'
 };
 
-Object.assign(c, require('./dev_constant.js') || {})
+if(fs.existsSync('./dev_constant.js')){
+    Object.assign(c, require('./dev_constant.js') || {})
+}
 
 module.exports = c;
