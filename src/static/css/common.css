@@ -113,6 +113,10 @@ img {
   position: relative;
   max-width: 800px;
 }
+#player-wrapper:hover .subtitle,
+.player-wrapper:hover .subtitle {
+  display: none;
+}
 #player-wrapper .subtitle,
 .player-wrapper .subtitle {
   position: absolute;
@@ -123,10 +127,6 @@ img {
   color: #eee;
   text-shadow: 2px 2px 2px #413b3b;
   pointer-events: none;
-}
-#player-wrapper .subtitle:hover,
-.player-wrapper .subtitle:hover {
-  display: none;
 }
 .fullscreen {
   position: fixed !important;
