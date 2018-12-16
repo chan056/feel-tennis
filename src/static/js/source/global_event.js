@@ -6,14 +6,18 @@ module.exports = function(){
         $('#star-section').hide();
     });
 
-    var W = $(window);
-    W.on('resize', function(){
-        if(W.width() < 1000){
-            $('#root-container').addClass('brief');
-        }
+    $(window).on('resize', function(){
+        Vue.nextTick(function(){
+            var rootContainer = $('#root-container');
+            if(window.isMobile = BrowserDetect.detectMob()){
+                if(location.href.match(/videos\/\d+/)){
+                    rootContainer.addClass('mobile-structure');
+                }else{
+                    rootContainer.addClass('brief');
+                }
+            }else{
+                rootContainer.removeClass('mobile-structure');
+            }
+        })
     });
-    
-    // setTimeout(()=>{
-    //     W.trigger('resize');
-    // },1000)
 }

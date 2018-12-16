@@ -113,6 +113,10 @@ img {
   position: relative;
   max-width: 800px;
 }
+#player-wrapper:hover .subtitle,
+.player-wrapper:hover .subtitle {
+  display: none;
+}
 #player-wrapper .subtitle,
 .player-wrapper .subtitle {
   position: absolute;
@@ -157,6 +161,12 @@ img {
   transform: translate(-50%, -50%);
   z-index: 10000;
   max-width: unset!important;
+}
+.abs-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 .el-breadcrumb span {
   font-size: 2rem;
@@ -225,6 +235,23 @@ body {
 #main {
   min-height: 500px;
 }
+#aside-controller {
+  position: absolute;
+  width: 2rem;
+  height: 4rem;
+  background-color: #d6cccc;
+  left: 0;
+  opacity: .8;
+  top: 20rem;
+  cursor: pointer;
+}
+#aside-controller .fa {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2.2rem;
+}
 .main-model h2 {
   margin-bottom: 20px;
 }
@@ -250,6 +277,30 @@ app {
 #root-container.brief .guide-entry-renderer .icon {
   font-size: 20px;
   margin-left: 0;
+}
+#root-container.mobile-structure #aside {
+  display: none!important;
+}
+#root-container.mobile-structure #main {
+  left: 0!important;
+  border-width: 0 !important;
+}
+#root-container.mobile-structure #main-router-view {
+  padding-left: .6rem;
+  padding-right: 0;
+}
+#root-container.mobile-structure #player-wrapper {
+  margin-left: -0.6rem;
+}
+#root-container.mobile-structure #video {
+  height: auto;
+  width: 100%;
+}
+#root-container.mobile-structure #usr-operation-desk {
+  width: auto;
+}
+#root-container.mobile-structure #star-section {
+  left: -8rem;
 }
 #header {
   border-bottom: 1px solid #dcdfe6;
@@ -350,6 +401,12 @@ app {
   border: 1px solid #dcdfe6;
   border-width: 0 0 1px 1px;
 }
+#main #guest-book-controller {
+  font-size: 2rem;
+  padding: .3rem;
+  cursor: pointer;
+  box-shadow: -3px 3px 1rem #222;
+}
 #main-router-view {
   min-width: 500px;
   margin: auto;
@@ -403,8 +460,8 @@ app {
   top: 0;
   right: 0;
   color: #fff;
-  background-color: #ccc;
   padding: 2px 3px;
+  text-shadow: 0px 0px 1rem #333;
 }
 .sortor-line {
   margin-bottom: 2rem;
@@ -415,15 +472,27 @@ app {
 .sortor-wrapper .fa {
   margin-right: 5px;
 }
+.sortor-wrapper button {
+  margin-bottom: 1rem;
+  margin-left: 0!important;
+  margin-right: 10px;
+}
 #usr-operation-desk {
   margin: 30px 0px;
   width: 712px;
 }
 #usr-operation-desk .block-list li {
   cursor: pointer;
+  float: left;
 }
 #usr-operation-desk .block-list li:not(:last-child) {
   margin-right: 20px;
+}
+#video-operation-wrapper button,
+#video-operation-wrapper input {
+  margin-bottom: 0.5rem;
+  margin-left: 0;
+  margin-right: 10px;
 }
 #link-to-translator {
   margin-left: 2rem;

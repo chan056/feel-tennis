@@ -303,13 +303,13 @@ module.exports = function(){
         album: `
             <div>
                 <el-row>
-                    <el-col :span="18">
+                    <el-col :span="14">
                         <el-breadcrumb separator="/" class="fl">
                             <el-breadcrumb-item :to="{ path: '/sports/' + crumb.sId }">{{crumb.sName}}</el-breadcrumb-item>
                             <el-breadcrumb-item :to="{ path: '/albums/' + crumb.aId }">{{crumb.aName}}</el-breadcrumb-item>
                         </el-breadcrumb>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="8">
                         <el-input placeholder="专辑内搜索" v-model="headline" clearable class="fr" @clear="fetchAlbumVideo(0)" @keyup.enter.native="fetchAlbumVideo(0)">
                             <el-button slot="append" icon="el-icon-search" @click="fetchAlbumVideo(0)"></el-button>
                         </el-input>
@@ -331,7 +331,7 @@ module.exports = function(){
                         <router-link :to="{path: '/videos/'+ video.id }">
                             <img @mouseover="dynamivePreview($event);" @mouseout="staticPreview($event);" 
                                 :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb video-thumb" alt="video"/>
-                            <span class="translate-tag" v-if="video.translated">已译</span>
+                            <span class="translate-tag" v-if="video.translated" title="字幕已翻译">译</span>
                             <h3 class="block-title video-title ellipsis">
                                 <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
                             </h3>
@@ -359,7 +359,7 @@ module.exports = function(){
         `,
     
         video: `
-            <div>
+            <div id="video-page">
                 <el-breadcrumb separator="/">
                     <el-breadcrumb-item :to="{ path: '/sports/' + crumb.sId }">{{crumb.sName}}</el-breadcrumb-item>
                     <el-breadcrumb-item :to="{ path: '/albums/' + crumb.aId }">{{crumb.aName}}</el-breadcrumb-item>
@@ -429,7 +429,7 @@ module.exports = function(){
                     </ul>
                     <br class="clr">
                 </div>
-                <div v-if="video">
+                <div v-if="video" id="video-operation-wrapper">
                     <input type="button" value="截取小视频" @click="captureCountdown()" id="capture-btn" class="el-button el-button--default"/>
                     <el-button v-if="shortVideoLink && !shooting" @click="preview(); previewType=1;">预览小视频</el-button>
                     <el-button v-if="shooting" :loading="true">截取中...</el-button>
@@ -440,7 +440,7 @@ module.exports = function(){
     
                 <div id="remark-wrapper" v-if="video">
                     <h3>
-                        <el-dropdown id="usr-btns" class="fr" @command="handleRemarkListBtns" trigger="click" :hide-on-click="false">
+                        <el-dropdown id="guest-book-controller" class="fr" @command="handleRemarkListBtns" trigger="click" :hide-on-click="false">
                             <i class="el-icon-more-outline" title="标注显示设置"></i>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item v-if="remarkPlaySetting.enable" command="close" id="header-btn-login">关闭</el-dropdown-item>

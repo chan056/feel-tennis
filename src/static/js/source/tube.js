@@ -17,6 +17,9 @@ $(function () {
 					<AppAside/>
 					<div id="main">
 						<router-view id="main-router-view" class="view"></router-view>
+						<div id="aside-controller" ng-if="isMobile">
+							<i class="fa fa-chevron-right" aria-hidden="true"></i>
+						</div>
 					</div>
 					<br class="clr">
 				</div>
@@ -51,7 +54,6 @@ $(function () {
 	});
 
 	router.beforeEach((to, from, next)=>{
-
 		// 存储页面
 		let curPath = router.history.current.path;
 		if(curPath.toLowerCase().match('admin')){
@@ -89,6 +91,11 @@ $(function () {
 
 	router.afterEach((to, from) => {
 		appInstance.$bus.emit('dismiss-guider');// 页面切换，隐藏引导
+		if(to.meta.title == '视频'){
+			$('#root-container').addClass('mobile-structure').removeClass('brief');
+		}else{
+			$('#root-container').removeClass('mobile-structure').addClass('brief');
+		}
 	})
 
 	tools.xhr('/isMapper', function(res){

@@ -827,6 +827,14 @@ module.exports = function(){
 				t.queryStar(t.queryVideoStarsContainTheVideo);
 				t.queryRemark(1);
 			};
+
+			$('#aside-controller').off('click').on('click', function(){
+				var rootContainer = $('#root-container');
+				rootContainer.toggleClass('brief')
+				rootContainer.toggleClass('mobile-structure');
+
+				rootContainer.find('#aside-controller .fa').toggleClass('fa-chevron-left fa-chevron-right')
+			});
 		},
 
 		beforeDestroy() {
