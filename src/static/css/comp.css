@@ -226,6 +226,9 @@ img {
   #llc {
     display: none !important;
   }
+  #aside-controller {
+    display: block!important;
+  }
 }
 body {
   min-width: 600px;
@@ -236,6 +239,7 @@ body {
   min-height: 500px;
 }
 #aside-controller {
+  display: none;
   position: absolute;
   width: 2rem;
   height: 4rem;

@@ -11,9 +11,9 @@ module.exports = function(){
             var rootContainer = $('#root-container');
             if(window.isMobile = BrowserDetect.detectMob()){
                 if(location.href.match(/videos\/\d+/)){
-                    rootContainer.addClass('mobile-structure');
+                    rootContainer.addClass('mobile-structure').removeClass('brief');
                 }else{
-                    rootContainer.addClass('brief');
+                    rootContainer.addClass('brief').removeClass('mobile-structure');
                 }
             }else{
                 rootContainer.removeClass('mobile-structure');

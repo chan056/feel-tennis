@@ -91,11 +91,16 @@ $(function () {
 
 	router.afterEach((to, from) => {
 		appInstance.$bus.emit('dismiss-guider');// 页面切换，隐藏引导
-		if(to.meta.title == '视频'){
-			$('#root-container').addClass('mobile-structure').removeClass('brief');
+		
+		$(window).trigger('resize');
+
+		console.log(to)
+		if(to.fullPath.match(/videos\/\d+/)){
+			$('#aside-controller').css('display', 'block!important')
 		}else{
-			$('#root-container').removeClass('mobile-structure').addClass('brief');
+			$('#aside-controller').css('display', 'none!important')
 		}
+		
 	})
 
 	tools.xhr('/isMapper', function(res){
