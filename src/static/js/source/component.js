@@ -2344,6 +2344,7 @@ module.exports = function(){
 
 					t.vEle.oncanplay= function(){
 						t.duration = t.vEle.duration;
+						t.duration = 600;
 
 						// t.$nextTick(function () {
 							t.drawTimeScale();
@@ -2383,6 +2384,10 @@ module.exports = function(){
 						}
 
 						t.drawTimeScale();
+						// 显示caption-block
+						// 时间点前后10块字幕
+
+
 					}
 				}, id: 'hls'});
 			},
@@ -2590,6 +2595,7 @@ module.exports = function(){
 
 			// 拖动block dragger
 			handlerMovingCaptionBlockLeftDragger: function(pos){
+				console.log('handlerMovingCaptionBlockLeftDragger')
 				pos = pos > 0? pos: 0;
 				let curCaptionBlock = this.curCaptionBlock;
 				let index = $('.caption-block').index(this.curCaptionBlock);
@@ -2605,12 +2611,20 @@ module.exports = function(){
 				if(pos < prevCaptionBlockRightBoundry && prevCaptinBlock){
 					prevCaptinBlock.width(pos - prevCaptionBlockLeftBoundry)
 					if(index > 0){
-						this.captions[index-1].endTime = this.posToTime(pos, true);
+						// setTimeout(()=>{
+							// draggingSign
+							this.captions[index-1].endTime = this.posToTime(pos, true);
+						// }, 1000)
 					}
 				}
 
 				if(index > - 1){
-					this.captions[index].startTime = this.posToTime(pos, true);
+					setTimeout(()=>{
+						if(!this.draggingSign.status){
+							console.log('change this.captions')
+							this.captions[index].startTime = this.posToTime(pos, true);
+						}
+					}, 300)
 				}
 			},
 
