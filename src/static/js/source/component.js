@@ -97,7 +97,6 @@ module.exports = function(){
 	
 				loginUsrInfo: {},
 				inmails: [],
-				cityZH: ''
 			}
 		},
 
@@ -170,7 +169,7 @@ module.exports = function(){
 				}.bind(this), 'post', {
 					name: trim(this.loginForm.name),
 					psw: md5(trim(this.loginForm.psw)),
-					city: this.cityZH,
+					city: window.CURPOS.city,
 					coords: CURPOS? CURPOS.lng + ',' + CURPOS.lat: ''
 				}, function(res){
 					let status = res.status;
@@ -368,16 +367,17 @@ module.exports = function(){
 			},
 
 			getCurPos: function(){
+				let t = this;
 				// 检查localstorage
-				let localCoords = localStorage.getItem('localCoords')
-				if(localCoords){
-					localCoords = JSON.parse(localStorage.getItem('localCoords'));
-					let storageTime = localCoords.storageTime;
+				let localPos = localStorage.getItem('localPos')
+				if(localPos){
+					localPos = JSON.parse(localStorage.getItem('localPos'));
+					let storageTime = localPos.storageTime;
 					const day = 1 * 24 * 60 * 60 * 1000;
 
 					if(Date.now() - storageTime < day){
-						window.CURPOS = localCoords;
-						console.log(window.CURPOS)
+						window.CURPOS = localPos;
+						// console.log(window.CURPOS)
 					}else{
 						requestCoords()
 					}
@@ -390,9 +390,10 @@ module.exports = function(){
 					geolocation.getCurrentPosition(function(r){
 						if(this.getStatus() == BMAP_STATUS_SUCCESS){
 							console.log(r)
-							r.point.storageTime = Date.now();
-							window.CURPOS = r.point;
-							localStorage.setItem('localCoords', JSON.stringify(r.point))
+							window.CURPOS = Object.assign({}, r.point)
+							window.CURPOS.storageTime = Date.now();
+							window.CURPOS.city = r.address.city;
+							localStorage.setItem('localPos', JSON.stringify(window.CURPOS));
 						}
 						else {
 							alert('failed'+this.getStatus());
@@ -438,10 +439,6 @@ module.exports = function(){
 					clearInterval(intervalId);
 
 					try{
-						(new BMap.LocalCity()).get(function(city){
-							t.cityZH = city.name;
-						})
-
 						t.getCurPos();
 					}catch(e){
 		
