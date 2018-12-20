@@ -96,7 +96,8 @@ module.exports = function(){
 				},
 	
 				loginUsrInfo: {},
-				inmails: []
+				inmails: [],
+				cityZH: ''
 			}
 		},
 
@@ -165,22 +166,12 @@ module.exports = function(){
 				let trim = $.trim;
 				
 				tools.xhr('/login', function(){
-					// this.fetchUsrLoginInfo();
-
-					// this.$message({
-					// 	message: '登录成功',
-					// 	type: 'success'
-					// });
-
 					location.reload();
-
-					// this.loginForm.visible = false;
 				}.bind(this), 'post', {
 					name: trim(this.loginForm.name),
 					psw: md5(trim(this.loginForm.psw)),
 					city: this.cityZH,
-					ip: CURPOS? CURPOS.ip: '',
-					coords: CURPOS? CURPOS.longitude + ',' + CURPOS.latitude: ''
+					coords: CURPOS? CURPOS.lng + ',' + CURPOS.lat: ''
 				}, function(res){
 					let status = res.status;
 					let statusText = res.statusText;
@@ -374,7 +365,41 @@ module.exports = function(){
 					this.fetchInmails();	
 				}.bind(this), 'patch', {inmailId: inmail.id});
 
-			}
+			},
+
+			getCurPos: function(){
+				// 检查localstorage
+				let localCoords = localStorage.getItem('localCoords')
+				if(localCoords){
+					localCoords = JSON.parse(localStorage.getItem('localCoords'));
+					let storageTime = localCoords.storageTime;
+					const day = 1 * 24 * 60 * 60 * 1000;
+
+					if(Date.now() - storageTime < day){
+						window.CURPOS = localCoords;
+						console.log(window.CURPOS)
+					}else{
+						requestCoords()
+					}
+				}else{
+					requestCoords()
+				}
+
+				function requestCoords(){
+					var geolocation = new BMap.Geolocation();
+					geolocation.getCurrentPosition(function(r){
+						if(this.getStatus() == BMAP_STATUS_SUCCESS){
+							console.log(r)
+							r.point.storageTime = Date.now();
+							window.CURPOS = r.point;
+							localStorage.setItem('localCoords', JSON.stringify(r.point))
+						}
+						else {
+							alert('failed'+this.getStatus());
+						}        
+					},{enableHighAccuracy: true})
+				}
+			},
 		},
 
 		mounted: function () {
@@ -401,8 +426,6 @@ module.exports = function(){
 				this.retrievePswCode = retrievePswCode;
 				this.retrievePswForm.visible = true;
 			}
-
-			
 		},
 
 		created: function(){
@@ -418,6 +441,8 @@ module.exports = function(){
 						(new BMap.LocalCity()).get(function(city){
 							t.cityZH = city.name;
 						})
+
+						t.getCurPos();
 					}catch(e){
 		
 					}
@@ -507,7 +532,6 @@ module.exports = function(){
 		},
 
 		mounted: function(){
-			this.getCurPos();
 			
 		},
 
@@ -516,32 +540,7 @@ module.exports = function(){
 		},
 
 		methods: {
-			getCurPos: function(){
-				// 检查localstorage
-				let ipstack = localStorage.getItem('ipstack')
-				if(ipstack){
-					ipstack = JSON.parse(localStorage.getItem('ipstack'));
-					let storageTime = ipstack.storageTime;
-					const day = 1 * 24 * 60 * 60 * 1000;
-					if(Date.now() - storageTime < day){
-						window.CURPOS = ipstack;
-					}else{
-						requestIpStack()
-					}
-				}else{
-					requestIpStack()
-				}
-
-				function requestIpStack(){
-					$.getJSON('//api.ipstack.com/check?access_key=05b0ae3a68eece35c67005836290cb70', function(data) {
-						data.storageTime = Date.now();
-						window.CURPOS = data;
-						localStorage.setItem('ipstack', JSON.stringify(data))
-						// var coord = {lng: data.longitude, lat: data.latitude};
-						// fn && fn(coord);
-					});
-				}
-			},
+			
 		},
 	};
 

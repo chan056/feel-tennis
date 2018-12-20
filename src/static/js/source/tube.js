@@ -94,8 +94,7 @@ $(function () {
 		
 		$(window).trigger('resize');
 
-		console.log(to)
-		if(to.fullPath.match(/videos\/\d+/)){
+		if(isMobile && to.fullPath.match(/videos\/\d+/)){
 			$('#aside-controller').css('display', 'block!important')
 		}else{
 			$('#aside-controller').css('display', 'none!important')

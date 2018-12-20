@@ -964,16 +964,9 @@ let operations = {
 					HttpOnly: true
 				});
 
-				if(!postObj.city){
-					postObj.city = '';
-					// res.statusCode = 400;
-					// res.statusMessage = 'login fail';
-					// return res.end();
-				}
-
-				sql = `INSERT INTO usr_login_log VALUES (${id}, now(), '${postObj.ip}', '${postObj.city.toLowerCase()}', '${postObj.coords}') 
+				sql = `INSERT INTO usr_login_log VALUES (${id}, now(), '${req.usrInfo.ip}', '${postObj.city.toLowerCase()}', '${postObj.coords}') 
 					ON DUPLICATE KEY 
-					UPDATE last_login_time=now(), last_login_ip='${postObj.ip}', last_login_city='${postObj.city.toLowerCase()}', last_login_coords='${postObj.coords}';`
+					UPDATE last_login_time=now(), last_login_ip='${req.usrInfo.ip}', last_login_city='${postObj.city.toLowerCase()}', last_login_coords='${postObj.coords}';`
 				
 				conn.query(sql, function(err, result){
 					if(err)
@@ -989,7 +982,6 @@ let operations = {
 				res.statusMessage = 'login fail';
 				res.end();
 			}
-			// console.log(result, fields);
 		});
 	},
 
