@@ -2299,7 +2299,6 @@ module.exports = function(){
 				curCaptionBlock: null,// 选中的字幕快
 				waveContainerWidth: 0,
 				duration: 0,// 视频时长
-				timeLineLength: 0,// 时间轴
 				captions: [],// 当前字幕
 				drafts: [],
 				draft: '',// 字幕草稿/用户 编号
@@ -2332,6 +2331,14 @@ module.exports = function(){
 			return d;
 		},
 
+		computed: {
+			timeLineLength: function(){
+				// 1秒10刻度
+				// 每刻度间距6像素
+				return this.duration * 10 * 6;
+			}
+		},
+
 		template: temp.translator,
 
 		methods: {
@@ -2346,7 +2353,6 @@ module.exports = function(){
 
 					t.vEle.oncanplay= function(){
 						t.duration = t.vEle.duration;
-						t.duration = 600;
 
 						// t.$nextTick(function () {
 							t.drawTimeScale();
@@ -2354,10 +2360,6 @@ module.exports = function(){
 						// })
 
 						t.trimCaption();
-
-						// setTimeout(()=>{
-						// 	console.log($('#time-scale').width())
-						// }, 100)
 
 						t.vEle.oncanplay = null;
 
@@ -2769,15 +2771,12 @@ module.exports = function(){
 
 			drawWave(){
 				tools.insertScriptTag(1, '/lib/wavesurfer.min.js', {onload: function(){
-					$('#waveform').css({
-						width: this.timeLineLength
-					})
-					
 					// http://wavesurfer-js.org/docs/options.html
 					var wavesurfer = WaveSurfer.create({
 						container: '#waveform',
 						interact: false,
 						height: $('#waveform').height(),
+						cursorWidth: 0,
 						// barWidth: 8,
 						// barHeight: 1.2
 					});
@@ -2803,7 +2802,6 @@ module.exports = function(){
 				let timeLineScrollLeft = $('#timeline').scrollLeft();
 
 				c.width = this.waveContainerWidth;
-				this.timeLineLength = totalIndex * intervalX;
 				
 				c.style.marginLeft = timeLineScrollLeft + 'px';
 				ctx.translate(-timeLineScrollLeft, 0);

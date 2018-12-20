@@ -1050,11 +1050,10 @@ module.exports = function(){
 
                             <p class="subtitle"></p>
                         </div>
-                        {{captionBlockLeftDraggerFns}}
                         <div id="timeline">
                             <!--<TimeScale v-if="duration" :duration="duration" :fn="drawWave"/>-->
                             <canvas id="time-scale" height=20></canvas>
-                            <div v-if="timeLineLength" id="waveform" :style="{width: timeLineLength}"></div>
+                            <div v-if="timeLineLength" id="waveform" :style="{width: timeLineLength + 'px'}"></div>
                             <div v-for="(caption, index) in captions" :key="caption.id" v-if="duration && timeLineLength" class="caption-block" 
                                 v-bind:style="{left: timeToPos(caption.startTime/1000)+'px', width: timeToPos((caption.endTime-caption.startTime)/1000)+'px'}"
                                 >

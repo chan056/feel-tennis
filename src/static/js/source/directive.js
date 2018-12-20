@@ -13,6 +13,7 @@ module.exports = function(){
                 startX =  e.clientX
                 startL = tools.matchNumber(el.css('left'));
                 draggingSign.status = true;
+                let W = $(window);
 
                 let maxL, minL;
 
@@ -24,7 +25,7 @@ module.exports = function(){
                     minL = bindingValue.min || 0;
                 }
 
-                $(window).on('mousemove' + rid, function(e){
+                W.on('mousemove' + rid, function(e){
                     let xDistance = e.clientX - startX;
                     let endL = startL + xDistance;
 
@@ -43,8 +44,8 @@ module.exports = function(){
                     }
                 })
 
-                $(window).on('mouseup' + rid, function(){
-                    $(window).off('mousemove' + rid).off('mouseup' + rid);
+                W.on('mouseup' + rid, function(){
+                    W.off('mousemove' + rid).off('mouseup' + rid);
                     draggingSign.status = false;
 
                     if(bindingValue.mousupFuns){
