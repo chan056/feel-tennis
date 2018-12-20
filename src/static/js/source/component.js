@@ -2310,6 +2310,8 @@ module.exports = function(){
 				captionBlockLeftBoundryScope:{},// 字幕块左边界移动范围
 				captionBlockRightBoundryScope:{},// 字幕块右边界移动范围
 				draggingSign: {status: false},// 标记是否正在拖动 字幕块边界
+				captionBlockLeftDraggerFns: [],
+				captionBlockRightDraggerFns: [],
 
 				loginInfo: {},// 登录信息
 				videoInfo: {},// 视频信息
@@ -2595,7 +2597,6 @@ module.exports = function(){
 
 			// 拖动block dragger
 			handlerMovingCaptionBlockLeftDragger: function(pos){
-				console.log('handlerMovingCaptionBlockLeftDragger')
 				pos = pos > 0? pos: 0;
 				let curCaptionBlock = this.curCaptionBlock;
 				let index = $('.caption-block').index(this.curCaptionBlock);
@@ -2608,23 +2609,26 @@ module.exports = function(){
 
 				curCaptionBlock.css('left', pos).width(curCaptionBlockRightBoundry-pos);
 
-				if(pos < prevCaptionBlockRightBoundry && prevCaptinBlock){
-					prevCaptinBlock.width(pos - prevCaptionBlockLeftBoundry)
-					if(index > 0){
-						// setTimeout(()=>{
-							// draggingSign
-							this.captions[index-1].endTime = this.posToTime(pos, true);
-						// }, 1000)
+				if(index > - 1){
+					this.captionBlockLeftDraggerFns[0] = ()=>{
+						this.captions[index].startTime = this.posToTime(pos, true);
 					}
+				}else{
+					this.captionBlockLeftDraggerFns[0] = null;
 				}
 
-				if(index > - 1){
-					setTimeout(()=>{
-						if(!this.draggingSign.status){
-							console.log('change this.captions')
-							this.captions[index].startTime = this.posToTime(pos, true);
+				if(pos < prevCaptionBlockRightBoundry && prevCaptinBlock){
+					prevCaptinBlock.width(pos - prevCaptionBlockLeftBoundry)
+
+					if(index > 0){
+						this.captionBlockLeftDraggerFns[1] = ()=>{
+							this.captions[index-1].endTime = this.posToTime(pos, true);
 						}
-					}, 300)
+					}else{
+						this.captionBlockLeftDraggerFns[1] = null;
+					}
+				}else{
+					this.captionBlockLeftDraggerFns[1] = null;
 				}
 			},
 
@@ -2642,15 +2646,26 @@ module.exports = function(){
 
 				curCaptionBlock.width(pos - curCaptionBlockLeftBoundry);
 
-				if(pos > nextCaptionBlockLeftBoundry && nextCaptinBlock){
-					nextCaptinBlock.width(nextCaptionBlockRightBoundry - pos).css('left', pos);
-					if(index > - 1 && index < this.captions.length - 1){
-						this.captions[index + 1].startTime = this.posToTime(pos, true)
+				if(index > - 1){
+					this.captionBlockRightDraggerFns[0] = ()=>{
+						this.captions[index].endTime = this.posToTime(pos, true);
 					}
+				}else{
+					this.captionBlockRightDraggerFns[0] = null;
 				}
 
-				if(index > - 1){
-					this.captions[index].endTime = this.posToTime(pos, true);
+				if(pos > nextCaptionBlockLeftBoundry && nextCaptinBlock){
+					nextCaptinBlock.width(nextCaptionBlockRightBoundry - pos).css('left', pos);
+
+					if(index > - 1 && index < this.captions.length - 1){
+						this.captionBlockRightDraggerFns[1] = ()=>{
+							this.captions[index + 1].startTime = this.posToTime(pos, true)
+						};
+					}else{
+						this.captionBlockRightDraggerFns[1] = null;
+					}
+				}else{
+					this.captionBlockRightDraggerFns[1] = null;
 				}
 			},
 

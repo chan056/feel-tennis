@@ -1050,6 +1050,7 @@ module.exports = function(){
 
                             <p class="subtitle"></p>
                         </div>
+                        {{captionBlockLeftDraggerFns}}
                         <div id="timeline">
                             <!--<TimeScale v-if="duration" :duration="duration" :fn="drawWave"/>-->
                             <canvas id="time-scale" height=20></canvas>
@@ -1059,10 +1060,10 @@ module.exports = function(){
                                 >
                             </div>
 
-                            <div class="caption-block-dragger caption-block-dragger-min" v-draggable="{boundry: captionBlockLeftBoundryScope, draggingFn: handlerMovingCaptionBlockLeftDragger, draggingSign: draggingSign}">
+                            <div class="caption-block-dragger caption-block-dragger-min" v-draggable="{boundry: captionBlockLeftBoundryScope, draggingFn: handlerMovingCaptionBlockLeftDragger, draggingSign: draggingSign, mousupFuns: captionBlockLeftDraggerFns}">
                                 <i class="fa fa-bars"></i>
                             </div>
-                            <div class="caption-block-dragger caption-block-dragger-max" v-draggable="{boundry: captionBlockRightBoundryScope, draggingFn: handlerMovingCaptionBlockRightDragger, draggingSign: draggingSign}">
+                            <div class="caption-block-dragger caption-block-dragger-max" v-draggable="{boundry: captionBlockRightBoundryScope, draggingFn: handlerMovingCaptionBlockRightDragger, draggingSign: draggingSign, mousupFuns: captionBlockRightDraggerFns}">
                                 <i class="fa fa-bars"></i>
                             </div>
 

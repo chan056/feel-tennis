@@ -46,6 +46,13 @@ module.exports = function(){
                 $(window).on('mouseup' + rid, function(){
                     $(window).off('mousemove' + rid).off('mouseup' + rid);
                     draggingSign.status = false;
+
+                    if(bindingValue.mousupFuns){
+                        bindingValue.mousupFuns.forEach(fn => {
+                            fn && fn();
+                            fn = null;
+                        });
+                    }
                 })
             })
         }
