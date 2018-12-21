@@ -940,6 +940,25 @@ let operations = {
 		res.end(JSON.stringify(data));
 
 	},
+
+	queryUsrPostLately: function(res, qualification, params){
+		let usrInfo = this.usrInfo;
+		let usrId = usrInfo.usrId;
+
+		if(usrInfo.isAdmin == 1){
+			//  where DATE_SUB(CURDATE(), INTERVAL 30 DAY) <= date(time)
+			let sql = `select * from usr_post where not in readers`;
+
+			conn.query(sql, function(err, list, fields){
+				if(err)
+					return throwError(err, res);
+	
+				res.end('0')
+			});
+		}else{
+			return res.end('0')
+		}
+	},
 	
 	// ===============POST================
 	login: function(res, postObj, req){
@@ -1477,7 +1496,20 @@ let operations = {
 	createCaption: function(res, postObj, req){
 		let toCaption = require('../captionParser.js').toCaption;
 		toCaption(postObj, this.usrInfo.usrId);
+
 		res.end();
+	},
+
+	recordUsrPost(res, postObj, req){
+		let sql = `insert into usr_post (usr_id, video_id, type) values (?,?,?)`;
+		conn.query(sql, [this.usrInfo.usrId, Number(postObj.vId), postObj.type], function(err, result){
+			if(err)
+				return throwError(err, res);
+
+			if(result.affectedRows == 1){
+				res.end();
+			}
+		});
 	},
 
 	inheritCaption: function(res, postObj, req){

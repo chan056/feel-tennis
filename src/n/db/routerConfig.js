@@ -466,6 +466,11 @@ const routerConfig = {
         '/vttSituation': function(params, res, req){
             r.query('checkVttSituation', params, res, req);
         },
+
+        // 查询用户最近的发布（视频、字幕）
+        '/usrPostLately': function(params, res, req){
+            r.query('queryUsrPostLately', params, res, req);
+        },
     },
 
     post: {
@@ -655,6 +660,13 @@ const routerConfig = {
         '/srt/:vId': {
             fn: function(req, res, pathParams){
                 r.post('createCaption', req, res, pathParams);
+            },
+            limit: {level: 10}
+        },
+
+        '/recordUsrPost': {
+            fn: function(req, res, pathParams){
+                r.post('recordUsrPost', req, res, pathParams);
             },
             limit: {level: 10}
         },

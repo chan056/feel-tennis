@@ -48,7 +48,7 @@ module.exports = function(){
                             <span v-if="!inmails.length">暂无新消息</span>
                         </el-popover>
     
-                        <el-badge :value="inmails.length" class="item item">
+                        <el-badge :hidden="!inmails.length" :value="inmails.length" class="item">
                             <i v-popover:inmail class="fa fa-bell-o" title="消息"></i>
                         </el-badge>
     

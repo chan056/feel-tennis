@@ -361,7 +361,7 @@ module.exports = function(){
 
 				// 标记已读
 				tools.xhr('/markAsRead', function(data){
-					this.fetchInmails();	
+					this.fetchInmails();
 				}.bind(this), 'patch', {inmailId: inmail.id});
 
 			},
@@ -2460,6 +2460,14 @@ module.exports = function(){
 					
 					if(isFinal){
 						this.listDrafts();
+
+						// recordUsrPost
+						tools.xhr('/recordUsrPost', function(){
+							console.log('记录成功')
+						}, 'post', {
+							vId: this.videoId,
+							type: 2,
+						})
 					}
 
 					this.clear = true;
@@ -2468,10 +2476,12 @@ module.exports = function(){
 					if(auto){
 						message = '自动' + message;
 					}
+
 					this.$message({
 						message: message,
 						type: 'success'
 					});
+
 				}.bind(this), 'post', {
 					captions: this.captions,
 					isFinal: isFinal
