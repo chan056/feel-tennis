@@ -167,8 +167,8 @@ temp.uploadAdmin =  `
             </el-col>
 
             <el-col :span="10">
-                <el-radio v-model="SO.translated" label="1">需要</el-radio>
-                <el-radio v-model="SO.translated" label="2">不需要</el-radio>
+                <el-radio :disabled="!videoEditable" v-model="SO.needTranslated" label="1">需要</el-radio>
+                <el-radio :disabled="!videoEditable" v-model="SO.needTranslated" label="0">不需要</el-radio>
             </el-col>
         </el-row>
 
@@ -363,7 +363,7 @@ COMPONENTS.UploadAdmin = {
                 tag: '',
                 videoAbsPath: '',
                 subtitleAbsPath: '',
-                translated: '1'
+                needTranslated: '1'
             }, 
 			albums: [], 
 			tags: [], 
@@ -406,7 +406,8 @@ COMPONENTS.UploadAdmin = {
 		d.fileList = [];
 
 		return d;
-	},
+    },
+
 	methods: {
         backToAlbumList: function(){
             this.$router.push({ path: 'albumsAdmin'})
@@ -463,7 +464,6 @@ COMPONENTS.UploadAdmin = {
             so.tag = this.SO.tag.join(',');
             
             so.isTutorial = Number(this.isTutorial);
-            so.translated = Number(so.translated - 1);
 
 			tools.xhr('/video', function(){
                 var message  = `视频$创建成功`;
@@ -475,7 +475,7 @@ COMPONENTS.UploadAdmin = {
 
                 this.SO.videoAbsPath = '';
                 this.SO.subtitleAbsPath = '';
-                this.SO.translated = '1';//新建后重置“翻译”选项
+                this.SO.needTranslated = '1';//新建后重置“翻译”选项
 
                 this.videoFileList = [];
                 this.subtitleFileList = [];
@@ -577,7 +577,7 @@ COMPONENTS.UploadAdmin = {
 			tools.xhr('/videoInfo/' + this.vId, function(res){
                 this.videoInfo = res;
 
-                this.sportId =  res.sportId;
+                this.sportId =  res.sport_id;
 
                 this.SO.albumId = res.album_id;
                 this.SO.headline = res.headline;
@@ -585,6 +585,7 @@ COMPONENTS.UploadAdmin = {
                 this.SO.tag = res.tag? res.tag.split(',').map(function(){
                     return Number(arguments[0])
                 }): [];
+                this.SO.needTranslated = String(res.need_translated);
 
                 fn && fn(res.sportId);
 			}.bind(this));
@@ -680,13 +681,11 @@ COMPONENTS.UploadAdmin = {
         }
 	},
 
-	// watch: {'SO.albumId': function(to, from){
-	// 	if(to){
-	// 		this.queryMaker(to)
-	// 	}else{
-	// 		this.selectedMaker = '';
-	// 	}
-    // }},
+	watch: {'vId': function(to, from){
+		if(!to && from){
+			location.reload();
+		}
+    }},
     
     mounted: function(){
         tools.togglePageIE(this);
@@ -730,7 +729,7 @@ routeConfig.push(
                 sId: route.query.sId, 
                 isIntro: route.query.isIntroductory
             }
-        } 
+        },
     },
 );
 

@@ -1108,20 +1108,20 @@ let operations = {
 
 				if(subtitleAbsPath && fs.existsSync(subtitleAbsPath)){
 					videoGenerator.storeSubtitle(subtitleAbsPath, tsDir);
-					recordSubtitleUploaded();
+					// recordSubtitleUploaded();
 				}
 			})
 		}else{
 			if(subtitleAbsPath && fs.existsSync(subtitleAbsPath)){
 				videoGenerator.storeSubtitle(subtitleAbsPath, tsDir);
-				recordSubtitleUploaded();
+				// recordSubtitleUploaded();
 			}
 		}
 
-		function recordSubtitleUploaded(){
-			let sql = `update video set has_subtitle=1 where id=${vId}`;
-			conn.query(sql)
-		}
+		// function recordSubtitleUploaded(){
+		// 	let sql = `update video set has_subtitle=1 where id=${vId}`;
+		// 	conn.query(sql)
+		// }
 	},
 
 	generateIntroductoryVideo: function(vId, obj){
@@ -2130,9 +2130,9 @@ let operations = {
 		let vId = postObj.id;
 
 		if(postObj.isTutorial){
-			var sql = `update video set album_id=?, headline=?, headline_eng=?, tag=?, update_time=? where id=${vId}`;
+			var sql = `update video set album_id=?, headline=?, headline_eng=?, tag=?, need_translated=?, update_time=? where id=${vId}`;
 
-			conn.query(sql, [postObj.albumId, postObj.headline, postObj.headlineEng, postObj.tag, Date.now()], function(err, result, fields){
+			conn.query(sql, [postObj.albumId, postObj.headline, postObj.headlineEng, postObj.tag, postObj.needTranslated, Date.now()], function(err, result, fields){
 				if(err)
 					return throwError(err, res);
 	
@@ -2150,9 +2150,9 @@ let operations = {
 		}else{
 			let sportId = postObj.sportId;
 
-			var sql = `update video_introductory set sport_id=?, headline=?, headline_eng=?, tag=?, update_time=? where id=${vId}`;
+			var sql = `update video_introductory set sport_id=?, headline=?, headline_eng=?, tag=?, need_translated=?, update_time=? where id=${vId}`;
 
-			conn.query(sql, [sportId, postObj.headline, postObj.headlineEng, postObj.tag, Date.now()], function(err, result, fields){
+			conn.query(sql, [sportId, postObj.headline, postObj.headlineEng, postObj.tag, postObj.needTranslated, Date.now()], function(err, result, fields){
 				if(err)
 					return throwError(err, res);
 	
