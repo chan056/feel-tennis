@@ -331,11 +331,10 @@ module.exports = function(){
                         <router-link :to="{path: '/videos/'+ video.id }">
                             <img @mouseover="dynamivePreview($event);" @mouseout="staticPreview($event);" 
                                 :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb video-thumb" alt="video"/>
-                            <span class="translate-tag" v-if="video.translated" title="字幕已翻译">译</span>
+                            <span class="translate-tag" v-if="video.translated || !video.need_translated" title="字幕已翻译">译</span>
                             <h3 class="block-title video-title ellipsis">
                                 <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
                             </h3>
-                            <!-- <div class="author">author</div> -->
                             <p class="clearfix block-info">
                                 <span class="play-count">{{video.impression}}次观看</span>
                                 <span class="update-time">
