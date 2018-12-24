@@ -94,6 +94,7 @@ $(function () {
 		
 		$(window).trigger('resize');
 
+		// 移动端 视频播放页
 		if(isMobile && to.fullPath.match(/videos\/\d+/)){
 			$('#aside-controller').css('display', 'block!important')
 		}else{

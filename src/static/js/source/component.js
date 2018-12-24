@@ -97,6 +97,7 @@ module.exports = function(){
 	
 				loginUsrInfo: {},
 				inmails: [],
+				usrPosts: []
 			}
 		},
 
@@ -342,12 +343,40 @@ module.exports = function(){
 					this.$bus.emit('update-login-info', this.loginUsrInfo);
 
 					name && this.fetchInmails();
+
+					this.loginUsrInfo.is_admin && this.fetchUsrPost();
 				}.bind(this));
 			},
 
 			fetchInmails: function(){
 				tools.xhr('/inmails', function(data){
 					this.inmails = data;
+				}.bind(this));
+			},
+
+			fetchUsrPost: function(){
+				tools.xhr('/usrPosts', function(data){
+					this.usrPosts = data;
+
+					this.usrPosts.forEach((post, index) => {
+						setTimeout(()=>{
+							let	videoId = post.video_id, 
+							videoUrl = '/translator/' + videoId,
+							usrId = post.usr_id;
+
+							let notify = this.$notify({
+								title: `usr: ${usrId}, video: ${videoId}`,
+								message: `<a class="post-detail-btn" target="_blank" href="${videoUrl}">查看</a>`,
+								duration: 0,
+								dangerouslyUseHTMLString: true,
+								showClose: false
+							});
+
+							$(notify.dom).find('.post-detail-btn').on('click', function(){
+								notify.close();
+							})
+						}, index * 1000)
+					})
 				}.bind(this));
 			},
 

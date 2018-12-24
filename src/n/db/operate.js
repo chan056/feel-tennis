@@ -850,6 +850,19 @@ let operations = {
 		});
 	},
 
+	fetchUsrPosts: function(res, qualification, params){
+		var sql = `SELECT * from usr_post where not find_in_set(${this.usrInfo.usrId}, readers) order by id desc`;
+
+		conn.query(sql, function(err, list, fields){
+			if(err)
+				console.log(err.sql, err.sqlMessage) ;
+			
+			let json = JSON.stringify(list);
+
+			res.end(json);
+		});
+	},
+
 	fetchCaptionDrafts: function(res, qualification, params){
 		const fs = require('fs');
 		const path = require('path');

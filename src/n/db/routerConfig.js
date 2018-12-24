@@ -447,6 +447,13 @@ const routerConfig = {
             limit: {level: 10}
         },
 
+        '/usrPosts': {
+            fn: function(params, res, req){
+                r.query('fetchUsrPosts', params, res, req)
+            },
+            limit: {level: 100}
+        },
+
         '/captionDrafts/:vId': {
             fn: function(params, res, req){
                 r.query('fetchCaptionDrafts', params, res, req)
