@@ -1011,14 +1011,13 @@ let operations = {
 		}
 		ip = ip.replace('::ffff:', '');
 
-		conn.query(`SELECT * from usr WHERE regist_ip='${ip}' and regist_time > DATE_SUB(CURRENT_TIMESTAMP(),INTERVAL 1 DAY)`, function(err, result){
-			if(err)
-				return throwError(err, res);
+		// conn.query(`SELECT * from usr WHERE regist_ip='${ip}' and regist_time > DATE_SUB(CURRENT_TIMESTAMP(),INTERVAL 1 DAY)`, function(err, result){
+		// 	if(err)
+		// 		return throwError(err, res);
 
-			// 1天内同个IP注册超过10个
+			// 1天内同个IP注册超过5个
 			// 将IP加入黑名单
-			if(result.length > 10){
-				// conn.query('select * from black where ip == ${ip}')
+			/* if(result.length > 5){
 				let sql = `insert into black (ip) values (${ip})`;
 				conn.query(sql);
 
@@ -1029,15 +1028,15 @@ let operations = {
 					HttpOnly: true
 				});
 
+				// TODO 删除该ip下所有的账户
 				res.end();
-			}else{
+			}else{ */
 				let code = Math.floor(Math.random() * 1000000000);
 				let email = postObj.email;
 		
 				let sql = `INSERT INTO usr 
 					(name, psw, email, active_code, regist_ip)
 					VALUES (?, ?, ?, ?, ?)`;
-				
 		
 				conn.query(sql, [postObj.name, postObj.psw, email, code, ip], function(err, result, fields){
 					if(err)
@@ -1061,8 +1060,8 @@ let operations = {
 						}
 					}
 				});
-			}
-		});
+			// }
+		// });
 	},
 
 	generateVideo: function(vId, obj){
@@ -1369,7 +1368,7 @@ let operations = {
 			sendInmail(offense, defense, inmailContent);
 		});
 	},
-
+/* 
 	blockUsr: function(res, postObj){
 		let sql;
 		if(postObj.usrId){
@@ -1413,7 +1412,7 @@ let operations = {
 				}
 			});
 		}
-	},
+	}, */
 
 	createSport: function(res, postObj, req){
 		let sql = `insert into sport (name, update_time) values ('${postObj.name}', ${Date.now()})`;

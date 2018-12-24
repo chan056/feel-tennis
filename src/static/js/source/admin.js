@@ -788,7 +788,7 @@ temp.feedbacksAdmin =  `
                 width="100">
                 <template slot-scope="scope">
                     <el-button @click="deleteFeedback(scope.row.id)" type="text" size="small">删除</el-button>
-                    <el-button v-if="!scope.row.black_usr_id_record && !scope.row.black_ip_record" @click="blockUsr(scope.row.ip, scope.row.usr_id, $event)" type="text" size="small">加黑</el-button>
+                    <!-- <el-button v-if="!scope.row.black_usr_id_record && !scope.row.black_ip_record" @click="blockUsr(scope.row.ip, scope.row.usr_id, $event)" type="text" size="small">加黑</el-button> -->
                 </template>
             </el-table-column>
         </el-table>
@@ -853,7 +853,7 @@ COMPONENTS.FeedbacksAdmin = {
             });
         },
 
-        blockUsr: function(ip, usrId, e){
+       /*  blockUsr: function(ip, usrId, e){
             this.$confirm('确认加黑？')
             .then(function(){
                 tools.xhr('/blockedUsr', function(res){
@@ -870,7 +870,7 @@ COMPONENTS.FeedbacksAdmin = {
             }.bind(this)).catch(function(){
 
             });
-        }
+        } */
 	},
 
 	// watch: {'SO.albumId': function(to, from){

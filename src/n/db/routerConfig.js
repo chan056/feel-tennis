@@ -636,12 +636,12 @@ const routerConfig = {
             limit: {level: 10}
         },
 
-        '/blockedUsr': {
+        /* '/blockedUsr': {
             fn: function(req, res, pathParams){
                 r.post('blockUsr', req, res, pathParams);
             },
             limit: {level: 100}
-        },
+        }, */
 
         '/competeBlack': {
             fn: function(req, res, pathParams){
