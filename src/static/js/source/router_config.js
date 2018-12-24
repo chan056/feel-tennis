@@ -7,7 +7,7 @@ module.exports = function(){
 		{ 
 			path: '/sports', 
 			component: COMPONENTS.Sports, 
-			meta: {title: '首页'},
+			meta: {title: '一波教练'},
 		},
 		{ 
 			path: '/sports/:sportId', 
