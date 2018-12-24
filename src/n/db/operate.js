@@ -1599,7 +1599,6 @@ let operations = {
 		pagePath = tools.transformPath(pagePath)
 
 		let fileStorePath = pathModule.resolve(global.staticRoot, `./page/spider/${pagePath}.html`);
-		
 
 		fs.writeFile(fileStorePath, pageContent, (err) => {
 			if (err) throw err;
@@ -1608,45 +1607,53 @@ let operations = {
 		fileStorePath = fileStorePath.replace(/\\/g, '/');// 存储到MYSQL 将\转化为/
 		let sql = `insert into spider_food (path, file_path) values ('${postObj.pagePath}', '${fileStorePath}') 
 			ON DUPLICATE KEY 
-			UPDATE file_path='${fileStorePath}'`;
+			UPDATE file_path='${fileStorePath}';`;
+
+		if(postObj.pagePath == '/sports'){
+			sql += `insert into spider_food (path, file_path) values ('/', '${fileStorePath}') 
+			ON DUPLICATE KEY 
+			UPDATE file_path='${fileStorePath}';`
+		}
 
 		conn.query(sql, [], function(err, result){
 			if(err)
 				return throwError(err, res);
 
-			if(result.affectedRows == 1){
-				res.statusMessage = 'update page success';
-				res.end();
+			res.statusMessage = 'update page success';
+			res.end();
 
-				updateSitemap();
-			}else{
-				res.end();
-			}
+			updateSitemap();
+			
 		});
 
 		// 更新到sitemap
 		function updateSitemap(){
 			let sitemapLocation = pathModule.resolve(global.staticRoot, 'sitemap.txt');
 
-			fs.readFile(sitemapLocation, 'utf8', function(err, data){
-				if(!data){
-					return
-				}
-				
-				let PATH = req.headers.origin + postObj.pagePath;// https://www.yitube.cn/albums/13 
-				let eol  = require('os').EOL;
-				data = data.split(eol);
+			fs.exists(sitemapLocation, function(exist){
+				if(exist){
+					fs.readFile(sitemapLocation, 'utf8', function(err, data){
+						let PATH = req.headers.origin + postObj.pagePath;// https://www.yitube.cn/albums/13 
+						let eol  = require('os').EOL;
+						data = data? data.split(eol): [];
 
-				if(data.length == 1 && !data[0]){
-					data = [];
-				}
+						if(data.indexOf(PATH) === -1){
+							data.push(PATH);
 
-				if(data.indexOf(PATH) === -1){
-					data.push(PATH);
+							fs.writeFileSync(sitemapLocation, data.join(eol), {encoding: 'utf8'})
+						}
 
-					fs.writeFileSync(sitemapLocation, data.join(eol), {encoding: 'utf8'})
+						if(postObj.pagePath == '/sports'){
+							var indexPagePath = req.headers.origin + '/';
+							if(data.indexOf(indexPagePath) === -1){
+								data.push(indexPagePath);
+								fs.writeFileSync(sitemapLocation, data.join(eol), {encoding: 'utf8'})
+							}
+						}
+					})
 				}
 			})
+			
 		}
 	},
 

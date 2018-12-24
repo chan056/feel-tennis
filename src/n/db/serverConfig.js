@@ -11,28 +11,27 @@ module.exports = function(req, res) {
 		let urlObj = url.parse(req.url, true);
 		let pathname = urlObj.pathname;
 
-		if(pathname == '/'){
+		let contentType = '';
+		let absPath = '';
+
+		let isBot = tools.botCheck(req.headers['user-agent']);
+
+		if(!isBot && pathname == '/'){
 			pathname = constants.indexPath;
 		}
 
-		let absPath = path.join(global.staticRoot, pathname);
 		let ext = path.extname(pathname);
 		ext = ext ? ext.slice(1) : '';
-		let contentType = '';
 
 		if(ext){
-			contentType = mime[ext];
-			contentType? disposeStaticResource(): tools.response404(res);
+			disposeStaticResource();
 		}else{
 			if(pathname.match(/\/api\//)){
 				disposeApi();
 			}else{
-				let userAgent = req.headers['user-agent'];
-				let isBot = tools.botCheck(userAgent);
-
 				if(isBot){
 					feedBot();
-				}else{
+				}else{// /sports 直接访问 返回首页
 					absPath = path.join(global.staticRoot, constants.indexPath);
 					ext = 'html';
 					contentType = mime[ext];
@@ -42,6 +41,13 @@ module.exports = function(req, res) {
 		}
 
 		function disposeStaticResource(){
+			absPath = path.join(global.staticRoot, pathname);
+
+			contentType = mime[ext];
+			if(!contentType){
+				tools.response404(res);
+			}
+
 			fs.exists(absPath, function(exists) {
 				if (!exists) {
 					tools.response404(res);
