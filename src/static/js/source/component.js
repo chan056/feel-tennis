@@ -361,8 +361,8 @@ module.exports = function(){
 					this.usrPosts.forEach((post, index) => {
 						setTimeout(()=>{
 							let	videoId = post.video_id, 
-							videoUrl = '/translator/' + videoId,
-							usrId = post.usr_id;
+								usrId = post.usr_id,
+								videoUrl = '/translator/' + videoId + '?draftId=' + usrId;
 
 							let notify = this.$notify({
 								title: `usr: ${usrId}, video: ${videoId}`,
@@ -373,12 +373,23 @@ module.exports = function(){
 							});
 
 							$(notify.dom).find('.post-detail-btn').on('click', function(){
-								notify.close();
+								markUsrPostReader(post.id, this.href, notify);
+								return false;
 							})
 						}, index * 1000)
 					})
+
+					function markUsrPostReader(id, href, notify){
+						tools.xhr('/usrPostReader', ()=>{
+							window.open(href);
+							notify.close();
+						}, 'patch', {
+							postId: id
+						});
+					}
 				}.bind(this));
 			},
+
 
 			showInmailDetail: function(inmail, key){
 				this.$alert(inmail.content, '消息详情', {
@@ -2564,12 +2575,21 @@ module.exports = function(){
 						vId: this.videoId,
 						draft: this.draft
 					});
+
 				}).catch(() => {
+
 					this.$message({
 						type: 'info',
 						message: '审核已取消'
 					});
 				});
+
+				// todo
+				// 标记审核人和审核时间
+				function markUsrPostCheckStatus(){
+
+					// 发送审核状态给用户
+				}
 			},
 
 			// 定位当前行

@@ -770,6 +770,13 @@ const routerConfig = {
         '/toggleVideo': function(req, res){
             r.patch('toggleVideo', req, res)
         },
+
+        '/usrPostReader': {
+            fn: function(req, res, pathParams){
+                r.patch('markUsrPostReader', req, res, pathParams);
+            },
+            limit: {level: 100}
+        },
     },
 
     // delete 删除资源

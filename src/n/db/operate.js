@@ -851,6 +851,7 @@ let operations = {
 	},
 
 	fetchUsrPosts: function(res, qualification, params){
+		// todo 并且不是本人的 并且没有被confirm的（成功、失败）
 		var sql = `SELECT * from usr_post where not find_in_set(${this.usrInfo.usrId}, readers) order by id desc`;
 
 		conn.query(sql, function(err, list, fields){
@@ -2071,6 +2072,27 @@ let operations = {
 
 			res.end();
 		});
+	},
+
+	markUsrPostReader: function(res, patchObj, req){
+		var sql = `select readers from usr_post where id=${patchObj.postId}`;
+		conn.query(sql, (err, readers)=>{
+			if (err) return throwError(err, res);
+
+			readers = readers[0].readers;
+			readers = readers? readers.split(','): [];
+			if(readers.indexOf(String(this.usrInfo.usrId)) === -1){
+				readers.push(this.usrInfo.usrId);
+				readers = readers.join(',');
+	
+				sql = `update usr_post set readers='${readers}' where id=${patchObj.postId}`;
+				conn.query(sql, function(err, result){
+					if (err) return throwError(err, res);
+	
+					res.end();
+				})
+			}
+		})
 	},
 
 	// ===============DELETE================

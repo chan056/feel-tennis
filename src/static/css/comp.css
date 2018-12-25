@@ -437,6 +437,7 @@ app {
   margin: 8px auto;
   font-weight: normal;
   font-size: inherit;
+  line-height: 20px;
 }
 .block-list .block-title a {
   text-decoration: none;
