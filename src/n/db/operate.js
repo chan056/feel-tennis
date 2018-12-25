@@ -1514,15 +1514,61 @@ let operations = {
 	},
 
 	recordUsrPost(res, postObj, req){
-		let sql = `insert into usr_post (usr_id, video_id, type) values (?,?,?)`;
-		conn.query(sql, [this.usrInfo.usrId, Number(postObj.vId), postObj.type], function(err, result){
-			if(err)
-				return throwError(err, res);
+		let usrId = this.usrInfo.usrId,
+			vId = postObj.vId,
+			type = postObj.type;
 
-			if(result.affectedRows == 1){
-				res.end();
+		// 不存在记录就插入
+		// let sql = `INSERT INTO usr_post (usr_id, video_id, type) SELECT
+		// 	${usrId},
+		// 	${usrId},
+		// 	${type}
+		// FROM
+		// 	DUAL
+		// WHERE
+		// 	NOT EXISTS (
+		// 		SELECT
+		// 			*
+		// 		FROM
+		// 			usr_post
+		// 		WHERE
+		// 			usr_id = ${usrId}
+		// 		AND video_id = ${usrId}
+		// 		AND type = ${type}
+		// 	);`
+		
+		conn.query(`select * from usr_post where usr_id = ${usrId} AND video_id = ${vId} AND type = ${type}`, function(err, result){
+			if(err)
+				return throwError(err, result);
+
+			if(result.length){
+				conn.query(`update usr_post set 
+					time = now(), 
+					readers='', 
+					checkor = null, 
+					check_time = null, 
+					check_result = null 
+					where id = ${result[0].id}`, 
+				function(err, result){
+						
+					if(err)
+						return throwError(err, result);
+
+					if(result.affectedRows == 1){
+						res.end();
+					}
+				})
+			}else{
+				conn.query(`INSERT INTO usr_post (usr_id, video_id, type) values (${usrId}, ${vId}, ${type})`, function(err, result){
+					if(err)
+						return throwError(err, result);
+
+					if(result.affectedRows == 1){
+						res.end();
+					}
+				})
 			}
-		});
+		})
 	},
 
 	inheritCaption: function(res, postObj, req){
@@ -1560,39 +1606,75 @@ let operations = {
 	},
 
 	auditCaption: function(res, postObj, req){
-		const parser = require('subtitles-parser');
-        const fs = require('fs');
-		const path = require('path');
-		
-		let usrId = this.usrInfo.usrId;
 		let draft = postObj.draft;
+		let vId = postObj.vId;
+		let usrId = this.usrInfo.usrId;
 
-		let root = path.resolve(
-			global.staticRoot, 
-			`./multimedia/ts/${postObj.vId}`
-		)
+		conn.query(`select * from usr_post where video_id=${vId} and usr_id=${draft} and not isnull(checkor)`, function(err, result){
+			if(err)
+				return throwError(err, res);
 
-		let srcFinalDraftPath = path.resolve(
-			root, 
-			`subtitle.${draft}`
-		)
+			if(!result.length){//未审核
 
-		let zhDrafPath = path.resolve(
-			root, 
-			`subtitle.zh`
-		)
-
-		// subtitle.25 -> subtitle.zh
-		tools.copyFile(srcFinalDraftPath, zhDrafPath, function(){
-			require('../tools').convertSrt2vtt(root, 'subtitle.zh')
-			// 记录该视频被翻译
-			let sql = `update video set translated=1 where id=?`;
-			conn.query(sql, [postObj.vId], function(err, result){
-				if(err)
-					return throwError(err, res);
-				
-				res.end();
-			});
+				if(postObj.status == 1){// 通过
+					const parser = require('subtitles-parser');
+					const fs = require('fs');
+					const path = require('path');
+			
+					let root = path.resolve(
+						global.staticRoot, 
+						`./multimedia/ts/${vId}`
+					)
+			
+					let srcFinalDraftPath = path.resolve(
+						root, 
+						`subtitle.${draft}`
+					)
+			
+					let zhDrafPath = path.resolve(
+						root, 
+						`subtitle.zh`
+					)
+			
+					// subtitle.25 -> subtitle.zh
+					tools.copyFile(srcFinalDraftPath, zhDrafPath, function(){
+						require('../tools').convertSrt2vtt(root, 'subtitle.zh')
+						// 标记视频已翻译
+						let sql = `update video set translated=1 where id=?`;
+						conn.query(sql, [vId], function(err, result){
+							if(err)
+								return throwError(err, res);
+							
+							res.end();
+						});
+			
+						// 更新用户审核人
+						sql = `update usr_post set checkor=${usrId}, check_time=now(), check_result=1 where video_id=${vId} and usr_id=${draft}`;
+						conn.query(sql, function(err, result){
+							if(err)
+								return throwError(err, res);
+			
+							if(result.affectedRows == 1){
+								res.end()
+							}
+						})
+					})
+				}else{// 否决
+					let sql = `update usr_post set checkor=${usrId}, check_time=now(), check_result=2 where video_id=${vId} and usr_id=${draft}`;
+					conn.query(sql, function(err, result){
+						if(err)
+							return throwError(err, res);
+		
+						if(result.affectedRows == 1){
+							res.end()
+						}
+					})
+				}
+			}else{
+				res.end(JSON.stringify({
+					checkor: result[0].checkor
+				}))
+			}
 		})
 	},
 

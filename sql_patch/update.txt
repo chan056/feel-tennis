@@ -1,1 +1,0 @@
-usr is_mapper boolean

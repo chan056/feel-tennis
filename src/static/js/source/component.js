@@ -344,7 +344,7 @@ module.exports = function(){
 
 					name && this.fetchInmails();
 
-					this.loginUsrInfo.is_admin && this.fetchUsrPost();
+					this.loginUsrInfo.is_admin && !this.$route.path.match(/translator\/\d+$/) && this.fetchUsrPost();
 				}.bind(this));
 			},
 
@@ -2501,7 +2501,6 @@ module.exports = function(){
 					if(isFinal){
 						this.listDrafts();
 
-						// recordUsrPost
 						tools.xhr('/recordUsrPost', function(){
 							console.log('记录成功')
 						}, 'post', {
@@ -2561,35 +2560,52 @@ module.exports = function(){
 			// 审核当前查看的终稿
 			auditCaption: function(){
 				this.$confirm('审核通过？', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
+					confirmButtonText: '通过',
+					cancelButtonText: '否决',
 					type: 'warning',
 				}).then(()=>{
-					tools.xhr('/caption/audition' , function(){
-						this.$message({
-							message: `字幕已通过审核,会作为视频默认字幕`,
-							type: 'success'
-						})
-
-					}.bind(this), 'post', {
-						vId: this.videoId,
-						draft: this.draft
-					});
-
+					if(confirm('确认通过？')){
+						tools.xhr('/caption/audition' , function(res){
+							if(!res){
+								this.$message({
+									message: `字幕已通过审核,会作为视频默认字幕`,
+									type: 'success'
+								})
+								// 发送审核状态给用户 todo
+							}else{
+								this.$message({
+									message: `已被用户ID为${res.checkor}的管理审核，不用重复审核`,
+									type: 'info'
+								})
+							}
+						}.bind(this), 'post', {
+							vId: this.videoId,
+							draft: this.draft,
+						});
+					}
 				}).catch(() => {
-
-					this.$message({
-						type: 'info',
-						message: '审核已取消'
-					});
+					if(confirm('确认否决？')){
+						tools.xhr('/caption/audition' , function(res){
+							if(!res){
+								this.$message({
+									message: `否决成功，稍后会通知该用户`,
+									type: 'success'
+								})
+								// 发送审核状态给用户 todo
+							}else{
+								this.$message({
+									message: `已被用户ID为${res.checkor}的管理审核，不用重复审核`,
+									type: 'info'
+								})
+							}
+						}.bind(this), 'post', {
+							vId: this.videoId,
+							draft: this.draft,
+							status: 2
+						});
+					}
 				});
 
-				// todo
-				// 标记审核人和审核时间
-				function markUsrPostCheckStatus(){
-
-					// 发送审核状态给用户
-				}
 			},
 
 			// 定位当前行

@@ -429,3 +429,7 @@ nodesession 独立
 
 1225
     查询用户最近的post
+
+1226
+    usr_post 加字段 checkor checkor_time
+    usr_post 记录唯一
