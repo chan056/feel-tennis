@@ -698,6 +698,14 @@ const routerConfig = {
             },
             limit: {level: 100}
         },
+        
+        '/usrPostNotifyier': {
+            fn: function(req, res, pathParams){
+                r.post('notifyUsrPost', req, res, pathParams);
+            },
+            limit: {level: 100}
+        },
+        
     },
 
     // ============put update完整资源=============

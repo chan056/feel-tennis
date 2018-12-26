@@ -851,8 +851,8 @@ let operations = {
 	},
 
 	fetchUsrPosts: function(res, qualification, params){
-		// todo 并且不是本人的 并且没有被confirm的（成功、失败）
-		var sql = `SELECT * from usr_post where not find_in_set(${this.usrInfo.usrId}, readers) order by id desc`;
+		// todo 未被审核 并且 未被查看的 
+		var sql = `SELECT * from usr_post where isnull(checkor) and not find_in_set(${this.usrInfo.usrId}, readers) order by id desc`;
 
 		conn.query(sql, function(err, list, fields){
 			if(err)
@@ -1750,6 +1750,13 @@ let operations = {
 			})
 			
 		}
+	},
+
+	notifyUsrPost: function(res, postObj, req){
+		let inmailContent = `《${postObj.videoTitle}》审核${['已','未'][postObj.status - 1]}通过`;
+		sendInmail(this.usrInfo.usrId, postObj.receiver, inmailContent);
+
+		res.end();
 	},
 
 	// ===============PATCH================

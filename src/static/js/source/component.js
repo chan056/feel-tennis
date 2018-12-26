@@ -2571,7 +2571,14 @@ module.exports = function(){
 									message: `字幕已通过审核,会作为视频默认字幕`,
 									type: 'success'
 								})
+
 								// 发送审核状态给用户 todo
+								// if(this.draft != window.loginUsrInfo.is)
+								tools.xhr('/usrPostNotifyier' , null, 'post', {
+									receiver: this.draft,
+									status: 1,
+									videoTitle: this.videoInfo.headline
+								});
 							}else{
 								this.$message({
 									message: `已被用户ID为${res.checkor}的管理审核，不用重复审核`,
@@ -2581,6 +2588,7 @@ module.exports = function(){
 						}.bind(this), 'post', {
 							vId: this.videoId,
 							draft: this.draft,
+							status: 1
 						});
 					}
 				}).catch(() => {

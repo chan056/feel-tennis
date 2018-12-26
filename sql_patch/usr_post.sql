@@ -25,7 +25,7 @@ CREATE TABLE `usr_post` (
   `video_id` mediumint(9) NOT NULL,
   `type` tinyint(1) NOT NULL COMMENT '1 视频 2 字幕',
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `readers` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '' COMMENT '宸叉煡鐪嬬殑绠＄悊鍛?',
+  `readers` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '',
   `checkor` mediumint(9) DEFAULT NULL,
   `check_time` datetime DEFAULT NULL,
   `check_result` tinyint(1) DEFAULT NULL,
