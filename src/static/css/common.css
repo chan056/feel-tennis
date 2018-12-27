@@ -78,7 +78,7 @@ img {
   overflow: hidden;
 }
 .block-list li {
-  display: inline-block;
+  display: inline-grid;
   margin: 0 4px 0px 0;
   max-width: 210px;
   overflow: hidden;
@@ -88,7 +88,6 @@ img {
 }
 .block-list .block-info {
   padding: 8px 0;
-  min-height: 3em;
 }
 .el-dialog {
   width: 500px;
@@ -101,11 +100,6 @@ img {
 }
 .el-form-item {
   margin-bottom: 20px;
-}
-.nowrap {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
 #player-wrapper,
 .player-wrapper {

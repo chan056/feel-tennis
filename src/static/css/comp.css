@@ -78,7 +78,7 @@ img {
   overflow: hidden;
 }
 .block-list li {
-  display: inline-block;
+  display: inline-grid;
   margin: 0 4px 0px 0;
   max-width: 210px;
   overflow: hidden;
@@ -88,7 +88,6 @@ img {
 }
 .block-list .block-info {
   padding: 8px 0;
-  min-height: 3em;
 }
 .el-dialog {
   width: 500px;
@@ -101,11 +100,6 @@ img {
 }
 .el-form-item {
   margin-bottom: 20px;
-}
-.nowrap {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
 #player-wrapper,
 .player-wrapper {
@@ -437,11 +431,9 @@ app {
   margin: 8px auto;
   font-weight: normal;
   font-size: inherit;
-  line-height: 20px;
-}
-.block-list .block-title a {
-  text-decoration: none;
-  max-height: 52px;
+  line-height: 2rem;
+  max-height: 4rem;
+  width: 210px;
   overflow: hidden;
 }
 .tags {
@@ -586,9 +578,9 @@ app {
 .star-list .v-star-list li a {
   display: block;
   height: 100%;
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden;
 }
 .map-container {
   box-shadow: 0px 0px 20px #777;

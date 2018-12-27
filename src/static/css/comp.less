@@ -185,8 +185,8 @@ app{font-size: 14px;}
 .block-list{
   .block-thumb{display: block; width: @list-item-width; height: @list-item-height; background-color: #666;}
   .block-title{
-    margin: 8px auto; font-weight: normal; font-size: inherit; line-height: 20px;
-    a{text-decoration: none; max-height: 52px; overflow: hidden;}
+    margin: 8px auto; font-weight: normal; font-size: inherit; line-height: 2rem; max-height: 4rem;  width: 210px;
+    overflow: hidden;
   }
 }
 
@@ -319,7 +319,7 @@ app{font-size: 14px;}
 	.v-star-list{
 		li{
 			width: @list-item-width; height: @list-item-height; text-align: center; line-height: @list-item-height; box-sizing: border-box; border: 1px solid @border-color;
-			a{display: block; height: 100%; .nowrap;}
+			a{display: block; height: 100%; .ellipsis;}
 		}
 	}
 	.shoot-v-list{
