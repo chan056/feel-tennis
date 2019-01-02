@@ -87,7 +87,7 @@ img {
   text-decoration: none;
 }
 .block-list .block-info {
-  padding: 8px 0;
+  margin: 0 0 1rem 0;
 }
 .el-dialog {
   width: 500px;
@@ -428,7 +428,7 @@ app {
   background-color: #666;
 }
 .block-list .block-title {
-  margin: 8px auto;
+  margin: 1rem auto 0;
   font-weight: normal;
   font-size: inherit;
   line-height: 2rem;
