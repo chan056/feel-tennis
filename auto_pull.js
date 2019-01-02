@@ -1,6 +1,6 @@
 const { exec } = require('child_process');
 
-constant ONEHOURMILLISECOND = 60 * 60 * 1000;
+let ONEHOURMILLISECOND = 60 * 60 * 1000;
 
 setInterval(function(){
     // 每天早上4点
