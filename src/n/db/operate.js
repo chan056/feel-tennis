@@ -73,7 +73,7 @@ let operations = {
 		
 		params.sport_id && (sql += ` and a.sport_id = ${params.sport_id}`);
 		params.sortBy && (sql += ` order by ${params.sortBy}`);
-		params.sort && (sql += ` ${params.sort}`);
+		params.sort && (sql += ` ${params.sortOrd}`);
 
 		if(params.pageSize){
 			sql = disposePageSql(sql, params);
