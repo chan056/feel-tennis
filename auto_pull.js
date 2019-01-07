@@ -5,7 +5,7 @@ if(argv[0] == '/usr/local/bin/node' || argv[0] == 'E:\\soft\\node\\node.exe' || 
     var isTesting = true;
     var port = 3000;
 }else{
-    port = 80;
+    var port = 80;
 }
 
 let ONEHOURMILLISECOND = 60 * 60 * 1000;
