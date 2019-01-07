@@ -11,7 +11,7 @@ if(argv[0] == '/usr/local/bin/node' || argv[0] == 'E:\\soft\\node\\node.exe' || 
 let ONEHOURMILLISECOND = 60 * 60 * 1000;
 
 setInterval(function(){
-    // 每天早上4点
+    // 每天早上4点多
     if(new Date().getHours() !== 4)
         return;
 
@@ -34,29 +34,13 @@ setInterval(function(){
                     }
 
                     console.log('打包')
-
-                    exec('netstat -aon|findstr ' + port, (error, stdout, stderr) => {
+                    
+                    exec('forever restart server.js', (error, stdout, stderr) => {
                         if (error) {
-                            return npmStart();
+                            return console.error(error);
                         }
 
-                        const reg = /\s(\d+)\s/;
-                        let PID = stdout.match(reg);
-
-                        if(PID){
-                            PID = PID[1];
-        
-                            exec(`taskkill /pid ${PID} -t -f`,(error, stdout, stderr)=>{
-                                if (error) {
-                                    return console.error(error);
-                                }
-                                console.log('关闭旧服务')
-
-                                npmStart()
-                            })
-                        }else{
-                            npmStart()
-                        }
+                        console.log('重启')
                     })
                 })
             })
@@ -64,14 +48,4 @@ setInterval(function(){
             console.log('已是最新，无需更新')
         }
     });
-
-    function npmStart(){
-        console.log('已重启')
-
-        exec('npm start', (error, stdout, stderr) => {
-            if (error) {
-                return console.error(error);
-            }
-        })
-    }
 }, ONEHOURMILLISECOND)
