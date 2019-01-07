@@ -1,14 +1,5 @@
 const { exec } = require('child_process');
-let argv = process.argv;
-
-if(argv[0] == '/usr/local/bin/node' || argv[0] == 'E:\\soft\\node\\node.exe' || argv[0] == 'D:\\soft_dev\\node\\node.exe'){
-    var isTesting = true;
-    var port = 3000;
-}else{
-    var port = 80;
-}
-
-let ONEHOURMILLISECOND = 60 * 60 * 1000;
+const ONEHOURMILLISECOND = 60 * 60 * 1000;
 
 setInterval(function(){
     // 每天早上4点多
