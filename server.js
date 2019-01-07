@@ -16,7 +16,11 @@ let serverConfig = require('./src/n/db/serverConfig');
 
 let server = http.createServer(function(req, res){
     if(isTesting){
-        serverConfig(req, res)
+        try{
+            serverConfig(req, res)
+        }catch(e){
+            logError(req, res, e);
+        }
     }else{
         res.writeHead(301, {'Location': 'https://www.yitube.cn/'});
         res.end();
@@ -33,9 +37,26 @@ let sslOption = {
 if(!isTesting){
     let https = require('https');
 
-    https.createServer(sslOption, serverConfig).listen(443, function(){
+    https.createServer(sslOption, function(req, res){
+        try{
+            serverConfig(req, res)
+        }catch(e){
+            logError(req, res, e);
+        }
+    }).listen(443, function(){
         console.log('HTTPS listen on ' + 443)
     });
+}
+
+function logError(req, res, err){
+    console.log(err);
+
+    return res.end(`
+        <pre>
+            Error  ${new Date().toISOString()} ${req.url}
+            ${err.stack || err.message || 'unknow error'}
+        </pre>
+    `)
 }
 
 // process.on('uncaughtException',function(err){
