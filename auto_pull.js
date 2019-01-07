@@ -1,4 +1,12 @@
 const { exec } = require('child_process');
+let argv = process.argv;
+
+if(argv[0] == '/usr/local/bin/node' || argv[0] == 'E:\\soft\\node\\node.exe' || argv[0] == 'D:\\soft_dev\\node\\node.exe'){
+    var isTesting = true;
+    var port = 3000;
+}else{
+    port = 80;
+}
 
 let ONEHOURMILLISECOND = 60 * 60 * 1000;
 
@@ -13,7 +21,7 @@ setInterval(function(){
         }
     
         if(stdout){
-            console.log('有改动')
+            console.log('有改动: ' + new Date())
             exec('git pull', (error, stdout, stderr) => {
                 if (error) {
                     return console.error(error);
@@ -27,7 +35,7 @@ setInterval(function(){
 
                     console.log('打包')
 
-                    exec('netstat -aon|findstr 3000', (error, stdout, stderr) => {
+                    exec('netstat -aon|findstr ' + port, (error, stdout, stderr) => {
                         if (error) {
                             return npmStart();
                         }
