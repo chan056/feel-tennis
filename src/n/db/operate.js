@@ -734,22 +734,7 @@ let operations = {
 
 	fetchFeedbackList: function(res, qualification, params){
 		var sql = `SELECT
-			*,(
-				SELECT
-					count(*)
-				FROM
-					black AS b
-				WHERE
-					b.usr_id = feedback.usr_id
-			) AS black_usr_id_record ,
-			(
-				SELECT
-					count(*)
-				FROM
-					black AS b
-				WHERE
-					b.ip = feedback.ip
-			) AS black_ip_record
+			*
 		FROM
 			feedback
 		ORDER BY

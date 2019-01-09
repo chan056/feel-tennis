@@ -222,7 +222,7 @@
 
                 //coords
                 geoc.getPoint(city, function(point){
-                    console.log(point)
+                    // console.log(point)
                     // var mk = new BMap.Marker(point);
                     // map.addOverlay(mk);
 
