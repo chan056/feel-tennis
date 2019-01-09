@@ -11,8 +11,8 @@ function isEmpty(obj) {
 }
 
 function newQueryClause(params) {
-	let mysql = require('mysql');
-	
+	// let mysql = require('mysql');
+
 	if (isEmpty(params)) {
 		return '';
 	}

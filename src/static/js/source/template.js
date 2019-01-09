@@ -332,7 +332,7 @@ module.exports = function(){
                             <img @mouseover="dynamivePreview($event);" @mouseout="staticPreview($event);" 
                                 :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb video-thumb" alt="video"/>
                             <span class="translate-tag" v-if="video.translated || !video.need_translated" title="字幕已翻译">译</span>
-                            <h3 class="block-title video-title">
+                            <h3 class="block-title video-title ellipsis">
                                 <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
                             </h3>
                             <p class="clearfix block-info">
