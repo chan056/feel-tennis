@@ -1,10 +1,10 @@
 const { exec } = require('child_process');
 const ONEHOURMILLISECOND = 60 * 60 * 1000;
 
-// setInterval(function(){
+setInterval(function(){
     // 每天早上4点多
-    // if(new Date().getHours() !== 4)
-        // return;
+    if(new Date().getHours() !== 4)
+        return;
 
     exec('git fetch --dry-run', (error, stdout, stderr) => {
         if (error) {
@@ -36,7 +36,7 @@ const ONEHOURMILLISECOND = 60 * 60 * 1000;
                 })
             })
         }else{
-            console.log('已是最新，无需更新')
+            console.log('已是最新，无需更新 ' + new Date())
         }
     });
-// }, ONEHOURMILLISECOND)
+}, ONEHOURMILLISECOND)
