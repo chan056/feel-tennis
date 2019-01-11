@@ -1,3 +1,16 @@
 // 最大无连接时间
 set global wait_timeout=2880000;
+show global variables like "wait_timeout"
 set global interactive_timeout=2880000;
+show global interactive_timeout like "wait_timeout"
+
+// 定时事件
+set global event_scheduler = 1;
+show global variables like "event_scheduler"
+
+// 登录
+mysql -uroot -p621xxx
+
+// 授权远程数据库终端
+grant all privileges *.* to 'root'@'%' identified by '621xxx' with grant option
+flush privileges 
