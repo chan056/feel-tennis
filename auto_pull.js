@@ -11,7 +11,7 @@ setInterval(function(){
             return console.error(error);
         }
     
-        if(1){
+        if(stdout){
             console.log('有改动: ' + new Date())
             exec('git pull', (error, stdout, stderr) => {
                 if (error) {

@@ -1,0 +1,3 @@
+// 最大无连接时间
+set global wait_timeout=2880000;
+set global interactive_timeout=2880000;
