@@ -344,7 +344,7 @@ module.exports = function(){
 
 					name && this.fetchInmails();
 
-					this.loginUsrInfo.is_admin && !this.$route.path.match(/translator\/\d+$/) && this.fetchUsrPost();
+					(this.loginUsrInfo.is_admin == 1) && !this.$route.path.match(/translator\/\d+$/) && this.fetchUsrPost();
 				}.bind(this));
 			},
 

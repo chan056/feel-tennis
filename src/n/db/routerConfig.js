@@ -706,6 +706,12 @@ const routerConfig = {
             limit: {level: 100}
         },
         
+        '/responseComment': {
+            fn: function(req, res, pathParams){
+                r.post('responseComment', req, res, pathParams);
+            },
+            limit: {level: 100}
+        }
     },
 
     // ============put update完整资源=============

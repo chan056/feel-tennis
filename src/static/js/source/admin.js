@@ -787,6 +787,7 @@ temp.feedbacksAdmin =  `
                 label="操作"
                 width="100">
                 <template slot-scope="scope">
+                    <el-button v-if="!scope.row.replied" @click="responseCommentDialog=true; commentId=scope.row.id" type="text" size="small">回复</el-button>
                     <el-button @click="deleteFeedback(scope.row.id)" type="text" size="small">删除</el-button>
                     <!-- <el-button v-if="!scope.row.black_usr_id_record && !scope.row.black_ip_record" @click="blockUsr(scope.row.ip, scope.row.usr_id, $event)" type="text" size="small">加黑</el-button> -->
                 </template>
@@ -799,6 +800,23 @@ temp.feedbacksAdmin =  `
             :page-size="pageSize"
             @current-change="fetchFeedbacks">
         </el-pagination>
+
+        <el-dialog
+            title="回复留言"
+            :visible.sync="responseCommentDialog"
+            width="30%"
+            :before-close="beforeCloseCommentDialog">
+            <el-input
+                type="textarea"
+                :rows="2"
+                placeholder="请输入内容"
+                v-model="responseContent">
+            </el-input>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="responseCommentDialog = false">取 消</el-button>
+                <el-button type="primary" @click="responseComment">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 `;
 
@@ -809,7 +827,10 @@ COMPONENTS.FeedbacksAdmin = {
             pageSize: 10,
             curPage: 0,
             total: 0,
-			feedbacks: []
+            feedbacks: [],
+            responseCommentDialog: false,
+            commentId: undefined,
+            responseContent: ''
 		};
 
 		return d;
@@ -817,7 +838,6 @@ COMPONENTS.FeedbacksAdmin = {
 	methods: {
 
 		postTag(){
-
 			tools.xhr('/tag', function(){
 				console.log(arguments)
 			}, 'post', this.newTag);
@@ -852,6 +872,22 @@ COMPONENTS.FeedbacksAdmin = {
 
             });
         },
+
+        responseComment: function(id){
+            tools.xhr('/responseComment', function(res){
+                this.fetchFeedbacks(this.curPage);
+                this.$message({
+                    message: '回复成功',
+                    type: 'success'
+                });
+                this.responseCommentDialog = false;
+            }.bind(this), 'post', {
+                commentId: this.commentId,
+                responseContent: this.responseContent
+            });
+        },
+
+        beforeCloseCommentDialog(){},
 
        /*  blockUsr: function(ip, usrId, e){
             this.$confirm('确认加黑？')

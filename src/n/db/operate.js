@@ -1744,6 +1744,17 @@ let operations = {
 		res.end();
 	},
 
+	responseComment: function(res, postObj, req){
+		let sender = this.usrInfo.usrId;
+		conn.query('update feedback set replied=1 where id=?; select usr_id from feedback where id = ?;', [postObj.commentId, postObj.commentId], function(err, result){
+			if(err)
+				return throwError(err, res);
+
+			sendInmail(sender, result[1][0]['usr_id'], postObj.responseContent);
+			res.end();
+		})
+	},
+
 	// ===============PATCH================
 	voteVideo: function(res, patchObj){
 		let voteType = patchObj.type;
