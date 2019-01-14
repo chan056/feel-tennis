@@ -1,7 +1,6 @@
 const fs = require('fs');
 
-let c = {
-    aesKey: 'key',// 密钥
+let CONSTANTS = {
 
     whiteList: [
         'localhost',
@@ -11,7 +10,6 @@ let c = {
         '192.168.3.3',// 家
     ],// 访问白名单
     bootJS: 'tube.js',// JS入口
-    sessionSecret: 'Q3UBzdH9GEfiRCTKbi5MTPyChpzXLsTD',// session加密字符
     maxDayView: 100,// 注册用户最大访问量
     tmpUsrDayView: 10,// 临时用户日常访问量
     gifMaxDuration: 15,// 用户截取gif的时间最大值
@@ -20,28 +18,15 @@ let c = {
         duration: 8,
         width: 210
     },
-    emailSender: {
-        service: 'QQ',
-        user: '374029208@qq.com',
-        pass: 'rpnuovesymglcaic',  //btwnqqiqgvjybiid
-    },
-
-    dbConfig: {
-        host: 'localhost',
-        user: 'root',
-        password: '62191056',
-        database: 'n',
-        multipleStatements: true// 执行多条语句
-    },
 
     videoCoverSize: '210x118',
     avtarThumbWidth: 50,
     indexPath: '/page/index.html',
     site: 'www.yitube.cn'
 };
-
-if(fs.existsSync('./dev_constant.js')){
-    Object.assign(c, require('./dev_constant.js') || {})
+// console.log(fs.existsSync('./constant_key.js'))
+var keyConstantFilePaht = require('path').resolve(__dirname, './constant_key.js');
+if(fs.existsSync(keyConstantFilePaht)){
+    CONSTANTS = Object.assign(CONSTANTS, require(keyConstantFilePaht))
 }
-
-module.exports = c;
+module.exports = CONSTANTS;

@@ -1,10 +1,15 @@
 const { exec } = require('child_process');
+let constants = require('./src/n/constant');
+let crypto = require('./src/n/crypto.js');
 const ONEHOURMILLISECOND = 60 * 60 * 1000;
 
 setInterval(function(){
     // 每天早上4点多
     if(new Date().getHours() !== 4)
         return;
+
+
+    updateSQL();
 
     exec('git fetch --dry-run', (error, stdout, stderr) => {
         if (error) {
@@ -40,3 +45,25 @@ setInterval(function(){
         }
     });
 }, ONEHOURMILLISECOND)
+
+function updateSQL(){
+    const fs = require('fs');
+    let updateSQqlPath = require('path').resolve(__dirname, 'update.sql');
+    
+    fs.readFile(updateSQqlPath, function(err, data){
+        if(err){
+            return console.log(err)
+        }
+
+        if(data.toString().length){
+            let x = crypto.aesDecrypt(constants.encyotedPsw, constants.aesKey);
+
+            exec(`mysql -u root -p${x} -Dn< ${updateSQqlPath}`, function(err, stdeout, stderr){
+                if(err)
+                    return console.log(err);
+        
+                fs.truncate(updateSQqlPath, 0, function(){})
+            });
+        }
+    })
+}

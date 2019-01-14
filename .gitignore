@@ -76,3 +76,4 @@ typings/
 # dotenv environment variables file
 .env
 
+/src/n/constnat_key.js
