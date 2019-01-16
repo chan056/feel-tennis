@@ -282,12 +282,20 @@ module.exports = function(){
                         <div class="author">
                             <a target="_blank" :href="album.author_link">{{album.author_name}}</a>
                         </div>
-                        <p class="clearfix block-info">
-                            <span class="play-count">{{album.impression}}次观看</span>
-                            <span class="update-time">
-                                <UpdateTime :timestamp="album.update_time"></UpdateTime>
-                            </span>
-                        </p>
+                        <div class="clearfix block-info ellipsis">
+                            <el-tooltip class="item" effect="dark" placement="top">
+                                <div slot="content">
+                                    {{album.impression}}次观看<br/>
+                                    <UpdateTime :timestamp="album.update_time"></UpdateTime>
+                                </div>
+                                <div>
+                                    <span class="play-count">{{album.impression}}次观看</span>
+                                    <span class="update-time">
+                                        <UpdateTime :timestamp="album.update_time"></UpdateTime>
+                                    </span>
+                                </div>
+                            </el-tooltip>
+                        </div>
                     </li>
                 </ul>
                 <el-pagination
@@ -302,46 +310,50 @@ module.exports = function(){
     
         album: `
             <div>
-                <el-row>
-                    <el-col :span="14">
-                        <el-breadcrumb separator="/" class="fl">
-                            <el-breadcrumb-item :to="{ path: '/sports/' + crumb.sId }">{{crumb.sName}}</el-breadcrumb-item>
-                            <el-breadcrumb-item :to="{ path: '/albums/' + crumb.aId }">{{crumb.aName}}</el-breadcrumb-item>
-                        </el-breadcrumb>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-input placeholder="专辑内搜索" v-model="headline" clearable class="fr" @clear="fetchAlbumVideo(0)" @keyup.enter.native="fetchAlbumVideo(0)">
-                            <el-button slot="append" icon="el-icon-search" @click="fetchAlbumVideo(0)"></el-button>
-                        </el-input>
-                    </el-col>
-                </el-row>
-                
+                <el-breadcrumb separator="/">
+                    <el-breadcrumb-item :to="{ path: '/sports/' + crumb.sId }">{{crumb.sName}}</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ path: '/albums/' + crumb.aId }">{{crumb.aName}}</el-breadcrumb-item>
+                </el-breadcrumb>
+
                 <div class="tags">
                     <el-tag type="info" v-for="tag in tags" :key="tag.id">
                         <router-link :to="{path: '/searchedvideos?tagId=' + tag.id}">{{tag.name}}</router-link>
                     </el-tag>
                 </div>
 
-                <div class="clearfix sortor-line">
-                    <Sortor class="sortor-wrapper" :config="sortorConfig"/>
+                <div class="clearfix">
+                    <el-input style="width: 50%;" placeholder="专辑内搜索" v-model="headline" clearable @clear="fetchAlbumVideo(0)" @keyup.enter.native="fetchAlbumVideo(0)" class="fr">
+                        <el-button slot="append" icon="el-icon-search" @click="fetchAlbumVideo(0)"></el-button>
+                    </el-input>
                 </div>
+                
+                <Sortor class="sortor-wrapper" :config="sortorConfig"/>
 
                 <ul class="block-list video-list">
                     <li v-for="video in albumVideoList" class="rel">
                         <router-link :to="{path: '/videos/'+ video.id }">
                             <img @mouseover="dynamivePreview($event);" @mouseout="staticPreview($event);" 
                                 :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb video-thumb" alt="video"/>
-                            <span class="translate-tag" v-if="video.translated || !video.need_translated" title="字幕已翻译">译</span>
-                            <h3 class="block-title video-title ellipsis">
-                                <a href="javascript:;" :title="video.headline">{{ video.headline }}</a>
-                            </h3>
-                            <p class="clearfix block-info">
+                        </router-link>
+                        
+                        <span class="translate-tag" v-if="video.translated || !video.need_translated" title="字幕已翻译">译</span>
+                        <h3 class="block-title video-title ellipsis">
+                            <el-tooltip class="item" effect="dark" placement="top" :content="video.headline">
+                                <span>{{ video.headline }}</span>
+                            </el-tooltip>
+                        </h3>
+                        <p class="clearfix block-info ellipsis">
+                            <el-tooltip class="item" effect="dark" placement="top">
+                                <div slot="content">
+                                    {{video.impression}}次观看<br/>
+                                    <UpdateTime :timestamp="video.update_time"></UpdateTime>
+                                </div>
                                 <span class="play-count">{{video.impression}}次观看</span>
                                 <span class="update-time">
                                     <UpdateTime :timestamp="video.update_time"></UpdateTime>
                                 </span>
-                            </p>
-                        </router-link>
+                            </el-tooltip>
+                        </p>
                     </li>
                 </ul>
     

@@ -57,6 +57,9 @@
     font-size: 1.4rem;
     line-height: 1.5em;
   }
+  .el-tooltip__popper {
+    font-size: 1.4rem !important;
+  }
   #llc {
     display: none !important;
   }

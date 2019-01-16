@@ -221,6 +221,9 @@ img {
     font-size: 1.4rem;
     line-height: 1.5em;
   }
+  .el-tooltip__popper {
+    font-size: 1.4rem !important;
+  }
   #llc {
     display: none !important;
   }
@@ -413,7 +416,7 @@ app {
   max-width: 1000px;
 }
 #main-router-view .el-breadcrumb {
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
 }
 #main-router-view .el-row {
   margin-top: 20px;
@@ -435,10 +438,6 @@ app {
   max-height: 4rem;
   width: 210px;
   overflow: hidden;
-}
-.tags {
-  margin-bottom: 30px;
-  min-height: 30px;
 }
 .tags .el-tag {
   margin-right: 10px;

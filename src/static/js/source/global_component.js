@@ -266,7 +266,6 @@ module.exports = function(){
 
     Vue.component('Sortor', {
         template: '<div>\
-            排序:&nbsp;&nbsp;\
             <el-button v-for="item in config" :key="item.name" icon="fa" size="small" :data-by="item.value" \
                 @click="sortVideo($event, config.callback, config.parentData)">{{item.name}} </el-button>\
         </div>',
