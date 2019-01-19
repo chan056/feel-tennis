@@ -1,6 +1,6 @@
 let https = require('https');
 let cheerio = require('cheerio');
-let conn = require('../db/connect').conn;
+let conn = require('../../db/connect').conn;
 
 let TENNISSPORTID = 1;//网球
 

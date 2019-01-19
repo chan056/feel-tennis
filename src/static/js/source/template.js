@@ -2,13 +2,13 @@ module.exports = function(){
     var temp = {
         header: `
             <div id="header">
+                <img src="https://www.atptour.com/en/players/ben-rogers/rc66/-/media/tennis/players/head-shot/2018/federer_head_18.png"/>
                 <el-row>
                     <el-col :span="4">
                         <i class="el-icon-menu aside-menu-btn"></i>
                         <router-link to="/sports" id="logo">
                             <img src="../img/logo.png" width="60px" alt="logo"/>
                         </router-link>
-                        
                     </el-col>
     
                     <el-col :span="10" id="search-form-wrapper">

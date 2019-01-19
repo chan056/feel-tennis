@@ -1,13 +1,13 @@
 const { exec } = require('child_process');
-let constants = require('./src/n/constant');
-let crypto = require('./src/n/crypto.js');
+const crypto = require('./src/n/crypto.js');
+
+const constants = require('./src/n/constant');
 const ONEHOURMILLISECOND = 60 * 60 * 1000;
 
 setInterval(function(){
     // 每天早上4点多
     if(new Date().getHours() !== 4)
         return;
-
 
     updateSQL();
 
