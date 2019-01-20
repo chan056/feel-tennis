@@ -36,10 +36,11 @@ setInterval(function(){
 
                         console.log('重启')
 
-                        updateSQL();
 
                     })
                 })
+
+                updateSQL();
             })
         }else{
             console.log('已是最新，无需更新 ' + new Date())
@@ -57,13 +58,21 @@ function updateSQL(){
         }
 
         if(data.toString().length){
-            let x = crypto.aesDecrypt(constants.encyotedPsw, constants.aesKey);
 
-            exec(`mysql -u root -p${x} -Dn< ${updateSQqlPath}`, function(err, stdeout, stderr){
-                if(err)
-                    return console.log(err);
-        
-                // fs.truncate(updateSQqlPath, 0, function(){})
+            fs.stat(updateSQqlPath, function(){
+                let lastUpdateTime = arguments[1].mtimeMs;
+                let now = +new Date();
+                const day = 24 * 60 * 60 * 1000;
+
+                if(now - lastUpdateTime < day){
+                    let x = crypto.aesDecrypt(constants.encyotedPsw, constants.aesKey);
+
+                    exec(`mysql -u root -p${x} -Dn< ${updateSQqlPath}`, function(err, stdeout, stderr){
+                        if(err)
+                            return console.log(err);
+                
+                    });
+                }
             });
         }
     })
