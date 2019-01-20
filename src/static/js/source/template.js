@@ -2,7 +2,6 @@ module.exports = function(){
     var temp = {
         header: `
             <div id="header">
-                <img src="https://www.atptour.com/en/players/ben-rogers/rc66/-/media/tennis/players/head-shot/2018/federer_head_18.png"/>
                 <el-row>
                     <el-col :span="4">
                         <i class="el-icon-menu aside-menu-btn"></i>
@@ -19,7 +18,6 @@ module.exports = function(){
                                 </el-input>
                             </el-form-item>
                         </el-form>
-                        
                     </el-col>
     
                     <el-col :span="6" class="masthead fr">
@@ -253,6 +251,7 @@ module.exports = function(){
                                 </span>
                             </p>
                         </router-link>
+                        <a class="sport-intro-link" href="/page/intro_tennis.html" target="_blank">运动介绍</a>
                     </li>
                 </ul>
                 <el-pagination
@@ -376,7 +375,7 @@ module.exports = function(){
                     <el-breadcrumb-item :to="{ path: '/albums/' + crumb.aId }">{{crumb.aName}}</el-breadcrumb-item>
                     <el-breadcrumb-item :to="{ path: '/videos/' + crumb.vId }">{{crumb.vHeadline}}</el-breadcrumb-item>
                 </el-breadcrumb>
-                <div class="tags">
+                <div class="tags video-tags">
                     <el-tag type="info" v-for="tag in tags" :key="tag.id">
                         <router-link :to="{path: '/searchedvideos?tagId=' + tag.id}">{{tag.name}}</router-link>
                     </el-tag>

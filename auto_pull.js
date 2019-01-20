@@ -9,8 +9,6 @@ setInterval(function(){
     if(new Date().getHours() !== 4)
         return;
 
-    updateSQL();
-
     exec('git fetch --dry-run', (error, stdout, stderr) => {
         if (error) {
             return console.error(error);
@@ -37,6 +35,9 @@ setInterval(function(){
                         }
 
                         console.log('重启')
+
+                        updateSQL();
+
                     })
                 })
             })
@@ -62,7 +63,7 @@ function updateSQL(){
                 if(err)
                     return console.log(err);
         
-                fs.truncate(updateSQqlPath, 0, function(){})
+                // fs.truncate(updateSQqlPath, 0, function(){})
             });
         }
     })
