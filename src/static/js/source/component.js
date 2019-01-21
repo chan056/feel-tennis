@@ -2458,7 +2458,7 @@ module.exports = function(){
 						$('#player-wrapper').find('.subtitle').text(subtitle)
 					});
 
-					this.captions = res
+					this.captions = res;
 
 					fn && fn();
 				}.bind(this));
@@ -2929,8 +2929,26 @@ module.exports = function(){
 			t.startEditTime = Date.now();
 
 			tools.togglePageIE(this);
+
 			this.bindSubtitle(()=>{
 				this.bindVideo();
+
+				setTimeout(()=>{
+					var kanjiLineIndex;
+					this.captions.forEach((caption, i)=>{
+						const kanji = /[\u4e00-\u9fa5]/;
+
+						if(caption.text.match(kanji)){
+							kanjiLineIndex = i;
+						}
+					})
+
+					// console.log(kanjiLineIndex)
+					if(kanjiLineIndex !== undefined){
+						$('#captions-area').find('.caption-line').eq(kanjiLineIndex).get(0)
+						.scrollIntoView({behavior: 'smooth'})
+					}
+				}, 1000)
 			});
 
 			this.listDrafts();
@@ -2945,8 +2963,6 @@ module.exports = function(){
 				if(!t.triggerScroll){// 手动拖动字幕时间轴
 					let duration = t.duration;
 					if(duration){
-						// _.debounce todo
-						
 						// 修改视频时间
 						vEle.currentTime = t.posToTime(sl) + t.timeOffset;
 					}
@@ -3143,13 +3159,14 @@ module.exports = function(){
 				if(e.keyCode === 9){// tab
 					let curLine = $(this).parents('.caption-line').eq(0);
 					let nextLine = curLine.next('.caption-line');
-					console.log(nextLine[0])
 					if(nextLine.length){
 						nextLine.find('.caption-text').trigger('click');
 					}
 					e.preventDefault();
+				}else if(e.keyCode == 27){
+					this.blur();
+					e.preventDefault();
 				}
-
 				e.stopPropagation();
 			})
 
