@@ -2933,22 +2933,24 @@ module.exports = function(){
 			this.bindSubtitle(()=>{
 				this.bindVideo();
 
-				setTimeout(()=>{
-					var kanjiLineIndex;
-					this.captions.forEach((caption, i)=>{
-						const kanji = /[\u4e00-\u9fa5]/;
-
-						if(caption.text.match(kanji)){
-							kanjiLineIndex = i;
+				if(!this.draft){
+					setTimeout(()=>{
+						var kanjiLineIndex;
+						this.captions.forEach((caption, i)=>{
+							const kanji = /[\u4e00-\u9fa5]/;
+	
+							if(caption.text.match(kanji)){
+								kanjiLineIndex = i;
+							}
+						})
+	
+						// console.log(kanjiLineIndex)
+						if(kanjiLineIndex !== undefined){
+							$('#captions-area').find('.caption-line').eq(kanjiLineIndex).get(0)
+							.scrollIntoView({behavior: 'smooth'})
 						}
-					})
-
-					// console.log(kanjiLineIndex)
-					if(kanjiLineIndex !== undefined){
-						$('#captions-area').find('.caption-line').eq(kanjiLineIndex).get(0)
-						.scrollIntoView({behavior: 'smooth'})
-					}
-				}, 1000)
+					}, 1000)
+				}
 			});
 
 			this.listDrafts();

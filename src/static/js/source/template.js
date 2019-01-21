@@ -251,7 +251,7 @@ module.exports = function(){
                                 </span>
                             </p>
                         </router-link>
-                        <a class="sport-intro-link text-above-img" href="/page/intro_tennis.html" target="_blank">运动介绍</a>
+                        <a class="sport-intro-link text-above-img" href="/page/intro_tennis.html" target="_blank">详细介绍</a>
                     </li>
                 </ul>
                 <el-pagination
