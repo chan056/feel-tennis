@@ -162,6 +162,11 @@ img {
   top: 50%;
   transform: translate(-50%, -50%);
 }
+.text-above-img {
+  color: #fff;
+  padding: 2px 3px;
+  text-shadow: 0px 0px 1rem #333;
+}
 .el-breadcrumb span {
   font-size: 2rem;
 }
@@ -452,13 +457,15 @@ app {
 #login-dialog .btns {
   padding-left: 100px;
 }
+.sport-intro-link {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
 .translate-tag {
   position: absolute;
   top: 0;
   right: 0;
-  color: #fff;
-  padding: 2px 3px;
-  text-shadow: 0px 0px 1rem #333;
 }
 .sortor-line {
   margin-bottom: 2rem;

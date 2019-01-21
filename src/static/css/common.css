@@ -162,3 +162,8 @@ img {
   top: 50%;
   transform: translate(-50%, -50%);
 }
+.text-above-img {
+  color: #fff;
+  padding: 2px 3px;
+  text-shadow: 0px 0px 1rem #333;
+}

@@ -241,7 +241,7 @@ module.exports = function(){
                     <span>运动</span>
                 </div>
                 <ul class="block-list">
-                    <li class="" v-for="sport in sports">
+                    <li class="rel" v-for="sport in sports">
                         <router-link :to="{path: '/sports/'+ sport.id }" :title="sport.name">
                             <img :src="'/img/cover/sport/' + sport.id + '.jpg'" class="block-thumb spt-thumb" alt="sport"/>
                             <p class="clearfix block-info">
@@ -251,7 +251,7 @@ module.exports = function(){
                                 </span>
                             </p>
                         </router-link>
-                        <a class="sport-intro-link" href="/page/intro_tennis.html" target="_blank">运动介绍</a>
+                        <a class="sport-intro-link text-above-img" href="/page/intro_tennis.html" target="_blank">运动介绍</a>
                     </li>
                 </ul>
                 <el-pagination
@@ -335,7 +335,7 @@ module.exports = function(){
                                 :src="'/multimedia/ts/'+video.id+'/cover.jpg'" class="block-thumb video-thumb" alt="video"/>
                         </router-link>
                         
-                        <span class="translate-tag" v-if="video.translated || !video.need_translated" title="字幕已翻译">译</span>
+                        <span class="translate-tag text-above-img" v-if="video.translated || !video.need_translated" title="字幕已翻译">译</span>
                         <h3 class="block-title video-title ellipsis">
                             <el-tooltip class="item" effect="dark" placement="top" :content="video.headline">
                                 <span>{{ video.headline }}</span>
