@@ -750,7 +750,7 @@ temp.feedbacksAdmin =  `
             </el-table-column>
             <el-table-column
                 prop="usr_id"
-                label="用户id">
+                label="ID">
             </el-table-column>
             <el-table-column
                 prop="description"
@@ -787,7 +787,7 @@ temp.feedbacksAdmin =  `
                 label="操作"
                 width="100">
                 <template slot-scope="scope">
-                    <el-button v-if="!scope.row.replied" @click="responseCommentDialog=true; commentId=scope.row.id" type="text" size="small">回复</el-button>
+                    <el-button v-if="scope.row.id && !scope.row.replied" @click="responseCommentDialog=true; commentId=scope.row.id" type="text" size="small">回复</el-button>
                     <el-button @click="deleteFeedback(scope.row.id)" type="text" size="small">删除</el-button>
                     <!-- <el-button v-if="!scope.row.black_usr_id_record && !scope.row.black_ip_record" @click="blockUsr(scope.row.ip, scope.row.usr_id, $event)" type="text" size="small">加黑</el-button> -->
                 </template>
