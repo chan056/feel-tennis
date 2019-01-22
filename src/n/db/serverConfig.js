@@ -24,6 +24,7 @@ module.exports = function(req, res) {
 	ext = ext ? ext.slice(1) : '';
 
 	if(ext){
+		// SSR TODO
 		disposeStaticResource();
 	}else{
 		if(pathname.match(/\/api\//)){
