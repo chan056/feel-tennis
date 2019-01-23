@@ -1,0 +1,58 @@
+function resolvePathSSR(req, res) {
+    var pathToRegexp = require('path-to-regexp');
+    const path = require('path');
+    var routerConfig = require('./router_config_ssr');
+    var tools = require('../tools');
+
+    var routerName;
+    var pathReg;
+    var pathMatched;
+    var templateMatched;
+    var keys;
+    var urlObj = require('url').parse(req.url, true);
+    var pathname = urlObj.pathname.replace(/\.ssr$/, '');
+
+    for (routerName in routerConfig) {
+        var routerHandler = routerConfig[routerName];
+        keys = [];
+
+        pathReg = pathToRegexp(routerName, keys);
+        pathMatched = pathReg.exec(pathname);
+
+        if (pathMatched) {
+            templateMatched = routerHandler;
+            // console.log(keys, templateMatched);
+            break;
+        }
+    }
+ 
+    if (templateMatched) {
+        var paramsMathed = {};
+        extractParamFromPath();
+
+        // 将params和query结合 /a/1?b=2
+        let params = Object.assign(paramsMathed, urlObj.query);
+
+        // var let = tools.newClause(params);
+        // if(clause){
+        //     clause = ' where ' + clause;
+        // }
+
+        const templateDir = '../template';
+        const templateSuffix = '.ssr';
+        let ssrTemplateParser = require('./template_parser_ssr');
+        let templateAbsPath = path.resolve(__dirname, templateDir, templateMatched + templateSuffix);
+        ssrTemplateParser(templateAbsPath, params, res, req);
+
+        function extractParamFromPath(){
+            for (let i = 0, l = keys.length; i < l; i++) {
+                if (pathMatched[i + 1] != undefined)
+                    paramsMathed[keys[i].name] = pathMatched[i + 1]
+            }
+        }
+    } else {
+        tools.response404(res);
+    }
+}
+
+module.exports = { resolvePathSSR: resolvePathSSR };

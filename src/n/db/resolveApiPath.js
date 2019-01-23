@@ -22,6 +22,7 @@ function resolveApiPath(req, res) {
         pathMatched = pathReg.exec(urlObj.pathname);
 
         if (pathMatched) {
+            console.log(keys)
             fnMatched = routerHandler;
             break;
         }
@@ -132,10 +133,8 @@ function resolveApiPath(req, res) {
 
             function extractParamFromPath(){
                 for (let i = 0, l = keys.length; i < l; i++) {
-                    let key = keys[i];
-                    let keyName = key.name;
                     if (pathMatched[i + 1] != undefined)
-                        paramsMathed[keyName] = pathMatched[i + 1]
+                        paramsMathed[keys[i].name] = pathMatched[i + 1]
                 }
             }
         }

@@ -24,8 +24,16 @@ module.exports = function(req, res) {
 	ext = ext ? ext.slice(1) : '';
 
 	if(ext){
-		// SSR TODO
-		disposeStaticResource();
+		if(ext == 'ssr'){
+			// 解析路径 获取参数
+			// 匹配路径 找到对应模板
+			// 传入参数 查询数据 渲染模板
+
+			require('./resolve_path_ssr').resolvePathSSR(req, res);
+			// res.end('SSR');
+		}else{
+			disposeStaticResource();
+		}
 	}else{
 		if(pathname.match(/\/api\//)){
 			disposeApi();
