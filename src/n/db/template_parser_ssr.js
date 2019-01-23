@@ -32,15 +32,13 @@ module.exports = function(tempaltePath, params, res, req){
                 // console.log(countAttribute(target), reqNames.length)
                 if(countAttribute(target) === reqNames.length){
                     // 数据准备完毕，解析模板
-                    const pug = require('pug');
-                    
-                    var html = pug.compile(`- 
-                    each item in dynamicDataSet
-                    li= item`, {
-                        dynamicDataSet: dynamicDataSet
+                    const ejs = require('ejs');
+                    console.log(pageStructureCode.trim(), dynamicDataSet[reqNames[0]])
+                    var html = ejs.render(pageStructureCode.trim(), {
+                        athletes: dynamicDataSet[reqNames[0]]
                     });
 
-                    console.log(html());
+                    console.log(html);
                 }
                 return true
             }

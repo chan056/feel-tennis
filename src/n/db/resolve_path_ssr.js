@@ -1,5 +1,5 @@
 function resolvePathSSR(req, res) {
-    var pathToRegexp = require('path-to-regexp');
+    const pathToRegexp = require('path-to-regexp');
     const path = require('path');
     var routerConfig = require('./router_config_ssr');
     var tools = require('../tools');

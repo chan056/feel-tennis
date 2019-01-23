@@ -2,5 +2,6 @@
     ['queryAthletes']
 }}
 
-- for (var x = 0; x < 3; x++)
-  li item
+<% athletes.forEach(function(athlete){%>
+  <p><%= athlete.name %></p>
+<% }) %>
