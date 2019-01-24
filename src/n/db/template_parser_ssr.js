@@ -1,13 +1,11 @@
 const path = require('path');
 const fs = require('fs');
 
-let r =  require('./operation_ssr');
 let tools = require('../tools');
 
 module.exports = function(tempaltePath, params, res, req){
     // 解析模板 
     // 查询数据
-    // 返回
 
     fs.readFile(tempaltePath, (err, data)=>{
         if(err)
@@ -34,11 +32,16 @@ module.exports = function(tempaltePath, params, res, req){
                     // 数据准备完毕，解析模板
                     const ejs = require('ejs');
                     console.log(pageStructureCode.trim(), dynamicDataSet[reqNames[0]])
-                    var html = ejs.render(pageStructureCode.trim(), {
-                        athletes: dynamicDataSet[reqNames[0]]
-                    });
-
-                    console.log(html);
+                    try{
+                        var html = ejs.render(pageStructureCode.trim(), {
+                            filename: `${__dirname}/../template/athletes.ssr`,
+                            athletes: dynamicDataSet[reqNames[0]]
+                        });
+    
+                        res.end(html);
+                    }catch(e){
+                        throw e;
+                    }
                 }
                 return true
             }
@@ -49,11 +52,10 @@ module.exports = function(tempaltePath, params, res, req){
             reqNames = eval(dataSourceCode);
             // console.log(reqNames);
 
-            let operations = require('./operation_ssr')
+            let operate = require('./operate')
             reqNames.forEach(reqName => {
-                if(operations[reqName]){
-                    operations[reqName](params, dynamicDataSet, res, req);
-                }
+                res.dynamicDataSet = dynamicDataSet;
+                operate.query(reqName, params, res, req);
             });
         }
     })

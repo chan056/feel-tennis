@@ -44,8 +44,12 @@ let operations = {
 		conn.query('SELECT * from athlete' + qualification, function (err, result, fields) {
 			if (err) return throwError(err, res);
 
-			result = JSON.stringify(result);
-			res.end(result)
+			if(!res.dynamicDataSet){
+				result = JSON.stringify(result);
+				res.end(result)
+			}else{
+				res.dynamicDataSet['queryAthletes'] = result;
+			}
 		});
 
 	},

@@ -2,6 +2,10 @@
     ['queryAthletes']
 }}
 
+<%- include views/header %>
+
 <% athletes.forEach(function(athlete){%>
   <p><%= athlete.name %></p>
 <% }) %>
+
+<%- include views/footer %>
