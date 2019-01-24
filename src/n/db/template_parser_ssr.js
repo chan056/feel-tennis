@@ -34,7 +34,7 @@ module.exports = function(tempaltePath, params, res, req){
                     console.log(pageStructureCode.trim(), dynamicDataSet[reqNames[0]])
                     try{
                         var html = ejs.render(pageStructureCode.trim(), {
-                            filename: `${__dirname}/../template/athletes.ssr`,
+                            filename: tempaltePath,
                             athletes: dynamicDataSet[reqNames[0]]
                         });
     
@@ -48,11 +48,12 @@ module.exports = function(tempaltePath, params, res, req){
         })
 
         if(dataSourceCode){
+            const operate = require('./operate');
+
             dataSourceCode =  dataSourceCode[1].trim();
             reqNames = eval(dataSourceCode);
             // console.log(reqNames);
 
-            let operate = require('./operate')
             reqNames.forEach(reqName => {
                 res.dynamicDataSet = dynamicDataSet;
                 operate.query(reqName, params, res, req);

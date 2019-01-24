@@ -269,7 +269,7 @@ const routerConfig = {
                 }
 
                 require('../ffmpeg/screenshot.js')(src, dest, st, params.size, function(){
-                    let conn = require('./connect.js').conn;
+                    let conn = require('./connect.js');
                     let sql = `insert into usr_screenshot_star (usr_id, screenshot, v_id, type) 
                         values (${req.usrInfo.usrId}, '${filename}', ${params.vId}, 2)`;
                     conn.query(sql, function(err, result){
@@ -422,7 +422,7 @@ const routerConfig = {
                 
             let sql = `select active_code,email,name from usr where id=${usrId}`;
 
-            let conn = require('./connect.js').conn;
+            let conn = require('./connect.js');
             conn.query(sql, function(err, result){
                 if(err)
                     console.log(err);

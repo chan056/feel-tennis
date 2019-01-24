@@ -124,7 +124,7 @@ module.exports = function(req, res) {
 		ext = 'html';
 		contentType = mime[ext]
 
-		let conn = require('./connect.js').conn;
+		let conn = require('./connect.js');
 		let sql  = `select file_path from spider_food where path='${pathname}'`;
 
 		conn.query(sql, function (err, result, fields) {

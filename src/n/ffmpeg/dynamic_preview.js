@@ -45,7 +45,7 @@ module.exports = function(captureParams, res, req){
             output = output.match(/\/multimedia\S+$/);
 
             if(req && res){// 用户截图
-                let conn = require('../db/connect.js').conn;
+                let conn = require('../db/connect.js');
                 let sql = `insert into usr_screenshot_star (usr_id, screenshot, v_id, type) values (${req.usrInfo.usrId}, '${gifFilename}', ${videoName}, 1)`;
                 conn.query(sql, function(err, result){
                     if(err)

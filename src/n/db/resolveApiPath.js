@@ -22,7 +22,6 @@ function resolveApiPath(req, res) {
         pathMatched = pathReg.exec(urlObj.pathname);
 
         if (pathMatched) {
-            console.log(keys)
             fnMatched = routerHandler;
             break;
         }

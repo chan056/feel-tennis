@@ -1,4 +1,4 @@
-let conn = require('./connect.js').conn;
+let conn = require('./connect.js');
 let tools = require('../tools');
 let usrInfo = {};
 
@@ -39,10 +39,13 @@ let operations = {
 
 	},
 
+	// 可用于API或SSR
 	queryAthletes: function (res, qualification, params) {
 
-		conn.query('SELECT * from athlete' + qualification, function (err, result, fields) {
+		conn.query(`use athlete; select * from athlete ${qualification}` , function (err, result, fields) {
 			if (err) return throwError(err, res);
+			
+			result = result[1];
 
 			if(!res.dynamicDataSet){
 				result = JSON.stringify(result);
