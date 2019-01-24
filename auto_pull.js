@@ -50,30 +50,44 @@ setInterval(function(){
 
 function updateSQL(){
     const fs = require('fs');
-    let updateSQqlPath = require('path').resolve(__dirname, 'update.sql');
     
-    fs.readFile(updateSQqlPath, function(err, data){
-        if(err){
-            return console.log(err)
-        }
+    const databaseConfig = {
+        athlete_tennis: 'update_athlete_tennis.sql',
+        n: 'update.sql'
+    };
 
-        if(data.toString().length){
+    for(let databaseName in databaseConfig){
+        sqlFilename = databaseConfig[databaseName];
 
-            fs.stat(updateSQqlPath, function(){
-                let lastUpdateTime = arguments[1].mtimeMs;
-                let now = +new Date();
-                const day = 24 * 60 * 60 * 1000;
+        updateOneDatabase(sqlFilename, databaseName)
+    }
 
-                if(now - lastUpdateTime < day){
-                    let x = crypto.aesDecrypt(constants.encyotedPsw, constants.aesKey);
+    function updateOneDatabase(sqlFilename, databaseName){
+        let updateSQqlPath = require('path').resolve(__dirname, sqlFilename);
+    
+        fs.readFile(updateSQqlPath, function(err, data){
+            if(err){
+                return console.log(err)
+            }
 
-                    exec(`mysql -u root -p${x} -Dn< ${updateSQqlPath}`, function(err, stdeout, stderr){
-                        if(err)
-                            return console.log(err);
-                
-                    });
-                }
-            });
-        }
-    })
+            if(data.toString().length){
+
+                fs.stat(updateSQqlPath, function(){
+                    let lastUpdateTime = arguments[1].mtimeMs;
+                    let now = +new Date();
+                    const day = 24 * 60 * 60 * 1000;
+
+                    if(now - lastUpdateTime < day){
+                        let x = crypto.aesDecrypt(constants.encyotedPsw, constants.aesKey);
+
+                        exec(`mysql -u root -p${x} -D${databaseName}< ${updateSQqlPath}`, function(err, stdeout, stderr){
+                            if(err)
+                                return console.log(err);
+                    
+                        });
+                    }
+                });
+            }
+        })
+    }
 }

@@ -4,7 +4,7 @@
 
 <%- include views/header %>
 
-<% athletes.forEach(function(athlete){%>
+<% dynamicDataSet.queryAthletes.forEach(function(athlete){%>
   <p><%= athlete.name %></p>
 <% }) %>
 

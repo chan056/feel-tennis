@@ -1,0 +1,10 @@
+<%- include views/header %>
+
+<% for(let i in links){ %>
+  <% linkName = i; linkUrl = links[linkName] %>
+  <p>
+    <a href="<%= linkUrl %>" target="_blank"><%= linkName %></a>
+  </p>
+<% } %>
+
+<%- include views/footer %>

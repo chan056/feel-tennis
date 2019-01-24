@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const ejs = require('ejs');
 
 let tools = require('../tools');
 
@@ -30,12 +31,11 @@ module.exports = function(tempaltePath, params, res, req){
                 // console.log(countAttribute(target), reqNames.length)
                 if(countAttribute(target) === reqNames.length){
                     // 数据准备完毕，解析模板
-                    const ejs = require('ejs');
-                    console.log(pageStructureCode.trim(), dynamicDataSet[reqNames[0]])
+                    // console.log(pageStructureCode.trim(), dynamicDataSet[reqNames[0]])
                     try{
                         var html = ejs.render(pageStructureCode.trim(), {
                             filename: tempaltePath,
-                            athletes: dynamicDataSet[reqNames[0]]
+                            dynamicDataSet: dynamicDataSet
                         });
     
                         res.end(html);
@@ -58,6 +58,21 @@ module.exports = function(tempaltePath, params, res, req){
                 res.dynamicDataSet = dynamicDataSet;
                 operate.query(reqName, params, res, req);
             });
+        }else{
+            try{
+                var html = ejs.render(pageStructureCode.trim(), {
+                    filename: tempaltePath,
+                    links: {
+                        '首页': '/',
+                        '运动介绍': '/page/intro_tennis.html',
+                        '运动员': '/athletes/1.ssr'
+                    }
+                });
+    
+                res.end(html)
+            }catch(e){
+                throw e;
+            }
         }
     })
 }

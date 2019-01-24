@@ -44,9 +44,9 @@
 			<h2>水平测评</h2>
 			<a id="tennis-level" href="" target="_blank">评测</a>
 
-			<h2>排行榜</h2>
+			<!-- <h2>排行榜</h2>
 			<ol id="male-athlete-list" class="athlete-list fl"></ol>
-			<ol id="female-athlete-list" class="athlete-list fl"></ol>
+			<ol id="female-athlete-list" class="athlete-list fl"></ol> -->
 			<br class="clr">
 		</div>
 
@@ -64,7 +64,7 @@
 			window.vEle = $('video');
 			$('#tennis-level').attr('href', CONSTANT.level.tennis);
 
-			queryAthletes();
+			// queryAthletes();
 			queryVideoIndex(function(data){
 				var historyIndex = data[0].id,
 					ruleIndex = data[1].id;
@@ -123,7 +123,7 @@
 				});
 			}
 
-			function queryAthletes(){
+			/* function queryAthletes(){
 				tools.xhr('/athletes/1', function(res){
 					var athletes = res;
 					// console.log(res);
@@ -148,7 +148,7 @@
 						athleteTemplateFn(femaleAhletes)
 					);
 				}.bind(this));
-			}
+			} */
 		</script>
 	</body>
 </html>

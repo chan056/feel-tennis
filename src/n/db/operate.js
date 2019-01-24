@@ -1,10 +1,8 @@
-let conn = require('./connect.js');
+let conn = require('./connect.js');// 一次性代码，因闭包会产生全局变量，在不同用户之间共享
 let tools = require('../tools');
-let usrInfo = {};
 
 let operations = {
 	querySports: function (res, qualification, params) {
-		
 		let sql = 'SELECT * from sport' + qualification;
 		sql = disposePageSql(sql, params);
 
@@ -41,12 +39,9 @@ let operations = {
 
 	// 可用于API或SSR
 	queryAthletes: function (res, qualification, params) {
-
-		conn.query(`use athlete; select * from athlete ${qualification}` , function (err, result, fields) {
+		conn.query(`select * from athlete_tennis.athlete ${qualification}` , function (err, result, fields) {
 			if (err) return throwError(err, res);
 			
-			result = result[1];
-
 			if(!res.dynamicDataSet){
 				result = JSON.stringify(result);
 				res.end(result)
