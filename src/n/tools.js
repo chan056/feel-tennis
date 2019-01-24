@@ -215,6 +215,27 @@ function transformPath(pagePath){
 	return pagePath.join('.')
 }
 
+function downloadImg(src){
+	src = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1548358178796&di=94e1201ae5ed988750222d2c5c0e3842&imgtype=0&src=http%3A%2F%2Fphotocdn.sohu.com%2F20150502%2Fmp13350674_1430531772698_1_th.jpeg';
+
+	var fs = require('fs');
+	var request = require("request");
+	// var src = "https://www.google.com.hk/images/srpr/logo3w.png";
+	var writeStream = fs.createWriteStream('image.png');
+	var readStream = request(src)
+	readStream.pipe(writeStream);
+	readStream.on('end', function() {
+		console.log('文件下载成功');
+	});
+	readStream.on('error', function() {
+		console.log("错误信息:" + err)
+	})
+	writeStream.on("finish", function() {
+		console.log("文件写入成功");
+		writeStream.end();
+	});
+}
+
 module.exports = {
     response404: response404,
     isEmpty: isEmpty,
@@ -226,5 +247,6 @@ module.exports = {
 	copyFile: copyFile,
 	botCheck: botCheck,
 	resolveRefererHost: resolveRefererHost,
-	transformPath: transformPath
+	transformPath: transformPath,
+	downloadImg
 }

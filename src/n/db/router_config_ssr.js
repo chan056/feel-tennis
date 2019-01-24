@@ -1,6 +1,6 @@
 
 const routerConfig = {
-    '/athletes/:sport_id': 'athletes',
+    '/athletes/:sport_id': 'tennis/athletes',
     '/sitemap': 'sitemap'
 }
 

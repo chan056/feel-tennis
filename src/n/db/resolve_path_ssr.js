@@ -13,14 +13,13 @@ function resolvePathSSR(req, res) {
     var pathname = urlObj.pathname.replace(/\.ssr$/, '');
 
     for (routerName in routerConfig) {
-        var routerHandler = routerConfig[routerName];
         keys = [];
 
         pathReg = pathToRegexp(routerName, keys);
         pathMatched = pathReg.exec(pathname);
 
         if (pathMatched) {
-            templateMatched = routerHandler;
+            templateMatched = routerConfig[routerName];
             // console.log(keys, templateMatched);
             break;
         }
@@ -32,11 +31,6 @@ function resolvePathSSR(req, res) {
 
         // 将params和query结合 /a/1?b=2
         let params = Object.assign(paramsMathed, urlObj.query);
-
-        // var let = tools.newClause(params);
-        // if(clause){
-        //     clause = ' where ' + clause;
-        // }
 
         const templateDir = '../template';
         const templateSuffix = '.ssr';
