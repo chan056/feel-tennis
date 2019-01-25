@@ -464,3 +464,6 @@ nodesession 独立
     服务端渲染
     分数据库
     添加页面索引
+
+190125
+    检测package.json的变化

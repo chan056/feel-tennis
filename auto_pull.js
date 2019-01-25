@@ -45,7 +45,8 @@ setInterval(function(){
                         })
                     })
     
-                    // updateSQL();
+                    updateSQL();
+                    updateNodeModule();
                 })
             }else{
                 console.log('已是最新，无需更新 ' + new Date())
@@ -97,4 +98,20 @@ function updateSQL(){
             }
         })
     }
+}
+
+function updateNodeModule(){
+    fs.stat('./package.json', function(){
+        let lastUpdateTime = arguments[1].mtimeMs;
+        let now = +new Date();
+        const day = 24 * 60 * 60 * 1000;
+
+        if(now - lastUpdateTime < day){
+            exec(`npm install`, function(err, stdeout, stderr){
+                if(err)
+                    return console.log(err);
+        
+            });
+        }
+    });
 }
