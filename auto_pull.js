@@ -9,42 +9,49 @@ setInterval(function(){
     if(new Date().getHours() !== 4)
         return;
 
-    exec('git fetch --dry-run', (error, stdout, stderr) => {
+    exec('git remote update', (error, stdout, stderr) => {
         if (error) {
             return console.error(error);
         }
     
-        if(stdout){
-            console.log('有改动: ' + new Date())
-            exec('git pull', (error, stdout, stderr) => {
-                if (error) {
-                    return console.error(error);
-                }
-                console.log('拉取')
-
-                exec('webpack', (error, stdout, stderr) => {
+        exec('git status -uno', (error, stdout)=>{
+            if (error) {
+                return console.error(error);
+            }
+    
+            if(stdout.match('can be fast-forwarded')){
+                console.log('有改动: ' + new Date())
+                exec('git pull', (error, stdout, stderr) => {
                     if (error) {
                         return console.error(error);
                     }
-
-                    console.log('打包')
-                    
-                    exec('forever restart server.js', (error, stdout, stderr) => {
+                    console.log('拉取')
+    
+                    exec('webpack', (error, stdout, stderr) => {
                         if (error) {
                             return console.error(error);
                         }
-
-                        console.log('重启')
-
-
+    
+                        console.log('打包')
+                        
+                        exec('forever restart server.js', (error, stdout, stderr) => {
+                            if (error) {
+                                return console.error(error);
+                            }
+    
+                            console.log('重启')
+    
+    
+                        })
                     })
+    
+                    // updateSQL();
                 })
-
-                updateSQL();
-            })
-        }else{
-            console.log('已是最新，无需更新 ' + new Date())
-        }
+            }else{
+                console.log('已是最新，无需更新 ' + new Date())
+            }
+        })
+    
     });
 }, ONEHOURMILLISECOND)
 
