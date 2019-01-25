@@ -1,7 +1,9 @@
 const { exec } = require('child_process');
-const crypto = require('./src/n/crypto.js');
+const fs = require('fs');
 
+const crypto = require('./src/n/crypto.js');
 const constants = require('./src/n/constant');
+
 const ONEHOURMILLISECOND = 60 * 60 * 1000;
 
 setInterval(function(){
@@ -57,7 +59,6 @@ setInterval(function(){
 }, ONEHOURMILLISECOND)
 
 function updateSQL(){
-    const fs = require('fs');
     
     const databaseConfig = {
         athlete_tennis: 'update_athlete_tennis.sql',
