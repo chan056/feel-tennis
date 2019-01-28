@@ -503,7 +503,7 @@ app {
 }
 #link-to-translator {
   margin-left: 2rem;
-  text-decoration: none;
+  font-weight: bold;
 }
 #kick-off-ball {
   position: fixed;
@@ -669,14 +669,13 @@ app {
 .evaluate-container .el-textarea {
   margin-top: 2rem;
 }
-#site {
+#sitename-on-video {
   position: absolute;
-  right: 20px;
-  top: 15px;
+  right: .5em;
+  top: .5em;
   text-align: center;
   letter-spacing: .2rem;
   color: #d38b6f;
-  background-color: #fff;
   padding: .4rem;
   -webkit-user-select: none;
   user-select: none;

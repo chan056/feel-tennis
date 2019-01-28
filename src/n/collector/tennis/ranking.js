@@ -44,20 +44,18 @@ function fetchHTML(url){
 
 }
 
-// function truncateAthlete(fn){
-//     conn.query('truncate athlete', function(err, result){
-//         if(err)
-//             console.log(err);
-
-//         fn && fn();
-//     });
-// }
-
 function fetchAndfilterData(html) {
     if (html) {
         let $ = cheerio.load(html);
 
-        console.log($('#atpRanking').find('tr').length)
+        let sql = ``;
+        $('#atpRanking').find('.player-row').map((i,playerLine)=>{
+            // console.log(player);
+            playerLine = $(playerLine);
+
+            let currentRank = playerLine.find('.current-rank').text()
+            console.log(currentRank);
+        })
        /*  $('#u868>tbody td:nth-child(4)').map(function(i, p){// 4 不是 3！
             if (i > 99)
                 return;

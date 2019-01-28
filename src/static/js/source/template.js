@@ -394,13 +394,15 @@ module.exports = function(){
                     </video>
 
                     <p class="subtitle"></p>
-                    <div id="site">www.yitube.cn</div>
+                    <div id="sitename-on-video">www.yitube.cn</div>
                 </div>
                 <div v-if="video" id="usr-operation-desk">
                     <div class="fl">{{video.impression}}次观看</div>
 
                     <router-link v-if="!isMobile" id="link-to-translator" :to="{path: '/translator/' + videoId}">
-                        {{video.translated? '翻译有误？': '我要翻译'}}
+                        <el-badge is-dot>
+                            {{video.translated? '翻译有误？': '帮忙翻译'}}
+                        </el-badge>
                     </router-link>
 
                     <ul class="fr block-list ovv">
