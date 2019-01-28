@@ -1,7 +1,7 @@
 
 const routerConfig = {
-    '/athletes/:sport_id': 'tennis/athletes',
-    '/sitemap': 'sitemap'
+    '/shortcut': 'shortcut',
+    '/tennis/rankings/:gender': 'tennis/ranking'
 }
 
 module.exports = routerConfig;

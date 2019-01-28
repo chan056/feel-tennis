@@ -1,10 +1,10 @@
 {{
-    ['queryAthletes']
+    ['queryTennisRanking']
 }}
 
 <%- include views/header %>
 
-<% dynamicDataSet.queryAthletes.forEach(function(athlete){%>
+<% dynamicDataSet.ranking.forEach(function(athlete){%>
   <p><%= athlete.name %></p>
 <% }) %>
 

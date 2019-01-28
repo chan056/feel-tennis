@@ -28,21 +28,13 @@ module.exports = function(tempaltePath, params, res, req){
             set: (target, key, value, receiver) => {
                 target[key] = value;
 
-                // console.log(countAttribute(target), reqNames.length)
                 if(countAttribute(target) === reqNames.length){
                     // 数据准备完毕，解析模板
-                    // console.log(pageStructureCode.trim(), dynamicDataSet[reqNames[0]])
-                    try{
-                        var html = ejs.render(pageStructureCode.trim(), {
-                            filename: tempaltePath,
-                            dynamicDataSet: dynamicDataSet
-                        });
-    
-                        res.end(html);
-                    }catch(e){
-                        throw e;
-                    }
+                    renderFile({
+                        dynamicDataSet: dynamicDataSet
+                    });
                 }
+
                 return true
             }
         })
@@ -58,22 +50,26 @@ module.exports = function(tempaltePath, params, res, req){
                 res.dynamicDataSet = dynamicDataSet;
                 operate.query(reqName, params, res, req);
             });
+            
         }else{
+            renderFile({
+                links: require('./shorcut.js')
+            });
+        } 
+
+        function renderFile(renderOpt){
+            let opt = Object.assign({
+                filename: tempaltePath,
+            }, renderOpt)
+            
             try{
-                var html = ejs.render(pageStructureCode.trim(), {
-                    filename: tempaltePath,
-                    links: {
-                        '首页': '/',
-                        '运动介绍': '/page/intro_tennis.html',
-                        '运动员': '/athletes/1.ssr'
-                    }
-                });
-    
-                res.end(html)
+                var html = ejs.render(pageStructureCode.trim(), opt);
+
+                res.end(html);
             }catch(e){
                 throw e;
             }
-        }
+        }        
     })
 }
 

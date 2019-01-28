@@ -38,15 +38,17 @@ let operations = {
 	},
 
 	// 可用于API或SSR
-	queryAthletes: function (res, qualification, params) {
-		conn.query(`select * from athlete_tennis.athlete ${qualification}` , function (err, result, fields) {
+	queryTennisRanking: function (res, qualification, params) {
+		let sql = `select * from tennis.athlete ${qualification}`;
+
+		conn.query(sql , function (err, result, fields) {
 			if (err) return throwError(err, res);
 			
 			if(!res.dynamicDataSet){
 				result = JSON.stringify(result);
 				res.end(result)
 			}else{
-				res.dynamicDataSet['queryAthletes'] = result;
+				res.dynamicDataSet['ranking'] = result;
 			}
 		});
 

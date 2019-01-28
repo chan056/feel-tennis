@@ -193,7 +193,7 @@ module.exports = function(){
                 </div>
                 <div class="guide-section" v-if="loginUsrInfo && loginUsrInfo.is_admin == 1">
                     <div class="guide-entry" id="upload-entry" >
-                        <a href="/sitemap.ssr" class="guide-entry-renderer" title="网页列表" target="_blank">
+                        <a href="/shortcut.ssr" class="guide-entry-renderer" title="网页列表" target="_blank">
                             <i class="fa fa-navicon icon"></i>
                             <span class="text">网页列表</span>
                         </a>
