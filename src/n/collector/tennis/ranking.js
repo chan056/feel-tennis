@@ -50,10 +50,26 @@ function fetchAndfilterData(html) {
 
         let sql = ``;
         $('#atpRanking').find('.player-row').map((i,playerLine)=>{
-            // console.log(player);
             playerLine = $(playerLine);
 
-            let currentRank = playerLine.find('.current-rank').text()
+            let currentRank = playerLine.find('.current-rank').text(),
+                playerPrevRank = playerLine.find('.prev-rank').text(),
+                playerName = playerLine.find('.player-name').text(),
+                playerCountry = playerLine.find('.player-country').text(),
+                playerPoints = playerLine.find('.player-points').text();
+
+                playerPoints && (playerPoints = playerPoints.replace(/,/g, ''))
+
+            // INSERT INTO 
+
+            // items(name,city,price,number,picture) 
+            
+            // VALUES
+            
+            // ('耐克运动鞋','广州',500,1000,'003.jpg'),
+            
+            // ('耐克运动鞋2','广州2',500,1000,'002.jpg');
+            sql += `insert into tennis.athlete ()`;
             console.log(currentRank);
         })
        /*  $('#u868>tbody td:nth-child(4)').map(function(i, p){// 4 不是 3！

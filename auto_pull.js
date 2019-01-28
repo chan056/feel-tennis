@@ -61,7 +61,7 @@ setInterval(function(){
 function updateSQL(){
     
     const databaseConfig = {
-        athlete_tennis: 'update_athlete_tennis.sql',
+        tennis: 'update_tennis.sql',
         n: 'update.sql'
     };
 
@@ -116,3 +116,5 @@ function updateNodeModule(){
         }
     });
 }
+
+// 监听自身的变化，重启进程 todo
