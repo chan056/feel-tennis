@@ -4,8 +4,22 @@
 
 <%- include views/header %>
 
+<table>
+  <th>
+    <td>排名</td>
+    <td>之前排名</td>
+    <td>名字</td>
+    <td>国家</td>
+    <td>积分</td>
+  </th>
 <% dynamicDataSet.ranking.forEach(function(athlete){%>
-  <p><%= athlete.name %></p>
+  <tr>
+    <td><%= athlete.name %></td>
+    <td><%= athlete.name %></td>
+    <td><%= athlete.name %></td>
+    <td><%= athlete.name %></td>
+    <td><%= athlete.name %></td>
+  </tr>
 <% }) %>
-
+</table>
 <%- include views/footer %>
