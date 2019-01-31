@@ -53,7 +53,7 @@ genders.forEach((v, i)=>{
         if (fragment) {
             let $ = cheerio.load(fragment);
     
-            let sql = `insert into tennis.athlete (name, name_en, gender, ranking, prev_ranking, point) values `;
+            let sql = `insert into tennis.athlete (name, name_en, gender, ranking, prev_ranking, country, point, state_abbreviation) values `;
     
             $('#atpRanking').find('.player-row').map((i,playerLine)=>{
                 playerLine = $(playerLine);
@@ -61,11 +61,20 @@ genders.forEach((v, i)=>{
                 let currentRanking = playerLine.find('.current-rank').text(),
                     playerPrevRanking = playerLine.find('.prev-rank').text(),
                     playerName = playerLine.find('.player-name').text().trim(),
-                    playerCountry = playerLine.find('.player-country').text(),
-                    playerPoints = playerLine.find('.player-points').text();
-                    playerPoints && (playerPoints = playerPoints.replace(/,/g, ''))
-    
-                sql += `('', '${playerName}', ${gender}, ${currentRanking}, ${playerPrevRanking}, ${playerPoints}),`
+                    playerCountry = playerLine.find('.country-name').text().trim();
+
+                let stateAbbreviation = playerLine.find('.player-country .flags').attr('class') || '';
+                let playerPoints = playerLine.find('.player-points').text() || '';
+                
+                if(stateAbbreviation){
+                    stateAbbreviation = stateAbbreviation.match(/-(\w+)$/)[1];
+                }
+
+                if(playerPoints){
+                    playerPoints = playerPoints.replace(/,/g, '')
+                }
+                    
+                sql += `('', '${playerName}', ${gender}, ${currentRanking}, ${playerPrevRanking}, '${playerCountry}', ${playerPoints}, '${stateAbbreviation}'),`
             })
     
             sql = sql.replace(/,$/, ';');

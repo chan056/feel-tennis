@@ -1,25 +1,36 @@
 {{
-    ['queryTennisRanking']
+	['queryTennisRanking']
 }}
 
 <%- include views/header %>
 
 <table>
-  <th>
-    <td>排名</td>
-    <td>之前排名</td>
-    <td>名字</td>
-    <td>国家</td>
-    <td>积分</td>
-  </th>
-<% dynamicDataSet.ranking.forEach(function(athlete){%>
-  <tr>
-    <td><%= athlete.name %></td>
-    <td><%= athlete.name %></td>
-    <td><%= athlete.name %></td>
-    <td><%= athlete.name %></td>
-    <td><%= athlete.name %></td>
-  </tr>
-<% }) %>
+	<tr>
+		<td>排名</td>
+		<td>旧排名</td>
+		<td>名字</td>
+		<td>国家</td>
+		<td>积分</td>
+	</tr>
+	<% dynamicDataSet.ranking.forEach(function(athlete){%>
+	<tr>
+		<td>
+			<%= athlete.ranking %>
+		</td>
+		<td>
+			<%= athlete.prev_ranking %>
+		</td>
+		<td>
+			<%= athlete.name_en %>
+		</td>
+		<td>
+			<%= athlete.country %>
+		</td>
+		<td>
+			<%= athlete.point %>
+		</td>
+	</tr>
+	<% }) %>
 </table>
+
 <%- include views/footer %>
