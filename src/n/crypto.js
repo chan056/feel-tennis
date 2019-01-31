@@ -5,7 +5,7 @@ module.exports = {
 
         // 可任意多次调用update():
         hash.update(s);
-        console.log(hash.digest('hex'));
+        return hash.digest('hex');
     },
 
     aesEncrypt: function (data, key) {
