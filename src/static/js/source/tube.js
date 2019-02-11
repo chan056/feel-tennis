@@ -60,7 +60,7 @@ $(function () {
 			return next();
 		}
 
-		if(loginUsrInfo && isMapper){
+		if(window.loginUsrInfo && isMapper){
 			recordPage();
 			sitePush();
 		}else{

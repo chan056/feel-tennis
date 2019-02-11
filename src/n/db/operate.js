@@ -1268,22 +1268,23 @@ let operations = {
 	},
 
 	createAlbum: function(res, postObj){
-		var sql = `INSERT INTO album 
-			(sport_id, author_id, name, tag, update_time)
-			VALUES (?, ?, ?, ?, ${Date.now()})`;
+		const fs = require('fs'),
+			path = require('path');
 
-		conn.query(sql, [postObj.sportId, postObj.maker, postObj.name, postObj.tag], function(err, result, fields){
+		const coverExt = path.extname(postObj.cover).toLowerCase() || '.jpg';
+
+		let sql = `INSERT INTO album 
+			(sport_id, author_id, name, tag, update_time, cover_ext)
+			VALUES (?, ?, ?, ?, ${Date.now()}, ?)`;
+
+		conn.query(sql, [postObj.sportId, postObj.maker, postObj.name, postObj.tag, coverExt], function(err, result, fields){
 			if(err)
 				return throwError(err, res);
 
 			let albumId = result.insertId;;
 
-			let fs = require('fs'),
-				path = require('path');
-
 			let sourceCoverPath = path.resolve(__dirname, `../../static${postObj.cover}`),
-				ext = path.extname(sourceCoverPath),
-				destCoverPath = path.resolve(__dirname, `../../static/img/cover/album/` + albumId + ext);
+				destCoverPath = path.resolve(__dirname, `../../static/img/cover/album/` + albumId + coverExt);
 				
 			require('../tools.js').scaleImage(sourceCoverPath, destCoverPath);
 

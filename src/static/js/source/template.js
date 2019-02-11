@@ -278,7 +278,7 @@ module.exports = function(){
                 <ul id="video-container" class="block-list">
                     <li v-for="album in albumList">
                         <router-link :to="{path: '/albums/'+ album.id }">
-                            <img :src="'/img/cover/album/' + album.id + '.jpg'" class="block-thumb album-thumb" alt="album"/>
+                            <img :src="'/img/cover/album/' + album.id + (album.cover_ext || '.jpg')" class="block-thumb album-thumb" alt="album"/>
                         </router-link>
                         <h3 class="block-title album-title" :title="album.name">
                             {{ album.name }}
