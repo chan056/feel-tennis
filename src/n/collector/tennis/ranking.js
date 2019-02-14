@@ -1,4 +1,3 @@
-const https = require('https');
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
@@ -25,12 +24,11 @@ genders.forEach((v, i)=>{
     fetchHTML()
 
     function fetchHTML(){
-        let requestor = sourceURL.match('https://')? https: http;
         let cacheFilePath = `./cache/${cacheFileName}`;
     
         if(!fs.existsSync(cacheFilePath)){
             console.log(`requesting ${association}`)
-            requestor.get(sourceURL, function(res) {
+            http.get(sourceURL, function(res) {
                 let html = '';
                 res.on('data', function(data) {
                     html += data;
@@ -92,7 +90,7 @@ genders.forEach((v, i)=>{
     
             runSql(sql, function(){
                 queueCompletedCount ++;
-                (queueCompletedCount == 2) && process.exit();
+                (queueCompletedCount == genders.length) && process.exit();
             } );
         }
     }

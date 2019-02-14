@@ -10,7 +10,7 @@ function isEmpty(obj) {
 	return (Object.getOwnPropertyNames(obj).length === 0);
 }
 
-function newQueryClause(params) {
+function newClause(params) {
 	// let mysql = require('mysql');
 
 	if (isEmpty(params)) {
@@ -237,16 +237,16 @@ function downloadImg(src){
 }
 
 module.exports = {
-    response404: response404,
-    isEmpty: isEmpty,
-	newClause: newQueryClause,
-	formatTime: formatTime,
-	convertSrt2vtt: convertSrt2vtt,
-	scaleImage: scaleImage,
-	sendActiveEmail: sendActiveEmail,
-	copyFile: copyFile,
-	botCheck: botCheck,
-	resolveRefererHost: resolveRefererHost,
-	transformPath: transformPath,
+    response404,
+    isEmpty,
+	newClause,
+	formatTime,
+	convertSrt2vtt,
+	scaleImage,
+	sendActiveEmail,
+	copyFile,
+	botCheck,
+	resolveRefererHost,
+	transformPath,
 	downloadImg
 }
