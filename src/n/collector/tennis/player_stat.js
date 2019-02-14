@@ -98,8 +98,6 @@ genders.forEach((v, i)=>{
     }
 })
 
-
-
 function writeFile(cache, targetFile){
     
     fs.writeFile(targetFile, cache, function(err) {
