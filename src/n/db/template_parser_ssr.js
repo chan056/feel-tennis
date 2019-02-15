@@ -52,9 +52,11 @@ module.exports = function(tempaltePath, params, res, req){
             });
             
         }else{
-            renderFile({
-                links: require('./shorcut.js')
-            });
+            if(tempaltePath.match('shortcut.ssr')){
+                renderFile({
+                    links: require('./shorcut.js')
+                });
+            }
         } 
 
         function renderFile(renderOpt){

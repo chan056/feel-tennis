@@ -1,114 +1,50 @@
-const http = require('http');
-const path = require('path');
-const fs = require('fs');
-const cheerio = require('cheerio');
-
-const conn = require('../../db/connect');
+const tools = require('../tools/main.js');
 
 let argv = process.argv.slice(2),
     playerId = argv[0],
     playerName = argv[1];
 
 let cacheFileName = `player.${playerId}.cache.js`;
+let cacheFilePath = `./cache/players/${cacheFileName}`;
 let sourceURL = `http://www.tennis.com/player/${playerId}/${playerName}/stats/`;
 
-console.log(cacheFileName, sourceURL)
-
-// fetchHTML()
-
-function fetchHTML(){
-    let cacheFilePath = `./cache/players/${cacheFileName}`;
-
-    if(!fs.existsSync(cacheFilePath)){
-        console.log(`requesting`)
-        http.get(sourceURL, function(res) {
-            let html = '';
-            res.on('data', function(data) {
-                html += data;
-            }).on('end', function() {
-                writeFile(html, cacheFilePath);
-                storeData(html)
-            });
-        }).on('error', function() {
-            console.log('获取数据出错！');
-        });
-    }else{
-        fs.readFile(cacheFilePath, (err, data)=>{
-            if(err){
-                return console.log(err);
-            }
-
-            storeData(data.toString())
-        })
-    }
-}
+tools.fetchHTML(sourceURL, cacheFilePath, storeData)
 
 function storeData(fragment) {
     if (fragment) {
+        const cheerio = require('cheerio');
+
         let $ = cheerio.load(fragment);
 
-        let sql = `insert into tennis.athlete (id_tennis_com, name, name_en, gender, ranking, prev_ranking, country, point, state_abbreviation) values `;
+        const aboutWrapper = $('.about-wrapper');
+        const age = aboutWrapper.find('.about-info').eq(0).text(),
+            residence = aboutWrapper.find('.about-info').eq(2).text(),
+            turn_pro = aboutWrapper.find('.about-info').eq(3).text();
 
-        $('#atpRanking').find('.player-row').map((i,playerLine)=>{
-            playerLine = $(playerLine);
+        const stats = $('.player-stats');
+        const birthdate = stats.find('.player-birthdate').text(),
+            height = stats.find('.player-height').text().match(/\((\d+)/)[1],
+            weight = stats.find('.player-weight').text().match(/\((\d+)/)[1],
+            plays = stats.find('.player-plays').text() == 'Left-handed'?1:0,
+            experience = stats.find('.player-experience').text().match(/\d+/)
+            nickname = stats.find('.player-nickname').text(),
+            ytd_win = stats.find('.player-wins').text().match(/\d+/g),
+            ytd_win_single = ytd_win[0]
+            ytd_win_double = ytd_win[1],
+            website = stats.find('.player-website a').attr('href');
 
-            let currentRanking = playerLine.find('.current-rank').text(),
-                playerPrevRanking = playerLine.find('.prev-rank').text(),
-                playerName = playerLine.find('.player-name').text().trim(),
-                playerCountry = playerLine.find('.country-name').text().trim();
+        let sql = `update tennis.athlete set age=${age}, residence='${residence}', turn_pro=${turn_pro}, birthdate='${tools.formatBirthdate(birthdate)}', height=${height}, weight=${weight}, plays=${plays}, 
+            experience=${experience}, nickname='${nickname}', ytd_win_single=${ytd_win_single}, ytd_win_double=${ytd_win_double}, website='${website}'
+            where id_tennis_com=${playerId}`;
 
-            let playerId = playerLine.find('.player-name a').eq(0).attr('href') || 0;
-            if(playerId){
-                playerId = playerId.match(/\/(\d+)\//);
-                if(playerId){
-                    playerId = playerId[1];
-                }
-            }
+        // console.log(sql);
 
-            let stateAbbreviation = playerLine.find('.player-country .flags').attr('class') || '';
-            let playerPoints = playerLine.find('.player-points').text() || '';
-            
-            if(stateAbbreviation){
-                stateAbbreviation = stateAbbreviation.match(/-(\w+)$/)[1];
-            }
-
-            if(playerPoints){
-                playerPoints = playerPoints.replace(/,/g, '')
-            }
-                
-            sql += `(${playerId}, '', '${playerName}', ${gender}, ${currentRanking}, ${playerPrevRanking}, '${playerCountry}', ${playerPoints}, '${stateAbbreviation}'),`
-        })
-
-        sql = sql.replace(/,$/, ';');
-
-        runSql(sql/* , function(){
-            queueCompletedCount ++;
-            (queueCompletedCount == 2) && process.exit();
-        }  */);
+        tools.runSql(sql, function(){
+            process.exit();
+        });
     }
 }
 
-function writeFile(cache, targetFile){
-    
-    fs.writeFile(targetFile, cache, function(err) {
-        if (err) {
-            return console.error(err);
-        }
-    });
-}
 
-// <<< SQL
-function truncate(tableName){
-    const sql = `truncate table ${tableName}`;
-    runSql(sql);
-}
 
-function runSql(sql, fn){
-    return conn.query(sql, function(err, result, fields){
-        if(err)
-            console.error(err.sqlMessage);
-        
-        fn && fn()
-    });
-}
-// SQL >>>
+

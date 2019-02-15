@@ -37,23 +37,6 @@ let operations = {
 
 	},
 
-	// 可用于API或SSR
-	queryTennisRanking: function (res, qualification, params) {
-		let sql = `select * from tennis.athlete ${qualification}`;
-
-		conn.query(sql , function (err, result, fields) {
-			if (err) return throwError(err, res);
-			
-			if(!res.dynamicDataSet){
-				result = JSON.stringify(result);
-				res.end(result)
-			}else{
-				res.dynamicDataSet['ranking'] = result;
-			}
-		});
-
-	},
-
 	querySport: function (res, qualification, params) {
 		
 		conn.query('SELECT * from sport' + qualification, function (err, result, fields) {
@@ -962,6 +945,41 @@ let operations = {
 			return res.end('0')
 		}
 	},
+
+	// =========== 运动员统计 开始
+	// 可用于API或SSR
+	queryTennisRanking: function (res, qualification, params) {
+		let sql = `select * from tennis.athlete ${qualification}`;
+
+		conn.query(sql , function (err, result, fields) {
+			if (err) return throwError(err, res);
+			
+			if(!res.dynamicDataSet){
+				result = JSON.stringify(result);
+				res.end(result)
+			}else{
+				res.dynamicDataSet['ranking'] = result;
+			}
+		});
+
+	},
+
+	queryTennisPlayerStat: function (res, qualification, params) {
+		let sql = `select * from tennis.athlete where id_tennis_com=${params.playerId}`;
+
+		conn.query(sql , function (err, result, fields) {
+			if (err) return throwError(err, res);
+			
+			if(!res.dynamicDataSet){
+				result = JSON.stringify(result);
+				res.end(result)
+			}else{
+				res.dynamicDataSet['stat'] = result;
+			}
+		});
+
+	},
+	// =========== 运动员统计 结束
 	
 	// ===============POST================
 	login: function(res, postObj, req){

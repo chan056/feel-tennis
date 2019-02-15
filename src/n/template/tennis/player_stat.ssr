@@ -1,0 +1,9 @@
+{{
+	['queryTennisPlayerStat']
+}}
+
+<%- include views/header %>
+
+<%= JSON.stringify(dynamicDataSet.stat) %>
+
+<%- include views/footer %>

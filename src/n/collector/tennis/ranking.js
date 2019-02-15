@@ -1,16 +1,12 @@
-const http = require('http');
-const path = require('path');
-const fs = require('fs');
-const cheerio = require('cheerio');
-
-const conn = require('../../db/connect');
+const tools = require('../tools/main.js');
 
 const genders = [1, 2];
 const ASSOCIATIONS = {1: 'ATP', 2: 'WTA'};
 
 let queueCompletedCount = 0;
 
-truncate('tennis.athlete')
+tools.truncate('tennis.athlete')
+
 genders.forEach((v, i)=>{
 
     let gender = v;
@@ -18,40 +14,15 @@ genders.forEach((v, i)=>{
     let association = ASSOCIATIONS[v];
 
     let cacheFileName = path.basename(__filename).replace('.js', `.${association.toLowerCase()}.cache.js`);
-    
+    let cacheFilePath = `./cache/${cacheFileName}`;
     let sourceURL = `http://www.tennis.com/rankings/${association}/`;
 
-    fetchHTML()
+    tools.fetchHTML(sourceURL, cacheFilePath, storeData)
 
-    function fetchHTML(){
-        let cacheFilePath = `./cache/${cacheFileName}`;
-    
-        if(!fs.existsSync(cacheFilePath)){
-            console.log(`requesting ${association}`)
-            http.get(sourceURL, function(res) {
-                let html = '';
-                res.on('data', function(data) {
-                    html += data;
-                }).on('end', function() {
-                    writeFile(html, cacheFilePath);
-                    storeData(html)
-                });
-            }).on('error', function() {
-                console.log('获取数据出错！');
-            });
-        }else{
-            fs.readFile(cacheFilePath, (err, data)=>{
-                if(err){
-                    return console.log(err);
-                }
-    
-                storeData(data.toString())
-            })
-        }
-    }
-    
     function storeData(fragment) {
         if (fragment) {
+            const cheerio = require('cheerio');
+
             let $ = cheerio.load(fragment);
     
             let sql = `insert into tennis.athlete (id_tennis_com, name, name_en, gender, ranking, prev_ranking, country, point, state_abbreviation) values `;
@@ -88,37 +59,10 @@ genders.forEach((v, i)=>{
     
             sql = sql.replace(/,$/, ';');
     
-            runSql(sql, function(){
+            tools.runSql(sql, function(){
                 queueCompletedCount ++;
                 (queueCompletedCount == genders.length) && process.exit();
             } );
         }
     }
 })
-
-
-
-function writeFile(cache, targetFile){
-    
-    fs.writeFile(targetFile, cache, function(err) {
-        if (err) {
-            return console.error(err);
-        }
-    });
-}
-
-// <<< SQL
-function truncate(tableName){
-    const sql = `truncate table ${tableName}`;
-    runSql(sql);
-}
-
-function runSql(sql, fn){
-    return conn.query(sql, function(err, result, fields){
-        if(err)
-            console.error(err.sqlMessage);
-        
-        fn && fn()
-    });
-}
-// SQL >>>
