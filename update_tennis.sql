@@ -1,3 +1,17 @@
+/*
+Navicat MySQL Data Transfer
+
+Source Server         : yitube
+Source Server Version : 50717
+Source Host           : localhost:3306
+Source Database       : tennis
+
+Target Server Type    : MYSQL
+Target Server Version : 50717
+File Encoding         : 65001
+
+Date: 2019-02-15 17:51:42
+*/
 
 SET FOREIGN_KEY_CHECKS=0;
 
@@ -17,13 +31,16 @@ CREATE TABLE `athlete` (
   `point` mediumint(9) DEFAULT NULL,
   `country` varchar(255) DEFAULT NULL,
   `state_abbreviation` varchar(5) DEFAULT NULL,
+  `age` tinyint(4) DEFAULT NULL,
   `residence` varchar(255) DEFAULT NULL,
   `turn_pro` varchar(4) DEFAULT NULL,
-  `birthdate` datetime DEFAULT NULL,
+  `birthdate` varchar(30) DEFAULT NULL,
+  `height` double DEFAULT NULL COMMENT 'cm',
   `weight` double DEFAULT NULL COMMENT 'kg',
-  `plays` tinyint(1) DEFAULT NULL COMMENT '左手 右手',
+  `plays` tinyint(1) DEFAULT NULL COMMENT '右手0(默认） 左手1 ',
   `experience` tinyint(4) DEFAULT '0' COMMENT '转职业选手年数',
-  `ytd_win` tinyint(4) DEFAULT NULL COMMENT '年初至今赢的次数',
+  `ytd_win_single` tinyint(4) DEFAULT NULL,
+  `ytd_win_double` tinyint(4) DEFAULT NULL COMMENT '年初至今赢的次数',
   `website` varchar(255) DEFAULT NULL COMMENT '个人站点',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=368 DEFAULT CHARSET=utf8;
