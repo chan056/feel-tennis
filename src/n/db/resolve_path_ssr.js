@@ -7,7 +7,9 @@ function resolvePathSSR(req, res) {
     var routerName;
     var pathReg;
     var pathMatched;
-    var templateMatched;
+    let templateMatched,
+        routerNameMatched;
+
     var keys;
     var urlObj = require('url').parse(req.url, true);
     var pathname = urlObj.pathname.replace(/\.ssr$/, '');
@@ -20,9 +22,21 @@ function resolvePathSSR(req, res) {
 
         if (pathMatched) {
             templateMatched = routerConfig[routerName];
-            // console.log(keys, templateMatched);
+            routerNameMatched = routerName;
+            // console.log(keys, templateMatched, routerName);
             break;
         }
+    }
+
+    // 根据routerName 和 参数 定位 cache文件
+        // 存在
+            // continue
+        // 不存在
+            // node xxx xx
+                // continue
+
+    if(routerNameMatched){
+
     }
  
     if (templateMatched) {

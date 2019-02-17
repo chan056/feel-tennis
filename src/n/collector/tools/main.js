@@ -13,14 +13,15 @@ module.exports = {
     },
 
     fetchHTML: function (url, cacheFilePath, fn){
+        let t = this;
         if(!fs.existsSync(cacheFilePath)){
             console.log(`requesting`)
-            http.get(sourceURL, function(res) {
+            http.get(url, function(res) {
                 let html = '';
                 res.on('data', function(data) {
                     html += data;
                 }).on('end', function() {
-                    writeFile(html, cacheFilePath);
+                    t.writeFile(html, cacheFilePath);
                     fn && fn(html)
                 });
             }).on('error', function() {
@@ -48,7 +49,7 @@ module.exports = {
     // <<< SQL
     truncate: function (tableName){
         const sql = `truncate table ${tableName}`;
-        runSql(sql);
+        this.runSql(sql);
     },
     
     runSql: function (sql, fn){
