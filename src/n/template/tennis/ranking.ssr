@@ -21,7 +21,7 @@
 			<%= athlete.prev_ranking %>
 		</td>
 		<td>
-			<%= athlete.name_en %>
+			<a href="/tennis/player/<%= athlete.id_tennis_com%>/stat.ssr"><%= athlete.name_en %></a>
 		</td>
 		<td>
 			<%= athlete.country %>

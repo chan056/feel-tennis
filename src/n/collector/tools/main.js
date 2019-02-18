@@ -12,30 +12,20 @@ module.exports = {
         });
     },
 
-    fetchHTML: function (url, cacheFilePath, fn){
+    fetchHTML: function (url, fn){
+        console.log(url)
         let t = this;
-        if(!fs.existsSync(cacheFilePath)){
-            console.log(`requesting`)
-            http.get(url, function(res) {
-                let html = '';
-                res.on('data', function(data) {
-                    html += data;
-                }).on('end', function() {
-                    t.writeFile(html, cacheFilePath);
-                    fn && fn(html)
-                });
-            }).on('error', function() {
-                console.log('获取数据出错！');
+
+        http.get(url, function(res) {
+            let html = '';
+            res.on('data', function(data) {
+                html += data;
+            }).on('end', function() {
+                fn && fn(html)
             });
-        }else{
-            fs.readFile(cacheFilePath, (err, data)=>{
-                if(err){
-                    return console.log(err);
-                }
-    
-                fn && fn(data.toString())
-            })
-        }
+        }).on('error', function() {
+            console.log('获取数据出错！');
+        });
     },
 
     // June 03, 1986 => 
@@ -47,9 +37,9 @@ module.exports = {
     },
     
     // <<< SQL
-    truncate: function (tableName){
+    truncate: function (tableName, fn){
         const sql = `truncate table ${tableName}`;
-        this.runSql(sql);
+        this.runSql(sql, fn);
     },
     
     runSql: function (sql, fn){
@@ -57,7 +47,7 @@ module.exports = {
             if(err)
                 console.error(err.sqlMessage);
             
-            fn && fn()
+            fn && fn(err, result, fields)
         });
     }
     // SQL >>>

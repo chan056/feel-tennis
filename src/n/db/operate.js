@@ -949,35 +949,74 @@ let operations = {
 	// =========== 运动员统计 开始
 	// 可用于API或SSR
 	queryTennisRanking: function (res, qualification, params) {
-		let sql = `select * from tennis.athlete ${qualification}`;
+		conn.query('select now() > ranking_expire as is_expire from tennis.athlete', function(err, rows){
+			if(err) return throwError(err, res);
 
-		conn.query(sql , function (err, result, fields) {
-			if (err) return throwError(err, res);
-			
-			if(!res.dynamicDataSet){
-				result = JSON.stringify(result);
-				res.end(result)
+			if(rows[0].is_expire){
+				let file = require('path').resolve(__dirname, '../collector/tennis/ranking.js');
+				let refetchCMD = 'node ' + file;
+
+				require('child_process').exec(refetchCMD, function(err, stdout, stderr){
+					if(err) return throwError(err, res);
+
+					queryRankingData();
+				})
 			}else{
-				res.dynamicDataSet['ranking'] = result;
+				queryRankingData();
 			}
-		});
+		})
+		
+		function queryRankingData(){
+			let sql = `select * from tennis.athlete ${qualification}`;
 
+			conn.query(sql , function (err, result, fields) {
+				if (err) return throwError(err, res);
+				
+				if(!res.dynamicDataSet){
+					result = JSON.stringify(result);
+					res.end(result)
+				}else{
+					res.dynamicDataSet['ranking'] = result;
+				}
+			});
+		}
 	},
 
 	queryTennisPlayerStat: function (res, qualification, params) {
-		let sql = `select * from tennis.athlete where id_tennis_com=${params.playerId}`;
+		let sql = `select *, now()>stat_expire as is_expire from tennis.athlete where id_tennis_com=${params.playerId}`;
 
-		conn.query(sql , function (err, result, fields) {
-			if (err) return throwError(err, res);
-			
-			if(!res.dynamicDataSet){
-				result = JSON.stringify(result);
-				res.end(result)
+		conn.query(sql, function(err, rows){
+			if(err) return throwError(err, res);
+
+			if(!rows[0].stat_expire || rows[0].is_expire){
+				let file = require('path').resolve(__dirname, '../collector/tennis/player_stat.js');
+				let name = rows[0]['name_en'].toLowerCase().replace(/\W/g, '-');
+				let refetchCMD = `node ${file} ${params.playerId} ${name}`;
+
+				require('child_process').exec(refetchCMD, function(err, stdout, stderr){
+					if(err) return throwError(err, res);
+
+					queryStatData();
+				})
 			}else{
-				res.dynamicDataSet['stat'] = result;
+				queryStatData();
 			}
-		});
+		})
 
+		function queryStatData(){
+			conn.query(sql , function (err, result, fields) {
+				if (err) return throwError(err, res);
+				
+				result = result[0];
+
+				if(!res.dynamicDataSet){
+					result = JSON.stringify(result);
+					res.end(result)
+				}else{
+					res.dynamicDataSet['stat'] = result;
+				}
+			});
+		}
 	},
 	// =========== 运动员统计 结束
 	
