@@ -1,0 +1,19 @@
+{{
+	['queryTennisPlayerBio']
+}}
+
+<%- include views/header %>
+
+<%= JSON.stringify(dynamicDataSet.bio) %>
+
+<ul>
+	<li>
+		<a href="stat.ssr">数据统计</a>
+	</li>
+	<li>历史比赛记录</li>
+	<li>档案</li>
+	<li>照片</li>
+	<li>装备</li>
+</ul>
+
+<%- include views/footer %>

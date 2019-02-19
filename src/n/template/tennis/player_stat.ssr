@@ -6,4 +6,16 @@
 
 <%= JSON.stringify(dynamicDataSet.stat) %>
 
+<ul>
+	<li>数据统计</li>
+	<li>
+		历史比赛
+	</li>
+	<li>
+		<a href="/tennis/player/532/bio.ssr">档案</a>
+	</li>
+	<li>照片</li>
+	<li>装备</li>
+</ul>
+
 <%- include views/footer %>
