@@ -82,8 +82,7 @@ tools.runSql('drop table if EXISTS tennis.athlete_tmp; create table tennis.athle
                                     let id = value['id_tennis_com'];
                                     // console.log(id)
 
-                                    let updateSQL = `update tennis.athlete a, tennis.athlete_tmp b
-                                        set 
+                                    let updateSQL = `update tennis.athlete a, tennis.athlete_tmp b set 
                                         a.nickname= b.nickname,
                                         a.age= b.age,
                                         a.residence = b.residence,
@@ -96,7 +95,10 @@ tools.runSql('drop table if EXISTS tennis.athlete_tmp; create table tennis.athle
                                         a.ytd_win_single= b.ytd_win_single,
                                         a.ytd_win_double= b.ytd_win_double,
                                         a.website= b.website,
-                                        a.stat_expire = b.stat_expire
+                                        a.stat_expire = b.stat_expire,
+                                        a.biography = b.biography,
+                                        a.titles = b.titles,
+                                        a.bio_expire = b.bio_expire,
                                         where  a.id_tennis_com = b.id_tennis_com and a.id_tennis_com = ${id};`;
 
                                     tools.runSql(updateSQL, function(){

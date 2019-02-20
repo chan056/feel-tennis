@@ -12,6 +12,34 @@ module.exports = {
         });
     },
 
+    downloadImg: function (src, dest, fn){
+        console.log(src, dest)
+        var request = require("request");
+
+        var writeStream = fs.createWriteStream(dest);
+        
+        var readStream = request(src, function(){
+            arguments[0] && console.log(arguments[0]);
+        });
+
+        readStream.pipe(writeStream);
+
+        readStream.on('end', function() {
+            console.log('文件下载成功');
+        });
+
+        readStream.on('error', function() {
+            console.log("错误信息:" + err)
+        });
+
+        writeStream.on("finish", function() {
+            console.log("文件写入成功");
+            writeStream.end();
+
+            fn && fn()
+        });
+    },
+
     fetchHTML: function (url, fn){
         console.log(url)
         let t = this;

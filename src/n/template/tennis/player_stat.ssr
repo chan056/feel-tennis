@@ -5,7 +5,8 @@
 <%- include views/header %>
 
 <%= JSON.stringify(dynamicDataSet.stat) %>
-
+<br/>
+<img src=<%= dynamicDataSet.stat['player_image'] %>/>
 <ul>
 	<li>数据统计</li>
 	<li>

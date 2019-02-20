@@ -32,7 +32,6 @@ function storeData(fragment) {
                 // console.log(titleContent)
                 let year = titleContent.match(/^\d+/)[0];
                 let tournament = titleContent.replace(/^\d+:\W+/, '').replace(/\n/g, '');//转义 '
-console.log(tournament)
                 titleGroup.push({year: year, tournament: tournament})
             })
 

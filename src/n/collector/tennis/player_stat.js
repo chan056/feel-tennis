@@ -10,6 +10,7 @@ let argv = process.argv.slice(2),
     playerName = argv[1];
 
 let sourceURL = `http://www.tennis.com/player/${playerId}/${playerName}/stats/`;
+let playerImagerDownloaded = false;
 
 tools.fetchHTML(sourceURL, storeData)
 
@@ -22,7 +23,13 @@ function storeData(fragment) {
         const aboutWrapper = $('.about-wrapper');
         const age = aboutWrapper.find('.about-info').eq(0).text(),
             residence = aboutWrapper.find('.about-info').eq(2).text(),
-            turn_pro = aboutWrapper.find('.about-info').eq(3).text();
+            turn_pro = aboutWrapper.find('.about-info').eq(3).text(),
+            playerImage = $('.player-image').attr('data-image').replace(/\.\w+$/, '') + '/tablet-rankings-players-page.jpg',
+            player_image = `/img/tennis/athlete/${playerId}.jpg`;
+
+        tools.downloadImg(playerImage, path.resolve(__dirname, `../../../static${player_image}`, ), function(){
+            playerImagerDownloaded = true;
+        });
 
         const stats = $('.player-stats');
         const birthdate = stats.find('.player-birthdate').text(),
@@ -37,6 +44,7 @@ function storeData(fragment) {
             website = stats.find('.player-website a').attr('href');
 
         let sql = `update tennis.athlete set 
+            player_image = '${player_image}',
             age=${age}, 
             residence='${residence}', 
             turn_pro=${turn_pro}, 
@@ -55,7 +63,11 @@ function storeData(fragment) {
         // console.log(sql);
 
         tools.runSql(sql, function(){
-            process.exit();
+            setInterval(() => {
+                if(playerImagerDownloaded){
+                    process.exit();
+                }
+            }, 1000);
         });
     }
 }
