@@ -13,7 +13,7 @@ function isEmpty(obj) {
 function newClause(params) {
 	// let mysql = require('mysql');
 
-	if (isEmpty(params)) {
+	if (!params || isEmpty(params)) {
 		return '';
 	}
 

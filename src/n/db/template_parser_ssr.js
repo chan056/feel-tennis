@@ -48,7 +48,13 @@ module.exports = function(tempaltePath, params, res, req){
 
             reqNames.forEach(reqName => {
                 res.dynamicDataSet = dynamicDataSet;
-                operate.query(reqName, params, res, req);
+
+                if(typeof reqName == 'string'){
+                    operate.query(reqName, params, res, req);
+                }else if(typeof reqName == 'object'){// 自定义参数
+                    console.log(reqName.params)
+                    operate.query(reqName.method, reqName.params, res, req);
+                }
             });
             
         }else{

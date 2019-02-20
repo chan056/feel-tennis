@@ -1,12 +1,23 @@
 {{
-	['queryTennisPlayerStat']
+	['queryTennisPlayerStat', {method: 'queryTennisRanking'}]
 }}
 
 <%- include views/header %>
 
 <%= JSON.stringify(dynamicDataSet.stat) %>
 <br/>
+<%= JSON.stringify(dynamicDataSet.ranking) %>
+<br>
 <img src=<%= dynamicDataSet.stat['player_image'] %>/>
+<div>
+	<ul id="h2h">
+		<% dynamicDataSet.ranking.forEach((athlete)=>{ %>
+			<li>
+				<a href="/tennis/player/<%= dynamicDataSet.stat.id_tennis_com %>/vs/<%= athlete.id_tennis_com %>"><%= athlete.name_en %></a>
+			</li>
+		<% }) %>
+	</ul>
+</div>
 <ul>
 	<li>数据统计</li>
 	<li>
@@ -18,5 +29,9 @@
 	<li>照片</li>
 	<li>装备</li>
 </ul>
+
+<style>
+	#h2h{ height: 200px; overflow-y: auto;}
+</style>
 
 <%- include views/footer %>

@@ -1025,10 +1025,46 @@ let operations = {
 		conn.query(sql, function(err, rows){
 			if(err) return throwError(err, res);
 
-			if(!rows[0].bio_expire || rows[0].bio_expire){
+			if(!rows[0].bio_expire || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/player_bio.js');
 				let name = rows[0]['name_en'].toLowerCase().replace(/\W/g, '-');
 				let refetchCMD = `node ${file} ${params.playerId} ${name}`;
+
+				require('child_process').exec(refetchCMD, function(err, stdout, stderr){
+					if(err) return throwError(err, res);
+
+					query();
+				})
+			}else{
+				query();
+			}
+		})
+
+		function query(){
+			conn.query(sql , function (err, result, fields) {
+				if (err) return throwError(err, res);
+				
+				result = result[0];
+
+				if(!res.dynamicDataSet){
+					result = JSON.stringify(result);
+					res.end(result)
+				}else{
+					res.dynamicDataSet['bio'] = result;
+				}
+			});
+		}
+	},
+
+	headToHead: function (res, qualification, params) {
+		let sql = `select a.*, (select name_en from athlete where id_tennis_com=a.p1) as p1_name, (select name_en from athlete where id_tennis_com=a.p2)as p2_name from h2h as a where p1=532 and p2=471`
+		conn.query(sql, function(err, rows){
+			if(err) return throwError(err, res);
+
+			if(!rows[0].expire || rows[0].is_expire){
+				let file = require('path').resolve(__dirname, '../collector/tennis/player_h2h.js');
+				let name = rows[0]['name_en'].toLowerCase().replace(/\W/g, '-');
+				let refetchCMD = `node ${file} ${rows[0].p1} ${name1} ${rows[0].p2} ${name2}`;
 
 				require('child_process').exec(refetchCMD, function(err, stdout, stderr){
 					if(err) return throwError(err, res);
