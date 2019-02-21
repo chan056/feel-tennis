@@ -976,7 +976,8 @@ let operations = {
 					result = JSON.stringify(result);
 					res.end(result)
 				}else{
-					res.dynamicDataSet['ranking'] = result;
+					result.params = params;
+					res.dynamicDataSet.ranking = result;// []
 				}
 			});
 		}
