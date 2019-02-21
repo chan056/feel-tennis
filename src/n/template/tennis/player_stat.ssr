@@ -6,14 +6,13 @@
 
 <%= JSON.stringify(dynamicDataSet.stat) %>
 <br/>
-<%= JSON.stringify(dynamicDataSet.ranking) %>
-<br>
+<img src=<%= dynamicDataSet.stat['feature_image'] %>/>
 <img src=<%= dynamicDataSet.stat['player_image'] %>/>
 <div>
 	<ul id="h2h">
 		<% dynamicDataSet.ranking.forEach((athlete)=>{ %>
 			<li>
-				<a href="/tennis/player/<%= dynamicDataSet.stat.id_tennis_com %>/vs/<%= athlete.id_tennis_com %>"><%= athlete.name_en %></a>
+				<a href="/tennis/player/<%= dynamicDataSet.stat.id_tennis_com %>/vs/<%= athlete.id_tennis_com %>.ssr"><%= athlete.name_en %></a>
 			</li>
 		<% }) %>
 	</ul>

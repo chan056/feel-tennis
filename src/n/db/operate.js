@@ -1057,19 +1057,33 @@ let operations = {
 	},
 
 	headToHead: function (res, qualification, params) {
-		let sql = `select a.*, (select name_en from athlete where id_tennis_com=a.p1) as p1_name, (select name_en from athlete where id_tennis_com=a.p2)as p2_name from h2h as a where p1=532 and p2=471`
+		let sql = `select a.*, now()>a.expire as is_expire, (select name_en from tennis.athlete where id_tennis_com=a.p1) as p1_name, 
+		(select name_en from tennis.athlete where id_tennis_com=a.p2)as p2_name from tennis.h2h as a where p1=${params.p1} and p2=${params.p2}`
+
 		conn.query(sql, function(err, rows){
 			if(err) return throwError(err, res);
 
-			if(!rows[0].expire || rows[0].is_expire){
-				let file = require('path').resolve(__dirname, '../collector/tennis/player_h2h.js');
-				let name = rows[0]['name_en'].toLowerCase().replace(/\W/g, '-');
-				let refetchCMD = `node ${file} ${rows[0].p1} ${name1} ${rows[0].p2} ${name2}`;
+			let row = rows[0];
+			if(!row || row.is_expire || row.is_expire){
 
-				require('child_process').exec(refetchCMD, function(err, stdout, stderr){
-					if(err) return throwError(err, res);
+				let sql2 = `select name_en from tennis.athlete where id_tennis_com in (${params.p1}, ${params.p2});`
+				conn.query(sql2, function(err, result, fields) {
+					if (err) return throwError(err, res);
+				
+					let name1 = result[0]['name_en'],
+						name2 = result[1]['name_en'];
 
-					query();
+					name1 = name1.trim().toLowerCase().replace(/\W/g, '-'),
+					name2 = name2.trim().toLowerCase().replace(/\W/g, '-');
+
+					let file = require('path').resolve(__dirname, '../collector/tennis/player_h2h.js');
+					let refetchCMD = `node ${file} ${params.p1} ${name1} ${params.p2} ${name2}`;
+					console.log(refetchCMD)
+					require('child_process').exec(refetchCMD, function(err, stdout, stderr){
+						if(err) return throwError(err, res);
+
+						query();
+					})
 				})
 			}else{
 				query();
@@ -1086,7 +1100,7 @@ let operations = {
 					result = JSON.stringify(result);
 					res.end(result)
 				}else{
-					res.dynamicDataSet['bio'] = result;
+					res.dynamicDataSet['h2h'] = result;
 				}
 			});
 		}

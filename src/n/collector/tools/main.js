@@ -17,7 +17,7 @@ module.exports = {
         var request = require("request");
 
         var writeStream = fs.createWriteStream(dest);
-        
+
         var readStream = request(src, function(){
             arguments[0] && console.log(arguments[0]);
         });
@@ -41,19 +41,13 @@ module.exports = {
     },
 
     fetchHTML: function (url, fn){
-        console.log(url)
-        let t = this;
-
-        http.get(url, function(res) {
-            let html = '';
-            res.on('data', function(data) {
-                html += data;
-            }).on('end', function() {
-                fn && fn(html)
-            });
-        }).on('error', function() {
-            console.log('获取数据出错！');
-        });
+        require('request')(url, function(error,response,body) {
+            if(!error && response.statusCode == 200){
+                fn && fn(body)
+            }else{
+                throw 'fetchHTML 出错'
+            }
+        })
     },
 
     // June 03, 1986 => 
@@ -71,6 +65,7 @@ module.exports = {
     },
     
     runSql: function (sql, fn){
+        console.log(sql)
         return conn.query(sql, function(err, result, fields){
             if(err)
                 console.log (err);
