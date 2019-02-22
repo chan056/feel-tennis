@@ -45,7 +45,7 @@ module.exports = {
             if(!error && response.statusCode == 200){
                 fn && fn(body)
             }else{
-                throw 'fetchHTML 出错'
+                throw error;
             }
         })
     },

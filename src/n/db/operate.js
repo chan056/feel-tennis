@@ -954,13 +954,8 @@ let operations = {
 
 			if(rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/ranking.js');
-				let refetchCMD = 'node ' + file;
 
-				require('child_process').exec(refetchCMD, function(err, stdout, stderr){
-					if(err) return throwError(err, res);
-
-					query();
-				})
+				tools.spawn([file], query)
 			}else{
 				query();
 			}
@@ -992,13 +987,8 @@ let operations = {
 			if(!rows[0].stat_expire || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/player_stat.js');
 				let name = rows[0]['name_en'].toLowerCase().replace(/\W/g, '-');
-				let refetchCMD = `node ${file} ${params.playerId} ${name}`;
 
-				require('child_process').exec(refetchCMD, function(err, stdout, stderr){
-					if(err) return throwError(err, res);
-
-					query();
-				})
+				tools.spawn([file, params.playerId, name], query)
 			}else{
 				query();
 			}
@@ -1029,13 +1019,8 @@ let operations = {
 			if(!rows[0].bio_expire || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/player_bio.js');
 				let name = rows[0]['name_en'].toLowerCase().replace(/\W/g, '-');
-				let refetchCMD = `node ${file} ${params.playerId} ${name}`;
 
-				require('child_process').exec(refetchCMD, function(err, stdout, stderr){
-					if(err) return throwError(err, res);
-
-					query();
-				})
+				tools.spawn([file, params.playerId, name], query)
 			}else{
 				query();
 			}
@@ -1058,8 +1043,8 @@ let operations = {
 	},
 
 	headToHead: function (res, qualification, params) {
-		let sql = `select a.*, now()>a.expire as is_expire, (select name_en from tennis.athlete where id_tennis_com=a.p1) as p1_name, 
-		(select name_en from tennis.athlete where id_tennis_com=a.p2)as p2_name from tennis.h2h as a where p1=${params.p1} and p2=${params.p2}`
+		let sql = `select h2h.*, now()>h2h.expire as is_expire, (select name_en from tennis.athlete where id_tennis_com=h2h.p1) as p1_name, 
+		(select name_en from tennis.athlete where id_tennis_com=h2h.p2)as p2_name from tennis.h2h as h2h where p1=${params.p1} and p2=${params.p2}`
 
 		conn.query(sql, function(err, rows){
 			if(err) return throwError(err, res);
@@ -1078,13 +1063,8 @@ let operations = {
 					name2 = name2.trim().toLowerCase().replace(/\W/g, '-');
 
 					let file = require('path').resolve(__dirname, '../collector/tennis/player_h2h.js');
-					let refetchCMD = `node ${file} ${params.p1} ${name1} ${params.p2} ${name2}`;
-					console.log(refetchCMD)
-					require('child_process').exec(refetchCMD, function(err, stdout, stderr){
-						if(err) return throwError(err, res);
 
-						query();
-					})
+					tools.spawn([file, params.p1, name1, params.p2, name2], query)
 				})
 			}else{
 				query();
@@ -1096,12 +1076,14 @@ let operations = {
 				if (err) return throwError(err, res);
 				
 				result = result[0];
+				result.p1 = params.p1;
+				result.p2 = params.p2;
 
 				if(!res.dynamicDataSet){
 					result = JSON.stringify(result);
 					res.end(result)
 				}else{
-					res.dynamicDataSet['h2h'] = result;
+					res.dynamicDataSet.h2h = result;
 				}
 			});
 		}

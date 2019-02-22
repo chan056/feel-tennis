@@ -4,7 +4,6 @@ const path = require('path');
 
 const now = Date.now() / 1000,
     day = 24 * 60 * 60;
-
 let argv = process.argv.slice(2),
     playerId = argv[0],
     playerName = argv[1];
@@ -17,73 +16,90 @@ tools.fetchHTML(sourceURL, storeData)
 
 function storeData(fragment) {
     if (fragment) {
-        const cheerio = require('cheerio');
+        try{
+            const cheerio = require('cheerio');
 
-        let $ = cheerio.load(fragment);
-
-        const aboutWrapper = $('.about-wrapper');
-        const age = aboutWrapper.find('.about-info').eq(0).text(),
-            residence = aboutWrapper.find('.about-info').eq(2).text(),
-            turn_pro = aboutWrapper.find('.about-info').eq(3).text();
-
-        let playerImage = $('.player-image').attr('data-image'),
-            playerImageExt = path.extname(playerImage),
-            player_image = `/img/tennis/athlete/${playerId}${playerImageExt}`;// 客户端访问地址
-
-        playerImage = playerImage.replace(/\.\w+$/, '') + `/tablet-rankings-players-page${playerImageExt}`;
-
-        let featureImage = $('.single-player-hero figure').attr('data-image'),
-            featureImageExt = path.extname(featureImage),
-            feature_image = `/img/tennis/athlete/${playerId}.feature.${featureImageExt}`;// 客户端访问地址
-
-        featureImage = featureImage.replace(/\.\w+$/, '') + `/desktop-detail-featured-image${featureImageExt}`;
-
-        tools.downloadImg(playerImage, path.resolve(__dirname, `../../../static${player_image}`, ), function(){
-            playerImagerDownloaded = true;
-        });
-
-        tools.downloadImg(featureImage, path.resolve(__dirname, `../../../static${feature_image}`, ), function(){
-            featureImagerDownloaded = true;
-        });
-
-        const stats = $('.player-stats');
-        const birthdate = stats.find('.player-birthdate').text(),
-            height = stats.find('.player-height').text().match(/\((\d+)/)[1],
-            weight = stats.find('.player-weight').text().match(/\((\d+)/)[1],
-            plays = stats.find('.player-plays').text() == 'Left-handed'?1:0,
-            experience = stats.find('.player-experience').text().match(/\d+/)
-            nickname = stats.find('.player-nickname').text(),
-            ytd_win = stats.find('.player-wins').text().match(/\d+/g),
-            ytd_win_single = ytd_win[0]
-            ytd_win_double = ytd_win[1],
-            website = stats.find('.player-website a').attr('href');
-
-        let sql = `update tennis.athlete set 
-            player_image = '${player_image}',
-            feature_image = '${feature_image}',
-            age=${age}, 
-            residence='${residence}', 
-            turn_pro=${turn_pro}, 
-            birthdate='${tools.formatBirthdate(birthdate)}', 
-            height=${height}, 
-            weight=${weight}, 
-            plays=${plays}, 
-            experience=${experience}, 
-            nickname='${nickname}', 
-            ytd_win_single=${ytd_win_single}, 
-            ytd_win_double=${ytd_win_double}, 
-            website='${website}',
-            stat_expire=FROM_UNIXTIME(${now + day * 7})
-            where id_tennis_com=${playerId}`;
-
-        // console.log(sql);
-
-        tools.runSql(sql, function(){
-            setInterval(() => {
-                if(playerImagerDownloaded && featureImagerDownloaded){
-                    process.exit();
+            let $ = cheerio.load(fragment);
+    
+            const aboutWrapper = $('.about-wrapper');
+            // 由于数据不完整，无法通过排列顺序确定
+            let age = null,
+                residence = '',
+                turn_pro = '';
+    
+            aboutWrapper.find('.about-info').each(function(i, item){
+                let infos = $(item).parent().html().split('<br>');
+                let label = infos[0].toLowerCase().trim();
+                let value = $(infos[1]).text().trim();
+    
+                if(label == 'age'){
+                    age = value
+                }else if(label == 'residence'){
+                    residence = value
+                }else if(label == 'turned pro'){
+                    turn_pro = value
                 }
-            }, 500);
-        });
+            })
+    
+            let playerImage = $('.player-image').attr('data-image'),
+                playerImageExt = path.extname(playerImage),
+                player_image = `/img/tennis/athlete/${playerId}${playerImageExt}`;// 客户端访问地址
+    
+            playerImage = playerImage.replace(/\.\w+$/, '') + `/tablet-rankings-players-page${playerImageExt}`;
+    
+            let featureImage = $('.single-player-hero figure').attr('data-image'),
+                featureImageExt = path.extname(featureImage),
+                feature_image = `/img/tennis/athlete/${playerId}.feature${featureImageExt}`;// 客户端访问地址
+    
+            featureImage = featureImage.replace(/\.\w+$/, '') + `/desktop-detail-featured-image${featureImageExt}`;
+    
+            tools.downloadImg(playerImage, path.resolve(__dirname, `../../../static${player_image}`, ), function(){
+                playerImagerDownloaded = true;
+            });
+    
+            tools.downloadImg(featureImage, path.resolve(__dirname, `../../../static${feature_image}`, ), function(){
+                featureImagerDownloaded = true;
+            });
+    
+            const stats = $('.player-stats');
+            const birthdate = stats.find('.player-birthdate').text(),
+                height = stats.find('.player-height').text().match(/\((\d+)/)[1],
+                weight = stats.find('.player-weight').text().match(/\((\d+)/)[1],
+                plays = stats.find('.player-plays').text() == 'Left-handed'?1:0,
+                experience = stats.find('.player-experience').text().match(/\d+/)
+                nickname = stats.find('.player-nickname').text(),
+                ytd_win = stats.find('.player-wins').text().match(/\d+/g),
+                ytd_win_single = ytd_win[0]
+                ytd_win_double = ytd_win[1],
+                website = stats.find('.player-website a').attr('href');
+    
+            let sql = `update tennis.athlete set 
+                player_image = '${player_image}',
+                feature_image = '${feature_image}',
+                age=${age}, 
+                residence='${residence}', 
+                turn_pro='${turn_pro}', 
+                birthdate='${tools.formatBirthdate(birthdate)}', 
+                height=${height}, 
+                weight=${weight}, 
+                plays=${plays}, 
+                experience=${experience}, 
+                nickname='${nickname}', 
+                ytd_win_single=${ytd_win_single}, 
+                ytd_win_double=${ytd_win_double}, 
+                website='${website}',
+                stat_expire=FROM_UNIXTIME(${now + day * 7})
+                where id_tennis_com=${playerId}`;
+    
+            tools.runSql(sql, function(){
+                setInterval(() => {
+                    if(playerImagerDownloaded && featureImagerDownloaded){
+                        process.exit();
+                    }
+                }, 500);
+            });
+        }catch(e){
+            throw e;
+        }
     }
 }

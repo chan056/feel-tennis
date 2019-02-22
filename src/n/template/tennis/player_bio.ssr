@@ -2,13 +2,13 @@
 	['queryTennisPlayerBio']
 }}
 
-<%- include views/header %>
+<%- include('views/header', {title: `${dynamicDataSet.bio.name_en} 数据统计`}) %>
 
 <%= JSON.stringify(dynamicDataSet.bio) %>
 
 <ul>
 	<li>
-		<a href="stat.ssr">数据统计</a>
+		<a href="/tennis/player/<%= dynamicDataSet.bio.id_tennis_com %>/stat.ssr">数据统计</a>
 	</li>
 	<li>历史比赛记录</li>
 	<li>档案</li>

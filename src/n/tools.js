@@ -215,6 +215,30 @@ function transformPath(pagePath){
 	return pagePath.join('.')
 }
 
+function spawn(processArgs, fn){
+	let node = require('child_process').spawn('node', processArgs);
+
+	node.stdout.on('data', (data) => {
+		console.log(data.toString());
+	});
+
+	node.stderr.on('data', (data) => {
+		console.log(`node stderr: ${data}`);
+	});
+
+	node.on('close', (code) => {
+		if (code !== 0) {
+			console.log(`node 进程的退出码：${code}`);
+		}else{
+			fn && fn();
+		}
+	});
+
+	node.on('error', (err) => {
+		console.log(err);
+	});
+}
+
 module.exports = {
     response404,
     isEmpty,
@@ -226,5 +250,6 @@ module.exports = {
 	copyFile,
 	botCheck,
 	resolveRefererHost,
-	transformPath
+	transformPath,
+	spawn
 }

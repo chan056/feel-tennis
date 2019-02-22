@@ -10,7 +10,7 @@ let argv = process.argv.slice(2),
     playerName = argv[1];
 
 let sourceURL = `http://www.tennis.com/player/${playerId}/${playerName}/bio/`;
-
+console.log(sourceURL)
 tools.fetchHTML(sourceURL, storeData)
 
 function storeData(fragment) {
@@ -29,8 +29,7 @@ function storeData(fragment) {
             let titleGroup = [];
             $(titles).children('li').each((index, title)=>{
                 let titleContent = $(title).text();
-                // console.log(titleContent)
-                let year = titleContent.match(/^\d+/)[0];
+                let year = titleContent.match(/(\d+):/)[1];
                 let tournament = titleContent.replace(/^\d+:\W+/, '').replace(/\n/g, '');//转义 '
                 titleGroup.push({year: year, tournament: tournament})
             })

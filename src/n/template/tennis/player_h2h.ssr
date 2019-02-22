@@ -2,13 +2,13 @@
 	['headToHead']
 }}
 
-<%- include views/header %>
+<%- include('views/header', {title: `${dynamicDataSet.h2h.p1_name} vs ${dynamicDataSet.h2h.p2_name}`}) %>
 
 <%= JSON.stringify(dynamicDataSet.h2h) %>
 
 <ul>
 	<li>
-		<a href="stat.ssr">数据统计</a>
+		<a href="/tennis/player/<%= dynamicDataSet.h2h.p1 %>/stat.ssr">数据统计</a>
 	</li>
 	<li>历史比赛记录</li>
 	<li>档案</li>
