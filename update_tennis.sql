@@ -1,22 +1,22 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : yitube
-Source Server Version : 50717
+Source Server         : chantube
+Source Server Version : 80012
 Source Host           : localhost:3306
 Source Database       : tennis
 
 Target Server Type    : MYSQL
-Target Server Version : 50717
+Target Server Version : 80012
 File Encoding         : 65001
 
-Date: 2019-02-21 17:54:10
+Date: 2019-02-25 01:57:10
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for athlete
+-- Table structure for `athlete`
 -- ----------------------------
 DROP TABLE IF EXISTS `athlete`;
 CREATE TABLE `athlete` (
@@ -24,6 +24,8 @@ CREATE TABLE `athlete` (
   `id_tennis_com` int(11) DEFAULT NULL COMMENT 'id in tennis.com',
   `name` varchar(255) DEFAULT NULL,
   `name_en` varchar(255) DEFAULT NULL,
+  `firstname` varchar(30) DEFAULT NULL,
+  `lastname` varchar(30) DEFAULT NULL,
   `nickname` varchar(50) DEFAULT NULL,
   `gender` tinyint(1) DEFAULT NULL COMMENT '1男 2女 3其他',
   `ranking` mediumint(9) DEFAULT NULL,
@@ -36,6 +38,7 @@ CREATE TABLE `athlete` (
   `age` tinyint(4) DEFAULT NULL,
   `residence` varchar(255) DEFAULT NULL,
   `turn_pro` varchar(4) DEFAULT NULL,
+  `earnings` varchar(255) DEFAULT NULL,
   `birthdate` varchar(30) DEFAULT NULL,
   `height` double DEFAULT NULL COMMENT 'cm',
   `weight` double DEFAULT NULL COMMENT 'kg',
@@ -52,17 +55,3 @@ CREATE TABLE `athlete` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idd` (`id_tennis_com`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=369 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Table structure for h2h
--- ----------------------------
-DROP TABLE IF EXISTS `h2h`;
-CREATE TABLE `h2h` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `p1` smallint(6) DEFAULT NULL,
-  `p2` smallint(6) DEFAULT NULL,
-  `win` smallint(6) DEFAULT NULL,
-  `lose` smallint(6) DEFAULT NULL,
-  `expire` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;

@@ -1,0 +1,36 @@
+body {
+  width: 1140px;
+  margin: auto;
+  overflow-x: hidden;
+}
+#player-base-info {
+  height: 326px;
+  box-sizing: border-box;
+  padding: 1rem;
+}
+#player-base-info #avatar {
+  height: 155px;
+  width: 120px;
+}
+#player-base-info #p11 {
+  color: #fff;
+}
+#player-base-info #h2h {
+  height: 200px;
+  overflow-y: auto;
+}
+#player-base-info #p3 {
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 1rem 0;
+}
+#player-base-info .base-data {
+  box-sizing: border-box;
+  width: 20%;
+  float: left;
+  padding: 1rem 0;
+  text-align: center;
+  color: #fff;
+}
+#player-base-info .base-data:not(:first-child) {
+  border-left: 1px solid #fff;
+}

@@ -6,19 +6,54 @@
 
 <%= JSON.stringify(dynamicDataSet.stat) %>
 <br/>
-<div>
-	
-</div>
-<img src=<%= dynamicDataSet.stat['feature_image'] %>/>
-<img src=<%= dynamicDataSet.stat['player_image'] %>/>
-<div>
-	<ul id="h2h">
+<div id="player-base-info" style="background-image: url(<%= dynamicDataSet.stat.feature_image %>)">
+	<div id="p1" class="fl">
+		<div id="avatar" class="fl" style="background-image: url(<%= dynamicDataSet.stat.player_image %>)"></div>
+		<div id="p11" class="fl">
+			<div id="ranking">
+				<label for="">Ranking</label><br>
+				#<%= dynamicDataSet.stat.ranking %>
+			</div>
+			<div id="name">
+				<div id="first-name"><%= dynamicDataSet.stat.firstname %></div>
+				<div id="second-name"><%= dynamicDataSet.stat.lastname %></div>
+			</div>
+		</div>
+	</div>
+	<div id="h2h" class="fr">
 		<% dynamicDataSet.ranking.forEach((athlete)=>{ %>
-			<li>
+			<div>
 				<a href="/tennis/player/<%= dynamicDataSet.stat.id_tennis_com %>/vs/<%= athlete.id_tennis_com %>.ssr"><%= athlete.name_en %></a>
-			</li>
+			</div>
 		<% }) %>
-	</ul>
+	</div>
+	<br class="clr">
+
+	<div id="p3" class="ovh">
+		<div class="base-data">
+			<p class="data-label">年龄</p>
+			<p class="data-value"><%= dynamicDataSet.stat.age %></p>
+		</div>
+		<div class="base-data">
+			<p class="data-label">国籍</p>
+			<p class="data-value"><%= dynamicDataSet.stat.country %></p>
+		</div>
+		<div class="base-data">
+			<p class="data-label">居住地</p>
+			<p class="data-value"><%= dynamicDataSet.stat.residence %></p>
+		</div>
+		<div class="base-data">
+			<p class="data-label">转职业</p>
+			<p class="data-value"><%= dynamicDataSet.stat.turn_pro %></p>
+		</div>
+		<div class="base-data">
+			<p class="data-label">奖金</p>
+			<p class="data-value"><%= dynamicDataSet.stat.earnings %></p>
+		</div>
+	</div>
+</div>
+<div id="plaer-detail-nav">
+	
 </div>
 <ul>
 	<li>数据统计</li>
@@ -31,9 +66,5 @@
 	<li>照片</li>
 	<li>装备</li>
 </ul>
-
-<style>
-	#h2h{ height: 200px; overflow-y: auto;}
-</style>
 
 <%- include views/footer %>

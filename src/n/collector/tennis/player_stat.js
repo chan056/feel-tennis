@@ -25,7 +25,8 @@ function storeData(fragment) {
             // 由于数据不完整，无法通过排列顺序确定
             let age = null,
                 residence = '',
-                turn_pro = '';
+                turn_pro = '',
+                earnings = '';
     
             aboutWrapper.find('.about-info').each(function(i, item){
                 let infos = $(item).parent().html().split('<br>');
@@ -38,6 +39,8 @@ function storeData(fragment) {
                     residence = value
                 }else if(label == 'turned pro'){
                     turn_pro = value
+                }else if(label.match('earnings')){
+                    earnings = value
                 }
             })
     
@@ -62,13 +65,15 @@ function storeData(fragment) {
             });
     
             const stats = $('.player-stats');
-            const birthdate = stats.find('.player-birthdate').text(),
-                height = stats.find('.player-height').text().match(/\((\d+)/)[1],
-                weight = stats.find('.player-weight').text().match(/\((\d+)/)[1],
-                plays = stats.find('.player-plays').text() == 'Left-handed'?1:0,
-                experience = stats.find('.player-experience').text().match(/\d+/)
-                nickname = stats.find('.player-nickname').text(),
-                ytd_win = stats.find('.player-wins').text().match(/\d+/g),
+            const firstname = $('.name-and-ranking .first-name').text().trim(),
+                lastname = $('.name-and-ranking .last-name').text().trim(),
+                birthdate = stats.find('.player-birthdate').text().trim(),
+                height = stats.find('.player-height').text().trim().match(/\((\d+)/)[1],
+                weight = stats.find('.player-weight').text().trim().match(/\((\d+)/)[1],
+                plays = stats.find('.player-plays').text().trim() == 'Left-handed'?1:0,
+                experience = stats.find('.player-experience').text().trim().match(/\d+/)
+                nickname = stats.find('.player-nickname').text().trim(),
+                ytd_win = stats.find('.player-wins').text().trim().match(/\d+/g),
                 ytd_win_single = ytd_win[0]
                 ytd_win_double = ytd_win[1],
                 website = stats.find('.player-website a').attr('href');
@@ -76,20 +81,23 @@ function storeData(fragment) {
             let sql = `update tennis.athlete set 
                 player_image = '${player_image}',
                 feature_image = '${feature_image}',
-                age=${age}, 
-                residence='${residence}', 
-                turn_pro='${turn_pro}', 
-                birthdate='${tools.formatBirthdate(birthdate)}', 
-                height=${height}, 
-                weight=${weight}, 
-                plays=${plays}, 
-                experience=${experience}, 
-                nickname='${nickname}', 
-                ytd_win_single=${ytd_win_single}, 
-                ytd_win_double=${ytd_win_double}, 
-                website='${website}',
-                stat_expire=FROM_UNIXTIME(${now + day * 7})
-                where id_tennis_com=${playerId}`;
+                firstname = '${firstname}',
+                lastname = '${lastname}',
+                age = ${age},
+                residence = '${residence}',
+                turn_pro = '${turn_pro}',
+                earnings = '${earnings}',
+                birthdate = '${tools.formatBirthdate(birthdate)}', 
+                height = ${height}, 
+                weight = ${weight}, 
+                plays = ${plays}, 
+                experience = ${experience}, 
+                nickname = '${nickname}', 
+                ytd_win_single = ${ytd_win_single}, 
+                ytd_win_double = ${ytd_win_double}, 
+                website = '${website}',
+                stat_expire = FROM_UNIXTIME(${now + day * 7})
+                where id_tennis_com = ${playerId}`;
     
             tools.runSql(sql, function(){
                 setInterval(() => {

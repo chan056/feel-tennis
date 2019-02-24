@@ -39,7 +39,7 @@ tools.runSql('drop table if EXISTS tennis.athlete_tmp; create table tennis.athle
             
                         let currentRanking = playerLine.find('.current-rank').text(),
                             playerPrevRanking = playerLine.find('.prev-rank').text(),
-                            playerName = playerLine.find('.player-name').text().trim(),
+                            nameEN = playerLine.find('.player-name').text().trim(),
                             playerCountry = playerLine.find('.country-name').text().trim();
         
                         let playerId = playerLine.find('.player-name a').eq(0).attr('href') || null;
@@ -51,7 +51,7 @@ tools.runSql('drop table if EXISTS tennis.athlete_tmp; create table tennis.athle
                         }else{
                             // 数据问题，有些球员没有id
                             // playerId大于10000没有用户详情
-                            playerId = IFFYPLAYERS[playerName];
+                            playerId = IFFYPLAYERS[nameEN];
                         }
         
                         let stateAbbreviation = playerLine.find('.player-country .flags').attr('class') || '';
@@ -65,7 +65,7 @@ tools.runSql('drop table if EXISTS tennis.athlete_tmp; create table tennis.athle
                             playerPoints = playerPoints.replace(/,/g, '')
                         }
                             
-                        sql += `(${playerId}, '', '${playerName}', ${gender}, ${currentRanking}, ${playerPrevRanking}, '${playerCountry}', ${playerPoints}, '${stateAbbreviation}', FROM_UNIXTIME(${now + day})),`
+                        sql += `(${playerId}, '', '${nameEN}', ${gender}, ${currentRanking}, ${playerPrevRanking}, '${playerCountry}', ${playerPoints}, '${stateAbbreviation}', FROM_UNIXTIME(${now + day})),`
                     })
             
                     sql = sql.replace(/,$/, ';');
@@ -84,12 +84,15 @@ tools.runSql('drop table if EXISTS tennis.athlete_tmp; create table tennis.athle
 
                                     // 复制整张表 删除某些字段
                                     updateSQL += `update tennis.athlete a, tennis.athlete_tmp b set 
+                                        a.firstname= b.firstname,
+                                        a.lastname= b.lastname,
                                         a.nickname= b.nickname,
                                         a.player_image = b.player_image,
                                         a.feature_image = b.feature_image,
-                                        a.age= b.age,
+                                        a.age = b.age,
                                         a.residence = b.residence,
                                         a.turn_pro= b.turn_pro,
+                                        a.earnings = b.earnings,
                                         a.birthdate= b.birthdate,
                                         a.height= b.height,
                                         a.weight= b.weight,
