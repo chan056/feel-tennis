@@ -6,6 +6,9 @@
 
 <%= JSON.stringify(dynamicDataSet.stat) %>
 <br/>
+<div>
+	
+</div>
 <img src=<%= dynamicDataSet.stat['feature_image'] %>/>
 <img src=<%= dynamicDataSet.stat['player_image'] %>/>
 <div>

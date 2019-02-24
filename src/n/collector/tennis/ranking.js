@@ -76,14 +76,17 @@ tools.runSql('drop table if EXISTS tennis.athlete_tmp; create table tennis.athle
                             // 从临时表复制数据
                             tools.runSql(`select id_tennis_com from tennis.athlete`, function(err, ids){
 
-                                let updateCount = 0;
+                                let updateSQL = '';
 
                                 ids.forEach(function(value, index){
                                     let id = value['id_tennis_com'];
                                     // console.log(id)
 
-                                    let updateSQL = `update tennis.athlete a, tennis.athlete_tmp b set 
+                                    // 复制整张表 删除某些字段
+                                    updateSQL += `update tennis.athlete a, tennis.athlete_tmp b set 
                                         a.nickname= b.nickname,
+                                        a.player_image = b.player_image,
+                                        a.feature_image = b.feature_image,
                                         a.age= b.age,
                                         a.residence = b.residence,
                                         a.turn_pro= b.turn_pro,
@@ -100,13 +103,11 @@ tools.runSql('drop table if EXISTS tennis.athlete_tmp; create table tennis.athle
                                         a.titles = b.titles,
                                         a.bio_expire = b.bio_expire,
                                         where  a.id_tennis_com = b.id_tennis_com and a.id_tennis_com = ${id};`;
+                                    
+                                })
 
-                                    tools.runSql(updateSQL, function(){
-                                        updateCount ++;
-                                        if(updateCount == ids.length){
-                                            process.exit();
-                                        }
-                                    })
+                                tools.runSql(updateSQL, function(){
+                                    process.exit();
                                 })
                             })
                         }

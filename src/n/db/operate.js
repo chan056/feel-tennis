@@ -952,7 +952,7 @@ let operations = {
 		conn.query('select now() > ranking_expire as is_expire from tennis.athlete', function(err, rows){
 			if(err) return throwError(err, res);
 
-			if(rows[0].is_expire){
+			if(!rows[0] || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/ranking.js');
 
 				tools.spawn([file], query)
@@ -984,7 +984,7 @@ let operations = {
 		conn.query(sql, function(err, rows){
 			if(err) return throwError(err, res);
 
-			if(!rows[0].stat_expire || rows[0].is_expire){
+			if(!rows[0]|| !rows[0].stat_expire || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/player_stat.js');
 				let name = rows[0]['name_en'].toLowerCase().replace(/\W/g, '-');
 
@@ -1016,7 +1016,7 @@ let operations = {
 		conn.query(sql, function(err, rows){
 			if(err) return throwError(err, res);
 
-			if(!rows[0].bio_expire || rows[0].is_expire){
+			if(!rows[0] || !rows[0].bio_expire || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/player_bio.js');
 				let name = rows[0]['name_en'].toLowerCase().replace(/\W/g, '-');
 
@@ -1050,7 +1050,7 @@ let operations = {
 			if(err) return throwError(err, res);
 
 			let row = rows[0];
-			if(!row || row.is_expire || row.is_expire){
+			if(!row || !row.is_expirerow.is_expire || row.is_expire){
 
 				let sql2 = `select name_en from tennis.athlete where id_tennis_com in (${params.p1}, ${params.p2});`
 				conn.query(sql2, function(err, result, fields) {
