@@ -20,7 +20,7 @@ function storeData(fragment) {
         let $ = cheerio.load(fragment);
 
         const bioContentWrapper = $('.bio-content');
-        const bioDescription = bioContentWrapper.find('p').eq(0).text();
+        const bioDescription = escape(bioContentWrapper.find('p').eq(0).text());
 
         let titleWrapper = $('.player-titles');
         let titlesObj = {};
@@ -30,7 +30,7 @@ function storeData(fragment) {
             $(titles).children('li').each((index, title)=>{
                 let titleContent = $(title).text();
                 let year = titleContent.match(/(\d+):/)[1];
-                let tournament = titleContent.replace(/^\d+:\W+/, '').replace(/\n/g, '');//转义 '
+                let tournament = titleContent.replace(/^\d+:\W+/, '').replace(/\n/g, '')/* .replace(/'/g, '\'') */;//转义 '
                 titleGroup.push({year: year, tournament: tournament})
             })
 
@@ -41,7 +41,7 @@ function storeData(fragment) {
             }
         })
 
-        let titleJSON = unescape(escape(JSON.stringify(titlesObj)));
+        let titleJSON = escape(JSON.stringify(titlesObj));
 
         // console.log(titlesObj)
         let sql = `update tennis.athlete set 
@@ -50,7 +50,7 @@ function storeData(fragment) {
             bio_expire=FROM_UNIXTIME(${now + day * 7})
             where id_tennis_com=${playerId}`;
 
-        // console.log(sql);
+        console.log(sql);
 
         tools.runSql(sql, function(){
             process.exit();

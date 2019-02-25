@@ -1050,7 +1050,7 @@ let operations = {
 			if(err) return throwError(err, res);
 
 			let row = rows[0];
-			if(!row || !row.is_expirerow.is_expire || row.is_expire){
+			if(!row || row.is_expire){
 
 				let sql2 = `select name_en from tennis.athlete where id_tennis_com in (${params.p1}, ${params.p2});`
 				conn.query(sql2, function(err, result, fields) {
