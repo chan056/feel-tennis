@@ -1,17 +1,25 @@
-body{width: 1140px; margin: auto; overflow-x: hidden;}
+#body{width: 1140px; margin: auto; overflow-x: hidden;}
 
 // stat === start
 #player-base-info{
     height: 326px; box-sizing: border-box; padding: 1rem;
     #avatar{height: 155px; width: 120px;}
-    #p11{color: #fff;}
-    #h2h{ height: 200px; overflow-y: auto;}
+    #p11{color: #fff; margin-left: 1rem;}
+    #h2h{
+        float: right; position: relative;
+        ul{position: absolute; top: 22px; right: 0; height: 10rem;}
+    }
 
     #p3{background-color: rgba(0, 0, 0, .3); padding: 1rem 0;}
     .base-data{
         box-sizing: border-box; width: 20%; float: left; padding: 1rem 0; text-align: center; color: #fff;
         &:not(:first-child){border-left: 1px solid #fff;}
     }
+}
+
+#player-detail-nav{
+    display: flex; justify-content: center; transform: translateY(-50%);
+    >li{padding: 1rem 2rem; background-color: #ddd;}
 }
 
 // start === end

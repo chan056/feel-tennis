@@ -3,68 +3,76 @@
 }}
 
 <%- include('views/header', {title: `${dynamicDataSet.stat.name_en} 数据统计`}) %>
-
+<link rel="stylesheet" href="/lib/zepto.editable.dropdown/editable-select.css">
+<script src="/lib/zepto.js"></script>
+<script src="/lib/zepto.editable.dropdown/editable-select.js"></script>
 <%= JSON.stringify(dynamicDataSet.stat) %>
 <br/>
-<div id="player-base-info" style="background-image: url(<%= dynamicDataSet.stat.feature_image %>)">
-	<div id="p1" class="fl">
-		<div id="avatar" class="fl" style="background-image: url(<%= dynamicDataSet.stat.player_image %>)"></div>
-		<div id="p11" class="fl">
-			<div id="ranking">
-				<label for="">Ranking</label><br>
-				#<%= dynamicDataSet.stat.ranking %>
+<div id="body">
+	<div id="player-base-info" style="background-image: url(<%= dynamicDataSet.stat.feature_image %>)">
+		<div id="p1" class="fl">
+			<div id="avatar" class="fl" style="background-image: url(<%= dynamicDataSet.stat.player_image %>)"></div>
+			<div id="p11" class="fl">
+				<div id="ranking">
+					<label for="">Ranking</label><br>
+					#<%= dynamicDataSet.stat.ranking %>
+				</div>
+				<div id="name">
+					<div id="first-name"><%= dynamicDataSet.stat.firstname %></div>
+					<div id="second-name"><%= dynamicDataSet.stat.lastname %></div>
+				</div>
 			</div>
-			<div id="name">
-				<div id="first-name"><%= dynamicDataSet.stat.firstname %></div>
-				<div id="second-name"><%= dynamicDataSet.stat.lastname %></div>
-			</div>
 		</div>
-	</div>
-	<div id="h2h" class="fr">
-		<% dynamicDataSet.ranking.forEach((athlete)=>{ %>
-			<div>
-				<a href="/tennis/player/<%= dynamicDataSet.stat.id_tennis_com %>/vs/<%= athlete.id_tennis_com %>.ssr"><%= athlete.name_en %></a>
-			</div>
-		<% }) %>
-	</div>
-	<br class="clr">
-
-	<div id="p3" class="ovh">
-		<div class="base-data">
-			<p class="data-label">年龄</p>
-			<p class="data-value"><%= dynamicDataSet.stat.age %></p>
+		<div id="h2h">
+			<ul class="fr">
+				<% dynamicDataSet.ranking.forEach((athlete)=>{ %>
+					<li>
+						<a href="/tennis/player/<%= dynamicDataSet.stat.id_tennis_com %>/vs/<%= athlete.id_tennis_com %>.ssr"><%= athlete.name_en %></a>
+					</li>
+				<% }) %>
+				</ul>
 		</div>
-		<div class="base-data">
-			<p class="data-label">国籍</p>
-			<p class="data-value"><%= dynamicDataSet.stat.country %></p>
-		</div>
-		<div class="base-data">
-			<p class="data-label">居住地</p>
-			<p class="data-value"><%= dynamicDataSet.stat.residence %></p>
-		</div>
-		<div class="base-data">
-			<p class="data-label">转职业</p>
-			<p class="data-value"><%= dynamicDataSet.stat.turn_pro %></p>
-		</div>
-		<div class="base-data">
-			<p class="data-label">奖金</p>
-			<p class="data-value"><%= dynamicDataSet.stat.earnings %></p>
-		</div>
-	</div>
-</div>
-<div id="plaer-detail-nav">
+		
+		<br class="clr">
 	
-</div>
-<ul>
-	<li>数据统计</li>
-	<li>
-		历史比赛
-	</li>
-	<li>
-		<a href="/tennis/player/<%= dynamicDataSet.stat.id_tennis_com %>/bio.ssr">档案</a>
-	</li>
-	<li>照片</li>
-	<li>装备</li>
-</ul>
+		<div id="p3" class="ovh">
+			<div class="base-data">
+				<p class="data-label">年龄</p>
+				<p class="data-value"><%= dynamicDataSet.stat.age %></p>
+			</div>
+			<div class="base-data">
+				<p class="data-label">国籍</p>
+				<p class="data-value"><%= dynamicDataSet.stat.country %></p>
+			</div>
+			<div class="base-data">
+				<p class="data-label">居住地</p>
+				<p class="data-value"><%= dynamicDataSet.stat.residence %></p>
+			</div>
+			<div class="base-data">
+				<p class="data-label">转职业</p>
+				<p class="data-value"><%= dynamicDataSet.stat.turn_pro %></p>
+			</div>
+			<div class="base-data">
+				<p class="data-label">奖金</p>
+				<p class="data-value"><%= dynamicDataSet.stat.earnings %></p>
+			</div>
+		</div>
+	</div>
 
+	<ul id="player-detail-nav" class="hori-list">
+		<li>数据统计</li>
+		<li>
+			历史比赛
+		</li>
+		<li>
+			<a href="/tennis/player/<%= dynamicDataSet.stat.id_tennis_com %>/bio.ssr">档案</a>
+		</li>
+		<li>照片</li>
+		<li>装备</li>
+	</ul>
+</div>
+
+<script>
+	$('#h2h ul').editableSelect();
+</script>
 <%- include views/footer %>

@@ -100,3 +100,9 @@ img{border-width: 0;}
 
 // 图片上的文字
 .text-above-img{ color: #fff;  padding: 2px 3px; text-shadow: 0px 0px 1rem #333;}
+
+// 横向列表
+.hori-list{
+  &::after{content: ''; display: block; .clr;}
+  li{float: left; min-width: 1rem; min-height: 1rem;}
+}

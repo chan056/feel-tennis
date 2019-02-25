@@ -1,4 +1,4 @@
-body {
+#body {
   width: 1140px;
   margin: auto;
   overflow-x: hidden;
@@ -14,10 +14,17 @@ body {
 }
 #player-base-info #p11 {
   color: #fff;
+  margin-left: 1rem;
 }
 #player-base-info #h2h {
-  height: 200px;
-  overflow-y: auto;
+  float: right;
+  position: relative;
+}
+#player-base-info #h2h ul {
+  position: absolute;
+  top: 22px;
+  right: 0;
+  height: 10rem;
 }
 #player-base-info #p3 {
   background-color: rgba(0, 0, 0, 0.3);
@@ -33,4 +40,13 @@ body {
 }
 #player-base-info .base-data:not(:first-child) {
   border-left: 1px solid #fff;
+}
+#player-detail-nav {
+  display: flex;
+  justify-content: center;
+  transform: translateY(-50%);
+}
+#player-detail-nav > li {
+  padding: 1rem 2rem;
+  background-color: #ddd;
 }
