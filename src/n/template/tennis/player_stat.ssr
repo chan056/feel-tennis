@@ -3,10 +3,13 @@
 }}
 
 <%- include('views/header', {title: `${dynamicDataSet.stat.name_en} 数据统计`}) %>
+
 <link rel="stylesheet" href="/lib/zepto.editable.dropdown/editable-select.css">
 <script src="/lib/zepto.js"></script>
 <script src="/lib/zepto.editable.dropdown/editable-select.js"></script>
+
 <%= JSON.stringify(dynamicDataSet.stat) %>
+
 <br/>
 <div id="body">
 	<div id="player-base-info" style="background-image: url(<%= dynamicDataSet.stat.feature_image %>)">
@@ -29,9 +32,11 @@
 					var athletes = renderTools.resortAthleteByGender(dynamicDataSet.ranking, dynamicDataSet.stat.gender);
 				%>
 				<% athletes.forEach((athlete)=>{ %>
-					<li>
-						<a href="/tennis/player/<%= dynamicDataSet.stat.id_tennis_com %>/vs/<%= athlete.id_tennis_com %>.ssr"><%= athlete.name_en %></a>
-					</li>
+					<% if(dynamicDataSet.stat.id_tennis_com != athlete.id_tennis_com){ %>
+						<li>
+							<a href="/tennis/player/<%= dynamicDataSet.stat.id_tennis_com %>/vs/<%= athlete.id_tennis_com %>.ssr"><%= athlete.name_en %></a>
+						</li>
+					<% } %>
 				<% }) %>
 			</ul>
 		</div>

@@ -13,7 +13,7 @@
     text: null,
     holder: null,
     init: function(holder) {
-      var text = $("<input class='input-wide editable-input fr' type=text/>");
+      var text = $("<input class='input-wide editable-input' type=text/>");
       holder.before(text);
 
       this.holder = $(holder).addClass('holder');

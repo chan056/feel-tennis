@@ -1,19 +1,47 @@
 {{
-	['headToHead']
+	['headToHead', {method: 'queryTennisRanking'}]
 }}
 
 <%- include('views/header', {title: `${dynamicDataSet.h2h.p1_name} vs ${dynamicDataSet.h2h.p2_name}`}) %>
 
 <%= JSON.stringify(dynamicDataSet.h2h) %>
+<br>
+<link rel="stylesheet" href="/lib/zepto.editable.dropdown/editable-select.css">
+<script src="/lib/zepto.js"></script>
+<script src="/lib/zepto.editable.dropdown/editable-select.js"></script>
 
-<ul>
-	<li>
-		<a href="/tennis/player/<%= dynamicDataSet.h2h.p1 %>/stat.ssr">数据统计</a>
-	</li>
-	<li>历史比赛记录</li>
-	<li>档案</li>
-	<li>照片</li>
-	<li>装备</li>
-</ul>
+<div id="body">
+	<%
+		var athletes = dynamicDataSet.ranking;
+	%>
+	<div>
+		<div class="fl">
+			<ul id="p1-selector">
+				<% athletes.forEach((athlete)=>{ %>
+					<li>
+						<%= athlete.name_en %></a>
+					</li>
+				<% }) %>
+			</ul>
+		</div>
+		
+		<div class="fr">
+			<ul id="p2-selector">
+				<% athletes.forEach((athlete)=>{ %>
+					<li>
+						<%= athlete.name_en %>
+					</li>
+				<% }) %>
+			</ul>
+		</div>
+	
+		<br class="clr">
+	</div>
+</div>
+
+<script>
+	$('#p1-selector').editableSelect();
+	$('#p2-selector').editableSelect();
+</script>
 
 <%- include views/footer %>
