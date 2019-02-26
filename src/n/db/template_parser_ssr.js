@@ -65,8 +65,10 @@ module.exports = function(tempaltePath, params, res, req){
         } 
 
         function renderFile(renderOpt){
+            let renderTools = require('../collector/tools/main.front');
             let opt = Object.assign({
                 filename: tempaltePath,
+                renderTools: renderTools
             }, renderOpt)
             
             try{
@@ -74,7 +76,7 @@ module.exports = function(tempaltePath, params, res, req){
 
                 res.end(html);
             }catch(e){
-                throw e;
+                res.end(e.message);
             }
         }        
     })

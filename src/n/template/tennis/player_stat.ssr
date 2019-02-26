@@ -25,12 +25,15 @@
 		</div>
 		<div id="h2h">
 			<ul class="fr">
-				<% dynamicDataSet.ranking.forEach((athlete)=>{ %>
+				<%
+					var athletes = renderTools.resortAthleteByGender(dynamicDataSet.ranking, dynamicDataSet.stat.gender);
+				%>
+				<% athletes.forEach((athlete)=>{ %>
 					<li>
 						<a href="/tennis/player/<%= dynamicDataSet.stat.id_tennis_com %>/vs/<%= athlete.id_tennis_com %>.ssr"><%= athlete.name_en %></a>
 					</li>
 				<% }) %>
-				</ul>
+			</ul>
 		</div>
 		
 		<br class="clr">

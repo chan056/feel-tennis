@@ -27,17 +27,6 @@ function resolvePathSSR(req, res) {
             break;
         }
     }
-
-    // 根据routerName 和 参数 定位 cache文件
-        // 存在
-            // continue
-        // 不存在
-            // node xxx xx
-                // continue
-
-    if(routerNameMatched){
-
-    }
  
     if (templateMatched) {
         var paramsMathed = {};
