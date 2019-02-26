@@ -1,4 +1,4 @@
-module.exports = {
+let o = {
     evtInfo: [{
         title: '注册',
         name: 'regist',
@@ -18,9 +18,15 @@ module.exports = {
         name: 'video',
         tar: '.video-thumb',
         delegator: 'body'
+    },{
+        prerequisite: window.isIOSdevice,
+        title: '添加到主屏幕',
+        name: 'quickFinder',
+        tar: '#support-btn, #video-operation-wrapper',
+        delegator: 'body',
+        triggerType: 'touchstart'
     }],
-
-
+    
     regist: [
         {
             selector: '#usr-btns', 
@@ -100,8 +106,20 @@ module.exports = {
                 帮忙翻译视频!!
             `,
             direction: 'down'
-        },
+        }
     ],
-
-    
+    quickFinder: [
+        {
+            lines: `<img style="width: 100%;" src="/img/safari_finder_1.jpg">`,
+        },
+        {
+            lines: `<img style="width: 100%;" src="/img/safari_finder_2.jpg">`,
+        }
+    ]
 }
+
+// if(window.isMobile){
+//     o.push();
+// }
+
+module.exports = o;

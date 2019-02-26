@@ -73,7 +73,9 @@ module.exports = function(){
             const guideEvtInfo = guideRoute.evtInfo;
 
             guideEvtInfo.forEach((item)=>{
-                bidnGuideEvent(item);
+                // console.log(item.prerequisite, window.isIOSdevice)
+                if(item.prerequisite === undefined || item.prerequisite)
+                    bidnGuideEvent(item);
             });
 
             this.$bus.on('dismiss-guider', function(info){
