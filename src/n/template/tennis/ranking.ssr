@@ -24,6 +24,7 @@
 			<a href="/tennis/player/<%= athlete.id_tennis_com%>/stat.ssr"><%= athlete.name_en %></a>
 		</td>
 		<td>
+			<i class="flag flags-<%= athlete.state_abbreviation %>"></i>
 			<%= athlete.country %>
 		</td>
 		<td>

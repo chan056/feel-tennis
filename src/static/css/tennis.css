@@ -2,6 +2,10 @@
   width: 1140px;
   margin: auto;
 }
+.flag {
+  display: inline-block;
+  background-image: url("/img/flags.png");
+}
 #body.stat #player-base-info {
   height: 326px;
   box-sizing: border-box;
@@ -59,6 +63,16 @@
   position: absolute;
   right: 0;
   bottom: 0;
+}
+#body.h2h .detail-wrapper .flag {
+  position: absolute;
+  bottom: 0;
+}
+#body.h2h #p1-wrapper .flag {
+  left: 0;
+}
+#body.h2h #p2-wrapper .flag {
+  right: 0;
 }
 #body.h2h #datas {
   position: absolute;

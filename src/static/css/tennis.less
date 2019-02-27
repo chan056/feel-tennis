@@ -1,4 +1,5 @@
 #body{width: 1140px; margin: auto; }
+.flag{display: inline-block; background-image: url("/img/flags.png")}
 
 // stat === start
 #body.stat{
@@ -29,8 +30,14 @@
     .detail-wrapper{
         .avatar-wrapper{position: relative;}
         .country-flag{position: absolute; right: 0; bottom: 0;}
+        .flag{position: absolute; bottom: 0;}
     }
-    #p1-wrapper{}
+    #p1-wrapper{
+        .flag{left: 0;}
+    }
+    #p2-wrapper{
+        .flag{right: 0;}
+    }
     #datas{position: absolute; left: 50%; transform: translateX(-50%); width: 100%;}
 
     #h2h-record{

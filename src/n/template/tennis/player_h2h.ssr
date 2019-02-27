@@ -44,8 +44,8 @@
 	<div id="players">
 		<div id="p1-wrapper" class="detail-wrapper fl">
 			<a href="" class="avatar-wrapper fl">
-				<img class="avatar" src="<%= dynamicDataSet.p1.player_image %>" alt="">
-				<img class="country-flag" src="" alt="">
+				<img class="avatar fl" src="<%= dynamicDataSet.p1.player_image %>" alt="">
+				<i class="flag flags-<%= dynamicDataSet.p1.state_abbreviation %>"></i>
 			</a>
 
 			<br class="clr">
@@ -62,8 +62,8 @@
 
 		<div id="p2-wrapper" class="detail-wrapper fr">
 			<a href="" class="avatar-wrapper fr">
-				<img class="avatar" src="<%= dynamicDataSet.p2.player_image %>" alt="">
-				<img class="country-flag" src="" alt="">
+				<img class="avatar fr" src="<%= dynamicDataSet.p2.player_image %>" alt="">
+				<i class="flag flags-<%= dynamicDataSet.p1.state_abbreviation %>"></i>
 			</a>
 
 			<br class="clr">
