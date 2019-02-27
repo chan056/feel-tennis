@@ -106,3 +106,17 @@ img{border-width: 0;}
   &::after{content: ''; display: block; .clr;}
   li{float: left; min-width: 1rem; min-height: 1rem;}
 }
+
+// 渐变遮罩
+.overlay-gradient {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  background-image: linear-gradient(to bottom, transparent 45%, #000 130%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FF000000', GradientType=0);
+  transition: background-color 0.3s ease-in;
+}

@@ -43,36 +43,44 @@
 
 	<div id="players">
 		<div id="p1-wrapper" class="detail-wrapper fl">
-			<a href="" class="avatar-wrapper fl">
-				<img class="avatar fl" src="<%= dynamicDataSet.p1.player_image %>" alt="">
-				<i class="flag flags-<%= dynamicDataSet.p1.state_abbreviation %>"></i>
-			</a>
+			<% var p1Data = dynamicDataSet.p1 %>
+			<div class="rel">
+				<a href="" class="avatar-wrapper fl">
+					<img class="avatar fl" src="<%= p1Data.player_image %>" alt="<%= p1Data.name_en %>">
+				</a>
+				<a target="_blank" class="country-link" href="https://ditu.baidu.com?q=<%= p1Data.country %>">
+					<i class="flag fl flags-<%= p1Data.state_abbreviation %>"></i>
+				</a>
+				<br class="clr">
+			</div>
 
-			<br class="clr">
-			
 			<div>
-				<span class="ranking fl">#<%= dynamicDataSet.p1.ranking %></span>
+				<span class="ranking fl">#<%= p1Data.ranking %></span>
 				<div class="name fr">
-					<p class="first"><%= dynamicDataSet.p1.firstname %></p>
-					<p class="second"><%= dynamicDataSet.p1.lastname %></p>
+					<p class="first"><%= p1Data.firstname %></p>
+					<p class="second"><%= p1Data.lastname %></p>
 				</div>
 				<br class="clr">
 			</div>
 		</div>
 
 		<div id="p2-wrapper" class="detail-wrapper fr">
-			<a href="" class="avatar-wrapper fr">
-				<img class="avatar fr" src="<%= dynamicDataSet.p2.player_image %>" alt="">
-				<i class="flag flags-<%= dynamicDataSet.p1.state_abbreviation %>"></i>
-			</a>
+			<% var p2Data = dynamicDataSet.p2 %>
+			<div class="rel">
+				<a href="" class="avatar-wrapper fr">
+					<img class="avatar fr" src="<%= p2Data.player_image %>" alt="<%= p2Data.name_en %>">
+				</a>
+				<a target="_blank" class="country-link" href="https://ditu.baidu.com?q=<%= p2Data.country %>">
+					<i class="flag fr flags-<%= p2Data.state_abbreviation %>"></i>
+				</a>
+				<br class="clr">
+			</div>
 
-			<br class="clr">
-			
 			<div>
-				<span class="ranking fr">#<%= dynamicDataSet.p2.ranking %></span>
+				<span class="ranking fr">#<%= p2Data.ranking %></span>
 				<div class="name fl">
-					<p class="first"><%= dynamicDataSet.p2.firstname %></p>
-					<p class="second"><%= dynamicDataSet.p2.lastname %></p>
+					<p class="first"><%= p2Data.firstname %></p>
+					<p class="second"><%= p2Data.lastname %></p>
 				</div>
 				<br class="clr">
 			</div>
@@ -98,29 +106,29 @@
 			</ul>
 			<div id="stats">
 				<ul id="p1-stat" class="p-stat">
-					<li><%= dynamicDataSet.p1.age %></li>
-					<li><%= dynamicDataSet.p1.birthdate %></li>
-					<li><%= dynamicDataSet.p1.residence %></li>
-					<li><%= dynamicDataSet.p1.height + ' cm' %></li>
-					<li><%= dynamicDataSet.p1.weight + ' kg' %></li>
-					<li><%= ['左手', '右手'][dynamicDataSet.p1.plays] %></li>
-					<li><%= dynamicDataSet.p1.turn_pro %></li>
-					<li><%= dynamicDataSet.p1.experience %></li>
-					<li><%= dynamicDataSet.p1.ytd_win_single + '单打' + '(' + dynamicDataSet.p1.ytd_win_double +'双打)' %></li>
-					<li><%= dynamicDataSet.p1.earnings %></li>
+					<li><%= p1Data.age %>&nbsp;</li>
+					<li><%= p1Data.birthdate %>&nbsp;</li>
+					<li><%= p1Data.residence %>&nbsp;</li>
+					<li><%= p1Data.height + ' cm' %>&nbsp;</li>
+					<li><%= p1Data.weight + ' kg' %>&nbsp;</li>
+					<li><%= ['左手', '右手'][p1Data.plays] %>&nbsp;</li>
+					<li><%= p1Data.turn_pro %>&nbsp;</li>
+					<li><%= p1Data.experience %>&nbsp;</li>
+					<li><%= p1Data.ytd_win_single + '单打' + '(' + p1Data.ytd_win_double +'双打)' %>&nbsp;</li>
+					<li><%= p1Data.earnings %>&nbsp;</li>
 				</ul>
 				
 				<ul id="p2-stat" class="p-stat">
-					<li><%= dynamicDataSet.p2.age %></li>
-					<li><%= dynamicDataSet.p2.birthdate %></li>
-					<li><%= dynamicDataSet.p2.residence %></li>
-					<li><%= dynamicDataSet.p2.height + ' cm' %></li>
-					<li><%= dynamicDataSet.p2.weight + ' kg' %></li>
-					<li><%= ['左手', '右手'][dynamicDataSet.p2.plays] %></li>
-					<li><%= dynamicDataSet.p2.turn_pro %></li>
-					<li><%= dynamicDataSet.p2.experience %></li>
-					<li><%= dynamicDataSet.p2.ytd_win_single + '单打' + '(' + dynamicDataSet.p2.ytd_win_double +'双打)' %></li>
-					<li><%= dynamicDataSet.p2.earnings %></li>
+					<li>&nbsp;<%= p2Data.age %></li>
+					<li>&nbsp;<%= p2Data.birthdate %></li>
+					<li>&nbsp;<%= p2Data.residence %></li>
+					<li>&nbsp;<%= p2Data.height + ' cm' %></li>
+					<li>&nbsp;<%= p2Data.weight + ' kg' %></li>
+					<li>&nbsp;<%= ['左手', '右手'][p2Data.plays] %></li>
+					<li>&nbsp;<%= p2Data.turn_pro %></li>
+					<li>&nbsp;<%= p2Data.experience %></li>
+					<li>&nbsp;<%= p2Data.ytd_win_single + '单打' + '(' + p2Data.ytd_win_double +'双打)' %></li>
+					<li>&nbsp;<%= p2Data.earnings %></li>
 				</ul>
 				<br class="clr">
 			</div>
@@ -142,17 +150,17 @@
 					window.p2 = id;
 				}
 
-				if(window.p1 && window.p2)
+				if(window.p1 && window.p2 && window.p1 != window.p2)
 					location.href = '/tennis/player/'+window.p1+'/vs/'+window.p2+'.ssr'
 			}
 		}
 	});
 
-	window.p1 = <%= dynamicDataSet.p1.id_tennis_com %>;
-	window.p2 = <%= dynamicDataSet.p2.id_tennis_com %>;
+	window.p1 = <%= p1Data.id_tennis_com %>;
+	window.p2 = <%= p2Data.id_tennis_com %>;
 
-	$('.editable-input').eq(0).val('<%= dynamicDataSet.p1.name_en %>')
-	$('.editable-input').eq(1).val('<%= dynamicDataSet.p2.name_en %>')
+	$('.editable-input').eq(0).val('<%= p1Data.name_en %>')
+	$('.editable-input').eq(1).val('<%= p2Data.name_en %>')
 </script>
 
 <%- include views/footer %>

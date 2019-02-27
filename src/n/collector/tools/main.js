@@ -28,7 +28,7 @@ module.exports = {
             console.log('文件下载成功');
         });
 
-        readStream.on('error', function() {
+        readStream.on('error', function(err) {
             console.log("错误信息:" + err)
         });
 

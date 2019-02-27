@@ -6,10 +6,16 @@
   display: inline-block;
   background-image: url("/img/flags.png");
 }
+#body.stat #p1,
+#body.stat #p3 {
+  position: relative;
+  z-index: 2;
+}
 #body.stat #player-base-info {
   height: 326px;
   box-sizing: border-box;
   padding: 1rem;
+  position: relative;
 }
 #body.stat #player-base-info #avatar {
   height: 155px;
@@ -30,6 +36,10 @@
   height: 10rem;
 }
 #body.stat #player-base-info #p3 {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
   background-color: rgba(0, 0, 0, 0.3);
   padding: 1rem 0;
 }
@@ -45,18 +55,21 @@
   border-left: 1px solid #fff;
 }
 #body.stat #player-detail-nav {
+  position: relative;
+  z-index: 10;
   display: flex;
   justify-content: center;
   transform: translateY(-50%);
 }
 #body.stat #player-detail-nav > li {
   padding: 1rem 2rem;
-  background-color: #ddd;
+  background-color: #F9F9F9;
+}
+#body.stat .overlay-left {
+  background-image: linear-gradient(to left, transparent 55%, #000 74%);
+  z-index: 1;
 }
 #body.h2h #players {
-  position: relative;
-}
-#body.h2h .detail-wrapper .avatar-wrapper {
   position: relative;
 }
 #body.h2h .detail-wrapper .country-flag {
@@ -64,14 +77,15 @@
   right: 0;
   bottom: 0;
 }
-#body.h2h .detail-wrapper .flag {
+#body.h2h .detail-wrapper .country-link {
   position: absolute;
   bottom: 0;
+  z-index: 100;
 }
-#body.h2h #p1-wrapper .flag {
+#body.h2h #p1-wrapper .country-link {
   left: 0;
 }
-#body.h2h #p2-wrapper .flag {
+#body.h2h #p2-wrapper .country-link {
   right: 0;
 }
 #body.h2h #datas {
@@ -107,6 +121,9 @@
   position: absolute;
   top: 2rem;
   z-index: 2;
+}
+#body.h2h .p-stat li {
+  min-height: 1em;
 }
 #body.h2h #p1-stat {
   padding-right: 4rem;
