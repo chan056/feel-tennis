@@ -60,7 +60,7 @@
 				_.text.val($(this).text().trim());
 				_.holder.hide();
 
-				_.opts.pickFunc && _.opts.pickFunc(this, _);
+				_.opts && _.opts.pickFunc && _.opts.pickFunc(this, _);
 			});
 		}
 	}
