@@ -1,6 +1,6 @@
-{{
+{{%
 	['queryTennisPlayerBio']
-}}
+%}}
 
 <%- include views/header %>
 

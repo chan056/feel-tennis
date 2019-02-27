@@ -1,6 +1,6 @@
-{{
+{{%
 	['queryTennisPlayerStat', {method: 'queryTennisRanking'}]
-}}
+%}}
 
 <%- include('views/header', {title: `${dynamicDataSet.stat.name_en} 数据统计`}) %>
 
@@ -8,10 +8,7 @@
 <script src="/lib/zepto.js"></script>
 <script src="/lib/zepto.editable.dropdown/editable-select.js"></script>
 
-<%= JSON.stringify(dynamicDataSet.stat) %>
-
-<br/>
-<div id="body">
+<div id="body" class="stat">
 	<div id="player-base-info" style="background-image: url(<%= dynamicDataSet.stat.feature_image %>)">
 		<div id="p1" class="fl">
 			<div id="avatar" class="fl" style="background-image: url(<%= dynamicDataSet.stat.player_image %>)"></div>

@@ -4,7 +4,7 @@ const ejs = require('ejs');
 
 let tools = require('../tools');
 
-module.exports = function(tempaltePath, params, res, req){
+module.exports = function(tempaltePath, routeParams, res, req){
     // 解析模板 
     // 查询数据
 
@@ -14,12 +14,12 @@ module.exports = function(tempaltePath, params, res, req){
 
         // 规定动态代码只出现一次
         let templateStr = data.toString();
-        const dynamicCodePattern = /{{([\s\S]+?)}}/;
+        const dynamicCodePattern = /{{%([\s\S]+?)%}}/;
 
         let dataSourceCode = templateStr.match(dynamicCodePattern);
         let pageStructureCode = templateStr.replace(dynamicCodePattern, '');
         let dynamicDataSet = {};
-        let reqNames = [];
+        let reqs = [];
 
         dynamicDataSet = new Proxy(dynamicDataSet, {
             get: (target, key, receiver) => {
@@ -28,7 +28,7 @@ module.exports = function(tempaltePath, params, res, req){
             set: (target, key, value, receiver) => {
                 target[key] = value;
 
-                if(countAttribute(target) === reqNames.length){
+                if(countAttribute(target) === reqs.length){
                     // 数据准备完毕，解析模板
                     renderFile({
                         dynamicDataSet: dynamicDataSet
@@ -43,16 +43,30 @@ module.exports = function(tempaltePath, params, res, req){
             const operate = require('./operate');
 
             dataSourceCode =  dataSourceCode[1].trim();
-            reqNames = eval(dataSourceCode);
-            // console.log(reqNames);
+            reqs = eval(dataSourceCode);
+            // console.log(reqs);
 
-            reqNames.forEach(reqName => {
+            reqs.forEach(reqData => {
                 res.dynamicDataSet = dynamicDataSet;
+                
+                if(typeof reqData == 'string'){
+                    operate.query(reqData, routeParams, res, req);
+                }else if(typeof reqData == 'object'){// 自定义参数
+                    let keymap = reqData.keymap;
+                    let reqParams = reqData.params || {};
 
-                if(typeof reqName == 'string'){
-                    operate.query(reqName, params, res, req);
-                }else if(typeof reqName == 'object'){// 自定义参数
-                    operate.query(reqName.method, reqName.params, res, req);
+                    // 复制属性给特定接口使用
+                    // keymap {p1: 'playerId'} // p1属性复制出playerId
+                    // {p1: 100, p2: 200} => {p1: 100, p2: 200, playerId: 100}
+                    if(keymap){
+                        for(let k in keymap){
+                            if(routeParams[k] != undefined){
+                                reqParams[keymap[k]] = routeParams[k];
+                            }
+                        }
+                    }
+
+                    operate.query(reqData.method, reqParams, res, req);
                 }
             });
             

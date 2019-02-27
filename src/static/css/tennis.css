@@ -1,36 +1,35 @@
 #body {
   width: 1140px;
   margin: auto;
-  overflow-x: hidden;
 }
-#player-base-info {
+#body.stat #player-base-info {
   height: 326px;
   box-sizing: border-box;
   padding: 1rem;
 }
-#player-base-info #avatar {
+#body.stat #player-base-info #avatar {
   height: 155px;
   width: 120px;
 }
-#player-base-info #p11 {
+#body.stat #player-base-info #p11 {
   color: #fff;
   margin-left: 1rem;
 }
-#player-base-info #h2h {
+#body.stat #player-base-info #h2h {
   float: right;
   position: relative;
 }
-#player-base-info #h2h ul {
+#body.stat #player-base-info #h2h ul {
   position: absolute;
   top: 22px;
   right: 0;
   height: 10rem;
 }
-#player-base-info #p3 {
+#body.stat #player-base-info #p3 {
   background-color: rgba(0, 0, 0, 0.3);
   padding: 1rem 0;
 }
-#player-base-info .base-data {
+#body.stat #player-base-info .base-data {
   box-sizing: border-box;
   width: 20%;
   float: left;
@@ -38,15 +37,70 @@
   text-align: center;
   color: #fff;
 }
-#player-base-info .base-data:not(:first-child) {
+#body.stat #player-base-info .base-data:not(:first-child) {
   border-left: 1px solid #fff;
 }
-#player-detail-nav {
+#body.stat #player-detail-nav {
   display: flex;
   justify-content: center;
   transform: translateY(-50%);
 }
-#player-detail-nav > li {
+#body.stat #player-detail-nav > li {
   padding: 1rem 2rem;
   background-color: #ddd;
+}
+#body.h2h #players {
+  position: relative;
+}
+#body.h2h .detail-wrapper .avatar-wrapper {
+  position: relative;
+}
+#body.h2h .detail-wrapper .country-flag {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+#body.h2h #datas {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+}
+#body.h2h #h2h-record > span {
+  box-sizing: border-box;
+}
+#body.h2h #h2h-record .win {
+  width: 50%;
+  text-align: right;
+  padding-right: 1rem;
+}
+#body.h2h #h2h-record .lose {
+  width: 50%;
+  text-align: left;
+  padding-left: 1rem;
+}
+#body.h2h #labels {
+  width: 100px;
+  text-align: center;
+  top: 2rem;
+  position: absolute;
+  transform: translateX(-50%);
+  left: 50%;
+}
+#body.h2h .p-stat {
+  width: 50%;
+  box-sizing: border-box;
+  position: absolute;
+  top: 2rem;
+  z-index: 2;
+}
+#body.h2h #p1-stat {
+  padding-right: 4rem;
+  text-align: right;
+  left: 0;
+}
+#body.h2h #p2-stat {
+  padding-left: 4rem;
+  text-align: left;
+  right: 0;
 }

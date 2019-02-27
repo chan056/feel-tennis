@@ -972,7 +972,7 @@ let operations = {
 					res.end(result)
 				}else{
 					result.params = params;
-					res.dynamicDataSet.ranking = result;// []
+					res.dynamicDataSet[params.ssrOutput || 'ranking'] = result;// []
 				}
 			});
 		}
@@ -1004,7 +1004,7 @@ let operations = {
 					result = JSON.stringify(result);
 					res.end(result)
 				}else{
-					res.dynamicDataSet['stat'] = result;
+					res.dynamicDataSet[params.ssrOutput || 'stat'] = result;
 				}
 			});
 		}
@@ -1036,15 +1036,14 @@ let operations = {
 					result = JSON.stringify(result);
 					res.end(result)
 				}else{
-					res.dynamicDataSet['bio'] = result;
+					res.dynamicDataSet[params.ssrOutput || 'bio'] = result;
 				}
 			});
 		}
 	},
 
 	headToHead: function (res, qualification, params) {
-		let sql = `select h2h.*, now()>h2h.expire as is_expire, (select name_en from tennis.athlete where id_tennis_com=h2h.p1) as p1_name, 
-		(select name_en from tennis.athlete where id_tennis_com=h2h.p2)as p2_name from tennis.h2h as h2h where p1=${params.p1} and p2=${params.p2}`
+		let sql = `select h2h.*, now()>h2h.expire as is_expire from tennis.h2h as h2h where p1=${params.p1} and p2=${params.p2}`
 
 		conn.query(sql, function(err, rows){
 			if(err) return throwError(err, res);
@@ -1083,7 +1082,7 @@ let operations = {
 					result = JSON.stringify(result);
 					res.end(result)
 				}else{
-					res.dynamicDataSet.h2h = result;
+					res.dynamicDataSet[params.ssrOutput || 'h2h'] = result;
 				}
 			});
 		}

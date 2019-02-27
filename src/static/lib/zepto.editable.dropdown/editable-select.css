@@ -20,6 +20,8 @@ div#div_for_shopping_centre {
 
 ul.holder {
   display: none;
+  position: absolute;
+  z-index: 10;
   margin: 0;
   padding: 0;
   overflow-y: scroll;

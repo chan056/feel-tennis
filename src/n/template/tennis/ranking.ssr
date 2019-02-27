@@ -1,6 +1,6 @@
-{{
+{{%
 	['queryTennisRanking']
-}}
+%}}
 
 <%- include('views/header', {title: {1: 'ATP', 2: 'WTA'}[dynamicDataSet.ranking.params.gender]+'排名' }) %>
 

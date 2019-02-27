@@ -1,16 +1,19 @@
-{{
-	['headToHead', {method: 'queryTennisRanking'}]
-}}
+{{%
+	[
+		'headToHead', 
+		{method: 'queryTennisRanking'}, 
+		{method: 'queryTennisPlayerStat', keymap: {p1: 'playerId'}, params: {ssrOutput: 'p1'}}, 
+		{method: 'queryTennisPlayerStat', keymap: {p2: 'playerId'}, params: {ssrOutput: 'p2'}}, 
+	]
+%}}
 
-<%- include('views/header', {title: `${dynamicDataSet.h2h.p1_name} vs ${dynamicDataSet.h2h.p2_name}`}) %>
+<%- include('views/header', {title: `${dynamicDataSet.p1.name_en} vs ${dynamicDataSet.p2.name_en}`}) %>
 
-<%= JSON.stringify(dynamicDataSet.h2h) %>
-<br>
 <link rel="stylesheet" href="/lib/zepto.editable.dropdown/editable-select.css">
 <script src="/lib/zepto.js"></script>
 <script src="/lib/zepto.editable.dropdown/editable-select.js"></script>
 
-<div id="body">
+<div id="body" class="h2h">
 	<%
 		var athletes = dynamicDataSet.ranking;
 	%>
@@ -18,7 +21,7 @@
 		<div class="fl">
 			<ul id="p1-selector">
 				<% athletes.forEach((athlete)=>{ %>
-					<li>
+					<li data-id="<%= athlete.id_tennis_com %>">
 						<%= athlete.name_en %></a>
 					</li>
 				<% }) %>
@@ -28,7 +31,7 @@
 		<div class="fr">
 			<ul id="p2-selector">
 				<% athletes.forEach((athlete)=>{ %>
-					<li>
+					<li data-id="<%= athlete.id_tennis_com %>">
 						<%= athlete.name_en %>
 					</li>
 				<% }) %>
@@ -37,11 +40,119 @@
 	
 		<br class="clr">
 	</div>
+
+	<div id="players">
+		<div id="p1-wrapper" class="detail-wrapper fl">
+			<a href="" class="avatar-wrapper fl">
+				<img class="avatar" src="<%= dynamicDataSet.p1.player_image %>" alt="">
+				<img class="country-flag" src="" alt="">
+			</a>
+
+			<br class="clr">
+			
+			<div>
+				<span class="ranking fl">#<%= dynamicDataSet.p1.ranking %></span>
+				<div class="name fr">
+					<p class="first"><%= dynamicDataSet.p1.firstname %></p>
+					<p class="second"><%= dynamicDataSet.p1.lastname %></p>
+				</div>
+				<br class="clr">
+			</div>
+		</div>
+
+		<div id="p2-wrapper" class="detail-wrapper fr">
+			<a href="" class="avatar-wrapper fr">
+				<img class="avatar" src="<%= dynamicDataSet.p2.player_image %>" alt="">
+				<img class="country-flag" src="" alt="">
+			</a>
+
+			<br class="clr">
+			
+			<div>
+				<span class="ranking fr">#<%= dynamicDataSet.p2.ranking %></span>
+				<div class="name fl">
+					<p class="first"><%= dynamicDataSet.p2.firstname %></p>
+					<p class="second"><%= dynamicDataSet.p2.lastname %></p>
+				</div>
+				<br class="clr">
+			</div>
+		</div>
+
+		<div id="datas">
+			<div id="h2h-record">
+				<span class="win fl"><%= dynamicDataSet.h2h.win %></span>
+				<span class="lose fr"><%= dynamicDataSet.h2h.lose %></span>
+				<br class="clr">
+			</div>
+			<ul id="labels">
+				<li>年龄</li>
+				<li>生日</li>
+				<li>居住地</li>
+				<li>身高</li>
+				<li>体重</li>
+				<li>打法</li>
+				<li>转职业</li>
+				<li>巡回赛经验</li>
+				<li>今年胜常数</li>
+				<li>总奖金</li>
+			</ul>
+			<div id="stats">
+				<ul id="p1-stat" class="p-stat">
+					<li><%= dynamicDataSet.p1.age %></li>
+					<li><%= dynamicDataSet.p1.birthdate %></li>
+					<li><%= dynamicDataSet.p1.residence %></li>
+					<li><%= dynamicDataSet.p1.height + ' cm' %></li>
+					<li><%= dynamicDataSet.p1.weight + ' kg' %></li>
+					<li><%= ['左手', '右手'][dynamicDataSet.p1.plays] %></li>
+					<li><%= dynamicDataSet.p1.turn_pro %></li>
+					<li><%= dynamicDataSet.p1.experience %></li>
+					<li><%= dynamicDataSet.p1.ytd_win_single + '单打' + '(' + dynamicDataSet.p1.ytd_win_double +'双打)' %></li>
+					<li><%= dynamicDataSet.p1.earnings %></li>
+				</ul>
+				
+				<ul id="p2-stat" class="p-stat">
+					<li><%= dynamicDataSet.p2.age %></li>
+					<li><%= dynamicDataSet.p2.birthdate %></li>
+					<li><%= dynamicDataSet.p2.residence %></li>
+					<li><%= dynamicDataSet.p2.height + ' cm' %></li>
+					<li><%= dynamicDataSet.p2.weight + ' kg' %></li>
+					<li><%= ['左手', '右手'][dynamicDataSet.p2.plays] %></li>
+					<li><%= dynamicDataSet.p2.turn_pro %></li>
+					<li><%= dynamicDataSet.p2.experience %></li>
+					<li><%= dynamicDataSet.p2.ytd_win_single + '单打' + '(' + dynamicDataSet.p2.ytd_win_double +'双打)' %></li>
+					<li><%= dynamicDataSet.p2.earnings %></li>
+				</ul>
+				<br class="clr">
+			</div>
+		</div>
+	</div>
 </div>
 
 <script>
-	$('#p1-selector').editableSelect();
-	$('#p2-selector').editableSelect();
+	$('#p1-selector, #p2-selector').editableSelect({
+		pickFunc: function(item, instance){
+			var item = $(item);
+			var id = item.data('id');
+			var name = item.text().trim();
+
+			if(id && name){
+				if(item.parent().is('#p1-selector')){
+					window.p1 = id;
+				}else if(item.parent().is('#p2-selector')){
+					window.p2 = id;
+				}
+
+				if(window.p1 && window.p2)
+					location.href = '/tennis/player/'+window.p1+'/vs/'+window.p2+'.ssr'
+			}
+		}
+	});
+
+	window.p1 = <%= dynamicDataSet.p1.id_tennis_com %>;
+	window.p2 = <%= dynamicDataSet.p2.id_tennis_com %>;
+
+	$('.editable-input').eq(0).val('<%= dynamicDataSet.p1.name_en %>')
+	$('.editable-input').eq(1).val('<%= dynamicDataSet.p2.name_en %>')
 </script>
 
 <%- include views/footer %>
