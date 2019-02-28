@@ -1796,13 +1796,14 @@ let operations = {
 
 	pageRecoder: function(res, postObj, req){
 		const pathModule = require('path'),
-			fs =require('fs');
+			fs = require('fs');
 
 		let pagePath = postObj.pagePath;
 		let pageContent = postObj.pageContent;
 
 		if(pathModule.extname(pagePath)){
 			// /page/intro_tennis.html
+			res.end();
 			return updateSitemap();
 		}
 
@@ -1844,12 +1845,21 @@ let operations = {
 			fs.exists(sitemapLocation, function(exist){
 				if(exist){
 					fs.readFile(sitemapLocation, 'utf8', function(err, data){
-						let PATH = req.headers.origin + postObj.pagePath;// https://www.yitube.cn/albums/13 
+						let fullpath = postObj.pagePath;// https://www.yitube.cn/albums/13 
+
+						if(!postObj.pagePath.match(/^https?:\/\//)){
+							fullpath = req.headers.origin + postObj.pagePath
+						}else{
+							if(!fullpath.match(req.headers.origin)){// 同源
+								return
+							}
+						}
+
 						let eol  = require('os').EOL;
 						data = data? data.split(eol): [];
 
-						if(data.indexOf(PATH) === -1){
-							data.push(PATH);
+						if(data.indexOf(fullpath) === -1){
+							data.push(fullpath);
 
 							fs.writeFileSync(sitemapLocation, data.join(eol), {encoding: 'utf8'})
 						}
