@@ -54,8 +54,10 @@
 			<p class="data-value"><%= playerinfo.turn_pro %>&nbsp;</p>
 		</div>
 		<div class="base-data">
-			<p class="data-label">奖金</p>
-			<p class="data-value"><%= playerinfo.earnings %>&nbsp;</p>
+			<% if(playerinfo.earnings && playerinfo.earnings.split('|').length == 2){ %>
+				<p class="data-label"><%= playerinfo.earnings.split('|')[0] %> 奖金</p>
+				<p class="data-value"><%= playerinfo.earnings.split('|')[1] %>&nbsp;</p>
+			<% } %>
 		</div>
 	</div>
 </div>

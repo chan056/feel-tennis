@@ -40,7 +40,10 @@ function storeData(fragment) {
                 }else if(label == 'turned pro'){
                     turn_pro = value
                 }else if(label.match('earnings')){
-                    earnings = value
+                    earnings = value;
+                    let earningYear = label.match(/\d+/);
+                    if(earningYear)
+                        earnings = earningYear + '|' +earnings;
                 }
             })
     

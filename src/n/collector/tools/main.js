@@ -56,7 +56,7 @@ module.exports = {
     // June 03, 1986 => 
     formatBirthdate: function (birthdate){
         return birthdate.replace(/\w+/, function(month){
-            let index = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'Autum', 'September', 'October', 'Novenmber', 'December'].indexOf(month) + 1;;
+            let index = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'Autum', 'September', 'October', 'November', 'December'].indexOf(month) + 1;;
             return index > 9? index: ('0' + index)
         })
     },
