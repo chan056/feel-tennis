@@ -10,7 +10,6 @@ let argv = process.argv.slice(2),
     p1Name = argv[1],
     p2 = argv[2],
     p2Name = argv[3];
-    console.log(argv)
 
 // http://www.tennis.com/players/471/rafael-nadal/vs/646/adrian-mannarino/
 let sourceURL = `http://www.tennis.com/players/${p1}/${p1Name}/vs/${p2}/${p2Name}/`;

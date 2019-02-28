@@ -3,35 +3,43 @@
 %}}
 
 <%- include('views/header', {title: {1: 'ATP', 2: 'WTA'}[dynamicDataSet.ranking.params.gender]+'排名' }) %>
-
-<table>
-	<tr>
-		<td>排名</td>
-		<td>旧排名</td>
-		<td>名字</td>
-		<td>国家</td>
-		<td>积分</td>
-	</tr>
-	<% dynamicDataSet.ranking.forEach(function(athlete){%>
-	<tr>
-		<td>
-			<%= athlete.ranking %>
-		</td>
-		<td>
-			<%= athlete.prev_ranking %>
-		</td>
-		<td>
-			<a href="/tennis/player/<%= athlete.id_tennis_com%>/stat.ssr"><%= athlete.name_en %></a>
-		</td>
-		<td>
-			<i class="flag flags-<%= athlete.state_abbreviation %>"></i>
-			<%= athlete.country %>
-		</td>
-		<td>
-			<%= athlete.point %>
-		</td>
-	</tr>
-	<% }) %>
-</table>
+<div id="body" class="ranking">
+	<div class="header">
+		<a href="/tennis/rankings/2.ssr" class="fr<%= (dynamicDataSet.ranking.params.gender==2) ?' active': '' %>" >WTA</a>
+		<a href="/tennis/rankings/1.ssr" class="fr<%= (dynamicDataSet.ranking.params.gender==1) ?' active': '' %>" >ATP</a>
+		<br class="clr">
+	</div>
+	<table class="table">
+		<tr>
+			<td>排名</td>
+			<td>旧排名</td>
+			<td>名字</td>
+			<td>国家</td>
+			<td>积分</td>
+		</tr>
+		<% dynamicDataSet.ranking.forEach(function(athlete){%>
+		<tr>
+			<td>
+				<%= athlete.ranking %>
+			</td>
+			<td>
+				<%= athlete.prev_ranking %>
+			</td>
+			<td>
+				<a href="/tennis/player/<%= athlete.id_tennis_com%>/stat.ssr" target="_blank"><%= athlete.name_en %></a>
+			</td>
+			<td>
+				<a href="https://ditu.baidu.com?q=<%= athlete.country %>" target="_blank">
+					<i class="flag flags-<%= athlete.state_abbreviation %>"></i>
+					<%= athlete.country %>
+				</a>
+			</td>
+			<td>
+				<%= athlete.point %>
+			</td>
+		</tr>
+		<% }) %>
+	</table>
+</div>
 
 <%- include views/footer %>

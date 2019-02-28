@@ -10,7 +10,6 @@ let argv = process.argv.slice(2),
     playerName = argv[1];
 
 let sourceURL = `http://www.tennis.com/player/${playerId}/${playerName}/bio/`;
-console.log(sourceURL)
 tools.fetchHTML(sourceURL, storeData)
 
 function storeData(fragment) {
@@ -43,14 +42,11 @@ function storeData(fragment) {
 
         let titleJSON = escape(JSON.stringify(titlesObj));
 
-        // console.log(titlesObj)
         let sql = `update tennis.athlete set 
             biography='${bioDescription}', 
             titles='${titleJSON}',
             bio_expire=FROM_UNIXTIME(${now + day * 7})
             where id_tennis_com=${playerId}`;
-
-        console.log(sql);
 
         tools.runSql(sql, function(){
             process.exit();

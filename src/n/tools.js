@@ -215,7 +215,7 @@ function transformPath(pagePath){
 	return pagePath.join('.')
 }
 
-function spawn(processArgs, fn){
+function spawn(processArgs, fn, res){
 	let node = require('child_process').spawn('node', processArgs);
 
 	node.stdout.on('data', (data) => {
@@ -223,12 +223,14 @@ function spawn(processArgs, fn){
 	});
 
 	node.stderr.on('data', (data) => {
-		console.log(`node stderr: ${data}`);
+		// console.log(`node stderr: ${data}`);
 	});
 
 	node.on('close', (code) => {
 		if (code !== 0) {
-			console.log(`node 进程的退出码：${code}`);
+			let msg = `node 进程的退出码：${code}`;
+			console.log(arguments);
+			res.end(msg)
 		}else{
 			fn && fn();
 		}

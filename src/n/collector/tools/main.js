@@ -42,10 +42,13 @@ module.exports = {
 
     fetchHTML: function (url, fn){
         require('request')(url, function(error,response,body) {
+            if(error)
+                throw error;
+
             if(!error && response.statusCode == 200){
                 fn && fn(body)
             }else{
-                throw error;
+                throw `statusCode: ${response.statusCode}`;
             }
         })
     },

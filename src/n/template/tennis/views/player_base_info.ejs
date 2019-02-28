@@ -1,0 +1,85 @@
+<link rel="stylesheet" href="/lib/zepto.editable.dropdown/editable-select.css">
+<script src="/lib/zepto.js"></script>
+<script src="/lib/zepto.editable.dropdown/editable-select.js"></script>
+
+<div id="player-base-info" style="background-image: url(<%= playerinfo.feature_image %>)">
+	<span class="overlay-gradient overlay-left"></span>
+	<div id="p1" class="fl">
+		<div id="avatar" class="fl" style="background-image: url(<%= playerinfo.player_image %>)"></div>
+		<div id="p11" class="fl">
+			<div id="ranking">
+				<label for="">Ranking</label><br>
+				#<%= playerinfo.ranking %>
+			</div>
+			<div id="name">
+				<div id="first-name"><%= playerinfo.firstname %></div>
+				<div id="second-name"><%= playerinfo.lastname %></div>
+			</div>
+		</div>
+	</div>
+	<div id="h2h">
+		<ul class="fr">
+			<%
+				var athletes = renderTools.resortAthleteByGender(ranking, playerinfo.gender);
+			%>
+			<% athletes.forEach((athlete)=>{ %>
+				<% if(playerinfo.id_tennis_com != athlete.id_tennis_com){ %>
+					<li>
+						<a href="/tennis/player/<%= playerinfo.id_tennis_com %>/vs/<%= athlete.id_tennis_com %>.ssr"><%= athlete.name_en %></a>
+					</li>
+				<% } %>
+			<% }) %>
+		</ul>
+	</div>
+	
+	<br class="clr">
+
+	<div id="p3" class="ovh">
+		<div class="base-data">
+			<p class="data-label">年龄</p>
+			<p class="data-value"><%= playerinfo.age %>&nbsp;</p>
+		</div>
+		<div class="base-data">
+			<p class="data-label">国籍</p>
+			<p class="data-value">
+				<a href="https://ditu.baidu.com?q=<%= playerinfo.country %>" target="blank"><%= playerinfo.country %></a>
+				&nbsp;
+			</p>
+		</div>
+		<div class="base-data">
+			<p class="data-label">居住地</p>
+			<p class="data-value"><%= playerinfo.residence %>&nbsp;</p>
+		</div>
+		<div class="base-data">
+			<p class="data-label">转职业</p>
+			<p class="data-value"><%= playerinfo.turn_pro %>&nbsp;</p>
+		</div>
+		<div class="base-data">
+			<p class="data-label">奖金</p>
+			<p class="data-value"><%= playerinfo.earnings %>&nbsp;</p>
+		</div>
+	</div>
+</div>
+
+<ul id="player-detail-nav" class="hori-list">
+	<li>
+		<a href="/tennis/player/<%= playerinfo.id_tennis_com %>/stat.ssr">数据统计</a>
+	</li>
+	<!-- <li>
+		<a href="/tennis/player/<%= playerinfo.id_tennis_com %>/stat.ssr">历史比赛</a>
+	</li> -->
+	<li>
+		<a href="/tennis/player/<%= playerinfo.id_tennis_com %>/bio.ssr">档案</a>
+	</li>
+	<!-- <li>
+		<a href="/tennis/player/<%= playerinfo.id_tennis_com %>/phtoto.ssr">照片</a>
+	</li> -->
+	<li>
+		<a href="/tennis/player/<%= playerinfo.id_tennis_com %>/gear.ssr">装备</a>
+	</li>
+</ul>
+
+<script>
+	$('#h2h ul').editableSelect();
+	$('#player-detail-nav li').eq(<%= index %>).addClass('active');
+</script>

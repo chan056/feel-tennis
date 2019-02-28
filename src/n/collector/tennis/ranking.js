@@ -80,7 +80,6 @@ tools.runSql('drop table if EXISTS tennis.athlete_tmp; create table tennis.athle
 
                                 ids.forEach(function(value, index){
                                     let id = value['id_tennis_com'];
-                                    // console.log(id)
 
                                     // 复制整张表 删除某些字段
                                     updateSQL += `update tennis.athlete a, tennis.athlete_tmp b set 

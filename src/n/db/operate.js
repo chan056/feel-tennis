@@ -955,7 +955,7 @@ let operations = {
 			if(!rows[0] || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/ranking.js');
 
-				tools.spawn([file], query)
+				tools.spawn([file], query, res)
 			}else{
 				query();
 			}
@@ -988,7 +988,7 @@ let operations = {
 				let file = require('path').resolve(__dirname, '../collector/tennis/player_stat.js');
 				let name = rows[0]['name_en'].toLowerCase().replace(/\W/g, '-');
 
-				tools.spawn([file, params.playerId, name], query)
+				tools.spawn([file, params.playerId, name], query, res)
 			}else{
 				query();
 			}
@@ -1020,7 +1020,7 @@ let operations = {
 				let file = require('path').resolve(__dirname, '../collector/tennis/player_bio.js');
 				let name = rows[0]['name_en'].toLowerCase().replace(/\W/g, '-');
 
-				tools.spawn([file, params.playerId, name], query)
+				tools.spawn([file, params.playerId, name], query, res)
 			}else{
 				query();
 			}
@@ -1063,7 +1063,7 @@ let operations = {
 
 					let file = require('path').resolve(__dirname, '../collector/tennis/player_h2h.js');
 
-					tools.spawn([file, params.p1, name1, params.p2, name2], query)
+					tools.spawn([file, params.p1, name1, params.p2, name2], query, res)
 				})
 			}else{
 				query();
