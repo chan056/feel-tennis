@@ -13,7 +13,6 @@ module.exports = {
     },
 
     downloadImg: function (src, dest, fn){
-        console.log(src, dest)
         var request = require("request");
 
         var writeStream = fs.createWriteStream(dest);

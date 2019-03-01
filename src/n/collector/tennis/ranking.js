@@ -100,9 +100,10 @@ tools.runSql('drop table if EXISTS tennis.athlete_tmp; create table tennis.athle
                                         a.ytd_win_single= b.ytd_win_single,
                                         a.ytd_win_double= b.ytd_win_double,
                                         a.website= b.website,
-                                        a.stat_expire = b.stat_expire,
+                                        a.history_data = b/history_data,
                                         a.biography = b.biography,
                                         a.titles = b.titles,
+                                        a.stat_expire = b.stat_expire,
                                         a.bio_expire = b.bio_expire,
                                         where  a.id_tennis_com = b.id_tennis_com and a.id_tennis_com = ${id};`;
                                     

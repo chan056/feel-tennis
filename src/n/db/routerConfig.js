@@ -478,6 +478,10 @@ const routerConfig = {
         '/usrPostLately': function(params, res, req){
             r.query('queryUsrPostLately', params, res, req);
         },
+
+        '/tennisRanking': function(params, res, req){
+            r.query('queryTennisRanking', params, res, req);
+        },
     },
 
     post: {

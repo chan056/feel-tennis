@@ -223,7 +223,7 @@ function spawn(processArgs, fn, res){
 	});
 
 	node.stderr.on('data', (data) => {
-		// console.log(`node stderr: ${data}`);
+		console.log(`node stderr: ${data}`);
 	});
 
 	node.on('close', (code) => {

@@ -1610,7 +1610,7 @@ module.exports = function(){
 			},
 
 			queryAthletes(){
-				tools.xhr('/athletes/'+this.voteNextForm.sport, function(res){
+				tools.xhr('/tennisRanking', function(res){
 					this.athletes = res;
 				}.bind(this));
 			},
@@ -1661,8 +1661,7 @@ module.exports = function(){
 				// $('#chart-container').html('<canvas id="myChart"></canvas>');
 
 				// 重新new chart，替换canvas
-				var $chart = $('#myChart');
-				var ctx = $chart[0].getContext('2d');
+				var ctx = $('#myChart')[0].getContext('2d');
 
 				var skillData = this.skillData = processData(data['skill']);
 				var playerData = this.playerData = processData(data['athlete']);

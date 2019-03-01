@@ -791,16 +791,15 @@ module.exports = function(){
     
                         <el-form-item label="运动员">
                             <el-select
-                            filterable
-                            clearable
-                            v-model="voteNextForm.athlete" 
-                            placeholder="请选择运动员"
-                            >
+                                filterable
+                                clearable
+                                v-model="voteNextForm.athlete" 
+                                placeholder="请选择运动员">
                                 <el-option
                                     v-for="item in athletes"
                                     :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id">
+                                    :label="item.name_en"
+                                    :value="item.id_tennis_com">
                                 </el-option>
                             </el-select>
                         </el-form-item>

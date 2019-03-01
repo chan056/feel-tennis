@@ -80,6 +80,18 @@ function storeData(fragment) {
                 ytd_win_single = ytd_win[0]
                 ytd_win_double = ytd_win[1],
                 website = stats.find('.player-website a').attr('href');
+
+            // JSON ranking + earning + standings
+            let historyDataStr = $('#_tennis_image_sizes').next('script').text();
+            let historyData;
+            try{
+                historyData = eval(historyDataStr);
+                console.log(historyDataStr, historyData)
+                delete historyData.STATIC_URL;
+                historyData = escape(JSON.stringify(historyData));
+            }catch(e){
+                throw e;
+            }
     
             let sql = `update tennis.athlete set 
                 player_image = '${player_image}',
@@ -99,6 +111,7 @@ function storeData(fragment) {
                 ytd_win_single = ${ytd_win_single}, 
                 ytd_win_double = ${ytd_win_double}, 
                 website = '${website}',
+                history_data = '${historyData}',
                 stat_expire = FROM_UNIXTIME(${now + day * 7})
                 where id_tennis_com = ${playerId}`;
     

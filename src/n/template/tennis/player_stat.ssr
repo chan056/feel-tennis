@@ -31,6 +31,15 @@
 				<td><%= dynamicDataSet.stat.website%></td>
 			</tr>
 		</table>
+
+		<!-- 历史排名 -->
+		<canvas id="hsitory-ranking"></canvas>
+
+		<!-- 历史奖金 -->
+		<canvas id="history-earnings"></canvas>
+
+		<!-- 历年战绩 -->
+		<canvas id="history-standings"></canvas>
 	</div>
 
 <%- include views/footer %>

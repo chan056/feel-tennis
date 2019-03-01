@@ -354,11 +354,11 @@ let operations = {
 		let sql2 = `SELECT
 		(
 			SELECT
-				NAME
+				name_en
 			FROM
-				athlete
+				tennis.athlete
 			WHERE
-				id = athlete_id
+				id_tennis_com = athlete_id
 		) AS tag,
 			count(*) AS count
 		FROM
