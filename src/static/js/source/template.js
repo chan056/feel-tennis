@@ -794,7 +794,8 @@ module.exports = function(){
                                 filterable
                                 clearable
                                 v-model="voteNextForm.athlete" 
-                                placeholder="请选择运动员">
+                                placeholder="请选择运动员"
+                            >
                                 <el-option
                                     v-for="item in athletes"
                                     :key="item.id"
@@ -802,6 +803,9 @@ module.exports = function(){
                                     :value="item.id_tennis_com">
                                 </el-option>
                             </el-select>
+                            <a v-show="voteNextForm.athlete" :href="'/tennis/player/' +voteNextForm.athlete+ '/stat.ssr'" target="_blank">
+                                球员详情
+                            </a>
                         </el-form-item>
     
                         <el-form-item>

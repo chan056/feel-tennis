@@ -229,7 +229,6 @@ function spawn(processArgs, fn, res){
 	node.on('close', (code) => {
 		if (code !== 0) {
 			let msg = `node 进程的退出码：${code}`;
-			console.log(arguments);
 			res.end(msg)
 		}else{
 			fn && fn();

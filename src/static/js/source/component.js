@@ -1462,7 +1462,7 @@ module.exports = function(){
 			var d = {
 				sports: [],
 				skills: [],
-				athletes: []
+				athletes: [],
 			};
 			d.voteNextForm = {
 				sport: '',

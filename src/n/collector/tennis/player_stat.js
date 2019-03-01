@@ -82,17 +82,17 @@ function storeData(fragment) {
                 website = stats.find('.player-website a').attr('href');
 
             // JSON ranking + earning + standings
-            let historyDataStr = $('#_tennis_image_sizes').next('script').text();
-            let historyData;
+            const historyReg = /_tennis.PLAYER_STATS = [^<]+/;
+            let str = fragment.match(historyReg)[0];
+            let _tennis = {};
             try{
-                historyData = eval(historyDataStr);
-                console.log(historyDataStr, historyData)
-                delete historyData.STATIC_URL;
-                historyData = escape(JSON.stringify(historyData));
+                eval(str);
+                delete _tennis.STATIC_URL;
             }catch(e){
                 throw e;
             }
-    
+            let historyData = escape(JSON.stringify(_tennis));
+           
             let sql = `update tennis.athlete set 
                 player_image = '${player_image}',
                 feature_image = '${feature_image}',

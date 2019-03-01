@@ -28,7 +28,9 @@
 					<%= dynamicDataSet.stat.ytd_win_single %>单打<br>
 					(<%= dynamicDataSet.stat.ytd_win_double %>双打)
 				</td>
-				<td><%= dynamicDataSet.stat.website%></td>
+				<td>
+					<a href="<%= dynamicDataSet.stat.website%>" href="_target"><%= dynamicDataSet.stat.website%></a>
+				</td>
 			</tr>
 		</table>
 
