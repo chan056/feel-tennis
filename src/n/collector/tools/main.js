@@ -67,7 +67,7 @@ module.exports = {
     },
     
     runSql: function (sql, fn){
-        console.log(sql)
+        // console.log(sql)
         return conn.query(sql, function(err, result, fields){
             if(err)
                 console.log (err);

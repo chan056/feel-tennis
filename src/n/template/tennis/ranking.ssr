@@ -2,7 +2,8 @@
 	['queryTennisRanking']
 %}}
 
-<%- include('views/header', {title: {1: 'ATP', 2: 'WTA'}[dynamicDataSet.ranking.params.gender]+'排名' }) %>
+
+<%- include('views/header', {title: dynamicDataSet.ranking.params.type.toUpperCase()+'排名' }) %>
 <div id="body" class="ranking">
 	<div class="header">
 		<a href="/tennis/rankings/2.ssr" class="fr<%= (dynamicDataSet.ranking.params.gender==2) ?' active': '' %>" >WTA</a>

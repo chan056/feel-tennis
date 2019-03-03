@@ -9,6 +9,8 @@ let argv = process.argv.slice(2),
     playerId = argv[0],
     playerName = argv[1];
 
+const expires = require('./expire_config');
+
 let sourceURL = `http://www.tennis.com/player/${playerId}/${playerName}/bio/`;
 tools.fetchHTML(sourceURL, storeData)
 
@@ -45,7 +47,7 @@ function storeData(fragment) {
         let sql = `update tennis.athlete set 
             biography='${bioDescription}', 
             titles='${titleJSON}',
-            bio_expire=FROM_UNIXTIME(${now + day * 7})
+            bio_expire=FROM_UNIXTIME(${now + day * expires.bio})
             where id_tennis_com=${playerId}`;
 
         tools.runSql(sql, function(){

@@ -8,6 +8,8 @@ let argv = process.argv.slice(2),
     playerId = argv[0],
     playerName = argv[1];
 
+const expires = require('./expire_config');
+
 let sourceURL = `http://www.tennis.com/player/${playerId}/${playerName}/stats/`;
 let playerImagerDownloaded = false,
     featureImagerDownloaded = false;
@@ -112,7 +114,7 @@ function storeData(fragment) {
                 ytd_win_double = ${ytd_win_double}, 
                 website = '${website}',
                 history_data = '${historyData}',
-                stat_expire = FROM_UNIXTIME(${now + day * 7})
+                stat_expire = FROM_UNIXTIME(${now + day * expires.stat})
                 where id_tennis_com = ${playerId}`;
     
             tools.runSql(sql, function(){

@@ -949,20 +949,40 @@ let operations = {
 	// =========== 运动员统计 开始
 	// 可用于API或SSR
 	queryTennisRanking: function (res, qualification, params) {
-		conn.query('select now() > ranking_expire as is_expire from tennis.athlete', function(err, rows){
+		let gender = [];
+		if(!params.type)
+			gender = [1,2]
+
+		else{
+			params.type = params.type.toLowerCase();
+
+			let typeIds = {'atp': 1, 'wta':2};
+			gender.push(typeIds[params.type]);
+		}
+
+		
+		conn.query(`select now() > ranking_expire as is_expire from tennis.athlete where gender in (${gender.join(',')})`, function(err, rows){
 			if(err) return throwError(err, res);
 
 			if(!rows[0] || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/ranking.js');
 
-				tools.spawn([file], query, res)
+				let i = 0;
+				gender.forEach((v)=>{
+					tools.spawn([file, gender], function(){
+						if(++i == gender.length){
+							query();
+						}
+					}, res)
+				})
+				
 			}else{
 				query();
 			}
 		})
 		
 		function query(){
-			let sql = `select * from tennis.athlete ${qualification}`;
+			let sql = `select * from tennis.athlete where gender in (${gender.join(',')})`;
 
 			conn.query(sql , function (err, result, fields) {
 				if (err) return throwError(err, res);
