@@ -2,9 +2,11 @@
 	['queryTennisPlayerStat', {method: 'queryTennisRanking'}]
 %}}
 
-<%- include('views/header', {title: `${dynamicDataSet.stat.name_en} 数据统计`}) %>
+<% stat = dynamicDataSet.stat %>
+
+<%- include('views/header', {title: `${stat.name_en} 数据统计`}) %>
 	<div id="body" class="stat has-common-header">
-		<%- include('views/player_base_info', {playerinfo: dynamicDataSet.stat, ranking: dynamicDataSet.ranking, index: 0}) %>
+		<!-- 
 		<table id="stat-more">
 			<tr>
 				<th>生日</th>
@@ -18,24 +20,50 @@
 			</tr>
 
 			<tr>
-				<td><%= dynamicDataSet.stat.birthdate%></td>
-				<td><%= dynamicDataSet.stat.height%>cm</td>
-				<td><%= dynamicDataSet.stat.weight%>kg</td>
-				<td><%= ['右手','左手'][dynamicDataSet.stat.plays] %></td>
-				<td><%= dynamicDataSet.stat.experience%></td>
-				<td><%= dynamicDataSet.stat.nickname%></td>
+				<td><%= stat.birthdate%></td>
+				<td><%= stat.height%>cm</td>
+				<td><%= stat.weight%>kg</td>
+				<td><%= ['右手','左手'][stat.plays] %></td>
+				<td><%= stat.experience%></td>
+				<td><%= stat.nickname%></td>
 				<td>
-					<%= dynamicDataSet.stat.ytd_win_single %>单打<br>
-					(<%= dynamicDataSet.stat.ytd_win_double %>双打)
+					<%= stat.ytd_win_single %>单打<br>
+					(<%= stat.ytd_win_double %>双打)
 				</td>
 				<td>
-					<a href="<%= dynamicDataSet.stat.website%>" href="_target"><%= dynamicDataSet.stat.website%></a>
+					<a href="<%= stat.website%>" href="_target"><%= stat.website%></a>
 				</td>
 			</tr>
-		</table>
+		</table> -->
+
+
 
 		<!-- 历史排名 -->
-		<canvas id="hsitory-ranking"></canvas>
+		<canvas id="history-ranking"><%= stat.history_data %></canvas>
+		<script src="/lib/Chart.min.js"></script>
+		<script>
+			var canvas = $("#history-ranking");
+			historyData = unescape(canvas.text());
+			historyData = JSON.parse(historyData);
+			console.log(historyData)
+			new Chart(
+				canvas[0],
+				{
+					"type":"line",
+					"data":{
+						"labels": historyData.YEARS,
+						"datasets":[
+							{"label":"排名",
+							"data":historyData.RANKINGS,
+							"fill":false,
+							"borderColor":"rgb(75, 192, 192)",
+							"lineTension":0.1}
+						]
+					},
+					"options":{}
+				}
+			);
+		</script>
 
 		<!-- 历史奖金 -->
 		<canvas id="history-earnings"></canvas>

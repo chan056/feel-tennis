@@ -4,6 +4,7 @@
   "description": "",
   "main": "mine.js",
   "dependencies": {
+    "chart.js": "^2.7.3",
     "cheerio": "^1.0.0-rc.2",
     "client-ip": "^1.0.0",
     "concat-files": "^0.1.1",

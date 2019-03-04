@@ -67,7 +67,7 @@ module.exports = {
     },
     
     runSql: function (sql, fn){
-        // console.log(sql)
+        console.log(sql.replace(/\s{2,}/g, '').slice(0, 100))
         return conn.query(sql, function(err, result, fields){
             if(err)
                 console.log (err);
