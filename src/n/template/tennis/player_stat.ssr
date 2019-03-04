@@ -6,7 +6,7 @@
 
 <%- include('views/header', {title: `${stat.name_en} 数据统计`}) %>
 	<div id="body" class="stat has-common-header">
-		<!-- 
+		<%- include('views/player_base_info', {playerinfo: stat, ranking: dynamicDataSet.ranking, index: 0}) %>
 		<table id="stat-more">
 			<tr>
 				<th>生日</th>
@@ -16,7 +16,7 @@
 				<th>经验</th>
 				<th>昵称</th>
 				<th>今年胜场数</th>
-				<th>个人网站</th>
+				<th width="200px">个人网站</th>
 			</tr>
 
 			<tr>
@@ -34,42 +34,69 @@
 					<a href="<%= stat.website%>" href="_target"><%= stat.website%></a>
 				</td>
 			</tr>
-		</table> -->
-
-
+		</table>
 
 		<!-- 历史排名 -->
-		<canvas id="history-ranking"><%= stat.history_data %></canvas>
-		<script src="/lib/Chart.min.js"></script>
-		<script>
-			var canvas = $("#history-ranking");
-			historyData = unescape(canvas.text());
-			historyData = JSON.parse(historyData);
-			console.log(historyData)
-			new Chart(
-				canvas[0],
-				{
-					"type":"line",
-					"data":{
-						"labels": historyData.YEARS,
-						"datasets":[
-							{"label":"排名",
-							"data":historyData.RANKINGS,
-							"fill":false,
-							"borderColor":"rgb(75, 192, 192)",
-							"lineTension":0.1}
-						]
-					},
-					"options":{}
-				}
-			);
-		</script>
+		<p class="hidden" id="chart-data-source"><%= stat.history_data %></p>
+		<canvas id="history-ranking"></canvas>
 
 		<!-- 历史奖金 -->
 		<canvas id="history-earnings"></canvas>
-
-		<!-- 历年战绩 -->
-		<canvas id="history-standings"></canvas>
 	</div>
+
+	<script src="/lib/Chart.min.js"></script>
+	<script>
+		var canvas = $("#chart-data-source");
+		historyData = unescape(canvas.text());
+		historyData = JSON.parse(historyData);
+
+		new Chart(
+			document.querySelector('#history-ranking'),
+			{
+				"type":"line",
+				"data":{
+					"labels": historyData.YEARS,
+					"datasets":[
+						{"label":"",
+						"data":historyData.RANKINGS,
+						"fill":false,
+						"borderColor":"rgb(75, 192, 192)",
+						"lineTension":0.1}
+					]
+				},
+				"options":{
+					title: {
+						display: true,
+						text: '历年排名',
+						fontSize: 20
+					}
+				}
+			}
+		);
+
+		new Chart(
+			document.querySelector('#history-earnings'),
+			{
+				"type":"line",
+				"data":{
+					"labels": historyData.YEARS,
+					"datasets":[
+						{"label":"",
+						"data":historyData.EARNINGS,
+						"fill":false,
+						"borderColor":"rgb(75, 192, 192)",
+						"lineTension":0.1}
+					]
+				},
+				"options":{
+					title: {
+						display: true,
+						text: '历年奖金(单位:百万美金）',
+						fontSize: 20
+					}
+				}
+			}
+		);
+	</script>
 
 <%- include views/footer %>

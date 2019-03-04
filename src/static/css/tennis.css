@@ -113,6 +113,9 @@
 #body.stat #stat-more th {
   padding-bottom: 1rem;
 }
+#body.stat canvas {
+  margin-top: 3rem;
+}
 #body.bio .part {
   border-top: 4px solid #21B43D;
   padding: 1rem 1rem 1rem 0;
