@@ -23,24 +23,30 @@ function storeData(fragment) {
         const bioContentWrapper = $('.bio-content');
         const bioDescription = escape(bioContentWrapper.find('p').eq(0).text());
 
-        let titleWrapper = $('.player-titles');
         let titlesObj = {};
         
-        titleWrapper.find('.titles-per-year').each((index, titles)=>{
-            let titleGroup = [];
-            $(titles).children('li').each((index, title)=>{
-                let titleContent = $(title).text();
-                let year = titleContent.match(/(\d+):/)[1];
-                let tournament = titleContent.replace(/^\d+:\W+/, '').replace(/\n/g, '')/* .replace(/'/g, '\'') */;//转义 '
-                titleGroup.push({year: year, tournament: tournament})
-            })
+        try{
+            let titleWrapper = $('.player-titles');
 
-            if(index == 0){
-                titlesObj.single = titleGroup
-            }else if(index == 1){
-                titlesObj.double = titleGroup
-            }
-        })
+            titleWrapper.find('.titles-per-year').each((index, titles)=>{
+                let titleGroup = [];
+                $(titles).children('li').each((index, title)=>{
+                    let titleContent = $(title).text();
+                    let year = titleContent.match(/(\d+):/)[1];
+                    let tournament = titleContent.replace(/^\d+:\W+/, '').replace(/\n/g, '')/* .replace(/'/g, '\'') */;//转义 '
+                    titleGroup.push({year: year, tournament: tournament})
+                })
+
+                if(index == 0){
+                    titlesObj.single = titleGroup
+                }else if(index == 1){
+                    titlesObj.double = titleGroup
+                }
+            })
+        }catch(e){
+            titlesObj = {}
+            console.log('TOUNAMENT HISTORY 格式有误')
+        }
 
         let titleJSON = escape(JSON.stringify(titlesObj));
 

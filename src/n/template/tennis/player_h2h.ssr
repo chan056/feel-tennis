@@ -10,7 +10,6 @@
 <%- include('views/header', {title: `${dynamicDataSet.p1.name_en} vs ${dynamicDataSet.p2.name_en}`}) %>
 
 <link rel="stylesheet" href="/lib/zepto.editable.dropdown/editable-select.css">
-<script src="/lib/zepto.js"></script>
 <script src="/lib/zepto.editable.dropdown/editable-select.js"></script>
 
 <div id="body" class="h2h">
