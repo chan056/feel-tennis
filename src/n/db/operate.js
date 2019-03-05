@@ -969,7 +969,7 @@ let operations = {
 
 				let i = 0;
 				gender.forEach((v)=>{
-					tools.spawn([file, gender], function(){
+					tools.spawn([file, v], function(){
 						if(++i == gender.length){
 							query();
 						}
