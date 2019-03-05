@@ -1062,6 +1062,38 @@ let operations = {
 		}
 	},
 
+	queryTennisPlayerGear: function (res, qualification, params) {
+		let sql = `select *, now()>gear_expire as is_expire from tennis.athlete where id_tennis_com=${params.playerId}`;
+
+		conn.query(sql, function(err, rows){
+			if(err) return throwError(err, res);
+
+			if(!rows[0] || !rows[0].bio_expire || rows[0].is_expire){
+				let file = require('path').resolve(__dirname, '../collector/tennis/player_gear.js');
+				let name = rows[0]['name_en'].toLowerCase().replace(/\W/g, '-');
+
+				tools.spawn([file, params.playerId, name], query, res)
+			}else{
+				query();
+			}
+		})
+
+		function query(){
+			conn.query(sql , function (err, result, fields) {
+				if (err) return throwError(err, res);
+				
+				result = result[0];
+
+				if(!res.dynamicDataSet){
+					result = JSON.stringify(result);
+					res.end(result)
+				}else{
+					res.dynamicDataSet[params.ssrOutput || 'gear'] = result;
+				}
+			});
+		}
+	},
+
 	headToHead: function (res, qualification, params) {
 		let sql = `select h2h.*, now()>h2h.expire as is_expire from tennis.h2h as h2h where p1=${params.p1} and p2=${params.p2}`
 
