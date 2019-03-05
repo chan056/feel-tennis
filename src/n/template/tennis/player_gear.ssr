@@ -5,7 +5,23 @@
 <%- include('views/header', {title: `${dynamicDataSet.gear.name_en} 装备`}) %>
 	<div id="body" class="gear has-common-header">
 		<%- include('views/player_base_info', {playerinfo: dynamicDataSet.gear, ranking: dynamicDataSet.ranking, index: 2}) %>
-		<%= dynamicDataSet.gear.gear %>
+		<% try{ gears = JSON.parse(unescape(dynamicDataSet.gear.gear)) }catch(e){} %>
+
+		<div class="gear-wrapper border">
+			<% gears.forEach((gear)=>{ %>
+				<div class="gear">
+						<div class="product-pic" style="background-image: <%= gear.picture%>"></div>
+						<div class="product-info">
+							<h5 class="product-name">
+								<%= gear.name %>
+							</h5>
+							<p class="product-summary"><%= gear.summary %></p>
+		
+							<a target="_blank" href="<%= gear.link%>" class="link btn btn-primary">详情<a>
+						</div>
+					</div>
+			<% }) %>
+		</div>
 	</div>
 
 <%- include views/footer %>

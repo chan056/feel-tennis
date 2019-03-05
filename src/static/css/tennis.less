@@ -1,5 +1,6 @@
 #body{width: 1140px; margin: auto; }
 .flag{display: inline-block; background-image: url("/img/flags.png")}
+.border{border-top: 4px solid #21B43D; padding: 1rem 0;}
 
 #body.ranking{
     .header{
@@ -68,6 +69,26 @@
         h2{margin-bottom: 1rem;}
     }
 }
+
+// gear
+#body.gear{
+    .gear-wrapper{overflow: hidden;}
+    .gear{
+        float: left; width: 33.3%; box-sizing: border-box; padding: 0 1rem;
+
+        .product-pic{
+            background-position: center center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            height: 257px;
+        }
+        
+        .product-info{background-color: #f9f9f9; padding: 1rem; position: relative; padding-bottom: 5rem;}
+        .product-name{font-size: 1.2em; margin-bottom: 1rem;}
+        .product-short-summary{}
+        .link{position: absolute; margin: auto; bottom: 1rem; left: 50%; transform: translateX(-50%);}
+    }
+} 
 
 // H2H
 #body.h2h{

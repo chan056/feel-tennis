@@ -6,6 +6,10 @@
   display: inline-block;
   background-image: url("/img/flags.png");
 }
+.border {
+  border-top: 4px solid #21B43D;
+  padding: 1rem 0;
+}
 #body.ranking .header {
   margin-top: 2rem;
 }
@@ -122,6 +126,38 @@
 }
 #body.bio .part h2 {
   margin-bottom: 1rem;
+}
+#body.gear .gear-wrapper {
+  overflow: hidden;
+}
+#body.gear .gear {
+  float: left;
+  width: 33.3%;
+  box-sizing: border-box;
+  padding: 0 1rem;
+}
+#body.gear .gear .product-pic {
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 257px;
+}
+#body.gear .gear .product-info {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  position: relative;
+  padding-bottom: 5rem;
+}
+#body.gear .gear .product-name {
+  font-size: 1.2em;
+  margin-bottom: 1rem;
+}
+#body.gear .gear .link {
+  position: absolute;
+  margin: auto;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
 }
 #body.h2h #players {
   position: relative;

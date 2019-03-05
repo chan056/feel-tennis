@@ -24,7 +24,7 @@ function storeData(fragment) {
         let gears = []
 
         contentWrapper.find('.single-product').each((index, product)=>{
-            let picture = $(product).find('.product-image').css('backgroundImage');
+            let picture = $(product).find('.product-image').css('background-image');
             let name = $(product).find('.product-name').text().trim();
             let summary = $(product).find('.product-short-summary').text().trim();
             let link = $(product).find('.btn-container a').attr('href');

@@ -192,3 +192,21 @@ img {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FF000000', GradientType=0);
   transition: background-color 0.3s ease-in;
 }
+.btn.btn-primary {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Hind', sans-serif;
+  font-size: 14px;
+  text-transform: uppercase;
+  line-height: 43px;
+  font-weight: bold;
+  transition: all 0.3s ease-out;
+  display: inline-block;
+  padding: 0 10px;
+  background-color: #21B43D;
+  color: white;
+  text-align: center;
+  min-width: 100px;
+  height: 40px;
+  text-decoration: none;
+}
