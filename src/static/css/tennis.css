@@ -122,9 +122,15 @@
 }
 #body.bio .part {
   border-top: 4px solid #21B43D;
-  padding: 1rem 1rem 1rem 0;
+  padding: 1rem;
 }
 #body.bio .part h2 {
+  margin-bottom: 1rem;
+}
+#body.bio .part h3 {
+  margin-bottom: 1rem;
+}
+#body.bio .part p {
   margin-bottom: 1rem;
 }
 #body.gear .gear-wrapper {

@@ -1139,6 +1139,15 @@ let operations = {
 			});
 		}
 	},
+
+	translate: function (res, qualification, params) {
+		let translateSevice = require('../service/baidu_translator');
+
+		translateSevice(params.source, params.to, function(translation){
+			res.end(translation);
+		});
+	},
+
 	// =========== 运动员统计 结束
 	
 	// ===============POST================

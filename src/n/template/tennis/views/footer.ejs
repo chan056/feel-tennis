@@ -8,6 +8,32 @@
 				}),
 				contentType: 'application/json'
 			})
+
+			var separator = '315699319005';
+			var sourceAry = [];
+
+			$('.need-translate').each(function(index, ele){
+				var source = $(ele).text().trim();
+				sourceAry.push(source)
+			})
+
+			$.ajax({
+				type: 'get',
+				url: '/api/translate',
+				data: {
+					to: 'zh',
+					source: sourceAry.join(separator)
+				},
+				contentType: 'text/plain',
+				success: function(translation){
+					var translation = translation.split(separator);
+					// console.log(translation)
+
+					$('.need-translate').each(function(index, ele){
+						$(ele).text(translation[index]);
+					})
+				}
+			})
 		</script>
 
 		<script>

@@ -15,32 +15,75 @@
 
 const http = require('http');
 const crypto = require('../crypto.js');
+const conn = require('../db/connect.js');
 
 const appid = '20190131000260936',
-    key = 'izgNbY0Pklgocd8naHK0',
-    from = 'en',
-    to = 'zh',
-    salt = '1435660288';
+	key = 'izgNbY0Pklgocd8naHK0',
+	from = 'en',
+	salt = '1435660288';
 
-function tranlate(sourceStr){
-    let sign = crypto.md5(appid + sourceStr + salt + key);
-    console.log(sign)
-    let url = `http://api.fanyi.baidu.com/api/trans/vip/translate?q=${encodeURI(sourceStr)}&from=${from}&to=${to}&appid=${appid}&salt=${salt}&sign=${sign}`;
+// 从英文转换成各种语言
+function translate(sourceStr, to = 'zh', fn) {
+	// 检查是否存在数据库中
+	conn.query(`select * from tennis.translation where en='${escape(sourceStr)}'`, function (err, result, fields) {
+		if (err)
+			throw err;
 
-    http.get(url, function(res){
-        let rawData = '';
-        res.on('data', (chunk) => { rawData += chunk; });
-        res.on('end', () => {
-          try {
-            const parsedData = JSON.parse(rawData);
-            console.log(parsedData.trans_result[0].dst);
-          } catch (e) {
-            console.error(e.message);
-          }
-        });
-    })
+		let row = result[0];
+		if (row) {
+			fn && fn(unescape(row[to]))
+		} else {
+			requestTranslation(saveTranslation);
+		}
+	})
+
+	function requestTranslation() {
+		let sign = crypto.md5(appid + sourceStr + salt + key);
+		// console.log(sign)
+		let url = `http://api.fanyi.baidu.com/api/trans/vip/translate?q=${encodeURI(sourceStr)}&from=${from}&to=${to}&appid=${appid}&salt=${salt}&sign=${sign}`;
+
+		http.get(url, function (res) {
+			let rawData = '';
+			res.on('data', (chunk) => { rawData += chunk; });
+			res.on('end', () => {
+				try {
+					const parsedData = JSON.parse(rawData);
+					const translation = parsedData.trans_result[0].dst;
+
+					fn && fn(translation);
+
+					saveTranslation(sourceStr, translation)
+				} catch (e) {
+					console.error(e.message);
+				}
+			});
+		})
+	}
+
+	function saveTranslation(en, dst){
+		conn.query(`insert into tennis.translation values (null, '${escape(en)}', '${escape(dst)}')`, function (err, result, fields){
+			if(err)
+				throw err
+		})
+	}
 }
 
-module.exports = tranlate;
+module.exports = translate;
 
-tranlate('Taylor Fritz')
+// tranlate('One of the greatest players ever to pick up a racquet, Novak Djokovic won his first Grand Slam title at the 2008 Australian Open, defeating Jo-Wilfried Tsonga in four sets in the final. The Serb won his first Wimbledon and first U.S. Open in 2011, and in 2016 he completed the career Grand Slam by ousting Andy Murray in the Roland Garros final. With that title, Djokovic held all four Grand Slams at once, and he had a 30-match Grand Slam winning streak until Sam Querrey beat him in the third round of Wimbledon in 2016. Djokovic, who reached No. 1 in the world for the first time on July 4, 2011, is known for his remarkable all-court play, aggressive baseline skills, tremendous stamina and unparalleled consistency. He is a terrific defensive player and one of the fittest men on tour, and he’s developed a very dangerous serve over the years. ___Hi.')
+
+/*
+  1. 返回原文
+  2. 根据class收集翻译的文字，用特殊符号间隔
+  3. 得到译文后 根据index 替换
+
+  减少请求数据
+    存储翻译结果 匹配后直接返回
+
+  优势：
+    响应较快
+    根据用户需要切换不同的语言
+
+  劣势
+    用户等待译文得1s左右
+*/

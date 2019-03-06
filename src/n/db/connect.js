@@ -4,6 +4,8 @@ let dbConfig = (constant.linkRemote && constant.dbConfigProductive)? constant.db
 
 let connection;
 
+handleDisconnect();
+
 function handleDisconnect(config) {
 	connection = mysql.createConnection(dbConfig); // Recreate the connection, since
 	// the old one cannot be reused.
@@ -24,7 +26,5 @@ function handleDisconnect(config) {
 		}
 	});
 }
-
-handleDisconnect();
 
 module.exports = connection;

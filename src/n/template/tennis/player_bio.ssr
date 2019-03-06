@@ -7,7 +7,10 @@
 		<%- include('views/player_base_info', {playerinfo: dynamicDataSet.bio, ranking: dynamicDataSet.ranking, index: 1}) %>
 		<div class="biography part">
 			<h2>档案</h2>
-			<%= unescape(dynamicDataSet.bio.biography) %>
+
+			<div class="need-translate">
+				<%= unescape(dynamicDataSet.bio.biography) %>
+			</div>
 		</div>
 
 		<div class="titles part">
@@ -21,14 +24,11 @@
 				eventTitles= titles[eventName];%>
 
 				<h3><%= {single: '单打', double: '双打'}[eventName] %>头衔</h3>
-				<br/>
 				<% eventTitles.forEach(function(title){
 					var year = title.year,
 						tournament = title.tournament; %>
 
-					<%= year + ': ' + tournament %>
-					<br/><br/>
-					
+					<p class="need-translate"><%= year + ': ' + tournament %></p>
 				<% })
 			} %>
 		</div>
