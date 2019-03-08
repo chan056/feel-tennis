@@ -13,11 +13,13 @@ module.exports = {
     },
 
     downloadImg: function (src, dest, fn){
-        var request = require("request");
+        // 保存图片之前 检查图片是否存在 以及 缓存时间
+        
+        const request = require("request");
 
-        var writeStream = fs.createWriteStream(dest);
+        let writeStream = fs.createWriteStream(dest);
 
-        var readStream = request(src, function(){
+        let readStream = request(src, function(){
             arguments[0] && console.log(arguments[0]);
         });
 
