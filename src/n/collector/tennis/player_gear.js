@@ -32,21 +32,20 @@ function storeData(fragment) {
             gears.push({picture, name, summary, link});
         })
 
-        if(gears.length){
-            gears = escape(JSON.stringify(gears));
-
-            let sql = `update tennis.athlete set 
-                gear='${gears}',
-                gear_expire = FROM_UNIXTIME(${now + day * expires.gear})
-                where id_tennis_com=${playerId}`;
-    
-            tools.runSql(sql, function(){
-                process.exit();
-            });
-        }else{
+        if(!gears.length){
             console.log('没有查询到装备信息');
-            process.exit();
         }
+
+        gears = escape(JSON.stringify(gears));
+
+        let sql = `update tennis.athlete set 
+            gear='${gears}',
+            gear_expire = FROM_UNIXTIME(${now + day * expires.gear})
+            where id_tennis_com=${playerId}`;
+
+        tools.runSql(sql, function(){
+            process.exit();
+        });
     }
 }
 

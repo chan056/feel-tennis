@@ -28,9 +28,9 @@ function translate(sourceStr, to = 'zh', fn) {
 	conn.query(`select * from tennis.translation where en='${escape(sourceStr)}'`, function (err, result, fields) {
 		if (err)
 			throw err;
-
-		let row = result[0];
-		if (row) {
+		
+		if (result && result[0]) {
+			let row = result[0];
 			fn && fn(unescape(row[to]))
 		} else {
 			requestTranslation(saveTranslation);
@@ -48,7 +48,11 @@ function translate(sourceStr, to = 'zh', fn) {
 			res.on('end', () => {
 				try {
 					const parsedData = JSON.parse(rawData);
-					const translation = parsedData.trans_result[0].dst;
+					let translation = '';
+					
+					if(parsedData.trans_result){
+						translation = parsedData.trans_result[0].dst;
+					}
 
 					fn && fn(translation);
 

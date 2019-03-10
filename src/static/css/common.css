@@ -62,6 +62,15 @@ img {
 .nodec {
   text-decoration: none;
 }
+.tac {
+  text-align: center;
+}
+.tal {
+  text-align: left;
+}
+.tar {
+  text-align: right;
+}
 .clearfix:after {
   display: table;
   content: "";

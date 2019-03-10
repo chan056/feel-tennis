@@ -167,6 +167,9 @@
 }
 #body.h2h #players {
   position: relative;
+  background-color: #F9F9F9;
+  margin-top: 3rem;
+  height: 38rem;
 }
 #body.h2h .detail-wrapper .country-flag {
   position: absolute;
@@ -177,6 +180,21 @@
   position: absolute;
   bottom: 0;
   z-index: 100;
+}
+#body.h2h .detail-wrapper .ranking {
+  color: #21B43D;
+  font-size: 2rem;
+}
+#body.h2h .detail-wrapper .ranking .number {
+  font-size: 3rem;
+  margin-left: -0.6rem;
+}
+#body.h2h .detail-wrapper .name {
+  margin-top: 0.6rem;
+}
+#body.h2h .detail-wrapper .name .second {
+  font-weight: 600;
+  font-size: 18px;
 }
 #body.h2h #p1-wrapper .country-link {
   left: 0;
@@ -189,6 +207,11 @@
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
+}
+#body.h2h #h2h-record {
+  color: #21B43D;
+  font-size: 2rem;
+  margin-top: 2rem;
 }
 #body.h2h #h2h-record > span {
   box-sizing: border-box;
@@ -206,17 +229,21 @@
 #body.h2h #labels {
   width: 100px;
   text-align: center;
-  top: 2rem;
+  top: 6rem;
   position: absolute;
   transform: translateX(-50%);
   left: 50%;
+  background-color: #F1F847;
+  font-size: 0.85rem;
+  line-height: 3rem;
 }
 #body.h2h .p-stat {
   width: 50%;
   box-sizing: border-box;
   position: absolute;
-  top: 2rem;
+  top: 6rem;
   z-index: 2;
+  line-height: 3rem;
 }
 #body.h2h .p-stat li {
   min-height: 1em;

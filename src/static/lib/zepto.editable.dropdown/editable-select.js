@@ -19,7 +19,7 @@
 			var text = $("<input class='input-wide editable-input' type=text/>");
 			holder.before(text);
 
-			this.holder = $(holder).addClass('holder');
+			this.holder = holder.addClass('holder');
 			this.text = text;
 			this.initInputEvents();
 			this.opts = opts;

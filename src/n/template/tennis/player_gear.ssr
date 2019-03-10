@@ -7,6 +7,7 @@
 		<%- include('views/player_base_info', {playerinfo: dynamicDataSet.gear, ranking: dynamicDataSet.ranking, index: 2}) %>
 		<% try{ gears = JSON.parse(unescape(dynamicDataSet.gear.gear)) }catch(e){} %>
 
+		<% if(gears) {%>
 		<div class="gear-wrapper border">
 			<% gears.forEach((gear)=>{ %>
 				<div class="gear">
@@ -22,6 +23,7 @@
 					</div>
 			<% }) %>
 		</div>
+		<% } %>
 	</div>
 
 <%- include views/footer %>

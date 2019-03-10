@@ -18,7 +18,7 @@
 	%>
 	<div>
 		<div class="fl">
-			<ul id="p1-selector">
+			<ul id="p1-selector" class="hidden">
 				<% athletes.forEach((athlete)=>{ %>
 					<li data-id="<%= athlete.id_tennis_com %>">
 						<%= athlete.name_en %></a>
@@ -28,7 +28,7 @@
 		</div>
 		
 		<div class="fr">
-			<ul id="p2-selector">
+			<ul id="p2-selector" class="hidden">
 				<% athletes.forEach((athlete)=>{ %>
 					<li data-id="<%= athlete.id_tennis_com %>">
 						<%= athlete.name_en %>
@@ -54,7 +54,10 @@
 			</div>
 
 			<div>
-				<span class="ranking fl">#<%= p1Data.ranking %></span>
+				<span class="ranking fl">
+					#
+					<em class="number"><%= p1Data.ranking %></em>
+				</span>
 				<div class="name fr">
 					<p class="first"><%= p1Data.firstname %></p>
 					<p class="second"><%= p1Data.lastname %></p>
@@ -76,7 +79,10 @@
 			</div>
 
 			<div>
-				<span class="ranking fr">#<%= p2Data.ranking %></span>
+				<span class="ranking fr">
+					#
+					<em class="number"><%= p2Data.ranking %></em>
+				</span>
 				<div class="name fl">
 					<p class="first"><%= p2Data.firstname %></p>
 					<p class="second"><%= p2Data.lastname %></p>
@@ -100,8 +106,8 @@
 				<li>打法</li>
 				<li>转职业</li>
 				<li>巡回赛经验</li>
-				<li>今年胜常数</li>
-				<li>总奖金</li>
+				<li>今年胜场数</li>
+				<li>奖金</li>
 			</ul>
 			<div id="stats">
 				<ul id="p1-stat" class="p-stat">
