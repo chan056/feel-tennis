@@ -17,28 +17,35 @@ module.exports = {
         
         const request = require("request");
 
-        let writeStream = fs.createWriteStream(dest);
+        fs.access(dest, function(err){
+            if(err){
+                let writeStream = fs.createWriteStream(dest);
 
-        let readStream = request(src, function(){
-            arguments[0] && console.log(arguments[0]);
-        });
-
-        readStream.pipe(writeStream);
-
-        readStream.on('end', function() {
-            console.log('文件下载成功');
-        });
-
-        readStream.on('error', function(err) {
-            console.log("错误信息:" + err)
-        });
-
-        writeStream.on("finish", function() {
-            console.log("文件写入成功");
-            writeStream.end();
-
-            fn && fn()
-        });
+                let readStream = request(src, function(){
+                    arguments[0] && console.log(arguments[0]);
+                });
+        
+                readStream.pipe(writeStream);
+        
+                readStream.on('end', function() {
+                    console.log('文件下载成功');
+                });
+        
+                readStream.on('error', function(err) {
+                    console.log("错误信息:" + err)
+                });
+        
+                writeStream.on("finish", function() {
+                    console.log("文件写入成功");
+                    writeStream.end();
+        
+                    fn && fn()
+                });
+            }else{
+                console.log(`${dest} 已存在`)
+                fn && fn()
+            }
+        })
     },
 
     fetchHTML: function (url, fn){

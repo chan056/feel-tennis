@@ -122,7 +122,7 @@ module.exports = function(req, res) {
 	function feedBot(){
 
 		ext = 'html';
-		contentType = mime[ext]
+		contentType = mime[ext];
 
 		let conn = require('./connect.js');
 		let sql  = `select file_path from spider_food where path='${pathname}'`;

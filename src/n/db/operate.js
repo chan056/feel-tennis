@@ -1864,6 +1864,7 @@ let operations = {
 
 		if(pathModule.extname(pagePath)){
 			// /page/intro_tennis.html
+			// /tennis/player/532/gear.ssr
 			res.end();
 			return updateSitemap();
 		}

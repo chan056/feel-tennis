@@ -1,39 +1,60 @@
 		<script>
-			$.ajax({
-				type: 'post',
-				url: '/api/pageRecoder',
-				data: JSON.stringify({
-					pagePath: location.href,
-					pageContent: ''
-				}),
-				contentType: 'application/json'
-			})
+			translate();
 
-			var separator = '315699319005';
-			var sourceAry = [];
+			function translate(){
+				var separator = '315699319005';
+				var sourceAry = [];
 
-			$('.need-translate').each(function(index, ele){
-				var source = $(ele).text().trim();
-				sourceAry.push(source)
-			})
+				$('.need-translate').each(function(index, ele){
+					var source = $(ele).text().trim();
+					sourceAry.push(source)
+				})
 
-			$.ajax({
-				type: 'get',
-				url: '/api/translate',
-				data: {
-					to: 'zh',
-					source: sourceAry.join(separator)
-				},
-				contentType: 'text/plain',
-				success: function(translation){
-					var translation = translation.split(separator);
-					// console.log(translation)
+				$.ajax({
+					type: 'get',
+					url: '/api/translate',
+					data: {
+						to: 'zh',
+						source: sourceAry.join(separator)
+					},
+					contentType: 'text/plain',
+					success: function(translation){
+						var translation = translation.split(separator);
+						// console.log(translation)
 
-					$('.need-translate').each(function(index, ele){
-						$(ele).text(translation[index]);
-					})
-				}
-			})
+						$('.need-translate').each(function(index, ele){
+							$(ele).text(translation[index]);
+						})
+
+						pageRecord();
+					},
+					error: function(xhr, type){
+						console.error('Ajax error!')
+						pageRecord();
+					}
+				})
+			}
+
+			function pageRecord(){
+				$.ajax({
+					type: 'get',
+					url: '/api/isMapper',
+					contentType: 'application/json',
+					success: function(isMapper){
+						if(isMapper){
+							$.ajax({
+								type: 'post',
+								url: '/api/pageRecoder',
+								data: JSON.stringify({
+									pagePath: location.href,
+									pageContent: $('html')[0].outerHTML
+								}),
+								contentType: 'application/json'
+							})
+						}
+					}
+				})
+			}
 		</script>
 
 		<script>
