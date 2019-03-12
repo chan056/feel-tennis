@@ -5,3 +5,8 @@ CREATE TABLE `translation` (
   `zh` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+
+athlete
+  player_image_small
+  top_expire

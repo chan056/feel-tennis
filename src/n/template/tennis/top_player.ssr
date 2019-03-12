@@ -1,0 +1,45 @@
+{{%
+	['queryTopPlayer']
+%}}
+
+<%- include('views/header', {title: '排名' }) %>
+<div id="body" class="top">
+	<% top = dynamicDataSet.top %>
+	
+	<h2>ATP前三</h2>
+	<div class="top-players">
+		<% top.forEach((p)=>{
+			if(p.gender == 1){ %>
+				<div class="player">
+					<a href="/tennis/player/<%= p.id_tennis_com %>/stat.ssr">
+						<img src="<%= p.player_image_small %>" alt="">
+						<br>
+						<p class="name">
+							<span class="first"><%=p.firstname%></span><br>
+							<span class="last"><%=p.lastname%></span>
+						</p>
+					</a>
+				</div>
+			<% }
+		}) %>
+	</div>
+	<h2>WTA前三</h2>
+	<div class="top-players">
+		<% top.forEach((p)=>{
+			if(p.gender == 2){ %>
+				<div class="player">
+					<a href="/tennis/player/<%= p.id_tennis_com %>/stat.ssr">
+						<img src="<%= p.player_image_small %>" alt="">
+						<br>
+						<p class="name">
+							<span class="first"><%=p.firstname%></span><br>
+							<span class="last"><%=p.lastname%></span>
+						</p>
+					</a>
+				</div>
+			<% }
+		}) %>
+	</div>
+</div>
+
+<%- include views/footer %>

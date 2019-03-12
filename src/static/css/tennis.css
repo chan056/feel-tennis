@@ -1,4 +1,5 @@
-#body {
+#body,
+header {
   width: 1140px;
   margin: auto;
 }
@@ -9,6 +10,23 @@
 .border {
   border-top: 4px solid #21B43D;
   padding: 1rem 0;
+}
+header {
+  padding-bottom: 3rem;
+  padding-top: 1rem;
+  font-size: 1.5em;
+}
+#body.top .top-players {
+  display: flex;
+  margin-bottom: 2rem;
+}
+#body.top .top-players .player {
+  flex-grow: 1;
+  box-sizing: border-box;
+  padding: 1rem;
+}
+#body.top .top-players .player .name {
+  display: inline-block;
 }
 #body.ranking .header {
   margin-top: 2rem;

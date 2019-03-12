@@ -41,7 +41,7 @@
 					url: '/api/isMapper',
 					contentType: 'application/json',
 					success: function(isMapper){
-						if(isMapper){
+						if(Number(isMapper)){
 							$.ajax({
 								type: 'post',
 								url: '/api/pageRecoder',

@@ -3,6 +3,11 @@ const path = require('path');
 
 let argv = process.argv.slice(2);
 const gender = argv[0];
+console.log('gender: ' + gender)
+if(!gender){
+    console.err('缺少性别参数');
+    process.exit();
+}
 
 const expires = require('./expire_config');
 let temp_id = {1:10000, 2: 20000}[gender];

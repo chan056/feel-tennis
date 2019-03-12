@@ -948,6 +948,39 @@ let operations = {
 
 	// =========== 运动员统计 开始
 	// 可用于API或SSR
+
+	queryTopPlayer: function (res, qualification, params) {
+		
+		conn.query(`select now() > top_expire as is_expire from tennis.athlete where is_top=1`, function(err, rows){
+			if(err) return throwError(err, res);
+
+			if(!rows[0] || rows[0].is_expire){
+				let file = require('path').resolve(__dirname, '../collector/tennis/top_player.js');
+
+				tools.spawn([file], function(){
+					query();
+				}, res)
+			}else{
+				query();
+			}
+		})
+		
+		function query(){
+			let sql = `select * from tennis.athlete where is_top=1`;
+
+			conn.query(sql , function (err, result, fields) {
+				if (err) return throwError(err, res);
+				
+				if(!res.dynamicDataSet){
+					result = JSON.stringify(result);
+					res.end(result)
+				}else{
+					res.dynamicDataSet[params.ssrOutput || 'top'] = result;
+				}
+			});
+		}
+	},
+
 	queryTennisRanking: function (res, qualification, params) {
 		let gender = [];
 		if(!params.type)
@@ -992,7 +1025,7 @@ let operations = {
 					res.end(result)
 				}else{
 					result.params = params;
-					res.dynamicDataSet[params.ssrOutput || 'ranking'] = result;// []
+					res.dynamicDataSet[params.ssrOutput || 'ranking'] = result;
 				}
 			});
 		}
