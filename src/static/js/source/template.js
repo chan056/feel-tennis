@@ -396,6 +396,7 @@ module.exports = function(){
                     <p class="subtitle"></p>
                     <div id="sitename-on-video">www.yitube.cn</div>
                 </div>
+                <div style="opacity: 0; position: absolute; z-index: -1;" id="subtitle-grave"></div>
                 <div v-if="video" id="usr-operation-desk">
                     <div class="fl">{{video.impression}}次观看</div>
 

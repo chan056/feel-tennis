@@ -840,7 +840,7 @@ module.exports = function(){
 			
 			this.fetchVideoTags();
 			
-			// this.bindSubtitle();
+			this.xSubtitle();
 
 			tools.togglePageIE(this);
 
@@ -914,6 +914,21 @@ module.exports = function(){
 				tools.xhr('/videoTags/' + this.videoId, function(res){
 					this.tags = res;
 				}.bind(this));
+			},
+
+			xSubtitle: function(){
+				tools.xhr('/caption/' + this.videoId, function(res){
+					if(!res)
+						return;
+
+					console.log(res)
+					let s = '';
+					res.forEach((subtitle) => {
+						s += `<p>${subtitle.text}</p>`
+					})
+
+					$('#subtitle-grave').append(s);
+				});
 			},
 
 			bindVideo: function(){

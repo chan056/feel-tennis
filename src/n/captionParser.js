@@ -25,10 +25,13 @@ module.exports = {
         }else{// 视频播放
             let p;
             
-            if(params.noTutorial){// 运动介绍
+            if(params.noTutorial){// 非教程视频
                 p = path.resolve(global.staticRoot, `./multimedia/ts_introductory/${vId}/subtitle`);
             }else{// 教程视频
-                p = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle.zh`);
+                p = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle.zh`);//默认中文字幕
+                if(!fs.existsSync(p)){
+                    p = path.resolve(global.staticRoot, `./multimedia/ts/${vId}/subtitle`);
+                }
             }
             
             if(fs.existsSync(p)){

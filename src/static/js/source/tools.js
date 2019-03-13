@@ -115,7 +115,7 @@ let tools = {
             if(!res)
                 return;
 
-                console.log(res)
+            console.log(res)
             tools.attachSubtile(video, res, 500, function(subtitle){
                 $(video).siblings('.subtitle').text(subtitle)/* .css({
 
