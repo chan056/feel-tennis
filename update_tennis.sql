@@ -8,5 +8,6 @@ CREATE TABLE `translation` (
 
 
 athlete
+  is_top
   player_image_small
   top_expire
