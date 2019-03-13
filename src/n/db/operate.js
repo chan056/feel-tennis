@@ -1039,7 +1039,7 @@ let operations = {
 
 			if(!rows[0]|| !rows[0].stat_expire || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/player_stat.js');
-				let name = rows[0]['name_en'].toLowerCase().replace(/\W/g, '-');
+				let name = rows[0]['name_en'].toLowerCase().replace(/\W+/g, '-');
 
 				tools.spawn([file, params.playerId, name], query, res)
 			}else{
@@ -1071,7 +1071,7 @@ let operations = {
 
 			if(!rows[0] || !rows[0].bio_expire || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/player_bio.js');
-				let name = rows[0]['name_en'].toLowerCase().replace(/\W/g, '-');
+				let name = rows[0]['name_en'].toLowerCase().replace(/\W+/g, '-');
 
 				tools.spawn([file, params.playerId, name], query, res)
 			}else{
@@ -1103,7 +1103,7 @@ let operations = {
 
 			if(!rows[0] || !rows[0].gear_expire || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/player_gear.js');
-				let name = rows[0]['name_en'].toLowerCase().replace(/\W/g, '-');
+				let name = rows[0]['name_en'].toLowerCase().replace(/\W+/g, '-');
 
 				tools.spawn([file, params.playerId, name], query, res)
 			}else{
@@ -1143,8 +1143,8 @@ let operations = {
 					let name1 = result[0]['name_en'],
 						name2 = result[1]['name_en'];
 
-					name1 = name1.trim().toLowerCase().replace(/\W/g, '-'),
-					name2 = name2.trim().toLowerCase().replace(/\W/g, '-');
+					name1 = name1.trim().toLowerCase().replace(/\W+/g, '-'),
+					name2 = name2.trim().toLowerCase().replace(/\W+/g, '-');
 
 					let file = require('path').resolve(__dirname, '../collector/tennis/player_h2h.js');
 
