@@ -65,7 +65,8 @@ module.exports = function(captureParams, res, req){
 
     function responseError(){
         if(res){
-            res.statusCode = 402;
+            res.statusCode = global.StatusCode.ClientErrorExpectationFailed;
+            res.statusMessage = '参数有误';
             res.end();
         }
     }

@@ -1,6 +1,7 @@
 
 const http = require('http');
 const fs = require('fs');
+const { StatusCode } = require('status-code-enum')
 
 let PORT = 80;
 let isTesting = false;
@@ -10,7 +11,9 @@ if(argv[0] == '/usr/local/bin/node' || argv[0] == 'E:\\soft\\node\\node.exe' || 
     isTesting = true;
     PORT = 3100;
 }
+
 global.staticRoot = __dirname + '/src/static';
+global.StatusCode = StatusCode;
 
 let serverConfig = require('./src/n/db/serverConfig');
 

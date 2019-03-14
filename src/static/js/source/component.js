@@ -921,7 +921,6 @@ module.exports = function(){
 					if(!res)
 						return;
 
-					console.log(res)
 					let s = '';
 					res.forEach((subtitle) => {
 						s += `<p>${subtitle.text}</p>`
@@ -1643,7 +1642,7 @@ module.exports = function(){
 							let statusCode = res.status;
 							if(statusCode == 401){
 								$('#header-btn-login').trigger('click')
-							}else if(statusCode == 402){
+							}else if(statusCode == 403){
 								this.$message({
 									message: '请隔天再投',
 									type: 'warning'

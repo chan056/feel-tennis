@@ -36,13 +36,13 @@ function resolveApiPath(req, res) {
                 visits = limit.visits;
 
             if(!Number(req.usrInfo.usrId)){//  && !admin
-                res.statusCode = 401;
+                res.statusCode = global.StatusCode.ClientErrorUnauthorized;
                 res.statusMessage = 'User Not Login';
                 return res.end();
             }
             
             if(!Number(req.usrInfo.isActive)){//  && !admin
-                res.statusCode = 402;
+                res.statusCode = global.StatusCode.ClientErrorForbidden;
                 res.statusMessage = 'User Not Activated';
                 return res.end();
             }
@@ -103,7 +103,7 @@ function resolveApiPath(req, res) {
                         }
 
                         function ecb(){
-                            res.statusCode = 402;
+                            res.statusCode = global.StatusCode.ClientErrorForbidden;
                             res.statusMessage = 'exceed access limit';
                             return res.end();
                         }
@@ -111,7 +111,7 @@ function resolveApiPath(req, res) {
                         shunt();
                     }
                 }else{
-                    res.statusCode = 401;
+                    res.statusCode = global.StatusCode.ClientErrorUnauthorized;
                     return res.end('Unauthorized: ' + urlObj.pathname);
                 }
             }

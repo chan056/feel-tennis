@@ -178,6 +178,12 @@ module.exports = function(){
                     </div>
                 </div>
                 <div class="guide-section">
+                    <div class="guide-entry">
+                        <a href="/tennis/ranking.ssr" class="guide-entry-renderer" title="球星">
+                            <i class="fa fa-hand-group icon"></i>
+                            <span class="text">球星</span>
+                        </a>
+                    </div>
                     <div v-if="(loginUsrInfo && loginUsrInfo.name)" class="guide-entry">
                         <router-link to="/voteNext" class="guide-entry-renderer" title="投票">
                             <i class="fa fa-hand-paper-o icon"></i>

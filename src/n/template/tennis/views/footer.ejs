@@ -10,6 +10,9 @@
 					sourceAry.push(source)
 				})
 
+				if(!sourceAry.length)
+					return;
+
 				$.ajax({
 					type: 'get',
 					url: '/api/translate',

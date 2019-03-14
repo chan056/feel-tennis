@@ -1176,6 +1176,11 @@ let operations = {
 	translate: function (res, qualification, params) {
 		let translateSevice = require('../service/baidu_translator');
 
+		if(!params.source || !params.source.trim()){
+			res.statusCode = global.StatusCode.ClientErrorExpectationFailed;
+			return res.end();
+		}
+
 		translateSevice(params.source, params.to, function(translation){
 			res.end(translation);
 		});
@@ -1220,8 +1225,7 @@ let operations = {
 					}
 				});
 			}else{
-				res.statusCode = 401;
-				res.statusMessage = 'login fail';
+				res.statusCode = global.StatusCode.ClientErrorUnauthorized;
 				res.end();
 			}
 		});
@@ -2067,7 +2071,7 @@ let operations = {
 				});
 			}
 		}else{
-			res.statusCode = 401;
+			res.statusCode = global.StatusCode.ClientErrorUnauthorized;
 			res.end();
 		}
 	},
@@ -2084,7 +2088,7 @@ let operations = {
 				res.statusMessage = 'reset password success';
 				res.end();
 			}else{
-				res.statusCode = 350;
+				res.statusCode = global.StatusCode.ClientErrorExpectationFailed;
 				res.statusMessage = 'reset password fail';
 				res.end();
 			}
@@ -2129,7 +2133,7 @@ let operations = {
 					}
 				});
 			}else{
-				res.statusCode = 400;
+				res.statusCode = global.StatusCode.ClientErrorExpectationFailed;
 				return res.end()
 			}
 		})
@@ -2150,7 +2154,7 @@ let operations = {
 			if(result && result.affectedRows == 1){
 				res.end();
 			}else{
-				res.statusCode = 400;
+				res.statusCode = global.StatusCode.ClientErrorExpectationFailed;
 				res.end();
 			}
 		})
@@ -2278,7 +2282,7 @@ let operations = {
 
 				if(offenseUsrId == usrId){
 					if(NOW - offenseTime < ONEDAY){
-						res.statusCode = 399;
+						res.statusCode = global.StatusCode.ClientErrorBadRequest;
 						res.statusMessage = 'should mark later';
 						return res.end();
 					}
@@ -2295,7 +2299,7 @@ let operations = {
 					offenseDefense = defenseRes * offenseRes;
 				}else if(defenseUsrId == usrId){
 					if(NOW - defenseTime < ONEDAY){
-						res.statusCode = 399;
+						res.statusCode = global.StatusCode.ClientErrorBadRequest;
 						res.statusMessage = 'should mark later';
 						return res.end();
 					}
@@ -2315,7 +2319,7 @@ let operations = {
 				if(doMatchClose){
 					// 双方互评，评价结果有误
 					if(offenseDefense != 2 && offenseDefense != 9){
-						res.statusCode = 398;
+						res.statusCode = global.StatusCode.ClientErrorBadRequest;
 						res.statusMessage = 'match result error';
 
 						if(offenseUsrId == usrId){
@@ -2666,7 +2670,7 @@ function disposePageSql(sql, params){
 function throwError(err, res){
 	var errCode = err.sqlMessage;
 
-	res.statusCode = 500;
+	res.statusCode = global.StatusCode.ServerErrorInternal;
 	res.end(JSON.stringify({
 		erorCode: errCode
 	}))

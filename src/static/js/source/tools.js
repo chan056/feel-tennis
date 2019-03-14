@@ -38,6 +38,7 @@ let tools = {
                 };
 
                 // 未登录
+                // ClientErrorUnauthorized
                 if (statusCode == 401) {
                     // 弹出登录窗口
                     notifyConfig.onClick = function () {
@@ -47,8 +48,9 @@ let tools = {
                     isActivePage || Vue.bus.emit('trigger-login');
                 }
 
-                // 未激活
-                if (statusCode == 402) {
+                // 未激活活权限不够
+                // ClientErrorForbidden
+                if (statusCode == 403) {
                     // 重新激活
                     notifyConfig.onClick = function () {
                         Vue.prototype.$confirm('是否发送新的激活邮件', '提示', {
