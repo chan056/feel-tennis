@@ -93,17 +93,17 @@ module.exports = function(req, res) {
 
 		// gzip压缩
 		const zlib = require('zlib');
-		let file = fs.createReadStream(absPath);
+		let readStream = fs.createReadStream(absPath);
 		let acceptEncoding = req.headers['accept-encoding'];
 		if (acceptEncoding && acceptEncoding.indexOf('gzip') != -1) {
 			var gzipStream = zlib.createGzip();
 
 			res.setHeader("Content-Encoding", "gzip");
 			
-			file.pipe(gzipStream).pipe(res);
+			readStream.pipe(gzipStream).pipe(res);
 
 		} else {
-			file.pipe(res);
+			readStream.pipe(res);
 		}
 
 		let responseHeader = {
@@ -114,8 +114,6 @@ module.exports = function(req, res) {
 		// console.log(urlObj);
 
 		res.writeHead(200, responseHeader);
-
-		res.pipe(file);
 	}
 
 	// 如果发现是 robot 返回对应页面
