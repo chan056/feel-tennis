@@ -79,6 +79,14 @@ module.exports = function(req, res) {
 			|| ext == 'vtt' || ext == 'srt' || ext == 'ssr'
 		){
 			let referer = req.headers.referer || '';
+
+			if(ext == 'ssr' && !referer){
+				if(fn){
+					fn();
+				}
+				return;
+			}
+			
 			if(!referer)
 				return res.end();
 
