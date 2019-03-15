@@ -6,7 +6,7 @@
 <div id="body" class="top">
 	<% top = dynamicDataSet.top %>
 	
-	<h2>ATP前三</h2>
+	<h2 class="border">ATP前三</h2>
 	<div class="top-players">
 		<% top.forEach((p)=>{
 			if(p.gender == 1){ %>
@@ -14,16 +14,17 @@
 					<a href="/tennis/player/<%= p.id_tennis_com %>/stat.ssr">
 						<img src="<%= p.player_image_small %>" alt="">
 						<br>
-						<p class="name">
-							<span class="first"><%=p.firstname%></span><br>
-							<span class="last"><%=p.lastname%></span>
+						<p class="name" title="<%= p.name_en%>">
+							<span class="first need-translate standalone"><%=p.firstname%></span><br>
+							<span class="last need-translate standalone"><%=p.lastname%></span>
 						</p>
 					</a>
 				</div>
 			<% }
 		}) %>
 	</div>
-	<h2>WTA前三</h2>
+	<a href="/tennis/rankings/atp.ssr" class="btn btn-primary full-list">ATP完整列表</a>
+	<h2 class="border">WTA前三</h2>
 	<div class="top-players">
 		<% top.forEach((p)=>{
 			if(p.gender == 2){ %>
@@ -31,15 +32,16 @@
 					<a href="/tennis/player/<%= p.id_tennis_com %>/stat.ssr">
 						<img src="<%= p.player_image_small %>" alt="">
 						<br>
-						<p class="name">
-							<span class="first"><%=p.firstname%></span><br>
-							<span class="last"><%=p.lastname%></span>
+						<p class="name" title="<%= p.name_en%>">
+							<span class="first need-translate standalone"><%=p.firstname%></span><br>
+							<span class="last need-translate standalone"><%=p.lastname%></span>
 						</p>
 					</a>
 				</div>
 			<% }
 		}) %>
 	</div>
+	<a href="/tennis/rankings/wta.ssr" class="btn btn-primary full-list">WTA完整列表</a>
 </div>
 
 <%- include views/footer %>

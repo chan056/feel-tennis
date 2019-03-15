@@ -20,6 +20,7 @@
 			}catch(e){
 				throw e;
 			} %>
+
 			<% for(var eventName in titles){
 				eventTitles= titles[eventName];%>
 
@@ -28,7 +29,13 @@
 					var year = title.year,
 						tournament = title.tournament; %>
 
-					<p class="need-translate"><%= year + ': ' + tournament %></p>
+					<p>
+						<%= year + ':  ' %>
+						<% tournament.split(',').forEach(function(city){ %>
+							<em title="<%= city.trim() %>" class="need-translate standalone"><%= city.trim() %></em>
+							&nbsp;&nbsp;
+						<% }) %>
+					</p>
 				<% })
 			} %>
 		</div>

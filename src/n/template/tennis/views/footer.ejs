@@ -1,5 +1,5 @@
 		<script>
-			// translate();
+			translate();
 			translate(true);
 
 			function translate(standalone){
@@ -8,7 +8,7 @@
 				var doms = standalone? $('.need-translate.standalone'):
 					$('.need-translate').not('.standalone');
 
-				doms.each(function(index, ele){
+				doms.css('opacity', 0).each(function(index, ele){
 					var source = $(ele).text().trim();
 					sourceAry.push(source)
 				})
@@ -35,8 +35,15 @@
 						var translation = translation.split(separator);
 						// console.log(translation)
 
-						doms.each(function(index, ele){
-							$(ele).text(translation[index]);
+						doms.css('opacity', 1).each(function(index, ele){
+							ele = $(ele);
+							ele.text(translation[index]).attr('title', sourceAry[index])/* .after(
+								'<em class="hidden">'+sourceAry[index]+'</em>'
+							) */;
+
+							// if(ele.is('a')){
+							// 	ele.attr('title', sourceAry[index])
+							// }
 						})
 
 						pageRecord();

@@ -11,6 +11,18 @@ header {
   border-top: 4px solid #21B43D;
   padding: 1rem 0;
 }
+.need-translate {
+  transition: opacity .3s ease;
+}
+.horizon-ul > li {
+  float: left;
+  margin-left: 1em;
+}
+.horizon-ul::after {
+  content: '';
+  display: block;
+  clear: both;
+}
 header {
   padding-bottom: 3rem;
   padding-top: 1rem;
@@ -18,7 +30,7 @@ header {
 }
 #body.top .top-players {
   display: flex;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 #body.top .top-players .player {
   flex-grow: 1;
@@ -28,8 +40,8 @@ header {
 #body.top .top-players .player .name {
   display: inline-block;
 }
-#body.ranking .header {
-  margin-top: 2rem;
+#body.top .full-list {
+  margin-bottom: 3rem;
 }
 #body.ranking .header a.active {
   color: #2FC64C;
@@ -40,10 +52,18 @@ header {
 #body.ranking .table {
   margin: 2rem 0;
   width: 100%;
+  border: 0;
+  margin: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 #body.ranking .table th,
 #body.ranking .table td {
   height: 36px;
+}
+#body.ranking .table td {
+  border-top: 1px solid #999;
+  padding: .5rem 0;
 }
 #body.ranking .table .flag {
   margin-right: 0.5rem;
@@ -140,7 +160,7 @@ header {
 }
 #body.bio .part {
   border-top: 4px solid #21B43D;
-  padding: 1rem;
+  padding: 1rem 0;
 }
 #body.bio .part h2 {
   margin-bottom: 1rem;

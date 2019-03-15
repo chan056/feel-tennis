@@ -27,12 +27,16 @@
 				<%= athlete.prev_ranking %>
 			</td>
 			<td>
-				<a href="/tennis/player/<%= athlete.id_tennis_com%>/stat.ssr" target="_blank" class="need-translate standalone"><%= athlete.name_en %></a>
+				<a title="<%= athlete.name_en %>" href="/tennis/player/<%= athlete.id_tennis_com%>/stat.ssr" target="_blank" class="no-text-decoration">
+					<em><%= athlete.name_en %></em>
+					<br>
+					<em class="need-translate standalone"><%= athlete.name_en %></em>
+				</a>
 			</td>
 			<td>
-				<a href="https://ditu.baidu.com?q=<%= athlete.country %>" target="_blank">
+				<a title="<%= athlete.country %>" href="https://ditu.baidu.com?q=<%= athlete.country %>" target="_blank" class="no-text-decoration">
 					<i class="flag flags-<%= athlete.state_abbreviation %>"></i>
-					<%= athlete.country %>
+					<em class="need-translate standalone"><%= athlete.country %></em>
 				</a>
 			</td>
 			<td>

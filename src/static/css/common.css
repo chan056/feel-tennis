@@ -71,6 +71,9 @@ img {
 .tar {
   text-align: right;
 }
+.no-text-decoration {
+  text-decoration: none;
+}
 .clearfix:after {
   display: table;
   content: "";
