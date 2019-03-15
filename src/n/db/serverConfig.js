@@ -28,9 +28,9 @@ module.exports = function(req, res) {
 			// 解析路径 获取参数
 			// 匹配路径 找到对应模板
 			// 传入参数 查询数据 渲染模板
-
-			require('./resolve_path_ssr').resolvePathSSR(req, res);
-			// res.end('SSR');
+			checkReferer(function(){
+				require('./resolve_path_ssr').resolvePathSSR(req, res);
+			})
 		}else{
 			disposeStaticResource();
 		}
@@ -72,11 +72,11 @@ module.exports = function(req, res) {
 		}, res);
 	}
 
-	function serveStatic(){
+	function checkReferer(fn){
 		// 域名限制
 		if(
 			ext == 'm3u8' || ext == 'mp4' || ext == 'ts'
-			|| ext == 'vtt' || ext == 'srt'
+			|| ext == 'vtt' || ext == 'srt' || ext == 'ssr'
 		){
 			let referer = req.headers.referer || '';
 			if(!referer)
@@ -88,32 +88,40 @@ module.exports = function(req, res) {
 
 			if(constants.whiteList.indexOf(refererHost) == -1){
 				return res.end();
+			}else{
+				fn && fn()
 			}
+		}else{
+			fn && fn();
 		}
+	}
 
-		// gzip压缩
-		const zlib = require('zlib');
-		let readStream = fs.createReadStream(absPath);
-		let acceptEncoding = req.headers['accept-encoding'];
-		if (acceptEncoding && acceptEncoding.indexOf('gzip') != -1) {
-			var gzipStream = zlib.createGzip();
+	function serveStatic(){
+		checkReferer(function(){
+			// gzip压缩
+			const zlib = require('zlib');
+			let readStream = fs.createReadStream(absPath);
+			let acceptEncoding = req.headers['accept-encoding'];
+			if (acceptEncoding && acceptEncoding.indexOf('gzip') != -1) {
+				var gzipStream = zlib.createGzip();
 
-			res.setHeader("Content-Encoding", "gzip");
-			
-			readStream.pipe(gzipStream).pipe(res);
+				res.setHeader("Content-Encoding", "gzip");
+				
+				readStream.pipe(gzipStream).pipe(res);
 
-		} else {
-			readStream.pipe(res);
-		}
+			} else {
+				readStream.pipe(res);
+			}
 
-		let responseHeader = {
-			'Content-Type': contentType,
-		};
-		
-		// 'Cache-Control': 'max-age=3600'
-		// console.log(urlObj);
+			let responseHeader = {
+				'Content-Type': contentType,
+			};
 
-		res.writeHead(200, responseHeader);
+			// 'Cache-Control': 'max-age=3600'
+			// console.log(urlObj);
+
+			res.writeHead(200, responseHeader);
+		})
 	}
 
 	// 如果发现是 robot 返回对应页面
@@ -140,5 +148,4 @@ module.exports = function(req, res) {
 		});
 
 	}
-	// });
 }
