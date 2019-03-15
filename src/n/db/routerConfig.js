@@ -482,10 +482,6 @@ const routerConfig = {
         '/tennisRanking': function(params, res, req){
             r.query('queryTennisRanking', params, res, req);
         },
-
-        '/translate': function(params, res, req){
-            r.query('translate', params, res, req);
-        },
     },
 
     post: {
@@ -719,7 +715,11 @@ const routerConfig = {
                 r.post('responseComment', req, res, pathParams);
             },
             limit: {level: 100}
-        }
+        },
+
+        '/translate': function(req, res){
+            r.post('translate', req, res);
+        },
     },
 
     // ============put update完整资源=============

@@ -1,11 +1,14 @@
 		<script>
-			translate();
+			// translate();
+			translate(true);
 
-			function translate(){
+			function translate(standalone){
 				var separator = '315699319005';
 				var sourceAry = [];
+				var doms = standalone? $('.need-translate.standalone'):
+					$('.need-translate').not('.standalone');
 
-				$('.need-translate').each(function(index, ele){
+				doms.each(function(index, ele){
 					var source = $(ele).text().trim();
 					sourceAry.push(source)
 				})
@@ -13,19 +16,26 @@
 				if(!sourceAry.length)
 					return;
 
+				var data = {
+					to: 'zh',
+					source: sourceAry.join(separator)
+				};
+
+				if(standalone){
+					data.separator = separator;
+					data.isAlone = standalone;
+				}
+
 				$.ajax({
-					type: 'get',
+					type: 'post',
 					url: '/api/translate',
-					data: {
-						to: 'zh',
-						source: sourceAry.join(separator)
-					},
-					contentType: 'text/plain',
+					data: JSON.stringify(data),
+					contentType: 'text/json',
 					success: function(translation){
 						var translation = translation.split(separator);
 						// console.log(translation)
 
-						$('.need-translate').each(function(index, ele){
+						doms.each(function(index, ele){
 							$(ele).text(translation[index]);
 						})
 

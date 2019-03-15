@@ -1173,19 +1173,6 @@ let operations = {
 		}
 	},
 
-	translate: function (res, qualification, params) {
-		let translateSevice = require('../service/baidu_translator');
-
-		if(!params.source || !params.source.trim()){
-			res.statusCode = global.StatusCode.ClientErrorExpectationFailed;
-			return res.end();
-		}
-
-		translateSevice(params.source, params.to, function(translation){
-			res.end(translation);
-		});
-	},
-
 	// =========== 运动员统计 结束
 	
 	// ===============POST================
@@ -1993,6 +1980,39 @@ let operations = {
 			sendInmail(sender, result[1][0]['usr_id'], postObj.responseContent);
 			res.end();
 		})
+	},
+
+	translate: function (res, postObj, req) {
+		let translateSevice = require('../service/baidu_translator');
+
+		if(!postObj.source || !postObj.source.trim()){
+			res.statusCode = global.StatusCode.ClientErrorExpectationFailed;
+			return res.end();
+		}
+
+		if(!postObj.isAlone){
+			translateSevice(postObj.source, postObj.to, function(translation){
+				res.end(translation);
+			});
+		}else{
+			let sourceAry = postObj.source.split(postObj.separator);
+			// sourceAry = sourceAry.slice(0, 5);
+			let translationAry = new Array(sourceAry.length);
+
+			var translateCount = 0;
+			sourceAry.forEach((word, index)=>{
+				translateSevice(word, postObj.to, function(translation){
+					translateCount ++;
+					console.log(translateCount, sourceAry.length)
+
+					translationAry[index] = translation;
+
+					if(translateCount == sourceAry.length){
+						res.end(translationAry.join(postObj.separator));
+					}
+				});
+			})
+		}
 	},
 
 	// ===============PATCH================

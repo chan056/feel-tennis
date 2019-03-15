@@ -180,7 +180,7 @@ module.exports = function(){
                 <div class="guide-section">
                     <div class="guide-entry">
                         <a href="/tennis/ranking.ssr" class="guide-entry-renderer" title="球星">
-                            <i class="fa fa-hand-group icon"></i>
+                            <i class="fa fa-group icon"></i>
                             <span class="text">球星</span>
                         </a>
                     </div>
