@@ -102,7 +102,7 @@ module.exports = function(){
                     setTimeout(()=>{
                         t.guideDialogVisible = true;
                     }, 200)
-
+                    
                     t.routeTitle = item.title;
                     t.routeName = item.name;
 

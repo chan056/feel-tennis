@@ -6,25 +6,25 @@ let o = {
         title: '资助',
         name: 'fund',
         tar: '#guide-fund-1',
-        delegator: '',
-        // triggerType
     },{
         title: '竞赛',
         name: 'compete',
         tar: '#guide-compete-1',
-        delegator: ''
     },{
         title: '视频播放',
         name: 'video',
         tar: '.video-thumb',
         delegator: 'body'
     },{
-        prerequisite: window.isIOSdevice,
+        prerequisite: detector.browser.safari? true: false,
         title: '添加到主屏幕',
-        name: 'quickFinder',
-        tar: '#support-btn, #video-operation-wrapper',
-        delegator: 'body',
-        triggerType: 'touchstart'
+        name: 'homescreen',
+        tar: 'body',
+    },{
+        prerequisite: detector.browser.chrome && !isMobile,
+        title: '添加网站到桌面',
+        name: 'homescreenPC',
+        tar: 'body',
     }],
     
     regist: [
@@ -108,12 +108,20 @@ let o = {
             direction: 'down'
         }
     ],
-    quickFinder: [
+    homescreen: [
         {
             lines: `<img style="width: 100%;" src="/img/safari_finder_1.jpg">`,
         },
         {
             lines: `<img style="width: 100%;" src="/img/safari_finder_2.jpg">`,
+        }
+    ],
+    
+    homescreenPC: [
+        {
+            lines: `
+                <a target="_blank" href="https://jingyan.baidu.com/article/bad08e1e21512409c85121d7.html">查看详细教程，便于下次访问</a>
+            `,
         }
     ]
 }
