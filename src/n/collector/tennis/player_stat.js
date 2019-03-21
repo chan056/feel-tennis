@@ -56,7 +56,7 @@ function storeData(fragment) {
             playerImage = playerImage.replace(/\.\w+$/, '') + `/tablet-rankings-players-page${playerImageExt}`;
     
             let featureImage = $('.single-player-hero figure').attr('data-image'),
-                featureImageExt = path.extname(featureImage),
+                featureImageExt = path.extname(featureImage).toLowerCase(),
                 feature_image = `/img/tennis/athlete/${playerId}.feature${featureImageExt}`;// 客户端访问地址
     
             featureImage = featureImage.replace(/\.\w+$/, '') + `/desktop-detail-featured-image${featureImageExt}`;

@@ -20,7 +20,7 @@ module.exports = function(req, res) {
 		pathname = constants.indexPath;
 	}
 
-	let ext = path.extname(pathname);
+	let ext = path.extname(pathname).toLowerCase();
 	ext = ext ? ext.slice(1) : '';
 
 	if(ext){
