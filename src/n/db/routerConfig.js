@@ -168,7 +168,7 @@ const routerConfig = {
                     const pageNum = params.pageNum,
                     pageSize = params.pageSize;
 
-                    let  curPageData = Object.assign([], resData).splice(pageNum * pageSize, pageSize)
+                    let  curPageData = Object.assign([], resData).splice((pageNum - 1) * pageSize, pageSize)
 
                     res.end( JSON.stringify({
                             datalist: curPageData,
