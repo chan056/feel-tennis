@@ -163,16 +163,15 @@ const routerConfig = {
             if(clauses.length){
                 sql += ' ' + clauses.join(' and ');
 
-                const pageNum = params.pageNum,
+                r.excuteSQL(sql, res, function(resData){
+                    
+                    const pageNum = params.pageNum,
                     pageSize = params.pageSize;
 
-                if(pageSize){
-                    sql += ` limit ${pageNum*pageSize},${pageSize}`
-                }
+                    let  curPageData = Object.assign([], resData).splice(pageNum * pageSize, pageSize)
 
-                r.excuteSQL(sql, res, function(resData){
                     res.end( JSON.stringify({
-                            datalist: resData,
+                            datalist: curPageData,
                             total: resData.length
                         })
                     )
