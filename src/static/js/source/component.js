@@ -115,7 +115,7 @@ module.exports = function(){
 					}
 				});
 
-				e.preventDefault();
+				e && e.preventDefault();
 			},
 
 			focus(e){
