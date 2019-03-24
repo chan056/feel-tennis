@@ -102,7 +102,8 @@ module.exports = function(){
 		},
 
 		methods: {
-			search: function(formName) {
+			search: function(e) {
+				
 				let t = this;
 				let name = $.trim(this.searchForm.name);
 				if(!name)
@@ -111,10 +112,10 @@ module.exports = function(){
 				this.$refs['searchForm'].validate((valid) => {
 					if (valid) {
 						this.$router.push({ path: '/searchedVideos', query: { headline: this.searchForm.name}})
-					} else {
-						return false;
 					}
 				});
+
+				e.preventDefault();
 			},
 
 			focus(e){
