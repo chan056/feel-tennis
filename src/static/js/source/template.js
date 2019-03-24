@@ -13,8 +13,15 @@ module.exports = function(){
                     <el-col :span="10" id="search-form-wrapper">
                         <el-form :model="searchForm" :rules="searchFormRules" ref="searchForm"  class="" id="searchForm">
                             <el-form-item label="" prop="name">
-                                <el-input placeholder="请输入内容" v-model="searchForm.name" @keyup.enter.native="submitForm('searchForm');">
-                                    <el-button slot="append" icon="el-icon-search" @click="submitForm('searchForm')"></el-button>
+                                <el-input placeholder="搜索标题或标签" 
+                                    id="x"
+                                    v-model="searchForm.name" 
+                                    @keydown.enter.native="submitForm('searchForm');" 
+                                    autofocus="true"
+                                    @focus="focus"
+                                    @blur="blur"
+                                    >
+                                    <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
                                 </el-input>
                             </el-form-item>
                         </el-form>
