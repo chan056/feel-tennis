@@ -102,20 +102,38 @@ module.exports = function(){
 		},
 
 		methods: {
-			submitForm: function(formName) {
+			search: function(e) {
+				
 				let t = this;
 				let name = $.trim(this.searchForm.name);
 				if(!name)
 					return;
 
-				this.$refs[formName].validate((valid) => {
+				this.$refs['searchForm'].validate((valid) => {
 					if (valid) {
 						this.$router.push({ path: '/searchedVideos', query: { headline: this.searchForm.name}})
-					} else {
-						return false;
 					}
 				});
+
+				e && e.preventDefault();
 			},
+
+			focus(e){
+				const t = e.target;
+				$(t.parentNode).css({
+					width: '100%',
+					opacity: 1
+				})
+			},
+
+			blur(e){
+				const t = e.target;
+				$(t.parentNode).css({
+					width: '200px',
+					opacity: .6
+				})
+			},
+
 			resetForm: function(formName) {
 				this.$refs[formName].resetFields();
 			},
@@ -1330,7 +1348,7 @@ module.exports = function(){
 			},
 
 			handlePageChange: function(index){
-				this.fetchVideolist(index);
+				this.fetchVideolist(index - 1);
 			}
 		}
 	};

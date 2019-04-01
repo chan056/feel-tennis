@@ -12,6 +12,9 @@ h6 {
   margin: 0;
   padding: 0;
 }
+body {
+  word-break: break-all;
+}
 canvas {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   backface-visibility: hidden;
@@ -57,6 +60,18 @@ img {
   display: none;
 }
 .nodec {
+  text-decoration: none;
+}
+.tac {
+  text-align: center;
+}
+.tal {
+  text-align: left;
+}
+.tar {
+  text-align: right;
+}
+.no-text-decoration {
   text-decoration: none;
 }
 .clearfix:after {
@@ -166,6 +181,46 @@ img {
   color: #fff;
   padding: 2px 3px;
   text-shadow: 0px 0px 1rem #333;
+}
+.hori-list::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.hori-list li {
+  float: left;
+  min-width: 1rem;
+  min-height: 1rem;
+}
+.overlay-gradient {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  background-image: linear-gradient(to bottom, transparent 45%, #000 130%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FF000000', GradientType=0);
+  transition: background-color 0.3s ease-in;
+}
+.btn.btn-primary {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Hind', sans-serif;
+  font-size: 14px;
+  text-transform: uppercase;
+  line-height: 43px;
+  font-weight: bold;
+  transition: all 0.3s ease-out;
+  display: inline-block;
+  padding: 0 10px;
+  background-color: #21B43D;
+  color: white;
+  text-align: center;
+  min-width: 100px;
+  height: 40px;
+  text-decoration: none;
 }
 .el-breadcrumb span {
   font-size: 2rem;
@@ -360,6 +415,9 @@ app {
 }
 #header .masthead .el-menu-item {
   min-width: 70px !important;
+}
+#header .el-input-group--append {
+  transition: all .5s ease;
 }
 #aside {
   width: 300px;

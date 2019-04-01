@@ -93,6 +93,8 @@ module.exports = function(){
                             $(item.tar).one(triggerType, evt);
                         }
                     }else{
+                        // 同时触发多个自动提示 TODO
+                        // 排队
                         evt();
                     }
                 }

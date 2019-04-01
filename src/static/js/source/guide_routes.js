@@ -17,12 +17,12 @@ let o = {
         delegator: 'body'
     },{
         prerequisite: detector.browser.safari? true: false,
-        title: '添加到主屏幕',
+        title: '添加快捷方式到主屏幕',
         name: 'homescreen',
         tar: 'body',
     },{
-        prerequisite: detector.browser.chrome && !isMobile,
-        title: '添加网站到桌面',
+        prerequisite: Boolean(detector.browser.chrome) && !isMobile,
+        title: '添加快捷方式到桌面',
         name: 'homescreenPC',
         tar: 'body',
     }],
