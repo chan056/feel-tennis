@@ -64,7 +64,7 @@ function resolveApiPath(req, res) {
 
                     if(usrLevel == 10 && visits){
                         // 普通用户, 特定接口访问次数限制
-                        let conn = require('./connect').conn;
+                        let conn = require('./connect');
                         let sql = `select * 
                             from usr_api_access_log 
                             where uid=${req.usrInfo.usrId} 
