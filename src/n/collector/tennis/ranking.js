@@ -29,7 +29,6 @@ tools.runSql('drop table if EXISTS tennis.athlete_tmp; create table tennis.athle
                 let $ = cheerio.load(fragment);
         
                 // select count(1)  from information_schema.COLUMNS where table_name = 'athlete';  表总列数
-                // 10
                 let sql = `insert into tennis.athlete (id_tennis_com, name, name_en, gender, ranking, prev_ranking, country, point, state_abbreviation, ranking_expire) values `;
         
                 $('#atpRanking').find('.player-row').map((i,playerLine)=>{

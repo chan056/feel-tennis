@@ -1,0 +1,50 @@
+{{%
+	['queryTennisRanking']
+%}}
+
+
+<%- include('views/header', {title: dynamicDataSet.ranking.params.type.toUpperCase()+'排名' }) %>
+<div id="body" class="ranking">
+	<div class="header">
+		<a href="/tennis/rankings/wta.ssr" class="fr<%= (dynamicDataSet.ranking.params.type=='wta') ?' active': '' %>" >WTA</a>
+		<a href="/tennis/rankings/atp.ssr" class="fr<%= (dynamicDataSet.ranking.params.type=='atp') ?' active': '' %>" >ATP</a>
+		<br class="clr">
+	</div>
+	<table class="table">
+		<tr>
+			<td>排名</td>
+			<td>旧排名</td>
+			<td>名字</td>
+			<td>国家</td>
+			<td>积分</td>
+		</tr>
+		<% dynamicDataSet.ranking.forEach(function(athlete){%>
+		<tr>
+			<td>
+				<%= athlete.ranking %>
+			</td>
+			<td>
+				<%= athlete.prev_ranking %>
+			</td>
+			<td>
+				<a title="<%= athlete.name_en %>" href="/tennis/player/<%= athlete.id_tennis_com%>/stat.ssr" target="_blank" class="no-text-decoration">
+					<em><%= athlete.name_en %></em>
+					<br>
+					<em class="need-translate standalone"><%= athlete.name_en %></em>
+				</a>
+			</td>
+			<td>
+				<a title="<%= athlete.country %>" href="https://ditu.baidu.com?q=<%= athlete.country %>" target="_blank" class="no-text-decoration">
+					<i class="flag flags-<%= athlete.state_abbreviation %>"></i>
+					<em class="need-translate standalone"><%= athlete.country %></em>
+				</a>
+			</td>
+			<td>
+				<%= athlete.point %>
+			</td>
+		</tr>
+		<% }) %>
+	</table>
+</div>
+
+<%- include views/footer %>
