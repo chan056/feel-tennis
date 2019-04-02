@@ -742,7 +742,7 @@ module.exports = function(){
                         </el-form-item>
     
                         <el-form-item label="头像" prop="avatar">
-                            <img v-if="!datumForm.editable" :src="datumForm.unstableDatum.avatar" alt="avatar"></img>
+                            <img v-if="!datumForm.editable && datumForm.unstableDatum.avatar" :src="datumForm.unstableDatum.avatar" alt="avatar"></img>
                             <el-upload
                                 v-if="datumForm.editable"
                                 class=""
