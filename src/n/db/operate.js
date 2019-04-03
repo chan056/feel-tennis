@@ -946,7 +946,7 @@ let operations = {
 		}
 	},
 
-	// =========== 运动员统计 开始
+	// =========== 网球统计 开始
 	// 可用于API或SSR
 
 	queryTopPlayer: function (res, qualification, params) {
@@ -1173,7 +1173,39 @@ let operations = {
 		}
 	},
 
-	// =========== 运动员统计 结束
+	queryTournament: function (res, qualification, params) {
+		
+		conn.query(`select now() > expire as is_expire from tennis.tournament`, function(err, rows){
+			if(err) return throwError(err, res);
+
+			if(!rows[0] || rows[0].is_expire){
+				let file = require('path').resolve(__dirname, '../collector/tennis/tournament.js');
+
+				tools.spawn([file], function(){
+					query();
+				}, res)
+			}else{
+				query();
+			}
+		})
+		
+		function query(){
+			let sql = `select * from tennis.tournament`;
+
+			conn.query(sql , function (err, result, fields) {
+				if (err) return throwError(err, res);
+				
+				if(!res.dynamicDataSet){
+					result = JSON.stringify(result);
+					res.end(result)
+				}else{
+					res.dynamicDataSet[params.ssrOutput || 'tournaments'] = result;
+				}
+			});
+		}
+	},
+
+	// =========== 网球统计 结束
 	
 	// ===============POST================
 	login: function(res, postObj, req){

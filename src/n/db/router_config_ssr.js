@@ -7,6 +7,7 @@ const routerConfig = {
     '/tennis/player/:playerId/bio': 'tennis/player_bio',
     '/tennis/player/:playerId/gear': 'tennis/player_gear',
     '/tennis/player/:p1/vs/:p2': 'tennis/player_h2h',
+    '/tennis/tournament': 'tennis/tournament',
 }
 
 module.exports = routerConfig;

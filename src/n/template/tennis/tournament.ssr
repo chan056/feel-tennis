@@ -1,50 +1,81 @@
 {{%
-	['queryTennisRanking']
+	['queryTournament']
 %}}
 
+<%- include('views/header', {title: '巡回赛' }) %>
+<div id="body" class="tournaments">
+	<!-- <%= JSON.stringify(dynamicDataSet.tournaments) %> -->
+	<div class="part border">
+		<h2>正在进行</h2>
+		<div class="tour-cards">
 
-<%- include('views/header', {title: dynamicDataSet.ranking.params.type.toUpperCase()+'排名' }) %>
-<div id="body" class="ranking">
-	<div class="header">
-		<a href="/tennis/rankings/wta.ssr" class="fr<%= (dynamicDataSet.ranking.params.type=='wta') ?' active': '' %>" >WTA</a>
-		<a href="/tennis/rankings/atp.ssr" class="fr<%= (dynamicDataSet.ranking.params.type=='atp') ?' active': '' %>" >ATP</a>
-		<br class="clr">
+			<div class="tour-row">
+				<% dynamicDataSet.tournaments.forEach(function(tournament){%>
+					<% if(tournament.status == 0){ %>
+						<a href="<%= tournament.link%>" class="tour-item">
+							<div class="overlay"></div>
+							<div class="basic-data">
+								<p class="name standalone"><%= unescape(tournament.name) %></p>
+								<p class="time"><%= 
+									(new Date(tournament.start_time)).toLocaleDateString().replace(/-/g, '/') 
+									+ '-' + 
+									(new Date(tournament.end_time)).toLocaleDateString().replace(/-/g, '/') %>
+								</p>
+							</div>
+						</a>
+					<% } %>
+				<% }) %>
+			</div>
+		</div>
 	</div>
-	<table class="table">
-		<tr>
-			<td>排名</td>
-			<td>旧排名</td>
-			<td>名字</td>
-			<td>国家</td>
-			<td>积分</td>
-		</tr>
-		<% dynamicDataSet.ranking.forEach(function(athlete){%>
-		<tr>
-			<td>
-				<%= athlete.ranking %>
-			</td>
-			<td>
-				<%= athlete.prev_ranking %>
-			</td>
-			<td>
-				<a title="<%= athlete.name_en %>" href="/tennis/player/<%= athlete.id_tennis_com%>/stat.ssr" target="_blank" class="no-text-decoration">
-					<em><%= athlete.name_en %></em>
-					<br>
-					<em class="need-translate standalone"><%= athlete.name_en %></em>
-				</a>
-			</td>
-			<td>
-				<a title="<%= athlete.country %>" href="https://ditu.baidu.com?q=<%= athlete.country %>" target="_blank" class="no-text-decoration">
-					<i class="flag flags-<%= athlete.state_abbreviation %>"></i>
-					<em class="need-translate standalone"><%= athlete.country %></em>
-				</a>
-			</td>
-			<td>
-				<%= athlete.point %>
-			</td>
-		</tr>
-		<% }) %>
-	</table>
+
+	<div class="part border">
+		<h2>即将到来</h2>
+		<div class="tour-cards">
+
+			<div class="tour-row">
+				<% dynamicDataSet.tournaments.forEach(function(tournament){%>
+					<% if(tournament.status == 1){ %>
+						<a href="<%= tournament.link%>" class="tour-item">
+							<div class="overlay"></div>
+							<div class="basic-data">
+								<p class="name standalone"><%= unescape(tournament.name) %></p>
+								<p class="time"><%= 
+									(new Date(tournament.start_time)).toLocaleDateString().replace(/-/g, '/') 
+									+ '-' + 
+									(new Date(tournament.end_time)).toLocaleDateString().replace(/-/g, '/') %>
+								</p>
+							</div>
+						</a>
+					<% } %>
+				<% }) %>
+			</div>
+		</div>
+	</div>
+
+	<div class="part border">
+		<h2>最近的</h2>
+		<div class="tour-cards">
+
+			<div class="tour-row">
+				<% dynamicDataSet.tournaments.forEach(function(tournament){%>
+					<% if(tournament.status == -1){ %>
+						<a href="<%= tournament.link%>" class="tour-item">
+							<div class="overlay"></div>
+							<div class="basic-data">
+								<p class="name standalone"><%= unescape(tournament.name) %></p>
+								<p class="time"><%= 
+									(new Date(tournament.start_time)).toLocaleDateString().replace(/-/g, '/') 
+									+ '-' + 
+									(new Date(tournament.end_time)).toLocaleDateString().replace(/-/g, '/') %>
+								</p>
+							</div>
+						</a>
+					<% } %>
+				<% }) %>
+			</div>
+		</div>
+	</div>
 </div>
 
 <%- include views/footer %>

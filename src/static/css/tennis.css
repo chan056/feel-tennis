@@ -296,3 +296,44 @@ header {
   text-align: left;
   right: 0;
 }
+#body.tournaments h2 {
+  margin-bottom: 2rem;
+}
+#body.tournaments .tour-row {
+  /* display: flex; */
+}
+#body.tournaments .tour-item {
+  min-height: 10rem;
+  display: inline-block;
+  width: 33%;
+  height: 280px;
+  box-shadow: 0 0 1px #333;
+  background-image: url('../img/tennis/live-today.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  padding: 1rem;
+  background-clip: content-box;
+  box-sizing: border-box;
+}
+#body.tournaments .tour-item .basic-data {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 2rem;
+  color: #fff;
+}
+#body.tournaments .tour-item .name {
+  margin-bottom: 1rem;
+}
+#body.tournaments .overlay {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  left: 1rem;
+  bottom: 1rem;
+  background-image: linear-gradient(to bottom, transparent 45%, #000 130%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FF000000', GradientType=0);
+  transition: background-color 0.3s ease-in;
+}
