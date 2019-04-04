@@ -1205,6 +1205,37 @@ let operations = {
 		}
 	},
 
+	queryTournamentDailySchedule: function(res, qualification, params){
+		// http://localhost:3100/tennis/tournaments/858254/2019-04-04
+		console.log(params);
+		tools.fetchHTML(`http://ace.tennis.com/pulse/${params.date}_livescores_new.json`, function(data){
+			try{
+				data = JSON.parse(data);
+				data = data.tournaments;
+				let matchedData = {};
+				data.forEach(function(tour){
+					if(tour.id == params.sid){
+						matchedData = tour;
+					}
+				});
+
+				matchedData = JSON.stringify(matchedData);
+
+				if(!res.dynamicDataSet){
+					res.end(matchedData)
+				}else{
+					res.dynamicDataSet[params.ssrOutput || 'tournament'] = matchedData;
+				}
+			}catch(e){
+				if(!res.dynamicDataSet){
+					res.end('')
+				}else{
+					res.dynamicDataSet[params.ssrOutput || 'tournament'] = {};
+				}
+			}
+		})
+	},
+
 	// =========== 网球统计 结束
 	
 	// ===============POST================

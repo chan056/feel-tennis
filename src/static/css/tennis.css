@@ -307,7 +307,6 @@ header {
   display: inline-block;
   width: 33%;
   height: 280px;
-  box-shadow: 0 0 1px #333;
   background-image: url('../img/tennis/live-today.jpg');
   background-size: cover;
   background-position: center;
@@ -322,9 +321,13 @@ header {
   bottom: 0;
   padding: 2rem;
   color: #fff;
+  pointer-events: none;
 }
 #body.tournaments .tour-item .name {
   margin-bottom: 1rem;
+}
+#body.tournaments .tour-item .time {
+  font-size: 0.8em;
 }
 #body.tournaments .overlay {
   position: absolute;
@@ -336,4 +339,7 @@ header {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FF000000', GradientType=0);
   transition: background-color 0.3s ease-in;
+}
+#body.tournaments .overlay:hover {
+  opacity: 0;
 }

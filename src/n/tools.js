@@ -240,6 +240,19 @@ function spawn(processArgs, fn, res){
 	});
 }
 
+function fetchHTML (url, fn){
+	require('request')(url, function(error,response,body) {
+		if(error)
+			throw error;
+
+		if(!error && response.statusCode == 200){
+			fn && fn(body)
+		}else{
+			throw `statusCode: ${response.statusCode}`;
+		}
+	})
+}
+
 module.exports = {
     response404,
     isEmpty,
@@ -252,5 +265,6 @@ module.exports = {
 	botCheck,
 	resolveRefererHost,
 	transformPath,
-	spawn
+	spawn,
+	fetchHTML
 }

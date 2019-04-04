@@ -178,7 +178,6 @@ header{padding-bottom: 3rem; padding-top: 1rem; font-size: 1.5em;}
         display: inline-block;
         width: 33%;
         height: 280px;
-        box-shadow: 0 0 1px #333;
         background-image: url('../img/tennis/live-today.jpg');
         background-size: cover;
         background-position: center;
@@ -192,6 +191,7 @@ header{padding-bottom: 3rem; padding-top: 1rem; font-size: 1.5em;}
             left: 0; bottom: 0;
             padding: 2rem;
             color: #fff;
+            pointer-events: none;
         }
 
         .name{
@@ -199,7 +199,7 @@ header{padding-bottom: 3rem; padding-top: 1rem; font-size: 1.5em;}
         }
 
         .time{
-
+            font-size: 0.8em;
         }
     }
 
@@ -213,6 +213,8 @@ header{padding-bottom: 3rem; padding-top: 1rem; font-size: 1.5em;}
         background-repeat: repeat-x;
         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FF000000', GradientType=0);
         transition: background-color 0.3s ease-in;
+
+        &:hover{opacity: 0;}
     }
 
 

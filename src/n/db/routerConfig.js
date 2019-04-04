@@ -488,6 +488,7 @@ const routerConfig = {
         '/tennisRanking': function(params, res, req){
             r.query('queryTennisRanking', params, res, req);
         },
+
     },
 
     post: {

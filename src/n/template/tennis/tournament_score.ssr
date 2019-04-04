@@ -1,0 +1,12 @@
+{{%
+	['queryTournamentDailySchedule']
+%}}
+
+<%- include('views/header', {title: '巡回赛赛况' }) %>
+<div id="body" class="tournament">
+	<% dynamicDataSet.tournament.forEach(function(){
+		
+	}) %>
+</div>
+
+<%- include views/footer %>
