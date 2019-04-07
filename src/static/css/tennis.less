@@ -216,6 +216,29 @@ header{padding-bottom: 3rem; padding-top: 1rem; font-size: 1.5em;}
 
         &:hover{opacity: 0;}
     }
+}
 
+#body.tournament{
+    #hero{
+        height: 326px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: relative;
+        
+        .info{
+            position: absolute; z-index: 2; top: 100px; left: 40px; color: #fff;
+            .status{color: @c1; font-weight: bold;}
+            .name{margin: .5rem 0;}
+        }
 
+        .overlay-gradient{
+            background-image: linear-gradient(to left, transparent 30%, #000 130%);
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+        }
+    }
 }

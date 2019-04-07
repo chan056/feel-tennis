@@ -48,6 +48,29 @@ module.exports = {
         })
     },
 
+    clipImage: function(src, dest, fn){
+        require('fs').access(dest, function(err){
+            if(err){
+                const Clipper = require('image-clipper');
+                const Canvas = require('canvas');
+                Clipper.configure({
+                    canvas: Canvas
+                })
+        
+                Clipper(src, function() {
+                    this.resize(1000)
+                    .quality(80)
+                    .toFile(dest, function() {
+                        console.log('saved!');
+                        fn && fn()
+                    });
+                });
+            }else{
+                fn && fn()
+            }
+        })
+    },
+
     fetchHTML: function (url, fn){
         require('request')(url, function(error,response,body) {
             if(error)
