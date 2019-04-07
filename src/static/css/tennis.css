@@ -372,3 +372,10 @@ header {
   left: 0;
   bottom: 0;
 }
+#body.tournament #days {
+  text-align: center;
+}
+#body.tournament #days .prev,
+#body.tournament #days .next {
+  cursor: pointer;
+}
