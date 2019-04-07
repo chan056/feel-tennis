@@ -89,6 +89,22 @@ header {
   height: 155px;
   width: 120px;
 }
+#body.has-common-header #player-base-info #ranking .value {
+  font-size: 2.5rem;
+}
+#body.has-common-header #player-base-info #name {
+  margin-top: 1rem;
+}
+#body.has-common-header #player-base-info #first-name {
+  font-size: 1.2rem;
+}
+#body.has-common-header #player-base-info #second-name {
+  font-size: 2rem;
+}
+#body.has-common-header #player-base-info .data-value ::after {
+  content: '';
+  display: inline-block;
+}
 #body.has-common-header #player-base-info #p11 {
   color: #fff;
   margin-left: 1rem;
@@ -160,22 +176,6 @@ header {
 }
 #body.stat canvas {
   margin-top: 3rem;
-}
-#body.stat #ranking .value {
-  font-size: 2.5rem;
-}
-#body.stat #name {
-  margin-top: 1rem;
-}
-#body.stat #first-name {
-  font-size: 1.2rem;
-}
-#body.stat #second-name {
-  font-size: 2rem;
-}
-#body.stat .data-value ::after {
-  content: '';
-  display: inline-block;
 }
 #body.bio .part {
   border-top: 4px solid #21B43D;
