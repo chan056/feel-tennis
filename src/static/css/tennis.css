@@ -81,6 +81,9 @@ header {
   box-sizing: border-box;
   padding: 1rem;
   position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 #body.has-common-header #player-base-info #avatar {
   height: 155px;
@@ -157,6 +160,22 @@ header {
 }
 #body.stat canvas {
   margin-top: 3rem;
+}
+#body.stat #ranking .value {
+  font-size: 2.5rem;
+}
+#body.stat #name {
+  margin-top: 1rem;
+}
+#body.stat #first-name {
+  font-size: 1.2rem;
+}
+#body.stat #second-name {
+  font-size: 2rem;
+}
+#body.stat .data-value ::after {
+  content: '';
+  display: inline-block;
 }
 #body.bio .part {
   border-top: 4px solid #21B43D;

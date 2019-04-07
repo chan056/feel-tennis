@@ -7,12 +7,12 @@
 		<div id="avatar" class="fl" style="background-image: url(<%= playerinfo.player_image %>)"></div>
 		<div id="p11" class="fl">
 			<div id="ranking">
-				<label for="">Ranking</label><br>
-				#<%= playerinfo.ranking %>
+				<label for="" class="need-translate standalone">Ranking</label><br>
+				<span class="value">#<%= playerinfo.ranking %></span>
 			</div>
 			<div id="name">
-				<div id="first-name"><%= playerinfo.firstname %></div>
-				<div id="second-name"><%= playerinfo.lastname %></div>
+				<div id="first-name" class="need-translate standalone"><%= playerinfo.firstname %></div>
+				<div id="second-name" class="need-translate standalone"><%= playerinfo.lastname %></div>
 			</div>
 		</div>
 	</div>
@@ -36,27 +36,30 @@
 	<div id="p3" class="ovh">
 		<div class="base-data">
 			<p class="data-label">年龄</p>
-			<p class="data-value"><%= playerinfo.age %>&nbsp;</p>
+			<p class="data-value"><%= playerinfo.age %></p>
 		</div>
 		<div class="base-data">
 			<p class="data-label">国籍</p>
 			<p class="data-value">
-				<a href="https://ditu.baidu.com?q=<%= playerinfo.country %>" target="blank"><%= playerinfo.country %></a>
-				&nbsp;
+				<a href="https://ditu.baidu.com?q=<%= playerinfo.country %>" target="blank" class="need-translate standalone">
+					<%= playerinfo.country %></a>
+				
 			</p>
 		</div>
 		<div class="base-data">
 			<p class="data-label">居住地</p>
-			<p class="data-value"><%= playerinfo.residence %>&nbsp;</p>
+			<p class="data-value"><%- playerinfo.residence.split(',').map(function(){
+				return `<span class="need-translate standalone">${arguments[0]}</span>`
+			}).join(',') %></p>
 		</div>
 		<div class="base-data">
 			<p class="data-label">转职业</p>
-			<p class="data-value"><%= playerinfo.turn_pro %>&nbsp;</p>
+			<p class="data-value"><%= playerinfo.turn_pro %></p>
 		</div>
 		<div class="base-data">
 			<% if(playerinfo.earnings && playerinfo.earnings.split('|').length == 2){ %>
 				<p class="data-label"><%= playerinfo.earnings.split('|')[0] %> 奖金</p>
-				<p class="data-value"><%= playerinfo.earnings.split('|')[1] %>&nbsp;</p>
+				<p class="data-value"><%= playerinfo.earnings.split('|')[1] %></p>
 			<% } %>
 		</div>
 	</div>
