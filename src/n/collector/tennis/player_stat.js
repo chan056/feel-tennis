@@ -55,20 +55,32 @@ function storeData(fragment) {
     
             playerImage = playerImage.replace(/\.\w+$/, '') + `/tablet-rankings-players-page${playerImageExt}`;
     
-            let featureImage = $('.single-player-hero figure').attr('data-image'),
+            let featureImage = $('.single-player-hero figure').attr('data-image');
+
+            if(playerImage){
+                tools.downloadImg(playerImage, path.resolve(__dirname, `../../../static${player_image}`, ), function(){
+                    playerImagerDownloaded = true;
+                });
+            }else{
+                playerImagerDownloaded = true;
+            }
+
+            let feature_image = '',
+                featureImageExt = '';
+
+            if(featureImage){
                 featureImageExt = path.extname(featureImage).toLowerCase(),
                 feature_image = `/img/tennis/athlete/${playerId}.feature${featureImageExt}`;// 客户端访问地址
     
-            featureImage = featureImage.replace(/\.\w+$/, '') + `/desktop-detail-featured-image${featureImageExt}`;
-    
-            tools.downloadImg(playerImage, path.resolve(__dirname, `../../../static${player_image}`, ), function(){
-                playerImagerDownloaded = true;
-            });
-    
-            tools.downloadImg(featureImage, path.resolve(__dirname, `../../../static${feature_image}`, ), function(){
+                featureImage = featureImage.replace(/\.\w+$/, '') + `/desktop-detail-featured-image${featureImageExt}`;// 下载地址
+
+                tools.downloadImg(featureImage, path.resolve(__dirname, `../../../static${feature_image}`, ), function(){
+                    featureImagerDownloaded = true;
+                });
+            }else{
                 featureImagerDownloaded = true;
-            });
-    
+            }
+            
             const stats = $('.player-stats');
             const firstname = $('.name-and-ranking .first-name').text().trim(),
                 lastname = $('.name-and-ranking .last-name').text().trim(),
@@ -116,7 +128,7 @@ function storeData(fragment) {
                 history_data = '${historyData}',
                 stat_expire = FROM_UNIXTIME(${now + day * expires.stat})
                 where id_tennis_com = ${playerId}`;
-    
+
             tools.runSql(sql, function(){
                 setInterval(() => {
                     if(playerImagerDownloaded && featureImagerDownloaded){

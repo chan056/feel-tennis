@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/lib/zepto.editable.dropdown/editable-select.css">
 <script src="/lib/zepto.editable.dropdown/editable-select.js"></script>
 
-<div id="player-base-info" style="background-image: url(<%= playerinfo.feature_image %>)">
+<div id="player-base-info" style="background-image: url(<%= playerinfo.feature_image || '/img/tennis/single-player-minor-hero.jpg' %>)">
 	<span class="overlay-gradient overlay-left"></span>
 	<div id="p1" class="fl">
 		<div id="avatar" class="fl" style="background-image: url(<%= playerinfo.player_image %>)"></div>
