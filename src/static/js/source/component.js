@@ -906,7 +906,7 @@ module.exports = function(){
 						let dayViewLeft = res.dayViewLeft;
 						if(dayViewLeft){
 							if(dayViewLeft <= 5){
-								this.$message({message: `当天剩余播放次数 ${res.dayViewLeft || 0}次`, type: 'warning'});
+								this.$message({message: `当天剩余播放次数 ${res.dayViewLeft || 0}次，点击右上角图标注册或登录查看更多视频`, type: 'warning'});
 							}
 	
 							this.bindVideo();
@@ -914,7 +914,7 @@ module.exports = function(){
 					}else{
 						this.$message({
 							dangerouslyUseHTMLString: true,
-							message: `当天剩余播放次数 0次，<br/>点击右上角注册或登录查看更多视频`, 
+							message: `当天剩余播放次数 0次，<br/>点击右上角注册或登录查看更多视频，点击右上角图标注册或登录查看更多视频`, 
 							type: 'warning'
 						});
 					}
@@ -993,7 +993,7 @@ module.exports = function(){
 				function clearCountdown(){
 					clearInterval(_this.intervalId);
 					captureBtn.data('counting', false);
-					captureBtn.val('截取小视频');
+					captureBtn.val('截视频');
 				}
 			},
 

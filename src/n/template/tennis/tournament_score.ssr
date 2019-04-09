@@ -5,11 +5,14 @@
 <%- include('views/header', {title: '巡回赛赛况' }) %>
 <% tournament = JSON.parse(dynamicDataSet.tournament); %>
 <div id="body" class="tournament" >
-	<div id="hero" style="background-image: url(<%= '/img/tennis/tournaments/' + tournament.id + '.mirror' + tournament.extname %>);">
+	<div id="hero" style="background-image: url(<%= tournament.extname
+		? '/img/tennis/tournaments/' + tournament.id + '.mirror' + tournament.extname 
+		: '/img/tennis/tournament-hero.jpg'
+		%>);">
 		<div class="overlay-gradient"></div>
 		<div class="info">
 			<p class="status">正在进行</p>
-			<h2 class="name"><%= tournament.name %></h2>
+			<h2 class="name"><%= (tournament.name || '').replace(/\([^)]+\)/, '') %></h2>
 			<p class="duration"><%= tournament.startdate.split(' ')[0].replace(/-/g, '/') 
 				+ ' - ' + tournament.enddate.split(' ')[0].replace(/-/g, '/') %></p>
 		</div>
@@ -28,17 +31,31 @@
 	<div id="draw">
 		draw
 	</div>
-	<%= JSON.stringify(tournament); %>
+	
 </div>
 <script>
 	var baseOffset = 0;
-	createDateSel();
+	var tournament = JSON.parse(`<%- dynamicDataSet.tournament %>`);
+	var events = tournament.events;
 
+	createDateSel();
+	console.log(tournament);
 	// 创建日期选择器
 	function createDateSel(){
+		// 第一场比赛开始前 没有日期选择
+			// 第一天 所有event  Not started
+		// 已结束 没有日期选择
+			// 有event Championship Finished =》 status “COMPLETED”
+
+		if(events[0].round == 'Championship' &&
+			events[0].status == 'Finished'
+		){
+			return;
+		}
+
 		var domBase = $('#days');
-		var minDate = '<%= tournament.startdate %>';
-		var maxDate = '<%= tournament.enddate %>';
+		var minDate = tournament.startdate;
+		var maxDate = tournament.enddate;
 
 		var curDate = getDate();
 		var prevDate = getDate(-1);
@@ -86,7 +103,7 @@
 
 		function getDate(dayOffset){
 			dayOffset = (dayOffset || 0) + baseOffset;
-			console.log(baseOffset)
+			// console.log(baseOffset)
 
 			var now = new Date(+new Date() + dayOffset * 24 * 60 * 60 * 1000) ,
 				min = new Date(minDate),

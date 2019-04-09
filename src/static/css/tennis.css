@@ -88,6 +88,9 @@ header {
 #body.has-common-header #player-base-info #avatar {
   height: 155px;
   width: 120px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 #body.has-common-header #player-base-info #ranking .value {
   font-size: 2.5rem;

@@ -1206,70 +1206,105 @@ let operations = {
 	},
 
 	queryTournamentDailySchedule: function(res, qualification, params){
-		// http://localhost:3100/tennis/tournaments/858254/2019-04-04
-		let date = calcTimeZoneDate(params.offset || 0);
+		// http://localhost:3100/tennis/tournaments/858254
 
-		let dataSource = `http://ace.tennis.com/pulse/${date}_livescores_new.json`;
+		let sql = `select start_time,end_time from tennis.tournament where sid=${params.sid}`;
 
-		tools.fetchHTML(dataSource, function(data){
-			try{
-				const path = require('path');
-				const collectorTool = require('../collector/tools/main');
-				data = JSON.parse(data);
-				data = data.tournaments;
-				let matchedData = {};
-				data.forEach(function(tour){
-					if(tour.id == params.sid){
-						matchedData = tour;
-					}
-				});
+		conn.query(sql , function (err, result, fields) {
+			if (err) return throwError(err, result);
+			
+			let maxTime = result[0].end_time,
+				minTime = result[0].minTime;
 
-				let url = matchedData.hero_image_url;
-				let extname = path.extname(url);
-				let dest = path.resolve(global.staticRoot, `./img/tennis/tournaments/${params.sid}${extname}`);
-				let destMirror = path.resolve(global.staticRoot, `./img/tennis/tournaments/${params.sid}.mirror${extname}`);
-				collectorTool.downloadImg(url, dest, function(){
-					matchedData.extname = extname;
-					matchedData = JSON.stringify(matchedData);
+			let date = calcTimeZoneDate(params.offset || 0);
+			
+			let dataSource = `http://ace.tennis.com/pulse/${date}_livescores_new.json`;
 
-					if(!res.dynamicDataSet){
-						res.end(matchedData)
+			tools.fetchHTML(dataSource, function(data){
+				try{
+					const path = require('path');
+					const collectorTool = require('../collector/tools/main');
+					data = JSON.parse(data);
+					data = data.tournaments;
+					let matchedData = null;
+					data.forEach(function(tour){
+						if(tour.id == params.sid){
+							matchedData = tour;
+						}
+					});
+
+					if(matchedData){
+						let url = matchedData.hero_image_url;
+						if(url){
+							let extname = path.extname(url);
+							let dest = path.resolve(global.staticRoot, `./img/tennis/tournaments/${params.sid}${extname}`);
+							let destMirror = path.resolve(global.staticRoot, `./img/tennis/tournaments/${params.sid}.mirror${extname}`);
+							collectorTool.downloadImg(url, dest, function(){
+								matchedData.extname = extname;
+								matchedData = JSON.stringify(matchedData);
+			
+								if(!res.dynamicDataSet){
+									res.end(matchedData)
+								}else{
+									res.dynamicDataSet[params.ssrOutput || 'tournament'] = matchedData;
+								}
+			
+								collectorTool.clipImage(dest, destMirror)
+							})
+						}else{// 没有图片
+							matchedData = JSON.stringify(matchedData);
+			
+							if(!res.dynamicDataSet){
+								res.end(matchedData)
+							}else{
+								res.dynamicDataSet[params.ssrOutput || 'tournament'] = matchedData;
+							}
+						}
+						
 					}else{
-						res.dynamicDataSet[params.ssrOutput || 'tournament'] = matchedData;
+						res.end('')
 					}
+				}catch(e){
+					console.log(e)
+					if(!res.dynamicDataSet){
+						res.end('')
+					}else{
+						res.dynamicDataSet[params.ssrOutput || 'tournament'] = {};
+					}
+				}
+			})
 
-					collectorTool.clipImage(dest, destMirror)
-				})
-			}catch(e){
-				console.log(e)
-				if(!res.dynamicDataSet){
-					res.end('')
-				}else{
-					res.dynamicDataSet[params.ssrOutput || 'tournament'] = {};
+			// 计算+1时区的日期
+			// 数据是东1时区的数据（英国）
+			function calcTimeZoneDate(offset){
+				let GMT = +new Date(
+					(new Date()).toUTCString()
+				);
+				let hourMilli = 60*60*1000;
+
+				let firstTimezone = new Date(GMT + 1 * hourMilli + offset * 24 * hourMilli);
+
+				if(firstTimezone > maxTime){
+					firstTimezone = new Date(maxTime)
+				}
+
+				if(firstTimezone < minTime){
+					firstTimezone = new Date(minTime)
+				}
+
+				let y = firstTimezone.getFullYear(),
+					m = firstTimezone.getMonth() + 1,
+					d = firstTimezone.getDate();
+
+				return (y + '-' + zeroFill(m) + '-' + zeroFill(d)).toString();
+
+				function zeroFill(n){
+					return n > 9? n: '0'+n
 				}
 			}
 		})
 
-		// 计算+1时区的日期
-		// 数据是东1时区的数据（英国）
-		// 数据链接中带有日期参数
-		function calcTimeZoneDate(offset){
-			let GMT = +new Date(
-				(new Date()).toUTCString()
-			);
-			let hourMilli = 60*60*1000;
-
-			let firstTimezone = new Date(GMT + 1 * hourMilli + offset * 24 * hourMilli);
-			let y = firstTimezone.getFullYear(),
-				m = firstTimezone.getMonth() + 1,
-				d = firstTimezone.getDate();
-
-			return (y + '-' + zeroFill(m) + '-' + zeroFill(d)).toString();
-
-			function zeroFill(n){
-				return n > 9? n: '0'+n
-			}
-		}
+		
 	},
 
 	// =========== 网球统计 结束

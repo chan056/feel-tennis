@@ -64,7 +64,7 @@ $(function () {
 			recordPage();
 			sitePush();
 		}else{
-			document.title = to.meta.title + '_网球视频教程';
+			document.title = to.meta.title + '_网球基地';
 		}
 
 		next();
@@ -72,7 +72,7 @@ $(function () {
 		function recordPage(){
 			var pageContent = $('html')[0].outerHTML;
 			if (to.meta.title) {
-				document.title = to.meta.title + '_网球视频教程';
+				document.title = to.meta.title + '_网球基地';
 			}
 
 			tools.xhr('/pageRecoder', function(res){

@@ -462,12 +462,12 @@ module.exports = function(){
                     <br class="clr">
                 </div>
                 <div v-if="video" id="video-operation-wrapper">
-                    <input type="button" value="截取小视频" @click="captureCountdown()" id="capture-btn" class="el-button el-button--default"/>
+                    <input type="button" value="截视频" @click="captureCountdown()" id="capture-btn" class="el-button el-button--default"/>
                     <el-button v-if="shortVideoLink && !shooting" @click="preview(); previewType=1;">预览小视频</el-button>
                     <el-button v-if="shooting" :loading="true">截取中...</el-button>
                     <input type="button" value="截图" @click="screenshot()" id="screenshot-btn" class="el-button el-button--default"/>
                     <el-button v-if="screenshotLink" @click="preview(); previewType=2;">预览截图</el-button>
-                    <el-button @click="remarker.visible = true; this.vEle.pause();" id="mark-btn">标注</el-button>
+                    <el-button @click="remarker.visible = true; this.vEle.pause();" id="mark-btn">留言</el-button>
                 </div>
     
                 <div id="remark-wrapper" v-if="video">
@@ -520,7 +520,7 @@ module.exports = function(){
                 </el-dialog>
     
                 <el-dialog 
-                    title="标注"
+                    title="留言"
                     :visible.sync="remarker.visible"
                     >
                     <el-form ref="remarkerForm" :rules="remarker.rules" :model="remarker">
