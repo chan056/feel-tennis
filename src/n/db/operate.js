@@ -1262,7 +1262,11 @@ let operations = {
 						}
 						
 					}else{
-						res.end('')
+						if(!res.dynamicDataSet){
+							res.end('')
+						}else{
+							res.dynamicDataSet[params.ssrOutput || 'tournament'] = '';
+						}
 					}
 				}catch(e){
 					console.log(e)
