@@ -401,3 +401,49 @@ header {
 #body.tournament #days .next {
   cursor: pointer;
 }
+#body.tournament #scores {
+  margin-top: 2rem;
+}
+#body.tournament #scores .score {
+  width: 33%;
+  min-height: 2rem;
+  float: left;
+}
+#body.tournament #scores .player-score {
+  float: right;
+  overflow: hidden;
+}
+#body.tournament #scores .player-score li {
+  float: left;
+}
+#body.tournament #draw {
+  overflow-x: auto;
+}
+#body.tournament #draw .round {
+  width: 20rem;
+  position: relative;
+  float: left;
+}
+#body.tournament #draw .round:nth-of-type(1) .match {
+  position: static;
+}
+#body.tournament #draw .round.final .match {
+  bottom: 0;
+  transform: translateY(61px);
+}
+#body.tournament #draw .round.final .match .player:last-child {
+  font-weight: bold;
+}
+#body.tournament #draw .match {
+  position: absolute;
+  background-color: #eee;
+  box-sizing: border-box;
+  padding-right: 1rem;
+  margin: 1rem 0;
+  background-clip: content-box;
+  width: 100%;
+}
+#body.tournament #draw .player {
+  padding: .5rem 1rem;
+  white-space: nowrap;
+}

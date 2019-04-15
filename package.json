@@ -24,7 +24,8 @@
     "request": "^2.88.0",
     "srt-to-vtt": "^1.1.2",
     "status-code-enum": "^1.0.0",
-    "subtitles-parser": "0.0.2"
+    "subtitles-parser": "0.0.2",
+    "xml-parser": "^1.2.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

@@ -5,4 +5,5 @@ module.exports = {
     bio: 20,
     gear: 30,
     tournament: 1,
+    tournamentDraw: 1/24
 }
