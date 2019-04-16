@@ -489,6 +489,9 @@ const routerConfig = {
             r.query('queryTennisRanking', params, res, req);
         },
 
+        '/tournamentDailySchedule': function(params, res, req){
+            r.query('queryTournamentDailySchedule', params, res, req);
+        },
     },
 
     post: {
