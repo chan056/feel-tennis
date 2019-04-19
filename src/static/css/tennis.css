@@ -321,6 +321,9 @@ header {
 #body.tournaments h2 {
   margin-bottom: 2rem;
 }
+#body.tournaments .tour-cards {
+  min-height: 10rem;
+}
 #body.tournaments .tour-row {
   /* display: flex; */
 }

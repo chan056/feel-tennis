@@ -1220,10 +1220,14 @@ let operations = {
 
 		conn.query(sql , function (err, result, fields) {
 			if (err) return throwError(err, result);
+
+			if(!result.length){
+				return
+			}
 			
 			let maxTime = result[0].end_time,
 				minTime = result[0].minTime;
-			
+
 			let date = calcTimeZoneDate(offset);
 			
 			// 由于时差的关系
@@ -1271,9 +1275,9 @@ let operations = {
 								collectorTool.downloadImg(url, dest, function(){
 									matchedData.extname = extname;
 									matchedData = JSON.stringify(matchedData);
-									respond(matchedData)
 									recordDayScore(matchedData)
-									collectorTool.clipImage(dest, destMirror);
+									// collectorTool.clipImage(dest, destMirror);
+									respond(matchedData)
 								})
 							}else{// 没有图片
 								matchedData = JSON.stringify(matchedData);
@@ -1344,13 +1348,13 @@ let operations = {
 
 	queryTournamentDraw: function (res, qualification, params) {
 		
-		conn.query(`select now() > expire as is_expire from tennis.tournament_draw`, function(err, rows){
+		conn.query(`select now() > expire as is_expire from tennis.tournament_draw where id=${params.sid}`, function(err, rows){
 			if(err) return throwError(err, res);
 
 			if(!rows[0] || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/tournament_draw.js');
 
-				tools.spawn([file], function(){
+				tools.spawn([file, params.sid], function(){
 					query();
 				}, res)
 			}else{

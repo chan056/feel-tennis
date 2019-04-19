@@ -243,8 +243,8 @@ function spawn(processArgs, fn, res){
 function fetchHTML (url, fn){
 	require('request')(url, function(error,response,body) {
 		if(error)
-			console.log(error);
-
+			return console.log(error);
+			
 		if(!error && response.statusCode == 200){
 			fn && fn(body)
 		}else{

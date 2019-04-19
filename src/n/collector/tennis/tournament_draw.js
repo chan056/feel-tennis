@@ -3,7 +3,7 @@ const path = require('path');
 
 let argv = process.argv.slice(2);
 console.log(argv);
-let tournamentID = argv[0] = 858253;
+let tournamentID = argv[0];
 let sid = argv[0];
 
 const expires = require('./expire_config');
@@ -12,6 +12,7 @@ const now = Date.now() / 1000,
 
 ;
 const sourceURL = `http://www.tennis.com/scores/tournaments/${tournamentID}/monterrey-open-wta-2019/draw/`;
+console.log(sourceURL)
 
 tools.fetchHTML(sourceURL, storeData)
 
