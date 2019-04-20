@@ -192,7 +192,7 @@ module.exports = function(){
                         </a>
                     </div>
                     <div class="guide-entry">
-                        <a href="/tennis/ranking.ssr" class="guide-entry-renderer" title="巡回赛">
+                        <a href="/tennis/tournament.ssr" class="guide-entry-renderer" title="巡回赛">
                             <i class="fa fa-wpforms icon"></i>
                             <span class="text">巡回赛</span>
                         </a>
