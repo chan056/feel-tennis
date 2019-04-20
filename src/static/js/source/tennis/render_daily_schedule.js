@@ -110,7 +110,6 @@ function createDateSel(){
     var curDate = getDate(0);
     var prevDate = getDate(-1);
     var nextDate = getDate(1);
-    alert(prevDate)
 
     domBase.html(`
         <div class="fl prev">
