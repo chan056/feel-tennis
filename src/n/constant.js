@@ -6,8 +6,7 @@ let CONSTANTS = {
         'localhost',
         '47.98.108.40',
         'www.yitube.cn',
-        '192.168.33.6',// 公司
-        '192.168.3.3',// 家
+        '192.168.3.12',// 家
     ],// 访问白名单
     bootJS: 'tube.js',// JS入口
     maxDayView: 100,// 注册用户最大访问量

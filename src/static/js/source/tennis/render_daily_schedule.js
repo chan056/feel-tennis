@@ -107,9 +107,10 @@ function createDateSel(){
     var minDate = tournament.startdate;
     var maxDate = tournament.enddate;
 
-    var curDate = getDate();
+    var curDate = getDate(0);
     var prevDate = getDate(-1);
     var nextDate = getDate(1);
+    alert(prevDate)
 
     domBase.html(`
         <div class="fl prev">
@@ -149,11 +150,11 @@ function createDateSel(){
     });
 
     function getDate(dayOffset){
-        dayOffset = (dayOffset || 0) + baseOffset;
+        dayOffset = (dayOffset || 0) + (baseOffset || 0);
 
         var now = new Date(+new Date() + dayOffset * dayMilli) ,
-            min = new Date(minDate),
-            max = new Date(maxDate);
+            min = new Date(minDate.split(' ')[0]),
+            max = new Date(maxDate.split(' ')[0]);
 
         if(now.getTime() < min.getTime()){
             now = min

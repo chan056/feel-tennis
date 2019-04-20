@@ -59,7 +59,7 @@
 		if(e.round == 'Championship' && e.status == 'Finished'){
 			isFinished = true;
 
-			baseOffset = (new Date(tournament.enddate) - new Date().setHours(23, 59, 59, 0))/dayMilli;
+			baseOffset = (new Date(tournament.enddate.split(' ')[0]) - new Date().setHours(23, 59, 59, 0))/dayMilli;
 
 			$('#hero .status').text('已结束')
 		}
