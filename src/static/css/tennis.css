@@ -397,12 +397,33 @@ header {
   left: 0;
   bottom: 0;
 }
+#body.tournament .border {
+  margin-top: 2rem;
+}
+#body.tournament #score-wrapper .fa-spinner-wrapper {
+  display: none;
+}
+#body.tournament #score-wrapper #scores {
+  opacity: 1;
+}
+#body.tournament #score-wrapper.loading .fa-spinner-wrapper {
+  display: block;
+}
+#body.tournament #score-wrapper.loading #scores {
+  opacity: 0;
+}
 #body.tournament #days {
   text-align: center;
 }
 #body.tournament #days .prev,
 #body.tournament #days .next {
   cursor: pointer;
+}
+#body.tournament .fa-spinner-wrapper {
+  text-align: center;
+  margin-top: 2rem;
+  display: none;
+  font-size: 3rem;
 }
 #body.tournament #scores {
   margin-top: 2rem;
@@ -411,6 +432,38 @@ header {
   width: 33%;
   min-height: 2rem;
   float: left;
+  box-sizing: border-box;
+  padding-right: 1rem;
+  margin-bottom: 2rem;
+}
+#body.tournament #scores .score .status {
+  width: 33%;
+  background-color: #cecece;
+  text-indent: 1em;
+  height: 2rem;
+  line-height: 2rem;
+  font-size: 1rem;
+}
+#body.tournament #scores .players {
+  background-color: #efefef;
+  padding: 0.5rem;
+}
+#body.tournament #scores .player {
+  padding: .5rem 0;
+  height: 37px;
+}
+#body.tournament #scores .player .name {
+  margin-left: 1rem;
+}
+#body.tournament #scores .player .fa-check {
+  opacity: 0;
+  margin: 0 .5rem;
+}
+#body.tournament #scores .player.is_winner {
+  font-weight: bold;
+}
+#body.tournament #scores .player.is_winner .fa-check {
+  opacity: 1;
 }
 #body.tournament #scores .player-score {
   float: right;
@@ -418,9 +471,17 @@ header {
 }
 #body.tournament #scores .player-score li {
   float: left;
+  margin-left: 1rem;
+}
+#body.tournament #scores .box-score {
+  height: 2rem;
+  line-height: 2rem;
+  background-color: #eae8e8;
+  padding-right: 0.5rem;
 }
 #body.tournament #draw {
   overflow-x: auto;
+  margin-bottom: 2rem;
 }
 #body.tournament #draw .round {
   width: 20rem;
@@ -449,4 +510,7 @@ header {
 #body.tournament #draw .player {
   padding: .5rem 1rem;
   white-space: nowrap;
+}
+#body.tournament #draw .player .name {
+  margin-left: 0.5rem;
 }

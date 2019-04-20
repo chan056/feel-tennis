@@ -222,3 +222,7 @@ img {
   height: 40px;
   text-decoration: none;
 }
+.flag {
+  min-width: 37px;
+  min-height: 1px;
+}

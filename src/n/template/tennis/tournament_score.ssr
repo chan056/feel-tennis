@@ -23,9 +23,13 @@
 		</div>
 	</div>
 	
-	<div class="border">
+	<div class="border" id="score-wrapper">
 		<div id="days">
 			<!-- 取当地日期，在startdate 和 enddate之间 -->
+		</div>
+
+		<div class="fa-spinner-wrapper">
+			<i class="fa fa-spinner"></i>
 		</div>
 
 		<div id="scores" class="clearfix">
@@ -34,14 +38,15 @@
 
 	</div>
 
-	<div id="draw">
+	<div id="draw" class="border">
 		<div id="bracket-1" class="bracket clearfix">
 		</div>
 		<div id="bracket-2" class="bracket clearfix"></div>
 	</div>
 	
 </div>
-<script src="/js/source/draw.js"></script>
+<script src="/js/source/tennis/render_daily_schedule.js"></script>
+<script src="/js/source/tennis/draw_racing_chart.js"></script>
 <script>
 	var baseOffset = 0;
 	var dayMilli = 24 * 60 * 60 * 1000;
@@ -63,159 +68,15 @@
 	createDateSel();
 	renderScores();
 
-	function renderScores(){
-		var events = tournament.events;
-		var s = '';
-
-		events.forEach(function(event){
-			var status = event.status;
-			s += `<div class="score">
-				<div class="status">${status}</div>
-
-				<div class="players">
-					${renderPlayers(event.players)}
-				</div>
-				<div class="box-score tar">
-					<!-- 
-						未开始 预测
-						已结束 查看对战统计
-						正在进行 分数直播
-						-->
-					<a href="" target="_blank">
-						${
-							{'Upcoming': '预测', 'Finished': '对战统计', 'Happening': '分数直播'}[status]
-						}
-					</a>
-				</div>
-			</div>`
-		})
-
-		$('#scores').html(s);
-
-		function renderPlayers(players){
-			var s = '';
-			players.forEach(function(player){
-				s += `<div class="player">
-					<i class="flag flags-${player.country}"></i>
-					<em class="name">${player.name}</em>
-					<em class="seed">(${player.seed})</em>
-
-					<ul class="player-score">
-						${renderGames(player.set_games)}
-					</ul>
-				</div>`
-			})
-
-			return s;
-
-			function renderGames(games){
-				var s = '';
-				games.forEach(function(game){
-					s += `<li>${game}</li>`
-				})
-
-				return s;
-			}
-		}
-	}
-	
-	function tournamentDailySchedule(){
-		$.ajax({
-			type: 'get',
-			url: '/api/tournamentDailySchedule',
-			data: {
-				sid: tournament.sid,
-				offset: baseOffset
-			},
-			contentType: 'text/json',
-			success: function(data){
-				console.log(data)
-				tournament = JSON.parse(data);
-				renderScores();
-			},
-			error: function(xhr, type){
-				console.error('Ajax error!')
-			}
-		})
-	}
-
-	// 创建日期选择器
-	function createDateSel(){
-		
-		var domBase = $('#days');
-		var minDate = tournament.startdate;
-		var maxDate = tournament.enddate;
-
-		var curDate = getDate();
-		var prevDate = getDate(-1);
-		var nextDate = getDate(1);
-
-		domBase.html(`
-			<div class="fl prev">
-				<
-				<span class="day">${prevDate}</span>
-			</div>
-			<span class="day cur">${curDate}</span>
-			<div class="fr next">
-				<span class="day">${nextDate}</span>
-				>
-			</div>
-			<br class="clr">
-		`);
-
-		if(curDate == prevDate){
-			domBase.find('.prev').hide();
-		}else{
-			domBase.find('.prev').show()
-		}
-
-		if(curDate == nextDate){
-			domBase.find('.next').hide();
-		}else{
-			domBase.find('.next').show()
-		}
-
-		domBase.off('click').on('click', '.prev', function(){
-			createDateSel(--baseOffset);
-			tournamentDailySchedule();
-		}).on('click', '.next', function(){
-			createDateSel(++baseOffset);
-			tournamentDailySchedule();
-		});
-
-		function getDate(dayOffset){
-			dayOffset = (dayOffset || 0) + baseOffset;
-
-			var now = new Date(+new Date() + dayOffset * dayMilli) ,
-				min = new Date(minDate),
-				max = new Date(maxDate);
-
-			if(now.getTime() < min.getTime()){
-				now = min
-			}
-
-			if(now.getTime() > max.getTime()){
-				now = max
-			}
-
-			var m = now.getMonth() + 1;
-			var d = now.getDate();
-
-			return zeroFill(m) + '/' + zeroFill(d)
-
-			function zeroFill(n){
-				return n >9? n: ('0' + n);
-			}
-		}
-	}
-
 	// 赛程
 	var tournamentDrawData = JSON.parse(unescape('<%= (dynamicDataSet.tournamentDraw) %>'));
 	tournamentDrawData = tournamentDrawData.root.children;
 	tournamentDrawData.pop();
 	console.log(tournamentDrawData)
 
-	draw(tournamentDrawData)
+	// 绘制赛程
+	drawrRacingChart(tournamentDrawData)
+	// 调整位置
 	clearupDraw();
 </script>
 <% }else{ %>

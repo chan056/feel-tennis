@@ -1,4 +1,4 @@
-function draw(tournamentDrawData){
+function drawrRacingChart(tournamentDrawData){
     var bracket1 = $('#bracket-1').width(320 * tournamentDrawData.length),
         bracket2 = $('#bracket-2').width(320 * tournamentDrawData.length);
 
@@ -41,14 +41,14 @@ function constructRound(bracketData, isFinal){
         var matchStr = '<div class="match">';
 
         matchStr += `<div class="player">
-            <i class="flag flags-${attributes.firstPlayerCountry}"></i>
-            <em class="name">${attributes.firstPlayer}</em>
+            <i class="fl flag flags-${attributes.firstPlayerCountry}"></i>
+            <em class="name need-translate standalone">${attributes.firstPlayer}</em>
             <em class="seed">${attributes.firstPlayerSeed}</em>
         </div>`;
 
         matchStr += `<div class="player">
-            <i class="flag flags-${attributes.secondlayerCountry}"></i>
-            <em class="name">${attributes.secondPlayer}</em>
+            <i class="fl flag flags-${attributes.secondlayerCountry}"></i>
+            <em class="name need-translate standalone">${attributes.secondPlayer}</em>
             <em class="seed">${attributes.secondPlayerSeed}</em>
         </div>`;
 

@@ -2,11 +2,16 @@
 			translate();
 			translate(true);
 
-			function translate(standalone){
+			function translate(standalone, DOMroot){
 				var separator = '315699319005';
 				var sourceAry = [];
 				var doms = standalone? $('.need-translate.standalone'):
 					$('.need-translate').not('.standalone');
+
+				if(DOMroot){
+					doms = standalone? DOMroot.find('.need-translate.standalone'):
+						DOMroot.find('.need-translate').not('.standalone');
+				}
 
 				doms.css('opacity', 0).each(function(index, ele){
 					var source = $(ele).text().trim();

@@ -2208,7 +2208,7 @@ let operations = {
 			sourceAry.forEach((word, index)=>{
 				translateSevice(word, postObj.to, function(translation){
 					translateCount ++;
-					console.log(translateCount, sourceAry.length)
+					// console.log(translateCount, sourceAry.length)
 
 					translationAry[index] = translation;
 

@@ -260,23 +260,49 @@ header{padding-bottom: 3rem; padding-top: 1rem; font-size: 1.5em;}
         }
     }
 
+    .border{margin-top: 2rem;}
+
+    #score-wrapper{
+        .fa-spinner-wrapper{display: none;}
+        #scores{opacity: 1;}
+        
+        &.loading{
+            .fa-spinner-wrapper{display: block;}
+            #scores{opacity: 0;}
+        }
+    }
+
     #days{
         text-align: center;
         .prev, .next{ cursor: pointer;}
     }
 
+    .fa-spinner-wrapper{ text-align: center; margin-top: 2rem; display: none; font-size: 3rem;}
+
     #scores{
         margin-top: 2rem;
-        .score{width: 33%; min-height: 2rem; float: left;}
+        .score{
+            width: 33%; min-height: 2rem; float: left; box-sizing: border-box; padding-right: 1rem; margin-bottom: 2rem;
+            .status{width: 33%; background-color: #cecece; text-indent: 1em; height: 2rem; line-height: 2rem; font-size: 1rem;}    
+        }
+        .players{background-color: #efefef; padding: 0.5rem;}
+        .player{
+            padding: .5rem 0;  height: 37px;
+            .name{margin-left: 1rem;}
+            .fa-check{opacity: 0; margin: 0 .5rem;}
+            &.is_winner{font-weight: bold; .fa-check{opacity: 1;}}
+        }
         .player-score{
             float: right;
             overflow: hidden;
-            li{float: left;}
+            
+            li{float: left; margin-left: 1rem;}
         }
+        .box-score{height: 2rem; line-height: 2rem; background-color: #eae8e8; padding-right: 0.5rem;}
     }
 
     #draw{
-        overflow-x: auto;
+        overflow-x: auto; margin-bottom: 2rem;
         .round{
             width: 20rem; position: relative; float: left;
             &:nth-of-type(1){
@@ -293,6 +319,6 @@ header{padding-bottom: 3rem; padding-top: 1rem; font-size: 1.5em;}
             position: absolute; background-color: #eee; box-sizing: border-box; padding-right: 1rem; margin: 1rem 0; background-clip: content-box; width: 100%;
             
         }
-        .player{padding: .5rem 1rem; white-space: nowrap;}
+        .player{padding: .5rem 1rem; white-space: nowrap; .name{margin-left: 0.5rem;}}
     }
 }
