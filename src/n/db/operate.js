@@ -1037,7 +1037,11 @@ let operations = {
 		conn.query(sql, function(err, rows){
 			if(err) return throwError(err, res);
 
-			if(!rows[0]|| !rows[0].stat_expire || rows[0].is_expire){
+			if(!rows[0]){
+				return res.end('');
+			}
+
+			if(!rows[0].stat_expire || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/player_stat.js');
 				let name = rows[0]['name_en'].toLowerCase().replace(/\W+/g, '-');
 
@@ -1069,7 +1073,11 @@ let operations = {
 		conn.query(sql, function(err, rows){
 			if(err) return throwError(err, res);
 
-			if(!rows[0] || !rows[0].bio_expire || rows[0].is_expire){
+			if(!rows[0]){
+				return res.end('');
+			}
+
+			if(!rows[0].bio_expire || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/player_bio.js');
 				let name = rows[0]['name_en'].toLowerCase().replace(/\W+/g, '-');
 
@@ -1101,7 +1109,11 @@ let operations = {
 		conn.query(sql, function(err, rows){
 			if(err) return throwError(err, res);
 
-			if(!rows[0] || !rows[0].gear_expire || rows[0].is_expire){
+			if(!rows[0]){
+				return res.end('');
+			}
+
+			if(!rows[0].gear_expire || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/player_gear.js');
 				let name = rows[0]['name_en'].toLowerCase().replace(/\W+/g, '-');
 
