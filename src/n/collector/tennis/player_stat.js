@@ -82,11 +82,11 @@ function storeData(fragment) {
             }
             
             const stats = $('.player-stats');
-            const firstname = $('.name-and-ranking .first-name').text().trim(),
+            let firstname = $('.name-and-ranking .first-name').text().trim(),
                 lastname = $('.name-and-ranking .last-name').text().trim(),
                 birthdate = stats.find('.player-birthdate').text().trim(),
-                height = stats.find('.player-height').text().trim().match(/\((\d+)/)[1],
-                weight = stats.find('.player-weight').text().trim().match(/\((\d+)/)[1],
+                height = stats.find('.player-height').text().trim().match(/\((\d+)/),
+                weight = stats.find('.player-weight').text().trim().match(/\((\d+)/),
                 plays = stats.find('.player-plays').text().trim() == 'Left-handed'?1:0,
                 experience = stats.find('.player-experience').text().trim().match(/\d+/)
                 nickname = stats.find('.player-nickname').text().trim(),
@@ -94,6 +94,9 @@ function storeData(fragment) {
                 ytd_win_single = ytd_win[0]
                 ytd_win_double = ytd_win[1],
                 website = stats.find('.player-website a').attr('href');
+
+            height = height? height[1]: null;
+            weight = weight? weight[1]: null;
 
             // JSON ranking + earning + standings
             const historyReg = /_tennis.PLAYER_STATS = [^<]+/;

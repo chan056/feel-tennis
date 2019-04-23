@@ -21,7 +21,7 @@
 
 			<tr>
 				<td><%= stat.birthdate%></td>
-				<td><%= stat.height%>cm</td>
+				<td><%= stat.height? stat.height + 'cm': ''%></td>
 				<td><%= stat.weight%>kg</td>
 				<td><%= ['右手','左手'][stat.plays] %></td>
 				<td><%= stat.experience%></td>

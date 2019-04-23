@@ -81,6 +81,10 @@
 
 	$('#draw').on("click", '.player', function(){
 		var nameDOM = $(this).find('.name');
+
+		if(nameDOM.hasClass('linked'))
+			return
+
 		var name = nameDOM.attr('title');
 		console.log(name);
 
@@ -92,11 +96,22 @@
 			},
 			contentType: 'text/json',
 			success: function(data){
+				if(!data)
+					return;
+
 				data = JSON.parse(data);
 				var id = data.id_tennis_com;
 				var s = `/tennis/player/${id}/stat.ssr`;
 
-				nameDOM.wrap(`<a href="${s}"></a>`);
+				$('#draw').find('.name').each(function(index, dom){
+					if(dom.title == name){
+						console.log(dom.parentNode.tagName)
+						if(dom.parentNode.tagName != 'A'){
+							$(dom).addClass('linked').wrap(`<a target="_blank" href="${s}"></a>`)
+						}
+					}
+				})
+
 			},
 			error: function(xhr, type){
 				console.error('Ajax error!')
