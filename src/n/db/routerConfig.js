@@ -492,6 +492,11 @@ const routerConfig = {
         '/tournamentDailySchedule': function(params, res, req){
             r.query('queryTournamentDailySchedule', params, res, req);
         },
+
+        '/tennisPlayerStat': function(params, res, req){
+            r.query('queryTennisPlayerStat', params, res, req);
+        },
+        
     },
 
     post: {

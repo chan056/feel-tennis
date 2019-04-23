@@ -1033,6 +1033,9 @@ let operations = {
 
 	queryTennisPlayerStat: function (res, qualification, params) {
 		let sql = `select *, now()>stat_expire as is_expire from tennis.athlete where id_tennis_com=${params.playerId}`;
+		if(params.name_en){
+			sql = `select *, now()>stat_expire as is_expire from tennis.athlete where name_en='${unescape(params.name_en)}'`;
+		}
 
 		conn.query(sql, function(err, rows){
 			if(err) return throwError(err, res);
@@ -1045,7 +1048,7 @@ let operations = {
 				let file = require('path').resolve(__dirname, '../collector/tennis/player_stat.js');
 				let name = rows[0]['name_en'].toLowerCase().replace(/\W+/g, '-');
 
-				tools.spawn([file, params.playerId, name], query, res)
+				tools.spawn([file, rows[0].id_tennis_com, name], query, res)
 			}else{
 				query();
 			}

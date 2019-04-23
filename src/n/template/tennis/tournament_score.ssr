@@ -78,6 +78,31 @@
 	drawrRacingChart(tournamentDrawData)
 	// 调整位置
 	clearupDraw();
+
+	$('#draw').on("click", '.player', function(){
+		var nameDOM = $(this).find('.name');
+		var name = nameDOM.attr('title');
+		console.log(name);
+
+		$.ajax({
+			type: 'get',
+			url: '/api/tennisPlayerStat',
+			data: {
+				name_en: escape(name),
+			},
+			contentType: 'text/json',
+			success: function(data){
+				data = JSON.parse(data);
+				var id = data.id_tennis_com;
+				var s = `/tennis/player/${id}/stat.ssr`;
+
+				nameDOM.wrap(`<a href="${s}"></a>`);
+			},
+			error: function(xhr, type){
+				console.error('Ajax error!')
+			}
+		})
+	})
 </script>
 <% }else{ %>
 	<script>alert('缺少相关数据')</script>

@@ -256,6 +256,9 @@ header {
   font-weight: 600;
   font-size: 18px;
 }
+#body.h2h .detail-wrapper .avatar {
+  min-height: 153px;
+}
 #body.h2h #p1-wrapper .country-link {
   left: 0;
 }
