@@ -2137,7 +2137,7 @@ let operations = {
 			if(err)
 				return throwError(err, res);
 
-			res.statusMessage = 'update page success';
+			res.statusMessage = 'update sitemap page success';
 			res.end();
 
 			updateSitemap();

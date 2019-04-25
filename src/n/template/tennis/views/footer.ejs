@@ -2,6 +2,9 @@
 			translate();
 			translate(true);
 
+			// 页面翻译完之后上传
+			setTimeout(pageRecord, 4000);
+
 			function translate(standalone, DOMroot){
 				var separator = '315699319005';
 				var sourceAry = [];
@@ -51,15 +54,16 @@
 							// }
 						})
 
-						pageRecord();
 					},
 					error: function(xhr, type){
 						console.error('Ajax error!')
-						pageRecord();
+						
 					}
 				})
 			}
 
+
+			// 同步到sitemap
 			function pageRecord(){
 				$.ajax({
 					type: 'get',
@@ -71,8 +75,8 @@
 								type: 'post',
 								url: '/api/pageRecoder',
 								data: JSON.stringify({
-									pagePath: location.href,
-									pageContent: $('html')[0].outerHTML
+									pagePath: location.pathname,
+									// pageContent: $('html')[0].outerHTML
 								}),
 								contentType: 'application/json'
 							})
@@ -95,6 +99,7 @@
 				var s = document.getElementsByTagName("script")[0];
 				s.parentNode.insertBefore(bp, s);
 			})();
+
 		</script>
 	</body>
 </html>
