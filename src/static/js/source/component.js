@@ -3208,8 +3208,10 @@ module.exports = function(){
 				// console.log(e.keyCode)
 				const kc = e.keyCode;
 				if(kc == 32){
-					t.vEle.paused? t.vEle.play(): t.vEle.pause();
-					e.preventDefault();
+					if(!$(document.activeElement).is('#video')){
+						t.vEle.paused? t.vEle.play(): t.vEle.pause();
+						e.preventDefault();
+					}
 				}else if(kc == 37){
 					t.vEle.currentTime -= 2;
 					if(t.vEle.currentTime < 0){
