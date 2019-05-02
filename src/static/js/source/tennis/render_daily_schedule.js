@@ -45,7 +45,7 @@ function renderScores(){
                 <i class="fa fa-check fl"></i>
                 <i class="fl flag flags-${player.country}"></i>
                 <a target="_blank" href="${id? `/tennis/player/${id}/stat.ssr`: 'javascript: void(0);'}" 
-                    class="fl name">${player.name}</a>
+                    class="fl name need-translate standalone">${player.name}</a>
                 `
                     + (player.seed? `<em class="seed">(${player.seed})</em>`: '') +
                 `
@@ -87,12 +87,12 @@ function tournamentDailySchedule(){
             // $('#scores').css('opacity', 1);
 
             tournament = JSON.parse(data);
-            console.log(tournament)
+            // console.log(tournament)
 
             renderScores();
 
-            // translate(false, $('#scores'));
-		    // translate(true, $('#scores'));
+            translate(false, $('#scores'));
+		    translate(true, $('#scores'));
         },
         error: function(xhr, type){
             console.error('Ajax error!')

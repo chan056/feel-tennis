@@ -55,13 +55,13 @@ function constructRound(bracketData, isFinal){
 
         matchStr += `<div class="player">
             <i class="fl flag flags-${attributes.firstPlayerCountry}"></i>
-            <em class="name">${attributes.firstPlayer}</em>
+            <em class="name need-translate standalone">${attributes.firstPlayer}</em>
             <em class="seed">${attributes.firstPlayerSeed}</em>
         </div>`;
 
         matchStr += `<div class="player">
             <i class="fl flag flags-${attributes.secondlayerCountry}"></i>
-            <em class="name">${attributes.secondPlayer}</em>
+            <em class="name need-translate standalone">${attributes.secondPlayer}</em>
             <em class="seed">${attributes.secondPlayerSeed}</em>
         </div>`;
 
