@@ -24,7 +24,7 @@ function renderScores(){
                     -->
                 <a target="_blank" href="${(p1id && p2id) ? `/tennis/player/${p1id}/vs/${p2id}.ssr`: 'javascript:void(0);'}" target="_blank">
                     ${
-                        {'Not started': '预测', 'Upcoming': '预测', 'Finished': '对战统计', 'Happening': '分数直播'}[status]
+                        {'Not started': '预测', 'Upcoming': '预测',  'Finished': '对战统计', 'Happening': '分数直播', 'In progress': '分数直播',}[status]
                     }
                 </a>
             </div>
