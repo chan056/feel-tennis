@@ -849,7 +849,7 @@ module.exports = function(){
         feedback: `
             <div class="feedback-wrapper">
                 <h2 class="ovh">
-                    <span class="fl">发生了什么</span>
+                    <span class="fl">问题描述</span>
                     <i class="fr el-icon-back" @click="goback()" style="cursor: pointer;"></i>
                 </h2>
     

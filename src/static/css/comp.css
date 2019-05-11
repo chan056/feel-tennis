@@ -222,6 +222,10 @@ img {
   height: 40px;
   text-decoration: none;
 }
+.flag {
+  min-width: 37px;
+  min-height: 1px;
+}
 .el-breadcrumb span {
   font-size: 2rem;
 }
@@ -292,9 +296,6 @@ body {
   min-width: 600px;
   font-size: 1.4rem;
   font-family: "Arial", "Microsoft YaHei", "黑体", "宋体", "sans-serif;";
-}
-#main {
-  min-height: 500px;
 }
 #aside-controller {
   display: none;
@@ -422,7 +423,7 @@ app {
 #aside {
   width: 300px;
   float: left;
-  border: 1px solid #dcdfe6;
+  overflow: auto;
   border-width: 0 1px 1px 0;
 }
 #aside .guide-entry {
@@ -459,9 +460,11 @@ app {
   border-bottom: 1px solid #dcdfe6;
 }
 #main {
+  box-sizing: border-box;
   position: absolute;
   left: 301px;
   right: 0;
+  overflow: auto;
   padding: 20px 0;
   border: 1px solid #dcdfe6;
   border-width: 0 0 1px 1px;

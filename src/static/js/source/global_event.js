@@ -18,6 +18,12 @@ module.exports = function(){
             }else{
                 rootContainer.removeClass('mobile-structure');
             }
+
+            // 更新 #aside 和 #main 的高度
+            if(!window.isMobile){
+                var h = $(window).height()- 70 - 2;
+                rootContainer.height(h).children().height(h);
+            }
         })
     });
 }

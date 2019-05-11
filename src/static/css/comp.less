@@ -13,10 +13,6 @@ body{
   font-family: "Arial","Microsoft YaHei","黑体","宋体","sans-serif;"
 }
 
-#main{
-  min-height: 500px;
-}
-
 #aside-controller{
   display: none;
   position: absolute;
@@ -114,10 +110,11 @@ app{font-size: 14px;}
 #aside{
   width: 300px;
   float: left;
+  overflow: auto;
   // flex-grow: 0;
   // flex-shrink: 0;
   // flex-basis: 300px;
-  border: 1px solid @border-color;
+  // border: 1px solid @border-color;
   border-width: 0 1px 1px 0;
 
   .guide-section:not(:last-child){
@@ -155,10 +152,11 @@ app{font-size: 14px;}
   // flex-grow: 1;
   // flex-shrink: 0;
   // flex-basis: 300px;
-
+  box-sizing: border-box;
   position: absolute;
   left: 301px;
   right: 0;
+  overflow: auto;
  
   padding: 20px 0;
   border: 1px solid @border-color;
