@@ -396,9 +396,9 @@ module.exports = function(){
         video: `
             <div id="video-page">
                 <el-breadcrumb separator="/">
-                    <el-breadcrumb-item :to="{ path: '/sports/' + crumb.sId }">{{crumb.sName}}</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{ path: '/albums/' + crumb.aId }">{{crumb.aName}}</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{ path: '/videos/' + crumb.vId }">{{crumb.vHeadline}}</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ path: '/sports/' + crumb.sId }">{{crumb.sName || ' '}}</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ path: '/albums/' + crumb.aId }">{{crumb.aName || ' '}}</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ path: '/videos/' + crumb.vId }">{{crumb.vHeadline || ' '}}</el-breadcrumb-item>
                 </el-breadcrumb>
                 <div class="tags video-tags">
                     <el-tag type="info" v-for="tag in tags" :key="tag.id">
