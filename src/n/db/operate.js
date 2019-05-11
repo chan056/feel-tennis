@@ -1310,14 +1310,30 @@ let operations = {
 				})
 
 				function recordDayScore(dayScoreData){
-					dayScoreData = escape(dayScoreData)
-	
-					var dayScoreSQL = `
-						delete from tennis.tournament_day_score where sid=${sid} and date='${date}';
-						insert into tennis.tournament_day_score values (null, ${sid}, '${date}', '${dayScoreData}')
-					`;
+					if(checkEventAllFinished(dayScoreData)){
+						dayScoreData = escape(dayScoreData)
 
-					conn.query(dayScoreSQL)
+						var dayScoreSQL = `
+							delete from tennis.tournament_day_score where sid=${sid} and date='${date}';
+							insert into tennis.tournament_day_score values (null, ${sid}, '${date}', '${dayScoreData}')
+						`;
+	
+						conn.query(dayScoreSQL)
+					}
+				}
+
+				// 检查该天的比赛数据是否全部Finished
+				function checkEventAllFinished(data){
+					data = JSON.parse(data);
+					var events = data.events;
+					var allFinished = true;
+					events.forEach(function(e,i){
+						if(e.status != 'Finished'){
+							allFinished = false;
+						}
+					})
+
+					return allFinished;
 				}
 			}
 

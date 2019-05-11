@@ -5,13 +5,14 @@ function renderScores(){
 
     events.forEach(function(event){
         var status = event.status;
+        var statusCn = {'Not started': '未开始', 'In progress': '进行中', 'Finished': '已结束'}[status] || '';
         var p1id = event.players[0].url.match(pIdReg);
         var p2id = event.players[1].url.match(pIdReg);
         p1id = p1id? p1id[1] : '';
         p2id = p2id? p2id[1] : '';
 
         s += `<div class="score">
-            <div class="status">${status}</div>
+            <div class="status">${statusCn}</div>
 
             <div class="players">
                 ${renderPlayers(event.players)}
@@ -45,7 +46,7 @@ function renderScores(){
                 <i class="fa fa-check fl"></i>
                 <i class="fl flag flags-${player.country}"></i>
                 <a target="_blank" href="${id? `/tennis/player/${id}/stat.ssr`: 'javascript: void(0);'}" 
-                    class="fl name need-translate standalone">${player.name}</a>
+                    class="fl name">${player.name}</a>
                 `
                     + (player.seed? `<em class="seed">(${player.seed})</em>`: '') +
                 `
