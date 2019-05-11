@@ -45,7 +45,7 @@ module.exports = function(){
                         width="100"
                         trigger="hover">
                             <ul v-if="inmails.length" id="inmail-list">
-                                <li v-on:click="showInmailDetail(inmail, k)" v-for="(inmail, k) in inmails" class="nowrap">
+                                <li v-on:click="showInmailDetail(inmail, k)" v-for="(inmail, k) in inmails" class="ellipsis" :title="inmail.content">
                                     {{k+1 + '. '}}{{ inmail.content }}
                                 </li>
                             </ul>
