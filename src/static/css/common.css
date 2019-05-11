@@ -107,9 +107,6 @@ img {
 .el-dialog {
   width: 500px;
 }
-.el-form-item__content {
-  margin-left: 100px;
-}
 .update-time:before {
   content: '• ';
 }
