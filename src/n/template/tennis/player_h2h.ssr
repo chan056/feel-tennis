@@ -44,7 +44,7 @@
 		<div id="p1-wrapper" class="detail-wrapper fl">
 			<% var p1Data = dynamicDataSet.p1 %>
 			<div class="rel">
-				<a href="" class="avatar-wrapper fl">
+				<a href="/tennis/player/<%= p1Data.id_tennis_com %>/stat.ssr" class="avatar-wrapper fl">
 					<img class="avatar fl" src="<%= p1Data.player_image %>" alt="<%= p1Data.name_en %>">
 				</a>
 				<a target="_blank" class="country-link" href="https://ditu.baidu.com?q=<%= p1Data.country %>">
@@ -69,7 +69,7 @@
 		<div id="p2-wrapper" class="detail-wrapper fr">
 			<% var p2Data = dynamicDataSet.p2 %>
 			<div class="rel">
-				<a href="" class="avatar-wrapper fr">
+				<a href="/tennis/player/<%= p2Data.id_tennis_com %>/stat.ssr" class="avatar-wrapper fr">
 					<img class="avatar fr" src="<%= p2Data.player_image %>" alt="<%= p2Data.name_en %>">
 				</a>
 				<a target="_blank" class="country-link" href="https://ditu.baidu.com?q=<%= p2Data.country %>">
@@ -116,7 +116,7 @@
 					<li><%= p1Data.residence %>&nbsp;</li>
 					<li><%= p1Data.height + ' cm' %>&nbsp;</li>
 					<li><%= p1Data.weight + ' kg' %>&nbsp;</li>
-					<li><%= ['左手', '右手'][p1Data.plays] %>&nbsp;</li>
+					<li><%= ['右手','左手'][p1Data.plays] %>&nbsp;</li>
 					<li><%= p1Data.turn_pro %>&nbsp;</li>
 					<li><%= p1Data.experience %>&nbsp;</li>
 					<li><%= p1Data.ytd_win_single + '单打' + '(' + p1Data.ytd_win_double +'双打)' %>&nbsp;</li>
@@ -129,7 +129,7 @@
 					<li>&nbsp;<%= p2Data.residence %></li>
 					<li>&nbsp;<%= p2Data.height + ' cm' %></li>
 					<li>&nbsp;<%= p2Data.weight + ' kg' %></li>
-					<li>&nbsp;<%= ['左手', '右手'][p2Data.plays] %></li>
+					<li>&nbsp;<%= ['右手', '左手'][p2Data.plays] %></li>
 					<li>&nbsp;<%= p2Data.turn_pro %></li>
 					<li>&nbsp;<%= p2Data.experience %></li>
 					<li>&nbsp;<%= p2Data.ytd_win_single + '单打' + '(' + p2Data.ytd_win_double +'双打)' %></li>

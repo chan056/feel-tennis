@@ -259,8 +259,18 @@ header {
 #body.h2h .detail-wrapper .avatar {
   min-height: 153px;
 }
+#body.h2h #p1-wrapper {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+}
 #body.h2h #p1-wrapper .country-link {
   left: 0;
+}
+#body.h2h #p2-wrapper {
+  position: absolute;
+  z-index: 2;
+  right: 0;
 }
 #body.h2h #p2-wrapper .country-link {
   right: 0;
