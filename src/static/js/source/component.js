@@ -1690,6 +1690,7 @@ module.exports = function(){
 			},
 
 			updateChart: function(data){
+				debugger
 				// $('#chart-container').html('<canvas id="myChart"></canvas>');
 
 				// 重新new chart，替换canvas
@@ -1704,7 +1705,6 @@ module.exports = function(){
 				Chart.defaults.global.defaultFontSize = 24;
 				Chart.defaults.global.defaultFontStyle = 'bold';
 				
-
 				if(!this.chartInstance){
 					this.chartInstance = new Chart(ctx, this.config);
 				}else{
@@ -1729,7 +1729,7 @@ module.exports = function(){
 		},
 
 		mounted: function(){
-			tools.insertScriptTag(1, "../lib/Chart.js", {onload: function(){
+			tools.insertScriptTag(1, "../lib/Chart.min.js", {onload: function(){
 			}.bind(this), id: 'chartjs'});
 
 			tools.togglePageIE(this);
