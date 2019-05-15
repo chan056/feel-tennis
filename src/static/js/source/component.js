@@ -154,14 +154,33 @@ module.exports = function(){
 			handlerLogin: function(){
 				this.loginForm.visible = true;
 
+				let t =  this;
+
+				// 回车登录
 				setTimeout(function(){
 					$('#last-login-iput').off('keyup.login').on('keyup.login', function(e){
 						var keyCode = e.keyCode;
 						if(keyCode == 13){
-							this.login();
+							t.login();
 						}
-					}.bind(this));
-				}.bind(this), 500)
+					});
+				}, 500)
+
+				// 获取当前位置信息
+				// 给竞赛页添加脚本
+				tools.insertScriptTag(1, CONSTANT.BAIDUMAPAPI, {id: 'map-api'});
+
+				var intervalId = setInterval(()=>{
+					if(window.BMap && window.BMap.Map){
+						clearInterval(intervalId);
+
+						try{
+							t.getCurPos();
+						}catch(e){
+			
+						}
+					}
+				}, 100)
 
 				tools.insertScriptTag(1, '../lib/md5.js', 'md5');
 			},
@@ -188,7 +207,7 @@ module.exports = function(){
 				}.bind(this), 'post', {
 					name: trim(this.loginForm.name),
 					psw: md5(trim(this.loginForm.psw)),
-					city: window.CURPOS.city,
+					city: CURPOS? CURPOS.city: '',
 					coords: CURPOS? CURPOS.lng + ',' + CURPOS.lat: ''
 				}, function(res){
 					let status = res.status;
@@ -488,22 +507,6 @@ module.exports = function(){
 		},
 
 		created: function(){
-			let t =  this;
-
-			tools.insertScriptTag(1, CONSTANT.BAIDUMAPAPI, {id: 'map-api'});
-
-			var intervalId = setInterval(()=>{
-				if(window.BMap && window.BMap.Map){
-					clearInterval(intervalId);
-
-					try{
-						t.getCurPos();
-					}catch(e){
-		
-					}
-				}
-			}, 100)
-
 			this.$bus.on('update-inmails', function(){
 				this.fetchInmails();
 			}.bind(this));
@@ -1690,7 +1693,6 @@ module.exports = function(){
 			},
 
 			updateChart: function(data){
-				debugger
 				// $('#chart-container').html('<canvas id="myChart"></canvas>');
 
 				// 重新new chart，替换canvas
