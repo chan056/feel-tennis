@@ -151,12 +151,16 @@ function createDateSel(){
         if(!$('#score-wrapper.loading').length){
             if(!createDateSel(--baseOffset)){
                 tournamentDailySchedule();
+            }else{
+                baseOffset ++
             }
         }
     }).on('click', '.next', function(){
         if(!$('#score-wrapper.loading').length){
             if(!createDateSel(++baseOffset)){
                 tournamentDailySchedule();
+            }else{
+                baseOffset --;
             }
         }
     });
