@@ -87,6 +87,11 @@ function tournamentDailySchedule(){
             // $('.fa-spinner-wrapper').hide();
             // $('#scores').css('opacity', 1);
 
+
+            if(!data){
+                return $('#scores').html('没有数据');
+            }
+
             tournament = JSON.parse(data);
             // console.log(tournament)
 

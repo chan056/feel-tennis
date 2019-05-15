@@ -1349,10 +1349,8 @@ let operations = {
 			// 计算+1时区的日期
 			// 数据是东1时区的数据（英国）
 			function calcTimeZoneDate(offset){
-				let GMT = +new Date(
-					(new Date()).toUTCString()
-				);
 				let hourMilli = 60*60*1000;
+				let GMT = Date.now() - 8 * hourMilli;
 
 				let firstTimezone = new Date(GMT + 1 * hourMilli + offset * 24 * hourMilli);
 
