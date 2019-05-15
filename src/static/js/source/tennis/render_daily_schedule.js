@@ -117,6 +117,9 @@ function createDateSel(){
     var prevDate = getDate(-1);
     var nextDate = getDate(1);
 
+    // 标记最后一天或第一天
+    var meetBoundary = false;
+
     domBase.html(`
         <div class="fl prev">
             <
@@ -132,27 +135,33 @@ function createDateSel(){
 
     if(curDate == prevDate){
         domBase.find('.prev').hide();
+        meetBoundary = true;
     }else{
         domBase.find('.prev').show()
     }
 
     if(curDate == nextDate){
         domBase.find('.next').hide();
+        meetBoundary = true;
     }else{
         domBase.find('.next').show()
     }
 
     domBase.off('click').on('click', '.prev', function(){
         if(!$('#score-wrapper.loading').length){
-            createDateSel(--baseOffset);
-            tournamentDailySchedule();
+            if(!createDateSel(--baseOffset)){
+                tournamentDailySchedule();
+            }
         }
     }).on('click', '.next', function(){
         if(!$('#score-wrapper.loading').length){
-            createDateSel(++baseOffset);
-            tournamentDailySchedule();
+            if(!createDateSel(++baseOffset)){
+                tournamentDailySchedule();
+            }
         }
     });
+
+    return meetBoundary;
 
     function getDate(dayOffset){
         dayOffset = (dayOffset || 0) + (baseOffset || 0);

@@ -240,7 +240,7 @@ function spawn(processArgs, fn, res){
 	});
 }
 
-function fetchHTML (url, fn){
+function fetchHTML (url, fn, fnErr){
 	require('request')(url, function(error,response,body) {
 		if(error)
 			return console.log(error);
@@ -249,6 +249,7 @@ function fetchHTML (url, fn){
 			fn && fn(body)
 		}else{
 			console.log( `statusCode: ${response.statusCode}`);
+			fnErr()
 		}
 	})
 }

@@ -1307,6 +1307,8 @@ let operations = {
 					}catch(e){
 						respond('')
 					}
+				}, function(){
+					respond('')
 				})
 
 				function recordDayScore(dayScoreData){
