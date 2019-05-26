@@ -5,7 +5,7 @@ function renderScores(){
 
     events.forEach(function(event){
         var status = event.status;
-        var statusCn = {'Not started': '未开始', 'In progress': '进行中', 'Finished': '已结束'}[status] || '';
+        var statusCn = {'Not started': '未开始', 'In progress': '进行中', 'Finished': '已结束', 'Cancelled': '被取消'}[status] || '';
         var p1id = event.players[0].url.match(pIdReg);
         var p2id = event.players[1].url.match(pIdReg);
         p1id = p1id? p1id[1] : '';
@@ -25,7 +25,12 @@ function renderScores(){
                     -->
                 <a target="_blank" href="${(p1id && p2id) ? `/tennis/player/${p1id}/vs/${p2id}.ssr`: 'javascript:void(0);'}" target="_blank">
                     ${
-                        {'Not started': '预测', 'Upcoming': '预测',  'Finished': '对战统计', 'Happening': '分数直播', 'In progress': '分数直播',}[status]
+                        {'Not started': '预测',
+                         'Upcoming': '预测',
+                          'Finished': '对战统计',
+                         'Happening': '分数直播',
+                         'In progress': '分数直播'}[status]
+                         || '预测'
                     }
                 </a>
             </div>

@@ -424,6 +424,7 @@ header {
 }
 #body.tournament #score-wrapper.loading #scores {
   opacity: 0;
+  height: 100px;
 }
 #body.tournament #days {
   text-align: center;
