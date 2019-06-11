@@ -160,18 +160,20 @@ function createDateSel(){
 
     domBase.off('click').on('click', '.prev', function(){
         if(!$('#score-wrapper.loading').length){
-            if(!createDateSel(--baseOffset)){
-                tournamentDailySchedule();
-            }else{
-                baseOffset ++
+            var meetBoundry = createDateSel(--baseOffset)            
+            tournamentDailySchedule();
+            if(meetBoundry){
+                console.log('meet boundry first')
+                // baseOffset ++
             }
         }
     }).on('click', '.next', function(){
         if(!$('#score-wrapper.loading').length){
-            if(!createDateSel(++baseOffset)){
-                tournamentDailySchedule();
-            }else{
-                baseOffset --;
+            var meetBoundry = createDateSel(++baseOffset);
+            tournamentDailySchedule();
+            if(meetBoundry){
+                console.log('meet boundry last')
+                // baseOffset --;
             }
         }
     });
