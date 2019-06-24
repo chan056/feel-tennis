@@ -207,8 +207,8 @@ module.exports = function(){
 				}.bind(this), 'post', {
 					name: trim(this.loginForm.name),
 					psw: md5(trim(this.loginForm.psw)),
-					city: CURPOS? CURPOS.city: '',
-					coords: CURPOS? CURPOS.lng + ',' + CURPOS.lat: ''
+					city: window.CURPOS? window.CURPOS.city: '',
+					coords: window.CURPOS? window.CURPOS.lng + ',' + window.CURPOS.lat: ''
 				}, function(res){
 					let status = res.status;
 					let statusText = res.statusText;
