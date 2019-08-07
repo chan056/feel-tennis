@@ -1155,6 +1155,9 @@ let operations = {
 				conn.query(sql2, function(err, result, fields) {
 					if (err) return throwError(err, res);
 				
+					if(!result[0] || !result[1])
+						return res.end('');
+
 					let name1 = result[0]['name_en'],
 						name2 = result[1]['name_en'];
 
