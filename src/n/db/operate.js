@@ -1293,8 +1293,9 @@ let operations = {
 							url = url[0];
 
 							if(url){
-								url = `http://cdn.tennis.com${url}.jpg`;
 								let extname = path.extname(url);
+
+								url = `http://cdn.tennis.com${url}/1140x326.${extname}`;
 								let dest = path.resolve(global.staticRoot, `./img/tennis/tournaments/${params.sid}${extname}`);
 								// let destMirror = path.resolve(global.staticRoot, `./img/tennis/tournaments/${params.sid}.mirror${extname}`);
 
