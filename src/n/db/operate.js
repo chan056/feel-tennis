@@ -1286,22 +1286,30 @@ let operations = {
 	
 						if(matchedData){
 							let url = matchedData.hero_image_url;
+							// http://media-tenniscdn-com.s3.amazonaws.com/uploads/img/2019/08/22/14d1b39083bc4812b062a8b0fadff5e2.jpg
+							// http://cdn.tennis.com/uploads/img/2019/08/22/14d1b39083bc4812b062a8b0fadff5e2/1140x326.jpg
+							const reg = /\/upload[^.]+/;
+							url = url.match(reg);
+							url = url[0];
+
 							if(url){
+								url = `http://cdn.tennis.com${url}.jpg`;
 								let extname = path.extname(url);
 								let dest = path.resolve(global.staticRoot, `./img/tennis/tournaments/${params.sid}${extname}`);
-								let destMirror = path.resolve(global.staticRoot, `./img/tennis/tournaments/${params.sid}.mirror${extname}`);
+								// let destMirror = path.resolve(global.staticRoot, `./img/tennis/tournaments/${params.sid}.mirror${extname}`);
+
+								matchedData.extname = extname;
+								matchedData = JSON.stringify(matchedData);
+								respond(matchedData)
+								recordDayScore(matchedData)
+
 								collectorTool.downloadImg(url, dest, function(){
-									matchedData.extname = extname;
-									matchedData = JSON.stringify(matchedData);
-									recordDayScore(matchedData)
 									// collectorTool.clipImage(dest, destMirror);
-									respond(matchedData)
 								})
 							}else{// 没有图片
 								matchedData = JSON.stringify(matchedData);
 								respond(matchedData)
 								recordDayScore(matchedData)
-
 							}
 							
 						}else{
