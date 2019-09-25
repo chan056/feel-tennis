@@ -62,7 +62,7 @@ tools.runSql('drop table if EXISTS tennis.athlete_tmp; create table tennis.athle
                         playerPoints = playerPoints.replace(/,/g, '')
                     }
                         
-                    sql += `(${playerId}, '', '${nameEN}', ${gender}, ${currentRanking}, ${playerPrevRanking}, '${playerCountry}', ${playerPoints}, '${stateAbbreviation}', FROM_UNIXTIME(${now + expires.ranking * day})),`
+                    sql += `(${playerId}, '', "${nameEN}", ${gender}, ${currentRanking}, ${playerPrevRanking}, '${playerCountry}', ${playerPoints}, '${stateAbbreviation}', FROM_UNIXTIME(${now + expires.ranking * day})),`
                 })
         
                 sql = sql.replace(/,$/, ';');
