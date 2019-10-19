@@ -1143,6 +1143,9 @@ let operations = {
 	},
 
 	headToHead: function (res, qualification, params) {
+		if(!params)
+			return res.end('');
+
 		let sql = `select h2h.*, now()>h2h.expire as is_expire from tennis.h2h as h2h where p1=${params.p1} and p2=${params.p2}`
 
 		conn.query(sql, function(err, rows){
