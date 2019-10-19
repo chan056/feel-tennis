@@ -23,8 +23,8 @@ function storeData(fragment) {
         let $ = cheerio.load(fragment);
 
         const recordWrapper = $('.h2h-record'),
-            win = recordWrapper.find('.first-player').eq(0).text(),
-            lose = recordWrapper.find('.second-player').eq(0).text();
+            win = recordWrapper.find('.first-player').eq(0).text() || 0,
+            lose = recordWrapper.find('.second-player').eq(0).text() || 0;
 
         let sql = `delete from tennis.h2h where p1=${p1} and p2=${p2}; insert into tennis.h2h values (null, ${p1}, ${p2}, ${win}, ${lose}, FROM_UNIXTIME(${now+7*day}));`;
 
