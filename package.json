@@ -14,7 +14,7 @@
     "forever": "^0.15.3",
     "formidable": "^1.1.1",
     "image-clipper": "^0.4.4",
-    "lodash": "4.17.4",
+    "lodash": "4.17.15",
     "moment": "2.18.1",
     "mysql": "^2.15.0",
     "nodemailer": "^4.4.2",
