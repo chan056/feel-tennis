@@ -1403,9 +1403,7 @@ let operations = {
 			if(!rows[0] || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/tournament_draw.js');
 
-				tools.spawn([file, params.sid], function(){
-					query();
-				}, res)
+				tools.spawn([file, params.sid], query, res, errRespond)
 			}else{
 				query();
 			}
@@ -1424,6 +1422,11 @@ let operations = {
 					res.dynamicDataSet[params.ssrOutput || 'tournamentDraw'] = result[0].draw;
 				}
 			});
+		}
+
+		// 赛事有可能没有赛程（draw）
+		function errRespond(){
+			res.dynamicDataSet[params.ssrOutput || 'tournamentDraw'] = '';
 		}
 	},
 

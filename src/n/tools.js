@@ -215,7 +215,7 @@ function transformPath(pagePath){
 	return pagePath.join('.')
 }
 
-function spawn(processArgs, fn, res){
+function spawn(processArgs, fn, res, errFn){
 	let node = require('child_process').spawn('node', processArgs);
 
 	node.stdout.on('data', (data) => {
@@ -223,6 +223,7 @@ function spawn(processArgs, fn, res){
 	});
 
 	node.stderr.on('data', (data) => {
+		errFn && errFn();
 		console.log(`node stderr: ${data}`);
 	});
 

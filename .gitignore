@@ -79,3 +79,4 @@ typings/
 .env
 
 /src/n/constant_key.js
+.DS_Store

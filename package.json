@@ -14,8 +14,8 @@
     "forever": "^0.15.3",
     "formidable": "^1.1.1",
     "image-clipper": "^0.4.4",
-    "lodash": "4.17.4",
-    "moment": "2.18.1",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
     "mysql": "^2.15.0",
     "nodemailer": "^4.4.2",
     "nodemailer-smtp-transport": "^2.7.4",
@@ -35,8 +35,8 @@
     "jshint": "^2.9.5",
     "jshint-loader": "^0.8.4",
     "open": "0.0.5",
-    "webpack": "^4.16.5",
-    "webpack-cli": "^3.1.0"
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
