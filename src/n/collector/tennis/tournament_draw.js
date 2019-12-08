@@ -3,15 +3,15 @@ const path = require('path');
 
 let argv = process.argv.slice(2);
 console.log(argv);
-let tournamentID = argv[0];
-let sid = argv[0];
+let tourId = argv[0];
+let tourName = argv[1];
 
 const expires = require('./expire_config');
 const now = Date.now() / 1000,
     day = 24 * 60 * 60;
 
 ;
-const sourceURL = `http://www.tennis.com/scores/tournaments/${tournamentID}/monterrey-open-wta-2019/draw/`;
+const sourceURL = `http://www.tennis.com/scores/tournaments/${tourId}/${tourName}/draw/`;
 console.log(sourceURL)
 
 tools.fetchHTML(sourceURL, storeData)
@@ -36,7 +36,7 @@ function storeData(fragment) {
                 ));
                 // console.log(JSON.stringify(json))
     
-                let sql = `insert into tennis.tournament_draw values (${tournamentID}, '${json}', FROM_UNIXTIME( ${now + day * expires.tournamentDraw}) ) 
+                let sql = `insert into tennis.tournament_draw values (${tourId}, '${json}', FROM_UNIXTIME( ${now + day * expires.tournamentDraw}) ) 
                     ON DUPLICATE KEY UPDATE draw='${json}', expire=FROM_UNIXTIME(${now + day * expires.tournamentDraw});`
                 tools.runSql(sql, function(){
                     process.exit();

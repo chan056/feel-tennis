@@ -1403,7 +1403,7 @@ let operations = {
 			if(!rows[0] || rows[0].is_expire){
 				let file = require('path').resolve(__dirname, '../collector/tennis/tournament_draw.js');
 
-				tools.spawn([file, params.sid], query, res, errRespond)
+				tools.spawn([file, params.sid, params.tourName], query, res, errRespond)
 			}else{
 				query();
 			}

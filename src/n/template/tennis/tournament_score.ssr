@@ -127,7 +127,7 @@
 		
 	</script>
 <% }else{ %>
-	<script>alert('缺少相关数据')</script>
+	<script>alert('缺少 score 数据')</script>
 <% } %>
 
 

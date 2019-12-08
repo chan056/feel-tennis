@@ -11,7 +11,7 @@
 			<div class="tour-row">
 				<% dynamicDataSet.tournaments.forEach(function(tournament){%>
 					<% if(tournament.status == 0){ %>
-						<a href="<%= '/tennis/tournaments/'+tournament.sid+'.ssr'%>" class="tour-item">
+						<a href="<%= '/tennis/tournaments/'+tournament.sid+tournament.link.match(/(\/[^/]+)\/$/)[1]+'.ssr'%>" class="tour-item">
 							<div class="overlay"></div>
 							<div class="basic-data">
 								<p class="name"><%= unescape(tournament.name) %></p>
@@ -59,7 +59,7 @@
 			<div class="tour-row">
 				<% dynamicDataSet.tournaments.forEach(function(tournament){%>
 					<% if(tournament.status == -1){ %>
-						<a href="<%= '/tennis/tournaments/'+tournament.sid+'.ssr'%>" class="tour-item">
+						<a href="<%= '/tennis/tournaments/'+tournament.sid+tournament.link.match(/(\/[^/]+)\/$/)[1]+'.ssr'%>" class="tour-item">
 							<div class="overlay"></div>
 							<div class="basic-data">
 								<p class="name"><%= unescape(tournament.name) %></p>
