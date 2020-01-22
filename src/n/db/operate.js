@@ -1181,8 +1181,13 @@ let operations = {
 				if (err) return throwError(err, res);
 				
 				result = result[0];
-				result.p1 = params.p1;
-				result.p2 = params.p2;
+
+				if(result){
+					result.p1 = params.p1;
+					result.p2 = params.p2;
+				}else{
+					result = ''
+				}
 
 				if(!res.dynamicDataSet){
 					result = JSON.stringify(result);
