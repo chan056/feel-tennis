@@ -3,12 +3,18 @@ const constant = require('../constant');
 let dbConfig = (constant.linkRemote && constant.dbConfigProductive)? constant.dbConfigProductive: constant.dbConfig;
 
 let connection;
+let liveID;
 
 handleDisconnect();
 
 function handleDisconnect(config) {
 	connection = mysql.createConnection(dbConfig); // Recreate the connection, since
 	// the old one cannot be reused.
+
+	if(liveID)
+		clearInterval(liveID)
+
+	liveID = setInterval(keepalive, 1000*60*5);
 
 	connection.connect(function (err) {              // The server is either down
 		if (err) {                                     // or restarting (takes a while sometimes).
@@ -24,6 +30,13 @@ function handleDisconnect(config) {
 		} else {                                      // connnection idle timeout (the wait_timeout
 			throw err;                                  // server variable configures this)
 		}
+	});
+}
+
+function keepalive() {
+	connection.query('select 1', [], function(err, result) {
+		if(err) return console.log(err);
+		// Successul keepalive
 	});
 }
 
