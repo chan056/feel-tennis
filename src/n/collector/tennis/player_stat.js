@@ -45,7 +45,7 @@ function storeData(fragment) {
                     earnings = value;
                     let earningYear = label.match(/\d+/);
                     if(earningYear)
-                        earnings = earningYear + '|' +earnings;
+                        earnings = earningYear + ' ' +earnings;
                 }
             })
     
