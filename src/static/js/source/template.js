@@ -276,7 +276,7 @@ module.exports = function(){
                                 </span>
                             </p>
                         </router-link>
-                        <a class="sport-intro-link text-above-img" href="/page/intro_tennis.html" target="_blank">详细介绍</a>
+                        <a class="sport-intro-link text-above-img" href="/page/intro_tennis.html" target="_blank">详细</a>
                     </li>
                 </ul>
                 <el-pagination
@@ -418,7 +418,6 @@ module.exports = function(){
                 <div style="display: none;" id="subtitle-grave"></div>
                 <div v-if="video" id="usr-operation-desk">
                     <div class="fl">{{video.impression}}次观看</div>
-
                     <router-link v-if="!isMobile" id="link-to-translator" :to="{path: '/translator/' + videoId}">
                         <el-badge is-dot>
                             {{video.translated? '翻译有误？': '帮忙翻译'}}

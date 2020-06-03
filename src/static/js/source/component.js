@@ -2747,7 +2747,7 @@ module.exports = function(){
 			},
 
 			handlerMovingCaptionBlockRightDragger: function(pos){
-				// console.log(pos, this.timeLineLength)
+				console.log(pos, this.timeLineLength)
 				pos = pos < this.timeLineLength? pos: this.timeLineLength;
 				let curCaptionBlock = this.curCaptionBlock;
 				let index = $('.caption-block').index(this.curCaptionBlock);

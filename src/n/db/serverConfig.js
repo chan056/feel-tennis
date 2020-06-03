@@ -129,6 +129,7 @@ module.exports = function(req, res) {
 			// console.log(urlObj);
 
 			res.writeHead(200, responseHeader);
+			res = null;
 		})
 	}
 
