@@ -25,6 +25,14 @@ let server = http.createServer(function(req, res){
             logError(req, res, e);
         }
     }else{
+        // ==== yitube.cn 域名过期 用IP进行远程测试
+        try{
+            serverConfig(req, res)
+        }catch(e){
+            logError(req, res, e);
+        }
+        return
+        // ====
         res.writeHead(301, {'Location': 'https://www.yitube.cn/'});
         res.end();
     }
